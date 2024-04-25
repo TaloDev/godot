@@ -1,0 +1,342 @@
+[gd_scene load_steps=18 format=3 uid="uid://bg71kho7jirad"]
+
+[ext_resource type="Script" path="res://addons/talo/samples/playground/scripts/identify_button.gd" id="1_o53s3"]
+[ext_resource type="Script" path="res://addons/talo/samples/playground/scripts/identified_state.gd" id="1_qsdrr"]
+[ext_resource type="Script" path="res://addons/talo/samples/playground/scripts/identified_label.gd" id="2_ncaxm"]
+[ext_resource type="Script" path="res://addons/talo/samples/playground/scripts/response_label.gd" id="3_bdtqj"]
+[ext_resource type="Script" path="res://addons/talo/samples/playground/scripts/level_up_button.gd" id="4_vboi8"]
+[ext_resource type="Script" path="res://addons/talo/samples/playground/scripts/get_config_button.gd" id="5_blrul"]
+[ext_resource type="Script" path="res://addons/talo/samples/playground/scripts/set_health_button.gd" id="5_fpvjp"]
+[ext_resource type="Script" path="res://addons/talo/samples/playground/scripts/discover_secret_button.gd" id="5_wpnvd"]
+[ext_resource type="Script" path="res://addons/talo/samples/playground/scripts/get_saves_button.gd" id="8_4usai"]
+[ext_resource type="Script" path="res://addons/talo/samples/playground/scripts/get_entries_button.gd" id="8_8262a"]
+[ext_resource type="Script" path="res://addons/talo/samples/playground/scripts/add_entry_button.gd" id="9_3705v"]
+[ext_resource type="Script" path="res://addons/talo/samples/playground/scripts/create_save_button.gd" id="12_4prkt"]
+[ext_resource type="Script" path="res://addons/talo/samples/playground/scripts/loadable_color_rect.gd" id="12_72qp7"]
+[ext_resource type="Script" path="res://addons/talo/samples/playground/scripts/randomise_save_button.gd" id="12_sshwt"]
+[ext_resource type="Script" path="res://addons/talo/samples/playground/scripts/load_save_button.gd" id="12_t2845"]
+[ext_resource type="Script" path="res://addons/talo/samples/playground/scripts/update_save_button.gd" id="14_lvmju"]
+[ext_resource type="Script" path="res://addons/talo/samples/playground/scripts/delete_save_button.gd" id="15_iq1bk"]
+
+[node name="Playground" type="Node2D"]
+
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1080.0
+offset_bottom = 720.0
+
+[node name="IdentifiedState" type="ColorRect" parent="UI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.980392, 0.392157, 0.470588, 1)
+script = ExtResource("1_qsdrr")
+
+[node name="MarginContainer" type="MarginContainer" parent="UI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 40
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 40
+
+[node name="IdentifiedLabel" type="Label" parent="UI/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Player not identified"
+script = ExtResource("2_ncaxm")
+
+[node name="ResponseLabel" type="Label" parent="UI/MarginContainer"]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+script = ExtResource("3_bdtqj")
+
+[node name="APIs" type="HBoxContainer" parent="UI/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 40
+
+[node name="Players" type="VBoxContainer" parent="UI/MarginContainer/APIs"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Label" type="Label" parent="UI/MarginContainer/APIs/Players"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 20
+text = "Players"
+
+[node name="IdentifyButton" type="Button" parent="UI/MarginContainer/APIs/Players"]
+layout_mode = 2
+text = "Identify"
+script = ExtResource("1_o53s3")
+service = "steam"
+identifier = "TaloPlayer"
+
+[node name="SetHealthButton" type="Button" parent="UI/MarginContainer/APIs/Players"]
+layout_mode = 2
+text = "Set health"
+script = ExtResource("5_fpvjp")
+
+[node name="Events" type="VBoxContainer" parent="UI/MarginContainer/APIs"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Label" type="Label" parent="UI/MarginContainer/APIs/Events"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 20
+text = "Events"
+
+[node name="LevelUpButton" type="Button" parent="UI/MarginContainer/APIs/Events"]
+layout_mode = 2
+text = "Level up"
+script = ExtResource("4_vboi8")
+
+[node name="Live config" type="VBoxContainer" parent="UI/MarginContainer/APIs"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Label" type="Label" parent="UI/MarginContainer/APIs/Live config"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 20
+text = "Live config"
+
+[node name="GetConfigButton" type="Button" parent="UI/MarginContainer/APIs/Live config"]
+layout_mode = 2
+text = "Get config"
+script = ExtResource("5_blrul")
+
+[node name="Stats" type="VBoxContainer" parent="UI/MarginContainer/APIs"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Label" type="Label" parent="UI/MarginContainer/APIs/Stats"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 20
+text = "Stats"
+
+[node name="DiscoverSecretButton" type="Button" parent="UI/MarginContainer/APIs/Stats"]
+layout_mode = 2
+text = "Discover secret"
+script = ExtResource("5_wpnvd")
+stat_name = "secrets-discovered"
+
+[node name="Leaderboards" type="VBoxContainer" parent="UI/MarginContainer/APIs"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Label" type="Label" parent="UI/MarginContainer/APIs/Leaderboards"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 20
+text = "Leaderboards"
+
+[node name="GetEntriesButton" type="Button" parent="UI/MarginContainer/APIs/Leaderboards"]
+layout_mode = 2
+text = "Get entries"
+script = ExtResource("8_8262a")
+leaderboard_name = "sed-totam-magni"
+
+[node name="AddEntryButton" type="Button" parent="UI/MarginContainer/APIs/Leaderboards"]
+layout_mode = 2
+text = "Add entry"
+script = ExtResource("9_3705v")
+leaderboard_name = "sed-totam-magni"
+
+[node name="Saves" type="VBoxContainer" parent="UI/MarginContainer/APIs"]
+layout_mode = 2
+theme_override_constants/separation = 20
+
+[node name="Label" type="Label" parent="UI/MarginContainer/APIs/Saves"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 20
+text = "Saves"
+
+[node name="GetSavesButton" type="Button" parent="UI/MarginContainer/APIs/Saves"]
+layout_mode = 2
+text = "Get saves"
+script = ExtResource("8_4usai")
+
+[node name="LoadSaveButton" type="Button" parent="UI/MarginContainer/APIs/Saves"]
+layout_mode = 2
+text = "Load save"
+script = ExtResource("12_t2845")
+
+[node name="CreateSaveButton" type="Button" parent="UI/MarginContainer/APIs/Saves"]
+layout_mode = 2
+text = "Create save"
+script = ExtResource("12_4prkt")
+
+[node name="UpdateSaveButton" type="Button" parent="UI/MarginContainer/APIs/Saves"]
+layout_mode = 2
+text = "Update save"
+script = ExtResource("14_lvmju")
+
+[node name="DeleteSaveButton" type="Button" parent="UI/MarginContainer/APIs/Saves"]
+layout_mode = 2
+text = "Delete save"
+script = ExtResource("15_iq1bk")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/MarginContainer/APIs/Saves"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Label" type="Label" parent="UI/MarginContainer/APIs/Saves/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_constants/line_spacing = -4
+theme_override_font_sizes/font_size = 14
+text = "Current save"
+horizontal_alignment = 1
+uppercase = true
+
+[node name="GridContainer" type="GridContainer" parent="UI/MarginContainer/APIs/Saves/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+columns = 3
+
+[node name="Control" type="Control" parent="UI/MarginContainer/APIs/Saves/VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+script = ExtResource("12_72qp7")
+id = "color_rect0"
+
+[node name="ColorRect" type="ColorRect" parent="UI/MarginContainer/APIs/Saves/VBoxContainer/GridContainer/Control"]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 0
+offset_right = 16.0
+offset_bottom = 16.0
+
+[node name="Control2" type="Control" parent="UI/MarginContainer/APIs/Saves/VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+script = ExtResource("12_72qp7")
+id = "color_rect1"
+
+[node name="ColorRect" type="ColorRect" parent="UI/MarginContainer/APIs/Saves/VBoxContainer/GridContainer/Control2"]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 0
+offset_right = 16.0
+offset_bottom = 16.0
+
+[node name="Control3" type="Control" parent="UI/MarginContainer/APIs/Saves/VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+script = ExtResource("12_72qp7")
+id = "color_rect2"
+
+[node name="ColorRect" type="ColorRect" parent="UI/MarginContainer/APIs/Saves/VBoxContainer/GridContainer/Control3"]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 0
+offset_right = 16.0
+offset_bottom = 16.0
+
+[node name="Control4" type="Control" parent="UI/MarginContainer/APIs/Saves/VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+script = ExtResource("12_72qp7")
+id = "color_rect3"
+
+[node name="ColorRect" type="ColorRect" parent="UI/MarginContainer/APIs/Saves/VBoxContainer/GridContainer/Control4"]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 0
+offset_right = 16.0
+offset_bottom = 16.0
+
+[node name="Control5" type="Control" parent="UI/MarginContainer/APIs/Saves/VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+script = ExtResource("12_72qp7")
+id = "color_rect4"
+
+[node name="ColorRect" type="ColorRect" parent="UI/MarginContainer/APIs/Saves/VBoxContainer/GridContainer/Control5"]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 0
+offset_right = 16.0
+offset_bottom = 16.0
+
+[node name="Control6" type="Control" parent="UI/MarginContainer/APIs/Saves/VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+script = ExtResource("12_72qp7")
+id = "color_rect5"
+
+[node name="ColorRect" type="ColorRect" parent="UI/MarginContainer/APIs/Saves/VBoxContainer/GridContainer/Control6"]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 0
+offset_right = 16.0
+offset_bottom = 16.0
+
+[node name="Control7" type="Control" parent="UI/MarginContainer/APIs/Saves/VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+script = ExtResource("12_72qp7")
+id = "color_rect6"
+
+[node name="ColorRect" type="ColorRect" parent="UI/MarginContainer/APIs/Saves/VBoxContainer/GridContainer/Control7"]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 0
+offset_right = 16.0
+offset_bottom = 16.0
+
+[node name="Control8" type="Control" parent="UI/MarginContainer/APIs/Saves/VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+script = ExtResource("12_72qp7")
+id = "color_rect7"
+
+[node name="ColorRect" type="ColorRect" parent="UI/MarginContainer/APIs/Saves/VBoxContainer/GridContainer/Control8"]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 0
+offset_right = 16.0
+offset_bottom = 16.0
+
+[node name="Control9" type="Control" parent="UI/MarginContainer/APIs/Saves/VBoxContainer/GridContainer"]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+script = ExtResource("12_72qp7")
+id = "color_rect8"
+
+[node name="ColorRect" type="ColorRect" parent="UI/MarginContainer/APIs/Saves/VBoxContainer/GridContainer/Control9"]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 0
+offset_right = 16.0
+offset_bottom = 16.0
+
+[node name="RandomiseSaveButton" type="Button" parent="UI/MarginContainer/APIs/Saves/VBoxContainer" node_paths=PackedStringArray("grid")]
+layout_mode = 2
+text = "Randomise"
+script = ExtResource("12_sshwt")
+grid = NodePath("../GridContainer")
+
+[connection signal="pressed" from="UI/MarginContainer/APIs/Players/IdentifyButton" to="UI/MarginContainer/APIs/Players/IdentifyButton" method="_on_pressed"]
+[connection signal="pressed" from="UI/MarginContainer/APIs/Players/SetHealthButton" to="UI/MarginContainer/APIs/Players/SetHealthButton" method="_on_pressed"]
+[connection signal="pressed" from="UI/MarginContainer/APIs/Events/LevelUpButton" to="UI/MarginContainer/APIs/Events/LevelUpButton" method="_on_pressed"]
+[connection signal="pressed" from="UI/MarginContainer/APIs/Live config/GetConfigButton" to="UI/MarginContainer/APIs/Live config/GetConfigButton" method="_on_pressed"]
+[connection signal="pressed" from="UI/MarginContainer/APIs/Stats/DiscoverSecretButton" to="UI/MarginContainer/APIs/Stats/DiscoverSecretButton" method="_on_pressed"]
+[connection signal="pressed" from="UI/MarginContainer/APIs/Leaderboards/GetEntriesButton" to="UI/MarginContainer/APIs/Leaderboards/GetEntriesButton" method="_on_pressed"]
+[connection signal="pressed" from="UI/MarginContainer/APIs/Leaderboards/AddEntryButton" to="UI/MarginContainer/APIs/Leaderboards/AddEntryButton" method="_on_pressed"]
+[connection signal="pressed" from="UI/MarginContainer/APIs/Saves/GetSavesButton" to="UI/MarginContainer/APIs/Saves/GetSavesButton" method="_on_pressed"]
+[connection signal="pressed" from="UI/MarginContainer/APIs/Saves/LoadSaveButton" to="UI/MarginContainer/APIs/Saves/LoadSaveButton" method="_on_pressed"]
+[connection signal="pressed" from="UI/MarginContainer/APIs/Saves/CreateSaveButton" to="UI/MarginContainer/APIs/Saves/CreateSaveButton" method="_on_pressed"]
+[connection signal="pressed" from="UI/MarginContainer/APIs/Saves/UpdateSaveButton" to="UI/MarginContainer/APIs/Saves/UpdateSaveButton" method="_on_pressed"]
+[connection signal="pressed" from="UI/MarginContainer/APIs/Saves/DeleteSaveButton" to="UI/MarginContainer/APIs/Saves/DeleteSaveButton" method="_on_pressed"]
+[connection signal="pressed" from="UI/MarginContainer/APIs/Saves/VBoxContainer/RandomiseSaveButton" to="UI/MarginContainer/APIs/Saves/VBoxContainer/RandomiseSaveButton" method="_on_pressed"]
