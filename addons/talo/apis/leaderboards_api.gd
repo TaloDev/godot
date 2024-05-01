@@ -18,12 +18,14 @@ func get_entries(internal_name: String, page: int, alias_id = -1) -> Array:
 			return []
 
 func get_entries_for_current_player(internal_name: String, page: int) -> Array:
-	Talo.identity_check()
+	if Talo.identity_check() != OK:
+		return []
 	
 	return await get_entries(internal_name, page, Talo.current_alias.id)
 
 func add_entry(internal_name: String, score: float) -> Array:
-	Talo.identity_check()
+	if Talo.identity_check() != OK:
+		return []
 
 	var res = await client.make_request(HTTPClient.METHOD_POST, "/%s/entries" % internal_name, { score = score })
 

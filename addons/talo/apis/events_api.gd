@@ -30,7 +30,8 @@ func _has_errors(errors: Array) -> bool:
 	return errors.any((func (err: Array): return err.size() > 0))
 
 func track(name: String, props: Dictionary) -> void:
-	Talo.identity_check()
+	if Talo.identity_check() != OK:
+		return
 
 	var final_props = _build_meta_props()
 	final_props.append_array(

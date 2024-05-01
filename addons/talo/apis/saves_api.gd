@@ -2,6 +2,7 @@ class_name SavesAPI extends TaloAPI
 
 signal saves_loaded
 signal save_chosen(save: TaloGameSave)
+signal save_loading_completed
 
 var _saves_manager = TaloSavesManager.new()
 
@@ -48,7 +49,8 @@ func get_saves() -> Array[TaloGameSave]:
 	if await Talo.is_offline():
 		saves.append_array(offline_saves)
 	else:
-		Talo.identity_check()
+		if Talo.identity_check() != OK:
+			return []
 
 		var res = await client.make_request(HTTPClient.METHOD_GET, "/")
 		match (res.status):
@@ -130,7 +132,8 @@ func update_save(save: TaloGameSave, new_name: String = "") -> TaloGameSave:
 		save.content = content
 		save.updated_at = TimeUtils.get_current_time_msec()
 	else:
-		Talo.identity_check()
+		if Talo.identity_check() != OK:
+			return
 
 		var res = await client.make_request(HTTPClient.METHOD_PATCH, "/%s" % [save.id], {
 			name=save.display_name if new_name.is_empty() else new_name,
@@ -146,7 +149,9 @@ func update_save(save: TaloGameSave, new_name: String = "") -> TaloGameSave:
 
 func delete_save(save: TaloGameSave) -> void:
 	if not await Talo.is_offline():
-		Talo.identity_check()
+		if Talo.identity_check() != OK:
+			return
+
 		var res = await client.make_request(HTTPClient.METHOD_DELETE, "/%s" % [save.id])
 
 		match res.status:
