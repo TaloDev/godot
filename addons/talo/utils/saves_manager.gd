@@ -68,6 +68,8 @@ func register(loadable: TaloLoadable) -> void:
 
 func set_object_loaded(id: String) -> void:
 	_loaded_loadables.push_back(id)
+	if _loaded_loadables.size() == _registered_saved_objects.size():
+		Talo.saves.save_loading_completed.emit()
 
 func get_save_content() -> Dictionary:
 	return {
