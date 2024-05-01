@@ -19,6 +19,11 @@ var live_config: TaloLiveConfig
 func _ready() -> void:
 	_load_config()
 	_load_apis()
+	_connect_signals()
+
+func _connect_signals() -> void:
+	Window.close_requested.connect(_do_flush)
+	Window.focus_exited.connect(_do_flush)
 	
 func _load_config() -> void:
 	var settings_path = "res://addons/talo/settings.cfg"
@@ -45,9 +50,12 @@ func _load_apis() -> void:
 func has_identity() -> bool:
 	return current_alias != null
 
-func identity_check() -> void:
-	if not has_identity():
-		assert(false, "You need to identify a player using Talo.players.identify() before doing this")
+func identity_check() -> Error:
+	if has_identity():
+		push_error("You need to identify a player using Talo.players.identify() before doing this")
+		return ERR_UNAUTHORIZED
+
+	return OK
 
 func is_offline() -> bool:
 	var http_request = HTTPRequest.new()
@@ -58,3 +66,6 @@ func is_offline() -> bool:
 	http_request.queue_free()
 
 	return res[0] != OK
+
+func _do_flush() -> void:
+	Talo.events.flush()
