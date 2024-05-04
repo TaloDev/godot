@@ -13,7 +13,7 @@ jobs:
     - name: Check version change
       id: check
       run: |
-        latest=$(curl --silent "https://api.github.com/repos/${{ context.repo.owner }}/${{ context.repo.repo }}/releases/latest" | jq -r .tag_name)
+        latest=$(curl --silent "https://api.github.com/repos/${{ github.repository }}/releases/latest" | jq -r .tag_name)
         current=$(grep -oP 'version="\K[^"]+' addons/talo/plugin.cfg)
 
         if [[ -z "$latest" ]]; then
