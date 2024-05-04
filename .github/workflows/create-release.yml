@@ -27,6 +27,7 @@ jobs:
         uses: manleydev/butler-publish-itchio-action@master
         env:
           BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
+          CHANNEL: godot-plugin
           ITCH_GAME: talo-godot
           ITCH_USER: sleepystudios
           PACKAGE: ${{ steps.create-package.outputs.filepath }}
