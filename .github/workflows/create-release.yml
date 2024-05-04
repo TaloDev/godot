@@ -17,7 +17,7 @@ jobs:
       - name: Create package
         id: create-package
         run: |
-          filepath=release/talo-godot.zip
+          filepath=release/talo-godot-${{ github.ref_name }}.zip
           echo "filepath=$filepath" >> $GITHUB_OUTPUT
 
           mkdir release
