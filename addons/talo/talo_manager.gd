@@ -19,12 +19,15 @@ var live_config: TaloLiveConfig
 func _ready() -> void:
 	_load_config()
 	_load_apis()
-	_connect_signals()
+	get_tree().set_auto_accept_quit(false)
 
-func _connect_signals() -> void:
-	Window.close_requested.connect(_do_flush)
-	Window.focus_exited.connect(_do_flush)
-	
+func _notification(what: int):
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		_do_flush()
+		get_tree().quit()
+	elif what == NOTIFICATION_WM_WINDOW_FOCUS_IN:
+		_do_flush()
+
 func _load_config() -> void:
 	var settings_path = "res://addons/talo/settings.cfg"
 	config = ConfigFile.new()

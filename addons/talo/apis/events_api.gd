@@ -47,11 +47,13 @@ func track(name: String, props: Dictionary) -> void:
 	})
 
 	if _queue.size() >= _min_queue_size:
-		var res = await client.make_request(HTTPClient.METHOD_POST, "/", { events = _queue })
+		await flush()
 
-		match (res.status):
-			200:
-				if not _has_errors(res.body.errors):
-					_queue.clear()
-				else:
-					client.handle_error(res)
+func flush() -> void:
+	var res = await client.make_request(HTTPClient.METHOD_POST, "/", { events = _queue })
+	match (res.status):
+		200:
+			if not _has_errors(res.body.errors):
+				_queue.clear()
+			else:
+				client.handle_error(res)
