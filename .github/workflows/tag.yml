@@ -8,7 +8,7 @@ jobs:
   tag:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     
     - name: Check version change
       id: check
@@ -17,18 +17,18 @@ jobs:
         current=$(grep -oP 'version="\K[^"]+' addons/talo/plugin.cfg)
 
         if [[ -z "$latest" ]]; then
-          echo "::set-output name=changed::true"
-          echo "::set-output name=version::$current"
+          echo "changed=true" >> $GITHUB_OUTPUT
+          echo "version=$current" >> $GITHUB_OUTPUT
         elif [[ "$latest" != "$current" ]]; then
-          echo "::set-output name=changed::true"
-          echo "::set-output name=version::$current"
+          echo "changed=true" >> $GITHUB_OUTPUT
+          echo "version=$current" >> $GITHUB_OUTPUT
         else
-          echo "::set-output name=changed::false"
+          echo "changed=false" >> $GITHUB_OUTPUT
         fi
 
     - name: Create tag
       if: steps.check.outputs.changed == 'true'
-      uses: tvdias/github-tagger@v0.0.1
+      uses: pxpm/github-tag-action@1.0.1
       with:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
         tag: ${{ steps.check.outputs.version }}

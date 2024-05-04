@@ -18,7 +18,9 @@ jobs:
         id: create-package
         run: |
           filepath=release/talo-godot.zip
-          echo "::set-output name=filepath::$filepath"
+          echo "filepath=$filepath" >> $GITHUB_OUTPUT
+
+          mkdir release
           zip -r $filepath addons/talo
 
       - name: Upload to itch
