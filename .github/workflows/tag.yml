@@ -1,0 +1,46 @@
+name: Tag
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  tag:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Check version change
+      id: check
+      run: |
+        latest=$(curl --silent "https://api.github.com/repos/${{ context.repo.owner }}/${{ context.repo.repo }}/releases/latest" | jq -r .tag_name)
+        current=$(grep -oP 'version="\K[^"]+' addons/talo/plugin.cfg)
+
+        if [[ -z "$latest" ]]; then
+          echo "::set-output name=changed::true"
+          echo "::set-output name=version::$current"
+        elif [[ "$latest" != "$current" ]]; then
+          echo "::set-output name=changed::true"
+          echo "::set-output name=version::$current"
+        else
+          echo "::set-output name=changed::false"
+        fi
+
+    - name: Create tag
+      if: steps.check.outputs.changed == 'true'
+      uses: tvdias/github-tagger@v0.0.1
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        tag: ${{ steps.check.outputs.version }}
+
+    - name: Trigger workflow
+      if: steps.check.outputs.changed == 'true'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          github.rest.actions.createWorkflowDispatch({
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            workflow_id: 'create-release.yml',
+            ref: '${{ steps.check.outputs.version }}'
+          })

@@ -1,11 +1,11 @@
-# Talo Godot SDK
+# Talo Godot Plugin
 
-Build games faster and make better decisions with the [Talo](https://trytalo.com) Godot SDK.
+Build games faster and make better decisions with the [Talo](https://trytalo.com) Godot Plugin.
 
 ## Features
 - ⚡️ [Event tracking](https://trytalo.com/events)
 - 👥 [Player management](https://trytalo.com/players) (including cross-session data, groups and identity management)
-- 🎮 [Unity SDK](https://trytalo.com/unity)
+- 🎮 [Godot plugin](https://trytalo.com/godot)
 - 🗃️ Data exports
 - 🕹️ [Leaderboards](https://trytalo.com/leaderboards)
 - 💾 [Game saves](https://trytalo.com/saves)

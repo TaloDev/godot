@@ -1,0 +1,39 @@
+name: Release
+
+on:
+  workflow_dispatch:
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Create package
+        id: create-package
+        run: |
+          filepath=release/talo-godot.zip
+          echo "::set-output name=filepath::$filepath"
+          zip -r $filepath addons/talo
+
+      - name: Upload to itch
+        uses: manleydev/butler-publish-itchio-action@master
+        env:
+          BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
+          ITCH_GAME: talo-godot
+          ITCH_USER: sleepystudios
+          PACKAGE: ${{ steps.create-package.outputs.filepath }}
+          VERSION: ${{ github.ref_name }}
+
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        if: "!contains(github.event.head_commit.message, '--no-release')"
+        with:
+          generate_release_notes: true
+          prerelease: ${{ contains(github.event.head_commit.message, 'pre.') }}
+          files: release/*.zip
