@@ -26,7 +26,7 @@ func _notification(what: int):
 		NOTIFICATION_WM_CLOSE_REQUEST:
 			_do_flush()
 			get_tree().quit()
-		[NOTIFICATION_APPLICATION_FOCUS_OUT, NOTIFICATION_APPLICATION_PAUSED]:
+		NOTIFICATION_APPLICATION_FOCUS_OUT, NOTIFICATION_APPLICATION_PAUSED:
 			_do_flush()
 
 func _load_config() -> void:
@@ -54,9 +54,10 @@ func _load_apis() -> void:
 func has_identity() -> bool:
 	return current_alias != null
 
-func identity_check() -> Error:
-	if has_identity():
-		push_error("You need to identify a player using Talo.players.identify() before doing this")
+func identity_check(should_error = true) -> Error:
+	if not has_identity():
+		if should_error:
+			push_error("You need to identify a player using Talo.players.identify() before doing this")
 		return ERR_UNAUTHORIZED
 
 	return OK
@@ -72,5 +73,5 @@ func is_offline() -> bool:
 	return res[0] != OK
 
 func _do_flush() -> void:
-	if Talo.identity_check() == OK:
+	if identity_check(false) == OK:
 		Talo.events.flush()
