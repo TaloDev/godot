@@ -22,11 +22,12 @@ func _ready() -> void:
 	get_tree().set_auto_accept_quit(false)
 
 func _notification(what: int):
-	if what == NOTIFICATION_WM_CLOSE_REQUEST:
-		_do_flush()
-		get_tree().quit()
-	elif what == NOTIFICATION_WM_WINDOW_FOCUS_IN:
-		_do_flush()
+	match what:
+		NOTIFICATION_WM_CLOSE_REQUEST:
+			_do_flush()
+			get_tree().quit()
+		[NOTIFICATION_APPLICATION_FOCUS_OUT, NOTIFICATION_APPLICATION_PAUSED]:
+			_do_flush()
 
 func _load_config() -> void:
 	var settings_path = "res://addons/talo/settings.cfg"
@@ -71,4 +72,5 @@ func is_offline() -> bool:
 	return res[0] != OK
 
 func _do_flush() -> void:
-	Talo.events.flush()
+	if Talo.identity_check() == OK:
+		Talo.events.flush()
