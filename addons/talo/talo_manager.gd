@@ -13,6 +13,7 @@ var game_config: GameConfigAPI
 var stats: StatsAPI
 var leaderboards: LeaderboardsAPI
 var saves: SavesAPI
+var feedback: FeedbackAPI
 
 var live_config: TaloLiveConfig
 
@@ -47,8 +48,9 @@ func _load_apis() -> void:
 	stats = preload("res://addons/talo/apis/stats_api.gd").new("/v1/game-stats")
 	leaderboards = preload("res://addons/talo/apis/leaderboards_api.gd").new("/v1/leaderboards")
 	saves = preload("res://addons/talo/apis/saves_api.gd").new("/v1/game-saves")
+	feedback = preload("res://addons/talo/apis/feedback_api.gd").new("/v1/game-feedback")
 	
-	for api in [players, events, game_config, stats, leaderboards, saves]:
+	for api in [players, events, game_config, stats, leaderboards, saves, feedback]:
 		add_child(api)
 
 func has_identity() -> bool:
