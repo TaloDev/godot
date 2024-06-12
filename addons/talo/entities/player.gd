@@ -25,10 +25,12 @@ func set_prop(key: String, value: String) -> void:
 func delete_prop(key: String) -> void:
 	props = props.filter(func (prop: TaloProp): return prop.key != key)
 
-func is_in_talo_group(group_id: String) -> bool:
+func is_in_talo_group_id(group_id: String) -> bool:
 	return not groups.filter(func (group: TaloGroup): return group.id == group_id).is_empty()
+
+func is_in_talo_group_name(group_name: String) -> bool:
+	return not groups.filter(func (group: TaloGroup): return group.name == group_name).is_empty()
 
 func get_serialized_props() -> Array:
 	return props \
-		.filter(func (prop: TaloProp): return not prop.key.begins_with("META")) \
 		.map(func (prop: TaloProp): return prop.to_dictionary())
