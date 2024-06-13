@@ -50,6 +50,9 @@ func track(name: String, props: Dictionary) -> void:
 		await flush()
 
 func flush() -> void:
+	if _queue.size() == 0:
+		return
+
 	var res = await client.make_request(HTTPClient.METHOD_POST, "/", { events = _queue })
 	match (res.status):
 		200:
