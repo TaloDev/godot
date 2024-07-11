@@ -35,9 +35,9 @@ func get_identifier() -> String:
   return config.get_value("session", "identifier", "")
 
 func save_verification_alias_id(alias_id: int) -> void:
-  _verification_alias_id = str(alias_id)
+  _verification_alias_id = alias_id
 
-func get_verification_alias_id() -> String:
+func get_verification_alias_id() -> int:
   return _verification_alias_id
 
 func handle_session_created(alias: Dictionary, session_token: String) -> void:
