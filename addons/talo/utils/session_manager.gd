@@ -1,6 +1,7 @@
 class_name TaloSessionManager extends Node
 
 var _config_file_path = "user://talo_session.cfg"
+var _verification_alias_id = ""
 
 func _init() -> void:
   Talo.players.identified.connect(_check_session)
@@ -34,13 +35,10 @@ func get_identifier() -> String:
   return config.get_value("session", "identifier", "")
 
 func save_verification_alias_id(alias_id: int) -> void:
-  var config = _load_config()
-  config.set_value("verification", "alias_id", str(alias_id))
-  config.save(_config_file_path)
+  _verification_alias_id = str(alias_id)
 
 func get_verification_alias_id() -> String:
-  var config = _load_config()
-  return config.get_value("verification", "alias_id", "")
+  return _verification_alias_id
 
 func handle_session_created(alias: Dictionary, session_token: String) -> void:
 	Talo.current_alias = TaloPlayerAlias.new(alias)
