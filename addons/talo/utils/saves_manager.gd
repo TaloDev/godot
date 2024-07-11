@@ -6,7 +6,7 @@ var current_save: TaloGameSave
 var _registered_saved_objects: Array[TaloSavedObject]
 var _loaded_loadables: Array[String]
 
-var _offline_saves_path = "user://saves.json"
+var _offline_saves_path = "user://talo_saves.json"
 
 func read_offline_saves() -> Array[TaloGameSave]:
 	if not FileAccess.file_exists(_offline_saves_path):

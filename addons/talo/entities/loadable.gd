@@ -13,7 +13,7 @@ func _load_data(save: TaloGameSave) -> void:
 
   var fields = {}
 
-  var filtered = save.content.objects.filter(func(obj: Dictionary): return obj.id == id)
+  var filtered = save.content.objects.filter(func (obj: Dictionary): return obj.id == id)
   if filtered.is_empty():
     push_warning("Loadable with id '%s' not found in save '%s'" % [id, save.display_name])
     return
@@ -48,7 +48,7 @@ func handle_destroyed(data: Dictionary) -> bool:
 
 func get_saved_object_data() -> Array:
   return _saved_fields.keys().map(
-    func(key: String):
+    func (key: String):
       var value = _saved_fields[key]
       return {key = key, value = str(value), type = str(typeof(value))}
   )
