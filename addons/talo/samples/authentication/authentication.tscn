@@ -1,0 +1,57 @@
+[gd_scene load_steps=10 format=3 uid="uid://bwh4ytfs4g7js"]
+
+[ext_resource type="PackedScene" uid="uid://bjopxp3rhpinb" path="res://addons/talo/samples/authentication/states/register.tscn" id="1_5qw25"]
+[ext_resource type="Script" path="res://addons/talo/samples/authentication/scripts/authentication.gd" id="1_aqcrf"]
+[ext_resource type="PackedScene" uid="uid://co0uou3idf65q" path="res://addons/talo/samples/authentication/states/login.tscn" id="2_fsclp"]
+[ext_resource type="PackedScene" uid="uid://dv6o0q01wov2o" path="res://addons/talo/samples/authentication/states/verify.tscn" id="3_njdp7"]
+[ext_resource type="PackedScene" uid="uid://b6mypp2qa8m4u" path="res://addons/talo/samples/authentication/states/change_email.tscn" id="4_vngav"]
+[ext_resource type="PackedScene" uid="uid://bdfuoxfyblqtw" path="res://addons/talo/samples/authentication/states/change_password.tscn" id="5_q15qy"]
+[ext_resource type="PackedScene" uid="uid://hmdhr4bk3v1a" path="res://addons/talo/samples/authentication/states/in_game.tscn" id="7_sxmru"]
+[ext_resource type="PackedScene" uid="uid://b0nvmmnpff27a" path="res://addons/talo/samples/authentication/states/forgot_password.tscn" id="8_tqrpb"]
+[ext_resource type="PackedScene" uid="uid://8aqpg6o0a1xx" path="res://addons/talo/samples/authentication/states/reset_password.tscn" id="9_6wobc"]
+
+[node name="Authentication" type="Node2D"]
+script = ExtResource("1_aqcrf")
+
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1080.0
+offset_bottom = 720.0
+
+[node name="States" type="Control" parent="UI"]
+unique_name_in_owner = true
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Login" parent="UI/States" instance=ExtResource("2_fsclp")]
+unique_name_in_owner = true
+
+[node name="Register" parent="UI/States" instance=ExtResource("1_5qw25")]
+unique_name_in_owner = true
+visible = false
+
+[node name="Verify" parent="UI/States" instance=ExtResource("3_njdp7")]
+unique_name_in_owner = true
+visible = false
+
+[node name="InGame" parent="UI/States" instance=ExtResource("7_sxmru")]
+unique_name_in_owner = true
+visible = false
+
+[node name="ChangeEmail" parent="UI/States" instance=ExtResource("4_vngav")]
+unique_name_in_owner = true
+visible = false
+
+[node name="ChangePassword" parent="UI/States" instance=ExtResource("5_q15qy")]
+unique_name_in_owner = true
+visible = false
+
+[node name="ForgotPassword" parent="UI/States" instance=ExtResource("8_tqrpb")]
+unique_name_in_owner = true
+visible = false
+
+[node name="ResetPassword" parent="UI/States" instance=ExtResource("9_6wobc")]
+unique_name_in_owner = true
+visible = false

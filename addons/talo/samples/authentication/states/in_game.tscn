@@ -1,0 +1,73 @@
+[gd_scene load_steps=3 format=3 uid="uid://hmdhr4bk3v1a"]
+
+[ext_resource type="Script" path="res://addons/talo/samples/authentication/scripts/in_game.gd" id="1_is44q"]
+[ext_resource type="Theme" uid="uid://ce2uyi827vc5x" path="res://addons/talo/samples/authentication/assets/theme.tres" id="2_7u3gt"]
+
+[node name="InGame" type="Node2D"]
+script = ExtResource("1_is44q")
+
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1080.0
+offset_bottom = 720.0
+
+[node name="Background" type="ColorRect" parent="UI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.121569, 0.160784, 0.215686, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="UI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 40
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 40
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 24
+
+[node name="Username" type="Label" parent="UI/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 0
+theme = ExtResource("2_7u3gt")
+text = "What would you like to do,
+{username}?"
+horizontal_alignment = 1
+
+[node name="ChangePassword" type="Button" parent="UI/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(200, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+theme = ExtResource("2_7u3gt")
+text = "Change password"
+
+[node name="ChangeEmail" type="Button" parent="UI/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(200, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+theme = ExtResource("2_7u3gt")
+text = "Change email"
+
+[node name="Logout" type="Button" parent="UI/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(200, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+theme = ExtResource("2_7u3gt")
+text = "Log out"
+
+[connection signal="pressed" from="UI/MarginContainer/VBoxContainer/ChangePassword" to="." method="_on_change_password_pressed"]
+[connection signal="pressed" from="UI/MarginContainer/VBoxContainer/ChangeEmail" to="." method="_on_change_email_pressed"]
+[connection signal="pressed" from="UI/MarginContainer/VBoxContainer/Logout" to="." method="_on_logout_pressed"]

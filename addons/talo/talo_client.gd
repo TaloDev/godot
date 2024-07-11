@@ -23,10 +23,13 @@ func make_request(method: HTTPClient.Method, url: String, body: Dictionary = {})
 
 	var response_body = res[3]
 	var json = JSON.new()
-	var error = json.parse(response_body.get_string_from_utf8())
+	json.parse(response_body.get_string_from_utf8())
 
-	if error != OK:
-		json.set_data({ message = response_body.get_string_from_utf8() })
+	if res[0] != RESULT_SUCCESS:
+		json.set_data({
+			message =
+				"Request failed with Result %s, visit the Godot docs for more details: https://docs.godotengine.org/en/stable/classes/class_httprequest.html#enum-httprequest-result" % res[0]
+		})
 
 	if Talo.config.get_value("logging", "requests"):
 		print_rich("[color=orange]--> %s %s %s[/color]" % [_get_method_name(method), full_url, request_body])
@@ -39,7 +42,7 @@ func make_request(method: HTTPClient.Method, url: String, body: Dictionary = {})
 		body = json.get_data()
 	}
 
-	if ret.status > 299:
+	if ret.status >= 400:
 		handle_error(ret)
 
 	return ret
@@ -58,6 +61,10 @@ func _build_headers() -> Array:
 			'X-Talo-Player: %s' % Talo.current_player.id,
 			'X-Talo-Alias: %s' % Talo.current_alias.id
 		])
+
+	var session_token = Talo.player_auth.session_manager.load_session()
+	if session_token:
+		headers.append('X-Talo-Session: %s' % session_token)
 		
 	return headers
 
@@ -70,12 +77,12 @@ func _build_full_url(url: String) -> String:
 
 func handle_error(res: Dictionary) -> void:
 	if res.body.has("message"):
-		push_error("%s %s" % [res.status, res.body.message])
+		push_error("%s: %s" % [res.status, res.body.message])
 		return
 	
 	if res.body.has("errors"):
-		push_error("%s %s" % [res.status, res.body.errors])
+		push_error("%s: %s" % [res.status, res.body.errors])
 		return
 
-	push_error("%s Unknown error" % res.status)
+	push_error("%s: Unknown error" % res.status)
 

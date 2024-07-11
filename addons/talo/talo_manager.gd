@@ -14,12 +14,14 @@ var stats: StatsAPI
 var leaderboards: LeaderboardsAPI
 var saves: SavesAPI
 var feedback: FeedbackAPI
+var player_auth: PlayerAuthAPI
 
 var live_config: TaloLiveConfig
 
 func _ready() -> void:
 	_load_config()
 	_load_apis()
+	_check_session()
 	get_tree().set_auto_accept_quit(false)
 
 func _notification(what: int):
@@ -49,8 +51,18 @@ func _load_apis() -> void:
 	leaderboards = preload("res://addons/talo/apis/leaderboards_api.gd").new("/v1/leaderboards")
 	saves = preload("res://addons/talo/apis/saves_api.gd").new("/v1/game-saves")
 	feedback = preload("res://addons/talo/apis/feedback_api.gd").new("/v1/game-feedback")
+	player_auth = preload("res://addons/talo/apis/player_auth_api.gd").new("/v1/players/auth")
 	
-	for api in [players, events, game_config, stats, leaderboards, saves, feedback]:
+	for api in [
+		players,
+		events,
+		game_config,
+		stats,
+		leaderboards,
+		saves,
+		feedback,
+		player_auth
+	]:
 		add_child(api)
 
 func has_identity() -> bool:
@@ -77,3 +89,8 @@ func is_offline() -> bool:
 func _do_flush() -> void:
 	if identity_check(false) == OK:
 		Talo.events.flush()
+
+func _check_session() -> void:
+	var session_token = player_auth.session_manager.load_session()
+	if not session_token.is_empty():
+		Talo.players.identify('talo', player_auth.session_manager.get_identifier())
