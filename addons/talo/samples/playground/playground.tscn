@@ -219,7 +219,6 @@ columns = 3
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
 script = ExtResource("12_72qp7")
-id = "color_rect0"
 
 [node name="ColorRect" type="ColorRect" parent="UI/MarginContainer/APIs/Saves/VBoxContainer/GridContainer/Control"]
 custom_minimum_size = Vector2(16, 16)
@@ -231,7 +230,6 @@ offset_bottom = 16.0
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
 script = ExtResource("12_72qp7")
-id = "color_rect1"
 
 [node name="ColorRect" type="ColorRect" parent="UI/MarginContainer/APIs/Saves/VBoxContainer/GridContainer/Control2"]
 custom_minimum_size = Vector2(16, 16)
@@ -243,7 +241,6 @@ offset_bottom = 16.0
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
 script = ExtResource("12_72qp7")
-id = "color_rect2"
 
 [node name="ColorRect" type="ColorRect" parent="UI/MarginContainer/APIs/Saves/VBoxContainer/GridContainer/Control3"]
 custom_minimum_size = Vector2(16, 16)
@@ -255,7 +252,6 @@ offset_bottom = 16.0
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
 script = ExtResource("12_72qp7")
-id = "color_rect3"
 
 [node name="ColorRect" type="ColorRect" parent="UI/MarginContainer/APIs/Saves/VBoxContainer/GridContainer/Control4"]
 custom_minimum_size = Vector2(16, 16)
@@ -267,7 +263,6 @@ offset_bottom = 16.0
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
 script = ExtResource("12_72qp7")
-id = "color_rect4"
 
 [node name="ColorRect" type="ColorRect" parent="UI/MarginContainer/APIs/Saves/VBoxContainer/GridContainer/Control5"]
 custom_minimum_size = Vector2(16, 16)
@@ -279,7 +274,6 @@ offset_bottom = 16.0
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
 script = ExtResource("12_72qp7")
-id = "color_rect5"
 
 [node name="ColorRect" type="ColorRect" parent="UI/MarginContainer/APIs/Saves/VBoxContainer/GridContainer/Control6"]
 custom_minimum_size = Vector2(16, 16)
@@ -291,7 +285,6 @@ offset_bottom = 16.0
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
 script = ExtResource("12_72qp7")
-id = "color_rect6"
 
 [node name="ColorRect" type="ColorRect" parent="UI/MarginContainer/APIs/Saves/VBoxContainer/GridContainer/Control7"]
 custom_minimum_size = Vector2(16, 16)
@@ -303,7 +296,6 @@ offset_bottom = 16.0
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
 script = ExtResource("12_72qp7")
-id = "color_rect7"
 
 [node name="ColorRect" type="ColorRect" parent="UI/MarginContainer/APIs/Saves/VBoxContainer/GridContainer/Control8"]
 custom_minimum_size = Vector2(16, 16)
@@ -315,7 +307,6 @@ offset_bottom = 16.0
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
 script = ExtResource("12_72qp7")
-id = "color_rect8"
 
 [node name="ColorRect" type="ColorRect" parent="UI/MarginContainer/APIs/Saves/VBoxContainer/GridContainer/Control9"]
 custom_minimum_size = Vector2(16, 16)
