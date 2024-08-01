@@ -111,3 +111,16 @@ func reset_password(code: String, password: String) -> Error:
 			return OK
 		_:
 			return _handle_error(res)
+
+func toggle_verification(current_password: String, verification_enabled: bool, email: String = "") -> Error:
+	var res = await client.make_request(HTTPClient.METHOD_PATCH, "/toggle_verification", {
+		currentPassword = current_password,
+		verificationEnabled = verification_enabled,
+		email = email
+	})
+
+	match (res.status):
+		204:
+			return OK
+		_:
+			return _handle_error(res)
