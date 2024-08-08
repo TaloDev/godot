@@ -1,0 +1,86 @@
+[gd_scene load_steps=3 format=3 uid="uid://10aipp4jmgtd"]
+
+[ext_resource type="Script" path="res://addons/talo/samples/leaderboards/scripts/leaderboard.gd" id="1_ul1ks"]
+[ext_resource type="Theme" uid="uid://ce2uyi827vc5x" path="res://addons/talo/samples/authentication/assets/theme.tres" id="2_aw1ey"]
+
+[node name="Leaderboard" type="Node2D"]
+script = ExtResource("1_ul1ks")
+leaderboard_internal_name = "test-leaderboard"
+
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1080.0
+offset_bottom = 720.0
+
+[node name="Background" type="ColorRect" parent="UI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.121569, 0.160784, 0.215686, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="UI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 40
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 40
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 24
+
+[node name="LeaderboardName" type="Label" parent="UI/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 0
+theme = ExtResource("2_aw1ey")
+text = "{leaderboard} entries"
+horizontal_alignment = 1
+
+[node name="InfoLabel" type="Label" parent="UI/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(400, 2.08165e-12)
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Loading..."
+horizontal_alignment = 1
+
+[node name="ScrollContainer" type="ScrollContainer" parent="UI/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(2.08165e-12, 300)
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="Entries" type="VBoxContainer" parent="UI/MarginContainer/VBoxContainer/ScrollContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(2.08165e-12, 32)
+layout_mode = 2
+size_flags_horizontal = 3
+alignment = 1
+
+[node name="Username" type="TextEdit" parent="UI/MarginContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(400, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+theme = ExtResource("2_aw1ey")
+placeholder_text = "Username"
+
+[node name="Submit" type="Button" parent="UI/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(200, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+theme = ExtResource("2_aw1ey")
+text = "Add entry"
+
+[connection signal="pressed" from="UI/MarginContainer/VBoxContainer/Submit" to="." method="_on_submit_pressed"]
