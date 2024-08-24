@@ -2,6 +2,8 @@ class_name TaloClient extends HTTPRequest
 
 var _base_url: String
 
+var _continuity_timestamp: int
+
 func _init(base_url: String):
 	_base_url = base_url
 
@@ -13,10 +15,13 @@ func _get_method_name(method: HTTPClient.Method):
 		HTTPClient.METHOD_PATCH: return "PATCH"
 		HTTPClient.METHOD_DELETE: return "DELETE"
 
-func make_request(method: HTTPClient.Method, url: String, body: Dictionary = {}) -> Dictionary:	
-	var full_url = _build_full_url(url)
+func make_request(method: HTTPClient.Method, url: String, body: Dictionary = {}, headers: Array[String] = [], continuity: bool = false) -> Dictionary:	
+	var full_url = url if continuity else _build_full_url(url)
+	var all_headers = headers if continuity else _build_headers(headers)
 	var request_body = "" if body.keys().is_empty() else JSON.stringify(body)
-	request(full_url, _build_headers(), method, request_body)
+	_continuity_timestamp = TimeUtils.get_timestamp_msec()
+
+	request(full_url, all_headers, method, request_body)
 
 	var res = await request_completed
 	var status = res[1]
@@ -32,7 +37,13 @@ func make_request(method: HTTPClient.Method, url: String, body: Dictionary = {})
 		})
 
 	if Talo.config.get_value("logging", "requests"):
-		print_rich("[color=orange]--> %s %s %s[/color]" % [_get_method_name(method), full_url, request_body])
+		print_rich("[color=%s]--> %s %s %s %s[/color]" % [
+			"yellow" if continuity else "orange",
+			"[CONTINUITY]" if continuity else "",
+			_get_method_name(method),
+			full_url,
+			request_body
+		])
 	
 	if Talo.config.get_value("logging", "responses"):
 		print_rich("[color=green]<-- %s %s[/color]" % [status, json.get_data()])
@@ -45,10 +56,13 @@ func make_request(method: HTTPClient.Method, url: String, body: Dictionary = {})
 	if ret.status >= 400:
 		handle_error(ret)
 
+	if res[0] != RESULT_SUCCESS or ret.status >= 500:
+		Talo.continuity_manager.push_request(method, full_url, body, all_headers, _continuity_timestamp)
+
 	return ret
 	
-func _build_headers() -> Array:
-	var headers = [
+func _build_headers(extra_headers: Array[String] = []) -> Array[String]:
+	var headers: Array[String] = [
 		"Authorization: Bearer %s" % Talo.config.get_value("", "access_key"),
 		"Content-Type: application/json",
 		"Accept: application/json",
@@ -58,13 +72,15 @@ func _build_headers() -> Array:
 	
 	if Talo.current_alias:
 		headers.append_array([
-			'X-Talo-Player: %s' % Talo.current_player.id,
-			'X-Talo-Alias: %s' % Talo.current_alias.id
+			"X-Talo-Player: %s" % Talo.current_player.id,
+			"X-Talo-Alias: %s" % Talo.current_alias.id
 		])
 
 	var session_token = Talo.player_auth.session_manager.load_session()
 	if session_token:
-		headers.append('X-Talo-Session: %s' % session_token)
+		headers.append("X-Talo-Session: %s" % session_token)
+
+	headers.append_array(extra_headers)
 		
 	return headers
 
@@ -85,4 +101,3 @@ func handle_error(res: Dictionary) -> void:
 		return
 
 	push_error("%s: Unknown error" % res.status)
-

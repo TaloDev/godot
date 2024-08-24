@@ -6,13 +6,13 @@ var current_save: TaloGameSave
 var _registered_saved_objects: Array[TaloSavedObject]
 var _loaded_loadables: Array[String]
 
-var _offline_saves_path = "user://talo_saves.json"
+const _offline_saves_path = "user://talo_saves.bin"
 
 func read_offline_saves() -> Array[TaloGameSave]:
 	if not FileAccess.file_exists(_offline_saves_path):
 		return []
 
-	var content = FileAccess.open(_offline_saves_path, FileAccess.READ)
+	var content = FileAccess.open_encrypted_with_pass(_offline_saves_path, FileAccess.READ, Talo.crypto_manager.get_key())
 	var json = JSON.new()
 	json.parse(content.get_as_text())
 
@@ -22,7 +22,7 @@ func read_offline_saves() -> Array[TaloGameSave]:
 	return res
 
 func write_offline_saves(offline_saves: Array[TaloGameSave]):
-	var saves = FileAccess.open(_offline_saves_path, FileAccess.WRITE)
+	var saves = FileAccess.open_encrypted_with_pass(_offline_saves_path, FileAccess.WRITE, Talo.crypto_manager.get_key())
 	saves.store_line(JSON.stringify(offline_saves.map(func (save: TaloGameSave): return save.to_dictionary())))
 
 func sync_save(online_save: TaloGameSave, offline_save: TaloGameSave) -> TaloGameSave:

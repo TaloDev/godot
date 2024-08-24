@@ -43,7 +43,7 @@ func track(name: String, props: Dictionary) -> void:
 	_queue.push_back({
 		name = name,
 		props = final_props.map(func (prop: TaloProp): return prop.to_dictionary()),
-		timestamp = ceil(Time.get_unix_time_from_system()) * 1000
+		timestamp = TimeUtils.get_timestamp_msec()
 	})
 
 	if _queue.size() >= _min_queue_size:
@@ -54,9 +54,9 @@ func flush() -> void:
 		return
 
 	var res = await client.make_request(HTTPClient.METHOD_POST, "/", { events = _queue })
+	_queue.clear()
+
 	match (res.status):
 		200:
-			if not _has_errors(res.body.errors):
-				_queue.clear()
-			else:
-				client.handle_error(res)
+			if _has_errors(res.body.errors):
+				push_error("Failed to flush events: %s" % res.body.errors)
