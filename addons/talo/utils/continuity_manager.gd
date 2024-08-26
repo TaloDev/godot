@@ -23,6 +23,9 @@ func _ready() -> void:
   start()
 
 func push_request(method: HTTPClient.Method, url: String, body: Dictionary, headers: Array[String], timestamp: int):
+  if not Talo.config.get_value("continuity", "enabled", true):
+    return
+
   if _excluded_endpoints.any(func (endpoint: String): return url.find(endpoint) != -1):
     return
 
@@ -35,9 +38,6 @@ func push_request(method: HTTPClient.Method, url: String, body: Dictionary, head
   })
 
   _write_requests()
-
-func _get_crypto_key():
-  return Talo.config.get_value("", "access_key")
 
 func _read_requests() -> Array:
   if not FileAccess.file_exists(_continuity_path):
