@@ -2,8 +2,6 @@ class_name TaloClient extends HTTPRequest
 
 var _base_url: String
 
-var _continuity_timestamp: int
-
 func _init(base_url: String):
 	_base_url = base_url
 
@@ -24,10 +22,11 @@ func _simulate_offline_request():
 	]
 
 func make_request(method: HTTPClient.Method, url: String, body: Dictionary = {}, headers: Array[String] = [], continuity: bool = false) -> Dictionary:	
+	var continuity_timestamp = TimeUtils.get_timestamp_msec()
+
 	var full_url = url if continuity else _build_full_url(url)
 	var all_headers = headers if continuity else _build_headers(headers)
 	var request_body = "" if body.keys().is_empty() else JSON.stringify(body)
-	_continuity_timestamp = TimeUtils.get_timestamp_msec()
 
 	request(full_url, all_headers, method, request_body)
 
@@ -65,7 +64,7 @@ func make_request(method: HTTPClient.Method, url: String, body: Dictionary = {},
 		handle_error(ret)
 
 	if res[0] != RESULT_SUCCESS or ret.status >= 500:
-		Talo.continuity_manager.push_request(method, full_url, body, all_headers, _continuity_timestamp)
+		Talo.continuity_manager.push_request(method, full_url, body, all_headers, continuity_timestamp)
 
 	return ret
 	

@@ -22,6 +22,11 @@ func _ready() -> void:
   connect("timeout", _on_timeout)
   start()
 
+func _filter_headers(headers: Array[String]) -> Array[String]:
+  return headers.filter(
+    func (h: String):
+      return h.find(_continuity_timestamp_header) == -1 && h.find("Authorization") == -1)
+
 func push_request(method: HTTPClient.Method, url: String, body: Dictionary, headers: Array[String], timestamp: int):
   if not Talo.config.get_value("continuity", "enabled", true):
     return
@@ -33,9 +38,11 @@ func push_request(method: HTTPClient.Method, url: String, body: Dictionary, head
     method = method,
     url = url,
     body = body,
-    headers = headers.filter(func (h: String): return h.find(_continuity_timestamp_header) == -1),
+    headers = _filter_headers(headers),
     timestamp = timestamp
   })
+
+  print(_filter_headers(headers))
 
   _write_requests()
 
@@ -64,7 +71,10 @@ func _on_timeout():
     var req = _requests.pop_front()
     _write_requests()
 
-    var headers: Array[String] = ["%s: %s" % [_continuity_timestamp_header, req.timestamp]]
+    var headers: Array[String] = [
+      "%s: %s" % [_continuity_timestamp_header, req.timestamp],
+      "Authorization: Bearer %s" % Talo.config.get_value("", "access_key")
+    ]
     headers.append_array(req.headers)
 
     await _client.make_request(req.method, req.url, req.body, headers, true)
