@@ -76,7 +76,7 @@ func get_saves() -> Array[TaloGameSave]:
 
 	return _saves_manager.all_saves
 
-func set_chosen_save(save: TaloGameSave, load_save=true) -> void:
+func set_chosen_save(save: TaloGameSave, load_save = true) -> void:
 	_saves_manager.set_chosen_save(save, load_save)
 
 func choose_save(save: TaloGameSave) -> void:

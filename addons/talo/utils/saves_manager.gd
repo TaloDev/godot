@@ -12,15 +12,18 @@ func read_offline_saves() -> Array[TaloGameSave]:
 	if not FileAccess.file_exists(_offline_saves_path):
 		return []
 
-	var saves = FileAccess.open(_offline_saves_path, FileAccess.READ)
+	var content = FileAccess.open(_offline_saves_path, FileAccess.READ)
 	var json = JSON.new()
-	json.parse(saves)
+	json.parse(content.get_as_text())
 
-	return json.map(func (data: Dictionary): return TaloGameSave.new(data))
+	var res: Array[TaloGameSave] = []
+	res.assign(json.get_data().map(func (data: Dictionary): return TaloGameSave.new(data)))
+
+	return res
 
 func write_offline_saves(offline_saves: Array[TaloGameSave]):
 	var saves = FileAccess.open(_offline_saves_path, FileAccess.WRITE)
-	saves.store_line(JSON.stringify(offline_saves))
+	saves.store_line(JSON.stringify(offline_saves.map(func (save: TaloGameSave): return save.to_dictionary())))
 
 func sync_save(online_save: TaloGameSave, offline_save: TaloGameSave) -> TaloGameSave:
 	var online_updated_at = Time.get_unix_time_from_datetime_string(online_save.updated_at)
@@ -49,7 +52,22 @@ func sync_offline_saves(offline_saves: Array[TaloGameSave]) -> Array[TaloGameSav
 	return new_saves
 
 func update_offline_saves(incoming_save: TaloGameSave) -> void:
-	pass
+	var offline_saves: Array[TaloGameSave] = read_offline_saves()
+	var updated = false
+
+	for i in range(offline_saves.size()):
+		if offline_saves[i].id == incoming_save.id:
+			offline_saves[i] = incoming_save
+			updated = true
+			break
+
+	if not updated:
+		if incoming_save.id == 0:
+			incoming_save.id = -offline_saves.size() - 1
+
+		offline_saves.append(incoming_save)
+
+	write_offline_saves(offline_saves)
 
 func register_fields_for_saved_objects():
 	for saved_object in _registered_saved_objects:
