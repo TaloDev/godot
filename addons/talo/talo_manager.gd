@@ -92,8 +92,11 @@ func identity_check(should_error = true) -> Error:
 
 	return OK
 
+func offline_mode_enabled() -> bool:
+	return config.get_value("debug", "offline_mode", false)
+
 func is_offline() -> bool:
-	return not await health_check.ping()
+	return offline_mode_enabled() or not await health_check.ping()
 
 func _do_flush() -> void:
 	if identity_check(false) == OK:

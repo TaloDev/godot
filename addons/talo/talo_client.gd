@@ -15,6 +15,14 @@ func _get_method_name(method: HTTPClient.Method):
 		HTTPClient.METHOD_PATCH: return "PATCH"
 		HTTPClient.METHOD_DELETE: return "DELETE"
 
+func _simulate_offline_request():
+	return [
+		RESULT_CANT_CONNECT,
+		0,
+		PackedStringArray(),
+		PackedByteArray()
+	]
+
 func make_request(method: HTTPClient.Method, url: String, body: Dictionary = {}, headers: Array[String] = [], continuity: bool = false) -> Dictionary:	
 	var full_url = url if continuity else _build_full_url(url)
 	var all_headers = headers if continuity else _build_headers(headers)
@@ -23,7 +31,7 @@ func make_request(method: HTTPClient.Method, url: String, body: Dictionary = {},
 
 	request(full_url, all_headers, method, request_body)
 
-	var res = await request_completed
+	var res = _simulate_offline_request() if Talo.offline_mode_enabled() else await request_completed
 	var status = res[1]
 
 	var response_body = res[3]
@@ -33,7 +41,7 @@ func make_request(method: HTTPClient.Method, url: String, body: Dictionary = {},
 	if res[0] != RESULT_SUCCESS:
 		json.set_data({
 			message =
-				"Request failed with Result %s, visit the Godot docs for more details: https://docs.godotengine.org/en/stable/classes/class_httprequest.html#enum-httprequest-result" % res[0]
+				"Request failed: result %s, details: https://docs.godotengine.org/en/stable/classes/class_httprequest.html#enum-httprequest-result" % res[0]
 		})
 
 	if Talo.config.get_value("logging", "requests"):
