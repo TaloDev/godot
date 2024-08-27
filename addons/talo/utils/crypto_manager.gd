@@ -3,7 +3,7 @@ class_name TaloCryptoManager extends Node
 var _key_file_path = "user://talo_init.bin"
 
 func _get_pass() -> String:
-  return Talo.config.get_value("", "access_key")
+  return Talo.settings.get_value("", "access_key")
 
 func _init() -> void:
   if not FileAccess.file_exists(_key_file_path):

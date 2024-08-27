@@ -6,7 +6,7 @@ func _ready() -> void:
   _set_text(_get_value())
 
 func _get_value():
-  return Talo.config.get_value("continuity", "enabled", true)
+  return Talo.settings.get_value("continuity", "enabled", true)
 
 func _set_text(enabled: bool):
   text = "Toggle off" if enabled else "Toggle on"
@@ -14,7 +14,7 @@ func _set_text(enabled: bool):
 func _on_pressed() -> void:
   var enabled = _get_value()
 
-  Talo.config.set_value(
+  Talo.settings.set_value(
     "continuity",
     "enabled",
     not enabled
