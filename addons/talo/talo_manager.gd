@@ -15,14 +15,27 @@ var leaderboards: LeaderboardsAPI
 var saves: SavesAPI
 var feedback: FeedbackAPI
 var player_auth: PlayerAuthAPI
+var health_check: HealthCheckAPI
 
 var live_config: TaloLiveConfig
+
+var crypto_manager: TaloCryptoManager
+var continuity_manager: TaloContinuityManager
 
 func _ready() -> void:
 	_load_config()
 	_load_apis()
+	_init_crypto_manager()
+	_init_continuity()
 	_check_session()
 	get_tree().set_auto_accept_quit(false)
+
+func _init_crypto_manager() -> void:
+	crypto_manager = TaloCryptoManager.new()
+
+func _init_continuity() -> void:
+	continuity_manager = TaloContinuityManager.new()
+	add_child(continuity_manager)
 
 func _notification(what: int):
 	match what:
@@ -39,6 +52,7 @@ func _load_config() -> void:
 	if not FileAccess.file_exists(settings_path):
 		config.set_value("", "access_key", "")
 		config.set_value("", "api_url", "https://api.trytalo.com")
+		config.set_value("continuity", "enabled", true)
 		config.save(settings_path)
 	else:
 		config.load(settings_path)
@@ -52,6 +66,7 @@ func _load_apis() -> void:
 	saves = preload("res://addons/talo/apis/saves_api.gd").new("/v1/game-saves")
 	feedback = preload("res://addons/talo/apis/feedback_api.gd").new("/v1/game-feedback")
 	player_auth = preload("res://addons/talo/apis/player_auth_api.gd").new("/v1/players/auth")
+	health_check = preload("res://addons/talo/apis/health_check_api.gd").new("/v1/health-check")
 	
 	for api in [
 		players,
@@ -61,7 +76,8 @@ func _load_apis() -> void:
 		leaderboards,
 		saves,
 		feedback,
-		player_auth
+		player_auth,
+		health_check
 	]:
 		add_child(api)
 
@@ -76,21 +92,17 @@ func identity_check(should_error = true) -> Error:
 
 	return OK
 
+func offline_mode_enabled() -> bool:
+	return config.get_value("debug", "offline_mode", false)
+
 func is_offline() -> bool:
-	var http_request = HTTPRequest.new()
-	add_child(http_request)
-
-	http_request.request("https://httpbin.org/get")
-	var res = await http_request.request_completed
-	http_request.queue_free()
-
-	return res[0] != OK
+	return offline_mode_enabled() or not await health_check.ping()
 
 func _do_flush() -> void:
 	if identity_check(false) == OK:
-		Talo.events.flush()
+		events.flush()
 
 func _check_session() -> void:
 	var session_token = player_auth.session_manager.load_session()
 	if not session_token.is_empty():
-		Talo.players.identify('talo', player_auth.session_manager.get_identifier())
+		players.identify("talo", player_auth.session_manager.get_identifier())
