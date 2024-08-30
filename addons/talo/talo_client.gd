@@ -13,12 +13,24 @@ func _get_method_name(method: HTTPClient.Method):
 		HTTPClient.METHOD_PATCH: return "PATCH"
 		HTTPClient.METHOD_DELETE: return "DELETE"
 
-func make_request(method: HTTPClient.Method, url: String, body: Dictionary = {}) -> Dictionary:	
-	var full_url = _build_full_url(url)
-	var request_body = "" if body.keys().is_empty() else JSON.stringify(body)
-	request(full_url, _build_headers(), method, request_body)
+func _simulate_offline_request():
+	return [
+		RESULT_CANT_CONNECT,
+		0,
+		PackedStringArray(),
+		PackedByteArray()
+	]
 
-	var res = await request_completed
+func make_request(method: HTTPClient.Method, url: String, body: Dictionary = {}, headers: Array[String] = [], continuity: bool = false) -> Dictionary:	
+	var continuity_timestamp = TimeUtils.get_timestamp_msec()
+
+	var full_url = url if continuity else _build_full_url(url)
+	var all_headers = headers if continuity else _build_headers(headers)
+	var request_body = "" if body.keys().is_empty() else JSON.stringify(body)
+
+	request(full_url, all_headers, method, request_body)
+
+	var res = _simulate_offline_request() if Talo.offline_mode_enabled() else await request_completed
 	var status = res[1]
 
 	var response_body = res[3]
@@ -28,13 +40,19 @@ func make_request(method: HTTPClient.Method, url: String, body: Dictionary = {})
 	if res[0] != RESULT_SUCCESS:
 		json.set_data({
 			message =
-				"Request failed with Result %s, visit the Godot docs for more details: https://docs.godotengine.org/en/stable/classes/class_httprequest.html#enum-httprequest-result" % res[0]
+				"Request failed: result %s, details: https://docs.godotengine.org/en/stable/classes/class_httprequest.html#enum-httprequest-result" % res[0]
 		})
 
-	if Talo.config.get_value("logging", "requests"):
-		print_rich("[color=orange]--> %s %s %s[/color]" % [_get_method_name(method), full_url, request_body])
+	if Talo.settings.get_value("logging", "requests"):
+		print_rich("[color=%s]--> %s %s %s %s[/color]" % [
+			"yellow" if continuity else "orange",
+			"[CONTINUITY]" if continuity else "",
+			_get_method_name(method),
+			full_url,
+			request_body
+		])
 	
-	if Talo.config.get_value("logging", "responses"):
+	if Talo.settings.get_value("logging", "responses"):
 		print_rich("[color=green]<-- %s %s[/color]" % [status, json.get_data()])
 
 	var ret = {
@@ -45,11 +63,14 @@ func make_request(method: HTTPClient.Method, url: String, body: Dictionary = {})
 	if ret.status >= 400:
 		handle_error(ret)
 
+	if res[0] != RESULT_SUCCESS or ret.status >= 500:
+		Talo.continuity_manager.push_request(method, full_url, body, all_headers, continuity_timestamp)
+
 	return ret
 	
-func _build_headers() -> Array:
-	var headers = [
-		"Authorization: Bearer %s" % Talo.config.get_value("", "access_key"),
+func _build_headers(extra_headers: Array[String] = []) -> Array[String]:
+	var headers: Array[String] = [
+		"Authorization: Bearer %s" % Talo.settings.get_value("", "access_key"),
 		"Content-Type: application/json",
 		"Accept: application/json",
 		"X-Talo-Dev-Build: %s" % ("1" if OS.has_feature("debug") else "0"),
@@ -58,19 +79,21 @@ func _build_headers() -> Array:
 	
 	if Talo.current_alias:
 		headers.append_array([
-			'X-Talo-Player: %s' % Talo.current_player.id,
-			'X-Talo-Alias: %s' % Talo.current_alias.id
+			"X-Talo-Player: %s" % Talo.current_player.id,
+			"X-Talo-Alias: %s" % Talo.current_alias.id
 		])
 
 	var session_token = Talo.player_auth.session_manager.load_session()
 	if session_token:
-		headers.append('X-Talo-Session: %s' % session_token)
+		headers.append("X-Talo-Session: %s" % session_token)
+
+	headers.append_array(extra_headers)
 		
 	return headers
 
 func _build_full_url(url: String) -> String:
 	return "%s%s%s" % [
-		Talo.config.get_value("", "api_url"),
+		Talo.settings.get_value("", "api_url"),
 		_base_url,
 		url
 	]
@@ -85,4 +108,3 @@ func handle_error(res: Dictionary) -> void:
 		return
 
 	push_error("%s: Unknown error" % res.status)
-

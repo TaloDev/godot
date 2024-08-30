@@ -4,7 +4,7 @@ var color_rect: ColorRect
 
 func _ready() -> void:
   super()
-  color_rect = get_child(0)
+  color_rect = get_child(1)
 
 func register_fields() -> void:
   register_field("r", color_rect.color.r)

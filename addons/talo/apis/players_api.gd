@@ -8,6 +8,8 @@ func identify(service: String, identifier: String) -> void:
 		200:
 			Talo.current_alias = TaloPlayerAlias.new(res.body.alias)
 			identified.emit(Talo.current_player)
+		_:
+			Talo.player_auth.session_manager.clear_session()
 
 func update() -> void:
 	var res = await client.make_request(HTTPClient.METHOD_PATCH, "/%s" % Talo.current_player.id, { props = Talo.current_player.get_serialized_props() })

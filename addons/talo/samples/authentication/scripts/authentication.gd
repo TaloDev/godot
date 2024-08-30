@@ -10,7 +10,7 @@ extends Node2D
 @onready var reset_password = %ResetPassword
 @onready var all_states = %States
 
-func _ready():
+func _ready() -> void:
   _configure_signals()
   _make_state_visible(login)
 
