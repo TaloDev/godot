@@ -5,7 +5,7 @@ var current_player: TaloPlayer:
 	get:
 		return null if not current_alias else current_alias.player
 
-var config: ConfigFile
+var settings: ConfigFile
 
 var players: PlayersAPI
 var events: EventsAPI
@@ -47,15 +47,15 @@ func _notification(what: int):
 
 func _load_config() -> void:
 	var settings_path = "res://addons/talo/settings.cfg"
-	config = ConfigFile.new()
+	settings = ConfigFile.new()
 
 	if not FileAccess.file_exists(settings_path):
-		config.set_value("", "access_key", "")
-		config.set_value("", "api_url", "https://api.trytalo.com")
-		config.set_value("continuity", "enabled", true)
-		config.save(settings_path)
+		settings.set_value("", "access_key", "")
+		settings.set_value("", "api_url", "https://api.trytalo.com")
+		settings.set_value("continuity", "enabled", true)
+		settings.save(settings_path)
 	else:
-		config.load(settings_path)
+		settings.load(settings_path)
 	
 func _load_apis() -> void:
 	players = preload("res://addons/talo/apis/players_api.gd").new("/v1/players")
@@ -93,7 +93,7 @@ func identity_check(should_error = true) -> Error:
 	return OK
 
 func offline_mode_enabled() -> bool:
-	return config.get_value("debug", "offline_mode", false)
+	return settings.get_value("debug", "offline_mode", false)
 
 func is_offline() -> bool:
 	return offline_mode_enabled() or not await health_check.ping()
