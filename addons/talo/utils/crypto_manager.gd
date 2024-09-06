@@ -6,7 +6,7 @@ func _get_pass() -> String:
   return Talo.settings.get_value("", "access_key")
 
 func _init() -> void:
-  if not FileAccess.file_exists(_key_file_path):
+  if not FileAccess.file_exists(_key_file_path) and not _get_pass().is_empty():
     var crypto = Crypto.new()
     var key = crypto.generate_random_bytes(32).hex_encode()
 
