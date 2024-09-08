@@ -54,8 +54,13 @@ func _load_config() -> void:
 		settings.set_value("", "api_url", "https://api.trytalo.com")
 		settings.set_value("continuity", "enabled", true)
 		settings.save(settings_path)
+
+		print_rich("[color=green]Talo settings.cfg created! Please close the game and fill in your access_key.[/color]")
 	else:
 		settings.load(settings_path)
+
+		if (settings.get_value("", "access_key", "").is_empty()) && OS.is_debug_build():
+			print_rich("[color=yellow]Warning: Talo access_key in settings.cfg is empty[/color]")
 	
 func _load_apis() -> void:
 	players = preload("res://addons/talo/apis/players_api.gd").new("/v1/players")

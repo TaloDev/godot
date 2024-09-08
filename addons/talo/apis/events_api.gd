@@ -12,10 +12,7 @@ func _get_window_mode() -> String:
 		_: return ""
 
 func _get_game_version() -> String:
-	var export_config = ConfigFile.new()
-	var export_config_path = "res://export_presets.cfg"
-	var config_error = export_config.load(export_config_path)
-	return "" if config_error else export_config.get_value("preset.0.options", "application/product_version")
+	return ProjectSettings.get_setting("application/config/version")
 
 func _build_meta_props() -> Array[TaloProp]:
 	return [

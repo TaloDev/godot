@@ -13,6 +13,7 @@ Build games faster and make better decisions with the [Talo](https://trytalo.com
 - ⚙️ [Live config](https://trytalo.com/live-config) (update your game config from the web, no releases required)
 - 🔧 [Steamworks integration](https://trytalo.com/steamworks-integration)
 - 💬 [Game feedback](https://trytalo.com/feedback)
+- 🛡️ [Continuity](https://trytalo.com/continuity) (keeping your data in-sync even when your players are offline)
 
 ## Docs
 
