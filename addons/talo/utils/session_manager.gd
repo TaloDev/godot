@@ -16,8 +16,10 @@ func _save_session(session_token: String) -> void:
 
 func clear_session() -> void:
   var config = _load_config()
-  config.erase_section("session")
-  config.save(_config_file_path)
+
+  if config.has_section("session"):
+    config.erase_section("session")
+    config.save(_config_file_path)
 
 func load_session() -> String:
   var config = _load_config()
