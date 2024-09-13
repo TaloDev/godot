@@ -9,12 +9,14 @@ var entry_scene = preload("res://addons/talo/samples/leaderboards/entry.tscn")
 @onready var info_label: Label = %InfoLabel
 @onready var username: TextEdit = %Username
 
+var _entries_error: bool
+
 func _ready() -> void:
   leaderboard_name.text = leaderboard_name.text.replace("{leaderboard}", leaderboard_internal_name)
 
   await _load_entries()
   if entries_container.get_child_count() == 0:
-    info_label.text = "No entries yet!"
+    info_label.text = "No entries yet!" if not _entries_error else "Failed loading leaderboard %s. Does it exist?" % [leaderboard_internal_name]
   else:
     info_label.text = "%s entries" % entries_container.get_child_count()
 
@@ -36,6 +38,11 @@ func _load_entries() -> void:
 
   while !done:
     var res = await Talo.leaderboards.get_entries(leaderboard_internal_name, page)
+
+    if res.size() == 0:
+      _entries_error = true
+      return
+
     var entries = res[0]
     var last_page = res[2]
 
