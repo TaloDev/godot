@@ -10,7 +10,7 @@ func _ready() -> void:
   Talo.players.identified.connect(_on_player_identified)
 
 func _on_player_identified(player: TaloPlayer) -> void:
-  username.text = username.text.replace("{username}", Talo.current_alias.identifier)
+  username.text = "What would you like to do,\n%s?" % [Talo.current_alias.identifier]
 
 func _on_change_password_pressed() -> void:
   go_to_change_password.emit()
