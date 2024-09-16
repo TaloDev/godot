@@ -3,7 +3,7 @@ class_name TaloContinuityManager extends Timer
 var _client: TaloClient
 var _requests: Array = []
 
-const _continuity_path = "user://talo_continuity.bin"
+const _continuity_path = "user://tc.bin"
 const _continuity_timestamp_header = "X-Talo-Continuity-Timestamp"
 
 const _excluded_endpoints: Array[String] = [
