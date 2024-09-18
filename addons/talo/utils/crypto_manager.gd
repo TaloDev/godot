@@ -3,10 +3,10 @@ class_name TaloCryptoManager extends Node
 var _key_file_path = "user://ti.bin"
 
 func _get_pass() -> String:
-  var os_unique_id = OS.get_unique_id()
-  var access_key = Talo.settings.get_value("", "access_key")
+  if OS.has_feature("web"):
+    return Talo.settings.get_value("", "access_key")
 
-  return access_key if os_unique_id.is_empty() else os_unique_id
+  return OS.get_unique_id()
 
 func _init() -> void:
   if not FileAccess.file_exists(_key_file_path):
