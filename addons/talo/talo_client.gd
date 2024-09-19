@@ -4,6 +4,7 @@ var _base_url: String
 
 func _init(base_url: String):
 	_base_url = base_url
+	name = "Client"
 
 func _get_method_name(method: HTTPClient.Method):
 	match method:
@@ -30,6 +31,7 @@ func make_request(method: HTTPClient.Method, url: String, body: Dictionary = {},
 
 	var http_request = HTTPRequest.new()
 	add_child(http_request)
+	http_request.name = "%s %s" % [_get_method_name(method), url]
 
 	http_request.request(full_url, all_headers, method, request_body)
 	var res = _simulate_offline_request() if Talo.offline_mode_enabled() else await http_request.request_completed

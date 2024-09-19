@@ -13,6 +13,7 @@ const _excluded_endpoints: Array[String] = [
 ]
 
 func _ready() -> void:
+  name = "TaloContinuityManager"
   _client = TaloClient.new("")
   add_child(_client)
 
