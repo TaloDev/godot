@@ -1,4 +1,4 @@
-class_name TaloClient extends HTTPRequest
+class_name TaloClient extends Node
 
 var _base_url: String
 
@@ -15,7 +15,7 @@ func _get_method_name(method: HTTPClient.Method):
 
 func _simulate_offline_request():
 	return [
-		RESULT_CANT_CONNECT,
+		HTTPRequest.RESULT_CANT_CONNECT,
 		0,
 		PackedStringArray(),
 		PackedByteArray()
@@ -28,16 +28,18 @@ func make_request(method: HTTPClient.Method, url: String, body: Dictionary = {},
 	var all_headers = headers if continuity else _build_headers(headers)
 	var request_body = "" if body.keys().is_empty() else JSON.stringify(body)
 
-	request(full_url, all_headers, method, request_body)
+	var http_request = HTTPRequest.new()
+	add_child(http_request)
 
-	var res = _simulate_offline_request() if Talo.offline_mode_enabled() else await request_completed
+	http_request.request(full_url, all_headers, method, request_body)
+	var res = _simulate_offline_request() if Talo.offline_mode_enabled() else await http_request.request_completed
 	var status = res[1]
 
 	var response_body = res[3]
 	var json = JSON.new()
 	json.parse(response_body.get_string_from_utf8())
 
-	if res[0] != RESULT_SUCCESS:
+	if res[0] != HTTPRequest.RESULT_SUCCESS:
 		json.set_data({
 			message =
 				"Request failed: result %s, details: https://docs.godotengine.org/en/stable/classes/class_httprequest.html#enum-httprequest-result" % res[0]
@@ -63,8 +65,10 @@ func make_request(method: HTTPClient.Method, url: String, body: Dictionary = {},
 	if ret.status >= 400:
 		handle_error(ret)
 
-	if res[0] != RESULT_SUCCESS or ret.status >= 500:
+	if res[0] != HTTPRequest.RESULT_SUCCESS or ret.status >= 500:
 		Talo.continuity_manager.push_request(method, full_url, body, all_headers, continuity_timestamp)
+
+	http_request.queue_free()
 
 	return ret
 	
