@@ -105,12 +105,13 @@ func _build_full_url(url: String) -> String:
 	]
 
 func handle_error(res: Dictionary) -> void:
-	if res.body.has("message"):
-		push_error("%s: %s" % [res.status, res.body.message])
-		return
-	
-	if res.body.has("errors"):
-		push_error("%s: %s" % [res.status, res.body.errors])
-		return
+	if res.body != null:
+		if res.body.has("message"):
+			push_error("%s: %s" % [res.status, res.body.message])
+			return
+		
+		if res.body.has("errors"):
+			push_error("%s: %s" % [res.status, res.body.errors])
+			return
 
 	push_error("%s: Unknown error" % res.status)
