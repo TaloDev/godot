@@ -2,6 +2,7 @@ extends Node2D
 
 signal go_to_change_password
 signal go_to_change_email
+signal go_to_delete
 signal logout_success
 
 @onready var username: Label = %Username
@@ -21,3 +22,6 @@ func _on_change_email_pressed() -> void:
 func _on_logout_pressed() -> void:
   await Talo.player_auth.logout()
   logout_success.emit()
+
+func _on_delete_pressed() -> void:
+  go_to_delete.emit()
