@@ -4,7 +4,7 @@ var session_manager = TaloSessionManager.new()
 var last_error: Variant = null
 
 func _handle_error(res: Dictionary, ret: Variant = FAILED) -> Variant:
-	if res.body.has("errorCode"):
+	if res.body != null and res.body.has("errorCode"):
 		last_error = TaloAuthError.new(res.body.errorCode)
 	else:
 		last_error = TaloAuthError.new("API_ERROR")
@@ -121,6 +121,19 @@ func toggle_verification(current_password: String, verification_enabled: bool, e
 
 	match (res.status):
 		204:
+			return OK
+		_:
+			return _handle_error(res)
+
+func delete_account(current_password: String) -> Error:
+	var res = await client.make_request(HTTPClient.METHOD_DELETE, "/", {
+		currentPassword = current_password
+	})
+
+	match (res.status):
+		204:
+			session_manager.clear_session()
+			Talo.current_alias = null
 			return OK
 		_:
 			return _handle_error(res)

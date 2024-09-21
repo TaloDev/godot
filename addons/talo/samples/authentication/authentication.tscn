@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://bwh4ytfs4g7js"]
+[gd_scene load_steps=11 format=3 uid="uid://bwh4ytfs4g7js"]
 
 [ext_resource type="PackedScene" uid="uid://bjopxp3rhpinb" path="res://addons/talo/samples/authentication/states/register.tscn" id="1_5qw25"]
 [ext_resource type="Script" path="res://addons/talo/samples/authentication/scripts/authentication.gd" id="1_aqcrf"]
@@ -6,9 +6,10 @@
 [ext_resource type="PackedScene" uid="uid://dv6o0q01wov2o" path="res://addons/talo/samples/authentication/states/verify.tscn" id="3_njdp7"]
 [ext_resource type="PackedScene" uid="uid://b6mypp2qa8m4u" path="res://addons/talo/samples/authentication/states/change_email.tscn" id="4_vngav"]
 [ext_resource type="PackedScene" uid="uid://bdfuoxfyblqtw" path="res://addons/talo/samples/authentication/states/change_password.tscn" id="5_q15qy"]
-[ext_resource type="PackedScene" uid="uid://hmdhr4bk3v1a" path="res://addons/talo/samples/authentication/states/in_game.tscn" id="7_sxmru"]
+[ext_resource type="PackedScene" uid="uid://df6qjcnw1atpn" path="res://addons/talo/samples/authentication/states/in_game.tscn" id="7_sxmru"]
 [ext_resource type="PackedScene" uid="uid://b0nvmmnpff27a" path="res://addons/talo/samples/authentication/states/forgot_password.tscn" id="8_tqrpb"]
 [ext_resource type="PackedScene" uid="uid://8aqpg6o0a1xx" path="res://addons/talo/samples/authentication/states/reset_password.tscn" id="9_6wobc"]
+[ext_resource type="PackedScene" uid="uid://d17bvaxw1qew4" path="res://addons/talo/samples/authentication/states/delete_account.tscn" id="10_gndcp"]
 
 [node name="Authentication" type="Node2D"]
 script = ExtResource("1_aqcrf")
@@ -53,5 +54,9 @@ unique_name_in_owner = true
 visible = false
 
 [node name="ResetPassword" parent="UI/States" instance=ExtResource("9_6wobc")]
+unique_name_in_owner = true
+visible = false
+
+[node name="DeleteAccount" parent="UI/States" instance=ExtResource("10_gndcp")]
 unique_name_in_owner = true
 visible = false

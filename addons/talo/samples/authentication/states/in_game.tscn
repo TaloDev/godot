@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://hmdhr4bk3v1a"]
+[gd_scene load_steps=3 format=3 uid="uid://df6qjcnw1atpn"]
 
 [ext_resource type="Script" path="res://addons/talo/samples/authentication/scripts/in_game.gd" id="1_is44q"]
 [ext_resource type="Theme" uid="uid://ce2uyi827vc5x" path="res://addons/talo/samples/authentication/assets/theme.tres" id="2_7u3gt"]
@@ -68,6 +68,14 @@ size_flags_horizontal = 4
 theme = ExtResource("2_7u3gt")
 text = "Log out"
 
+[node name="Delete" type="Button" parent="UI/MarginContainer/VBoxContainer"]
+custom_minimum_size = Vector2(200, 40)
+layout_mode = 2
+size_flags_horizontal = 4
+theme = ExtResource("2_7u3gt")
+text = "Delete account"
+
 [connection signal="pressed" from="UI/MarginContainer/VBoxContainer/ChangePassword" to="." method="_on_change_password_pressed"]
 [connection signal="pressed" from="UI/MarginContainer/VBoxContainer/ChangeEmail" to="." method="_on_change_email_pressed"]
 [connection signal="pressed" from="UI/MarginContainer/VBoxContainer/Logout" to="." method="_on_logout_pressed"]
+[connection signal="pressed" from="UI/MarginContainer/VBoxContainer/Delete" to="." method="_on_delete_pressed"]
