@@ -15,7 +15,7 @@ func identify_steam(ticket: string, identity: string = "") -> void:
 	if identity.is_empty():
 		identify("steam", ticket)
 	else:
-		identify("steam", "%s:%s" % [ticket, identity])
+		identify("steam", "%s:%s" % [identity, ticket])
 
 func update() -> void:
 	var res = await client.make_request(HTTPClient.METHOD_PATCH, "/%s" % Talo.current_player.id, { props = Talo.current_player.get_serialized_props() })
