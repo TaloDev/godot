@@ -1,4 +1,4 @@
-class_name TaloLeaderboardEntry extends Node
+class_name TaloLeaderboardEntry extends TaloEntityWithProps
 
 var id: int
 var position: int
@@ -8,6 +8,8 @@ var created_at: String
 var updated_at: String
 
 func _init(data: Dictionary):
+  super._init(data.props.map(func (prop): return TaloProp.new(prop.key, prop.value)))
+
   id = data.id
   position = data.position
   score = data.score
