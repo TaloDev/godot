@@ -11,7 +11,7 @@ func identify(service: String, identifier: String) -> void:
 		_:
 			Talo.player_auth.session_manager.clear_session()
 
-func identify_steam(ticket: string, identity: string = "") -> void:
+func identify_steam(ticket: String, identity: String = "") -> void:
 	if identity.is_empty():
 		identify("steam", ticket)
 	else:
