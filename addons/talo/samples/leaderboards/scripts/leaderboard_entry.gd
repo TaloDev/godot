@@ -9,7 +9,12 @@ func _set_username(username: String) -> void:
 func _set_score(score: int) -> void:
   text = text.replace("{score}", str(int(score)))
 
-func set_data(pos: int, username: String, score: int) -> void:
-  _set_pos(pos)
-  _set_username(username)
-  _set_score(score)
+func _set_team(team: String) -> void:
+  if not team.is_empty():
+    text += " (%s team)" % [team]
+
+func set_data(entry: TaloLeaderboardEntry) -> void:
+  _set_pos(entry.position)
+  _set_username(entry.player_alias.identifier)
+  _set_score(entry.score)
+  _set_team(entry.get_prop("team", ""))

@@ -1,36 +1,26 @@
-class_name TaloPlayer extends Node
+class_name TaloPlayer extends TaloEntityWithProps
 
 var id: String
-var props: Array[TaloProp] = []
 var groups: Array[TaloGroup] = []
 
 func _init(data: Dictionary):
-	id = data.id
-	props.assign(data.props.map(func (prop): return TaloProp.new(prop.key, prop.value)))
-	groups.assign(data.groups.map(func (group): return TaloGroup.new(group.id, group.name)))
+  super._init(data.props.map(func (prop): return TaloProp.new(prop.key, prop.value)))
 
-func get_prop(key: String, fallback: String) -> String:
-	var filtered = props.filter(func (prop: TaloProp): return prop.key == key)
-	return fallback if filtered.is_empty() else filtered.front()
+  id = data.id
+  groups.assign(data.groups.map(func (group): return TaloGroup.new(group.id, group.name)))
 
-func set_prop(key: String, value: String) -> void:
-	var filtered = props.filter(func (prop: TaloProp): return prop.key == key)
-	if filtered.is_empty():
-		props.push_back(TaloProp.new(key, value))
-	else:
-		filtered.front().value = value
-	
-	Talo.players.update()
+func set_prop(key: String, value: String, update: bool = true) -> void:
+  super.set_prop(key, value)
+  if update:
+    Talo.players.update()
 
-func delete_prop(key: String) -> void:
-	props = props.filter(func (prop: TaloProp): return prop.key != key)
+func delete_prop(key: String, update: bool = true) -> void:
+  super.delete_prop(key)
+  if update:
+    Talo.players.update()
 
 func is_in_talo_group_id(group_id: String) -> bool:
-	return not groups.filter(func (group: TaloGroup): return group.id == group_id).is_empty()
+  return not groups.filter(func (group: TaloGroup): return group.id == group_id).is_empty()
 
 func is_in_talo_group_name(group_name: String) -> bool:
-	return not groups.filter(func (group: TaloGroup): return group.name == group_name).is_empty()
-
-func get_serialized_props() -> Array:
-	return props \
-		.map(func (prop: TaloProp): return prop.to_dictionary())
+  return not groups.filter(func (group: TaloGroup): return group.name == group_name).is_empty()
