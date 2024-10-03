@@ -85,7 +85,7 @@ func choose_save(save: TaloGameSave) -> void:
 func unload_current_save() -> void:
 	set_chosen_save(null)
 
-func create_save(save_name: String, content: Dictionary) -> TaloGameSave:
+func create_save(save_name: String, content: Dictionary = {}) -> TaloGameSave:
 	var save: TaloGameSave
 
 	_saves_manager.register_fields_for_saved_objects()

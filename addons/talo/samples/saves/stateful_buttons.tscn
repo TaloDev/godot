@@ -1,0 +1,115 @@
+[gd_scene load_steps=3 format=3 uid="uid://cbmprpim3xigq"]
+
+[ext_resource type="Script" path="res://addons/talo/samples/saves/stateful_buttons_manager.gd" id="1_0jiiv"]
+[ext_resource type="Script" path="res://addons/talo/samples/saves/loadable_button.gd" id="2_ge7ge"]
+
+[node name="StatefulButtons" type="Node2D"]
+script = ExtResource("1_0jiiv")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_right = 1080.0
+offset_bottom = 720.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="GridContainer" type="GridContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -116.0
+offset_top = -66.5
+offset_right = 116.0
+offset_bottom = 66.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/h_separation = 20
+theme_override_constants/v_separation = 20
+columns = 3
+
+[node name="LoadableButton" type="Control" parent="Control/GridContainer"]
+custom_minimum_size = Vector2(65, 32)
+layout_mode = 2
+script = ExtResource("2_ge7ge")
+id = "Button1"
+
+[node name="Button" type="Button" parent="Control/GridContainer/LoadableButton"]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+text = "0 clicks"
+
+[node name="LoadableButton2" type="Control" parent="Control/GridContainer"]
+custom_minimum_size = Vector2(65, 32)
+layout_mode = 2
+script = ExtResource("2_ge7ge")
+id = "Button2"
+
+[node name="Button" type="Button" parent="Control/GridContainer/LoadableButton2"]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+text = "0 clicks"
+
+[node name="LoadableButton3" type="Control" parent="Control/GridContainer"]
+custom_minimum_size = Vector2(65, 32)
+layout_mode = 2
+script = ExtResource("2_ge7ge")
+id = "Button3"
+
+[node name="Button" type="Button" parent="Control/GridContainer/LoadableButton3"]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+text = "0 clicks"
+
+[node name="LoadableButton4" type="Control" parent="Control/GridContainer"]
+custom_minimum_size = Vector2(65, 32)
+layout_mode = 2
+script = ExtResource("2_ge7ge")
+id = "Button4"
+
+[node name="Button" type="Button" parent="Control/GridContainer/LoadableButton4"]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+text = "0 clicks"
+
+[node name="LoadableButton5" type="Control" parent="Control/GridContainer"]
+custom_minimum_size = Vector2(65, 32)
+layout_mode = 2
+script = ExtResource("2_ge7ge")
+id = "Button5"
+
+[node name="Button" type="Button" parent="Control/GridContainer/LoadableButton5"]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+text = "0 clicks"
+
+[node name="LoadableButton6" type="Control" parent="Control/GridContainer"]
+custom_minimum_size = Vector2(65, 32)
+layout_mode = 2
+script = ExtResource("2_ge7ge")
+id = "Button6"
+
+[node name="Button" type="Button" parent="Control/GridContainer/LoadableButton6"]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+text = "0 clicks"
+
+[connection signal="pressed" from="Control/GridContainer/LoadableButton/Button" to="Control/GridContainer/LoadableButton" method="_on_button_pressed"]
+[connection signal="pressed" from="Control/GridContainer/LoadableButton2/Button" to="Control/GridContainer/LoadableButton2" method="_on_button_pressed"]
+[connection signal="pressed" from="Control/GridContainer/LoadableButton3/Button" to="Control/GridContainer/LoadableButton3" method="_on_button_pressed"]
+[connection signal="pressed" from="Control/GridContainer/LoadableButton4/Button" to="Control/GridContainer/LoadableButton4" method="_on_button_pressed"]
+[connection signal="pressed" from="Control/GridContainer/LoadableButton5/Button" to="Control/GridContainer/LoadableButton5" method="_on_button_pressed"]
+[connection signal="pressed" from="Control/GridContainer/LoadableButton6/Button" to="Control/GridContainer/LoadableButton6" method="_on_button_pressed"]
