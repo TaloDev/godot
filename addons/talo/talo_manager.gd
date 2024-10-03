@@ -41,7 +41,8 @@ func _notification(what: int):
 	match what:
 		NOTIFICATION_WM_CLOSE_REQUEST:
 			_do_flush()
-			get_tree().quit()
+			if Talo.settings.get_value("", "handle_tree_quit", true):
+				get_tree().quit()
 		NOTIFICATION_APPLICATION_FOCUS_OUT, NOTIFICATION_APPLICATION_PAUSED:
 			_do_flush()
 
@@ -52,6 +53,7 @@ func _load_config() -> void:
 	if not FileAccess.file_exists(settings_path):
 		settings.set_value("", "access_key", "")
 		settings.set_value("", "api_url", "https://api.trytalo.com")
+		settings.set_value("", "handle_tree_quit", true)
 		settings.set_value("continuity", "enabled", true)
 		settings.save(settings_path)
 
