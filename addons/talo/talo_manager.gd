@@ -41,7 +41,8 @@ func _notification(what: int):
 	match what:
 		NOTIFICATION_WM_CLOSE_REQUEST:
 			_do_flush()
-			get_tree().quit()
+			if Talo.settings.get_value("", "handle_tree_quit", true):
+				get_tree().quit()
 		NOTIFICATION_APPLICATION_FOCUS_OUT, NOTIFICATION_APPLICATION_PAUSED:
 			_do_flush()
 
