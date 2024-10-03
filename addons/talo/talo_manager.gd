@@ -53,6 +53,7 @@ func _load_config() -> void:
 	if not FileAccess.file_exists(settings_path):
 		settings.set_value("", "access_key", "")
 		settings.set_value("", "api_url", "https://api.trytalo.com")
+		settings.set_value("", "handle_tree_quit", true)
 		settings.set_value("continuity", "enabled", true)
 		settings.save(settings_path)
 
