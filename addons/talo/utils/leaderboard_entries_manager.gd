@@ -13,7 +13,10 @@ func upsert_entry(internal_name: String, entry: TaloLeaderboardEntry) -> void:
       func (e: TaloLeaderboardEntry): return e.id != entry.id
     )
 
-  _current_entries[internal_name].insert(entry.position, entry)
+  if entry.position >= _current_entries[internal_name].size():
+      _current_entries[internal_name].append(entry)
+  else:
+    _current_entries[internal_name].insert(entry.position, entry)
 
   for idx in range(entry.position, _current_entries[internal_name].size()):
     _current_entries[internal_name][idx].position = idx
