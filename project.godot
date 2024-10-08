@@ -12,7 +12,7 @@ config_version=5
 
 config/name="Talo"
 run/main_scene="res://addons/talo/samples/playground/playground.tscn"
-config/features=PackedStringArray("4.2", "Forward Plus")
+config/features=PackedStringArray("4.3", "Forward Plus")
 config/icon="res://icon.png"
 
 [autoload]
@@ -36,9 +36,6 @@ gdscript/warnings/unreachable_pattern=2
 gdscript/warnings/standalone_expression=2
 gdscript/warnings/standalone_ternary=2
 gdscript/warnings/incompatible_ternary=2
-gdscript/warnings/property_used_as_function=2
-gdscript/warnings/constant_used_as_function=2
-gdscript/warnings/function_used_as_property=2
 gdscript/warnings/untyped_declaration=2
 gdscript/warnings/inferred_declaration=2
 gdscript/warnings/unsafe_property_access=2
@@ -56,6 +53,9 @@ gdscript/warnings/deprecated_keyword=2
 gdscript/warnings/confusable_identifier=2
 gdscript/warnings/confusable_local_declaration=2
 gdscript/warnings/confusable_local_usage=2
+gdscript/warnings/property_used_as_function=2
+gdscript/warnings/constant_used_as_function=2
+gdscript/warnings/function_used_as_property=2
 
 [display]
 
