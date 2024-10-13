@@ -26,7 +26,7 @@ func _build_meta_props() -> Array[TaloProp]:
 func _has_errors(errors: Array) -> bool:
 	return errors.any((func (err: Array): return err.size() > 0))
 
-func track(name: String, props: Dictionary) -> void:
+func track(name: String, props: Dictionary = {}) -> void:
 	if Talo.identity_check() != OK:
 		return
 
