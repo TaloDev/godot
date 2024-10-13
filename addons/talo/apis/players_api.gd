@@ -31,6 +31,6 @@ func merge(player_id1: String, player_id2: String) -> TaloPlayer:
 
 	match (res.status):
 		200:
-			return res.body.player
+			return TaloPlayer.new(res.body.player)
 		_:
 			return null
