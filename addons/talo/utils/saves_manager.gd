@@ -92,7 +92,7 @@ func set_object_loaded(id: String) -> void:
 func get_save_content() -> Dictionary:
 	return {
 		objects = _registered_saved_objects.map(func (saved_object: TaloSavedObject): return saved_object.to_dictionary())
-  }
+	}
 
 func replace_save(new_save: TaloGameSave) -> void:
 	var existing_saves = all_saves.filter(func (save): return save.id == new_save.id)
