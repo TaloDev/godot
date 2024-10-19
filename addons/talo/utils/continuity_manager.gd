@@ -45,6 +45,10 @@ func _read_requests() -> Array:
 		return []
 
 	var content = FileAccess.open_encrypted_with_pass(_continuity_path, FileAccess.READ, Talo.crypto_manager.get_key())
+	if content == null:
+		DirAccess.remove_absolute(_continuity_path)
+		return []
+
 	var json = JSON.new()
 	json.parse(content.get_as_text())
 

@@ -1,4 +1,4 @@
-class_name TaloGroup extends Node
+class_name TaloPlayerGroupStub extends Node
 
 var id: String
 var display_name: String
