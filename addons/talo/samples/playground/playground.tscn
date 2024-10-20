@@ -4,11 +4,11 @@
 [ext_resource type="Script" path="res://addons/talo/samples/playground/scripts/identified_state.gd" id="1_qsdrr"]
 [ext_resource type="Script" path="res://addons/talo/samples/playground/scripts/identified_label.gd" id="2_ncaxm"]
 [ext_resource type="Script" path="res://addons/talo/samples/playground/scripts/response_label.gd" id="3_bdtqj"]
-[ext_resource type="Script" path="res://addons/talo/samples/playground/scripts/level_up_button.gd" id="4_vboi8"]
+[ext_resource type="Script" path="res://addons/talo/samples/playground/scripts/track_event_button.gd" id="4_vboi8"]
 [ext_resource type="Script" path="res://addons/talo/samples/playground/scripts/get_config_button.gd" id="5_blrul"]
-[ext_resource type="Script" path="res://addons/talo/samples/playground/scripts/set_health_button.gd" id="5_fpvjp"]
-[ext_resource type="Script" path="res://addons/talo/samples/playground/scripts/discover_secret_button.gd" id="5_wpnvd"]
-[ext_resource type="Script" path="res://addons/talo/samples/playground/scripts/delete_health_button.gd" id="6_it1yx"]
+[ext_resource type="Script" path="res://addons/talo/samples/playground/scripts/set_prop_button.gd" id="5_fpvjp"]
+[ext_resource type="Script" path="res://addons/talo/samples/playground/scripts/track_stat_button.gd" id="5_wpnvd"]
+[ext_resource type="Script" path="res://addons/talo/samples/playground/scripts/delete_prop_button.gd" id="6_it1yx"]
 [ext_resource type="Script" path="res://addons/talo/samples/playground/scripts/toggle_continuity_button.gd" id="6_pvyh2"]
 [ext_resource type="Script" path="res://addons/talo/samples/playground/scripts/get_group_button.gd" id="7_5qx11"]
 [ext_resource type="Script" path="res://addons/talo/samples/playground/scripts/toggle_network_button.gd" id="7_wsc44"]
@@ -39,7 +39,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.980392, 0.392157, 0.470588, 1)
+color = Color(1, 0.509804, 0.627451, 1)
 script = ExtResource("1_qsdrr")
 
 [node name="MarginContainer" type="MarginContainer" parent="UI"]
@@ -63,6 +63,7 @@ text = "Player not identified"
 script = ExtResource("2_ncaxm")
 
 [node name="ResponseLabel" type="Label" parent="UI/MarginContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 8
@@ -91,17 +92,15 @@ text = "Players"
 layout_mode = 2
 text = "Identify"
 script = ExtResource("1_o53s3")
-service = "username"
-identifier = "TaloPlayer"
 
-[node name="SetHealthButton" type="Button" parent="UI/MarginContainer/APIs/Players_Continuity/Players"]
+[node name="SetPropButton" type="Button" parent="UI/MarginContainer/APIs/Players_Continuity/Players"]
 layout_mode = 2
-text = "Set health"
+text = "Set prop"
 script = ExtResource("5_fpvjp")
 
-[node name="DeleteHealthButton" type="Button" parent="UI/MarginContainer/APIs/Players_Continuity/Players"]
+[node name="DeletePropButton" type="Button" parent="UI/MarginContainer/APIs/Players_Continuity/Players"]
 layout_mode = 2
-text = "Delete health"
+text = "Delete prop"
 script = ExtResource("6_it1yx")
 
 [node name="GetGroupButton" type="Button" parent="UI/MarginContainer/APIs/Players_Continuity/Players"]
@@ -139,9 +138,9 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 20
 text = "Events"
 
-[node name="LevelUpButton" type="Button" parent="UI/MarginContainer/APIs/Events"]
+[node name="TrackEventButton" type="Button" parent="UI/MarginContainer/APIs/Events"]
 layout_mode = 2
-text = "Level up"
+text = "Track event"
 script = ExtResource("4_vboi8")
 
 [node name="Live config" type="VBoxContainer" parent="UI/MarginContainer/APIs"]
@@ -169,11 +168,10 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 20
 text = "Stats"
 
-[node name="DiscoverSecretButton" type="Button" parent="UI/MarginContainer/APIs/Stats"]
+[node name="TrackStatButton" type="Button" parent="UI/MarginContainer/APIs/Stats"]
 layout_mode = 2
-text = "Discover secret"
+text = "Track stat"
 script = ExtResource("5_wpnvd")
-stat_name = "secrets-discovered"
 
 [node name="Leaderboards" type="VBoxContainer" parent="UI/MarginContainer/APIs"]
 layout_mode = 2
@@ -189,13 +187,11 @@ text = "Leaderboards"
 layout_mode = 2
 text = "Get entries"
 script = ExtResource("8_8262a")
-leaderboard_name = "sed-totam-magni"
 
 [node name="AddEntryButton" type="Button" parent="UI/MarginContainer/APIs/Leaderboards"]
 layout_mode = 2
 text = "Add entry"
 script = ExtResource("9_3705v")
-leaderboard_name = "sed-totam-magni"
 
 [node name="Saves" type="VBoxContainer" parent="UI/MarginContainer/APIs"]
 layout_mode = 2
@@ -467,18 +463,17 @@ script = ExtResource("18_vdjyg")
 layout_mode = 2
 text = "Send feedback"
 script = ExtResource("19_2r4rn")
-internal_name = "bugs"
 feedback_comment = "There is a bug in the game somewhere, go find it"
 
 [connection signal="pressed" from="UI/MarginContainer/APIs/Players_Continuity/Players/IdentifyButton" to="UI/MarginContainer/APIs/Players_Continuity/Players/IdentifyButton" method="_on_pressed"]
-[connection signal="pressed" from="UI/MarginContainer/APIs/Players_Continuity/Players/SetHealthButton" to="UI/MarginContainer/APIs/Players_Continuity/Players/SetHealthButton" method="_on_pressed"]
-[connection signal="pressed" from="UI/MarginContainer/APIs/Players_Continuity/Players/DeleteHealthButton" to="UI/MarginContainer/APIs/Players_Continuity/Players/DeleteHealthButton" method="_on_pressed"]
+[connection signal="pressed" from="UI/MarginContainer/APIs/Players_Continuity/Players/SetPropButton" to="UI/MarginContainer/APIs/Players_Continuity/Players/SetPropButton" method="_on_pressed"]
+[connection signal="pressed" from="UI/MarginContainer/APIs/Players_Continuity/Players/DeletePropButton" to="UI/MarginContainer/APIs/Players_Continuity/Players/DeletePropButton" method="_on_pressed"]
 [connection signal="pressed" from="UI/MarginContainer/APIs/Players_Continuity/Players/GetGroupButton" to="UI/MarginContainer/APIs/Players_Continuity/Players/GetGroupButton" method="_on_pressed"]
 [connection signal="pressed" from="UI/MarginContainer/APIs/Players_Continuity/Continuity/ToggleContinuityButton" to="UI/MarginContainer/APIs/Players_Continuity/Continuity/ToggleContinuityButton" method="_on_pressed"]
 [connection signal="pressed" from="UI/MarginContainer/APIs/Players_Continuity/Continuity/ToggleNetworkButton" to="UI/MarginContainer/APIs/Players_Continuity/Continuity/ToggleNetworkButton" method="_on_pressed"]
-[connection signal="pressed" from="UI/MarginContainer/APIs/Events/LevelUpButton" to="UI/MarginContainer/APIs/Events/LevelUpButton" method="_on_pressed"]
+[connection signal="pressed" from="UI/MarginContainer/APIs/Events/TrackEventButton" to="UI/MarginContainer/APIs/Events/TrackEventButton" method="_on_pressed"]
 [connection signal="pressed" from="UI/MarginContainer/APIs/Live config/GetConfigButton" to="UI/MarginContainer/APIs/Live config/GetConfigButton" method="_on_pressed"]
-[connection signal="pressed" from="UI/MarginContainer/APIs/Stats/DiscoverSecretButton" to="UI/MarginContainer/APIs/Stats/DiscoverSecretButton" method="_on_pressed"]
+[connection signal="pressed" from="UI/MarginContainer/APIs/Stats/TrackStatButton" to="UI/MarginContainer/APIs/Stats/TrackStatButton" method="_on_pressed"]
 [connection signal="pressed" from="UI/MarginContainer/APIs/Leaderboards/GetEntriesButton" to="UI/MarginContainer/APIs/Leaderboards/GetEntriesButton" method="_on_pressed"]
 [connection signal="pressed" from="UI/MarginContainer/APIs/Leaderboards/AddEntryButton" to="UI/MarginContainer/APIs/Leaderboards/AddEntryButton" method="_on_pressed"]
 [connection signal="pressed" from="UI/MarginContainer/APIs/Saves/GetSavesButton" to="UI/MarginContainer/APIs/Saves/GetSavesButton" method="_on_pressed"]

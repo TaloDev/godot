@@ -135,7 +135,7 @@ func update_save(save: TaloGameSave, new_name: String = "") -> TaloGameSave:
 		if Talo.identity_check() != OK:
 			return
 
-		var res = await client.make_request(HTTPClient.METHOD_PATCH, "/%s" % [save.id], {
+		var res = await client.make_request(HTTPClient.METHOD_PATCH, "/%s" % save.id, {
 			name=save.display_name if new_name.is_empty() else new_name,
 			content=content
 		})
@@ -152,7 +152,7 @@ func delete_save(save: TaloGameSave) -> void:
 		if Talo.identity_check() != OK:
 			return
 
-		var res = await client.make_request(HTTPClient.METHOD_DELETE, "/%s" % [save.id])
+		var res = await client.make_request(HTTPClient.METHOD_DELETE, "/%s" % save.id)
 
 		match res.status:
 			_:
