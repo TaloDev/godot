@@ -16,6 +16,7 @@ var saves: SavesAPI
 var feedback: FeedbackAPI
 var player_auth: PlayerAuthAPI
 var health_check: HealthCheckAPI
+var player_groups: PlayerGroupsAPI
 
 var live_config: TaloLiveConfig
 
@@ -74,6 +75,7 @@ func _load_apis() -> void:
 	feedback = preload("res://addons/talo/apis/feedback_api.gd").new("/v1/game-feedback")
 	player_auth = preload("res://addons/talo/apis/player_auth_api.gd").new("/v1/players/auth")
 	health_check = preload("res://addons/talo/apis/health_check_api.gd").new("/v1/health-check")
+	player_groups = preload("res://addons/talo/apis/player_groups_api.gd").new("/v1/player-groups")
 	
 	for api in [
 		players,
@@ -84,7 +86,8 @@ func _load_apis() -> void:
 		saves,
 		feedback,
 		player_auth,
-		health_check
+		health_check,
+		player_groups
 	]:
 		add_child(api)
 

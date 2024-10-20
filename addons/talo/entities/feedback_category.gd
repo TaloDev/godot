@@ -9,10 +9,10 @@ var created_at: String
 var updated_at: String
 
 func _init(data: Dictionary):
-  id = data.id
-  internal_name = data.internalName
-  display_name = data.name
-  description = data.description
-  anonymised = data.anonymised
-  created_at = data.createdAt
-  updated_at = data.updatedAt
+	id = data.id
+	internal_name = data.internalName
+	display_name = data.name
+	description = data.description
+	anonymised = data.anonymised
+	created_at = data.createdAt
+	updated_at = data.updatedAt
