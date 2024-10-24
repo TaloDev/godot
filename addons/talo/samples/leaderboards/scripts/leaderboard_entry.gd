@@ -11,7 +11,7 @@ func _set_score(score: int) -> void:
 
 func _set_team(team: String) -> void:
 	if not team.is_empty():
-		text += " (%s team)" % [team]
+		text += " (%s team)" % team
 
 func set_data(entry: TaloLeaderboardEntry) -> void:
 	_set_pos(entry.position)

@@ -21,11 +21,11 @@ func _ready() -> void:
 
 func _set_entry_count():
 	if entries_container.get_child_count() == 0:
-		info_label.text = "No entries yet!" if not _entries_error else "Failed loading leaderboard %s. Does it exist?" % [leaderboard_internal_name]
+		info_label.text = "No entries yet!" if not _entries_error else "Failed loading leaderboard %s. Does it exist?" % leaderboard_internal_name
 	else:
-		info_label.text = "%s entries" % [entries_container.get_child_count()]
+		info_label.text = "%s entries" % entries_container.get_child_count()
 		if _filter != "All":
-			info_label.text += " (%s team)" % [_filter]
+			info_label.text += " (%s team)" % _filter
 
 func _create_entry(entry: TaloLeaderboardEntry) -> void:
 	var entry_instance = entry_scene.instantiate()
@@ -82,7 +82,7 @@ func _on_filter_pressed() -> void:
 	_filter_idx += 1
 	_filter = _get_next_filter(_filter_idx)
 
-	info_label.text = "Filtering on %s" % [filter_button.text.to_lower()]
-	filter_button.text = "%s team scores" % [_get_next_filter(_filter_idx + 1)]
+	info_label.text = "Filtering on %s" % filter_button.text.to_lower()
+	filter_button.text = "%s team scores" % _get_next_filter(_filter_idx + 1)
 
 	_build_entries()
