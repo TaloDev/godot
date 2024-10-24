@@ -1,0 +1,18 @@
+extends Button
+
+@export var event_name: String
+@export var event_props: Dictionary = {
+	"prop1": "value1"
+}
+
+func _on_pressed() -> void:
+	if Talo.identity_check() != OK:
+		%ResponseLabel.text = "You need to identify a player first!"
+		return
+
+	if event_name.is_empty():
+		%ResponseLabel.text = "event_name not set on TrackEventButton"
+		return
+
+	Talo.events.track(event_name, event_props)
+	%ResponseLabel.text = "Event queued: %s %s" % [event_name, event_props]

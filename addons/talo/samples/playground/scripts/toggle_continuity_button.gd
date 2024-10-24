@@ -1,7 +1,5 @@
 extends Button
 
-@onready var response_label: Label = $"/root/Playground/UI/MarginContainer/ResponseLabel"
-
 func _ready() -> void:
 	_set_text(_get_value())
 
@@ -20,4 +18,4 @@ func _on_pressed() -> void:
 		not enabled
 	)
 	_set_text(not enabled)
-	response_label.text = "Continuity is now " + ("enabled" if not enabled else "disabled")
+	%ResponseLabel.text = "Continuity is now " + ("enabled" if not enabled else "disabled")

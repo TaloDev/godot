@@ -1,7 +1,5 @@
 extends Button
 
-@onready var response_label: Label = $"/root/Playground/UI/MarginContainer/ResponseLabel"
-
 func _ready() -> void:
 	_set_text(Talo.offline_mode_enabled())
 
@@ -17,4 +15,4 @@ func _on_pressed() -> void:
 		not offline
 	)
 	_set_text(not offline)
-	response_label.text = "You are now " + ("offline" if not offline else "online")
+	%ResponseLabel.text = "You are now " + ("offline" if not offline else "online")

@@ -10,10 +10,10 @@ func get_categories() -> Array:
 		_:
 			return []
 
-func send(internal_name: String, comment: String) -> void:
+func send(category_internal_name: String, comment: String) -> void:
 	if Talo.identity_check() != OK:
 		return
 	
-	await client.make_request(HTTPClient.METHOD_POST, "/categories/%s" % internal_name, {
+	await client.make_request(HTTPClient.METHOD_POST, "/categories/%s" % category_internal_name, {
 		comment = comment
 	})
