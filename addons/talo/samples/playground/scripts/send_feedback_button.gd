@@ -1,7 +1,7 @@
 extends Button
 
 @export var category_name: String
-@export var feedback_comment: String
+@export var feedback_comment: String = "There is a bug in the game somewhere, go find it"
 
 func _on_pressed() -> void:
 	if Talo.identity_check() != OK:

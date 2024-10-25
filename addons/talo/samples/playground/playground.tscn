@@ -42,7 +42,7 @@ grow_vertical = 2
 color = Color(1, 0.509804, 0.627451, 1)
 script = ExtResource("1_qsdrr")
 
-[node name="MarginContainer" type="MarginContainer" parent="UI"]
+[node name="Content" type="MarginContainer" parent="UI"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -54,7 +54,7 @@ theme_override_constants/margin_top = 40
 theme_override_constants/margin_right = 40
 theme_override_constants/margin_bottom = 40
 
-[node name="IdentifiedLabel" type="Label" parent="UI/MarginContainer"]
+[node name="IdentifiedLabel" type="Label" parent="UI/Content"]
 layout_mode = 2
 size_flags_horizontal = 8
 size_flags_vertical = 8
@@ -62,7 +62,7 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "Player not identified"
 script = ExtResource("2_ncaxm")
 
-[node name="ResponseLabel" type="Label" parent="UI/MarginContainer"]
+[node name="ResponseLabel" type="Label" parent="UI/Content"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
@@ -70,169 +70,169 @@ size_flags_vertical = 8
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 script = ExtResource("3_bdtqj")
 
-[node name="APIs" type="HBoxContainer" parent="UI/MarginContainer"]
+[node name="APIs" type="HBoxContainer" parent="UI/Content"]
 layout_mode = 2
 theme_override_constants/separation = 40
 
-[node name="Players_Continuity" type="VBoxContainer" parent="UI/MarginContainer/APIs"]
+[node name="Players_Continuity" type="VBoxContainer" parent="UI/Content/APIs"]
 layout_mode = 2
 theme_override_constants/separation = 40
 
-[node name="Players" type="VBoxContainer" parent="UI/MarginContainer/APIs/Players_Continuity"]
+[node name="Players" type="VBoxContainer" parent="UI/Content/APIs/Players_Continuity"]
 layout_mode = 2
 theme_override_constants/separation = 20
 
-[node name="Label" type="Label" parent="UI/MarginContainer/APIs/Players_Continuity/Players"]
+[node name="Label" type="Label" parent="UI/Content/APIs/Players_Continuity/Players"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 20
 text = "Players"
 
-[node name="IdentifyButton" type="Button" parent="UI/MarginContainer/APIs/Players_Continuity/Players"]
+[node name="IdentifyButton" type="Button" parent="UI/Content/APIs/Players_Continuity/Players"]
 layout_mode = 2
 text = "Identify"
 script = ExtResource("1_o53s3")
 
-[node name="SetPropButton" type="Button" parent="UI/MarginContainer/APIs/Players_Continuity/Players"]
+[node name="SetPropButton" type="Button" parent="UI/Content/APIs/Players_Continuity/Players"]
 layout_mode = 2
 text = "Set prop"
 script = ExtResource("5_fpvjp")
 
-[node name="DeletePropButton" type="Button" parent="UI/MarginContainer/APIs/Players_Continuity/Players"]
+[node name="DeletePropButton" type="Button" parent="UI/Content/APIs/Players_Continuity/Players"]
 layout_mode = 2
 text = "Delete prop"
 script = ExtResource("6_it1yx")
 
-[node name="GetGroupButton" type="Button" parent="UI/MarginContainer/APIs/Players_Continuity/Players"]
+[node name="GetGroupButton" type="Button" parent="UI/Content/APIs/Players_Continuity/Players"]
 layout_mode = 2
 text = "Get group"
 script = ExtResource("7_5qx11")
 
-[node name="Continuity" type="VBoxContainer" parent="UI/MarginContainer/APIs/Players_Continuity"]
+[node name="Continuity" type="VBoxContainer" parent="UI/Content/APIs/Players_Continuity"]
 layout_mode = 2
 theme_override_constants/separation = 20
 
-[node name="Label" type="Label" parent="UI/MarginContainer/APIs/Players_Continuity/Continuity"]
+[node name="Label" type="Label" parent="UI/Content/APIs/Players_Continuity/Continuity"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 20
 text = "Continuity"
 
-[node name="ToggleContinuityButton" type="Button" parent="UI/MarginContainer/APIs/Players_Continuity/Continuity"]
+[node name="ToggleContinuityButton" type="Button" parent="UI/Content/APIs/Players_Continuity/Continuity"]
 layout_mode = 2
 text = "Toggle"
 script = ExtResource("6_pvyh2")
 
-[node name="ToggleNetworkButton" type="Button" parent="UI/MarginContainer/APIs/Players_Continuity/Continuity"]
+[node name="ToggleNetworkButton" type="Button" parent="UI/Content/APIs/Players_Continuity/Continuity"]
 layout_mode = 2
 text = "Go offline"
 script = ExtResource("7_wsc44")
 
-[node name="Events" type="VBoxContainer" parent="UI/MarginContainer/APIs"]
+[node name="Events" type="VBoxContainer" parent="UI/Content/APIs"]
 layout_mode = 2
 theme_override_constants/separation = 20
 
-[node name="Label" type="Label" parent="UI/MarginContainer/APIs/Events"]
+[node name="Label" type="Label" parent="UI/Content/APIs/Events"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 20
 text = "Events"
 
-[node name="TrackEventButton" type="Button" parent="UI/MarginContainer/APIs/Events"]
+[node name="TrackEventButton" type="Button" parent="UI/Content/APIs/Events"]
 layout_mode = 2
 text = "Track event"
 script = ExtResource("4_vboi8")
 
-[node name="Live config" type="VBoxContainer" parent="UI/MarginContainer/APIs"]
+[node name="Live config" type="VBoxContainer" parent="UI/Content/APIs"]
 layout_mode = 2
 theme_override_constants/separation = 20
 
-[node name="Label" type="Label" parent="UI/MarginContainer/APIs/Live config"]
+[node name="Label" type="Label" parent="UI/Content/APIs/Live config"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 20
 text = "Live config"
 
-[node name="GetConfigButton" type="Button" parent="UI/MarginContainer/APIs/Live config"]
+[node name="GetConfigButton" type="Button" parent="UI/Content/APIs/Live config"]
 layout_mode = 2
 text = "Get config"
 script = ExtResource("5_blrul")
 
-[node name="Stats" type="VBoxContainer" parent="UI/MarginContainer/APIs"]
+[node name="Stats" type="VBoxContainer" parent="UI/Content/APIs"]
 layout_mode = 2
 theme_override_constants/separation = 20
 
-[node name="Label" type="Label" parent="UI/MarginContainer/APIs/Stats"]
+[node name="Label" type="Label" parent="UI/Content/APIs/Stats"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 20
 text = "Stats"
 
-[node name="TrackStatButton" type="Button" parent="UI/MarginContainer/APIs/Stats"]
+[node name="TrackStatButton" type="Button" parent="UI/Content/APIs/Stats"]
 layout_mode = 2
 text = "Track stat"
 script = ExtResource("5_wpnvd")
 
-[node name="Leaderboards" type="VBoxContainer" parent="UI/MarginContainer/APIs"]
+[node name="Leaderboards" type="VBoxContainer" parent="UI/Content/APIs"]
 layout_mode = 2
 theme_override_constants/separation = 20
 
-[node name="Label" type="Label" parent="UI/MarginContainer/APIs/Leaderboards"]
+[node name="Label" type="Label" parent="UI/Content/APIs/Leaderboards"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 20
 text = "Leaderboards"
 
-[node name="GetEntriesButton" type="Button" parent="UI/MarginContainer/APIs/Leaderboards"]
+[node name="GetEntriesButton" type="Button" parent="UI/Content/APIs/Leaderboards"]
 layout_mode = 2
 text = "Get entries"
 script = ExtResource("8_8262a")
 
-[node name="AddEntryButton" type="Button" parent="UI/MarginContainer/APIs/Leaderboards"]
+[node name="AddEntryButton" type="Button" parent="UI/Content/APIs/Leaderboards"]
 layout_mode = 2
 text = "Add entry"
 script = ExtResource("9_3705v")
 
-[node name="Saves" type="VBoxContainer" parent="UI/MarginContainer/APIs"]
+[node name="Saves" type="VBoxContainer" parent="UI/Content/APIs"]
 layout_mode = 2
 theme_override_constants/separation = 20
 
-[node name="Label" type="Label" parent="UI/MarginContainer/APIs/Saves"]
+[node name="Label" type="Label" parent="UI/Content/APIs/Saves"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 20
 text = "Saves"
 
-[node name="GetSavesButton" type="Button" parent="UI/MarginContainer/APIs/Saves"]
+[node name="GetSavesButton" type="Button" parent="UI/Content/APIs/Saves"]
 layout_mode = 2
 text = "Get saves"
 script = ExtResource("8_4usai")
 
-[node name="LoadSaveButton" type="Button" parent="UI/MarginContainer/APIs/Saves"]
+[node name="LoadSaveButton" type="Button" parent="UI/Content/APIs/Saves"]
 layout_mode = 2
 text = "Load save"
 script = ExtResource("12_t2845")
 
-[node name="CreateSaveButton" type="Button" parent="UI/MarginContainer/APIs/Saves"]
+[node name="CreateSaveButton" type="Button" parent="UI/Content/APIs/Saves"]
 layout_mode = 2
 text = "Create save"
 script = ExtResource("12_4prkt")
 
-[node name="UpdateSaveButton" type="Button" parent="UI/MarginContainer/APIs/Saves"]
+[node name="UpdateSaveButton" type="Button" parent="UI/Content/APIs/Saves"]
 layout_mode = 2
 text = "Update save"
 script = ExtResource("14_lvmju")
 
-[node name="DeleteSaveButton" type="Button" parent="UI/MarginContainer/APIs/Saves"]
+[node name="DeleteSaveButton" type="Button" parent="UI/Content/APIs/Saves"]
 layout_mode = 2
 text = "Delete save"
 script = ExtResource("15_iq1bk")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="UI/MarginContainer/APIs/Saves"]
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/Content/APIs/Saves"]
 layout_mode = 2
 theme_override_constants/separation = 8
 
-[node name="Label" type="Label" parent="UI/MarginContainer/APIs/Saves/VBoxContainer"]
+[node name="Label" type="Label" parent="UI/Content/APIs/Saves/VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_constants/line_spacing = -4
@@ -241,7 +241,7 @@ text = "Current save"
 horizontal_alignment = 1
 uppercase = true
 
-[node name="GridContainer" type="GridContainer" parent="UI/MarginContainer/APIs/Saves/VBoxContainer"]
+[node name="GridContainer" type="GridContainer" parent="UI/Content/APIs/Saves/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 6
 size_flags_vertical = 4
@@ -249,13 +249,13 @@ theme_override_constants/h_separation = 8
 theme_override_constants/v_separation = 8
 columns = 3
 
-[node name="Control" type="Control" parent="UI/MarginContainer/APIs/Saves/VBoxContainer/GridContainer"]
+[node name="Control" type="Control" parent="UI/Content/APIs/Saves/VBoxContainer/GridContainer"]
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
 script = ExtResource("12_72qp7")
 id = "CR1"
 
-[node name="BG" type="ColorRect" parent="UI/MarginContainer/APIs/Saves/VBoxContainer/GridContainer/Control"]
+[node name="BG" type="ColorRect" parent="UI/Content/APIs/Saves/VBoxContainer/GridContainer/Control"]
 custom_minimum_size = Vector2(18, 18)
 layout_mode = 0
 offset_left = -1.0
@@ -264,19 +264,19 @@ offset_right = 17.0
 offset_bottom = 17.0
 color = Color(0, 0, 0, 1)
 
-[node name="ColorRect" type="ColorRect" parent="UI/MarginContainer/APIs/Saves/VBoxContainer/GridContainer/Control"]
+[node name="ColorRect" type="ColorRect" parent="UI/Content/APIs/Saves/VBoxContainer/GridContainer/Control"]
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 0
 offset_right = 16.0
 offset_bottom = 16.0
 
-[node name="Control2" type="Control" parent="UI/MarginContainer/APIs/Saves/VBoxContainer/GridContainer"]
+[node name="Control2" type="Control" parent="UI/Content/APIs/Saves/VBoxContainer/GridContainer"]
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
 script = ExtResource("12_72qp7")
 id = "CR2"
 
-[node name="BG" type="ColorRect" parent="UI/MarginContainer/APIs/Saves/VBoxContainer/GridContainer/Control2"]
+[node name="BG" type="ColorRect" parent="UI/Content/APIs/Saves/VBoxContainer/GridContainer/Control2"]
 custom_minimum_size = Vector2(18, 18)
 layout_mode = 0
 offset_left = -1.0
@@ -285,19 +285,19 @@ offset_right = 17.0
 offset_bottom = 17.0
 color = Color(0, 0, 0, 1)
 
-[node name="ColorRect" type="ColorRect" parent="UI/MarginContainer/APIs/Saves/VBoxContainer/GridContainer/Control2"]
+[node name="ColorRect" type="ColorRect" parent="UI/Content/APIs/Saves/VBoxContainer/GridContainer/Control2"]
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 0
 offset_right = 16.0
 offset_bottom = 16.0
 
-[node name="Control3" type="Control" parent="UI/MarginContainer/APIs/Saves/VBoxContainer/GridContainer"]
+[node name="Control3" type="Control" parent="UI/Content/APIs/Saves/VBoxContainer/GridContainer"]
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
 script = ExtResource("12_72qp7")
 id = "CR3"
 
-[node name="BG" type="ColorRect" parent="UI/MarginContainer/APIs/Saves/VBoxContainer/GridContainer/Control3"]
+[node name="BG" type="ColorRect" parent="UI/Content/APIs/Saves/VBoxContainer/GridContainer/Control3"]
 custom_minimum_size = Vector2(18, 18)
 layout_mode = 0
 offset_left = -1.0
@@ -306,19 +306,19 @@ offset_right = 17.0
 offset_bottom = 17.0
 color = Color(0, 0, 0, 1)
 
-[node name="ColorRect" type="ColorRect" parent="UI/MarginContainer/APIs/Saves/VBoxContainer/GridContainer/Control3"]
+[node name="ColorRect" type="ColorRect" parent="UI/Content/APIs/Saves/VBoxContainer/GridContainer/Control3"]
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 0
 offset_right = 16.0
 offset_bottom = 16.0
 
-[node name="Control4" type="Control" parent="UI/MarginContainer/APIs/Saves/VBoxContainer/GridContainer"]
+[node name="Control4" type="Control" parent="UI/Content/APIs/Saves/VBoxContainer/GridContainer"]
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
 script = ExtResource("12_72qp7")
 id = "CR4"
 
-[node name="BG" type="ColorRect" parent="UI/MarginContainer/APIs/Saves/VBoxContainer/GridContainer/Control4"]
+[node name="BG" type="ColorRect" parent="UI/Content/APIs/Saves/VBoxContainer/GridContainer/Control4"]
 custom_minimum_size = Vector2(18, 18)
 layout_mode = 0
 offset_left = -1.0
@@ -327,19 +327,19 @@ offset_right = 17.0
 offset_bottom = 17.0
 color = Color(0, 0, 0, 1)
 
-[node name="ColorRect" type="ColorRect" parent="UI/MarginContainer/APIs/Saves/VBoxContainer/GridContainer/Control4"]
+[node name="ColorRect" type="ColorRect" parent="UI/Content/APIs/Saves/VBoxContainer/GridContainer/Control4"]
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 0
 offset_right = 16.0
 offset_bottom = 16.0
 
-[node name="Control5" type="Control" parent="UI/MarginContainer/APIs/Saves/VBoxContainer/GridContainer"]
+[node name="Control5" type="Control" parent="UI/Content/APIs/Saves/VBoxContainer/GridContainer"]
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
 script = ExtResource("12_72qp7")
 id = "CR5"
 
-[node name="BG" type="ColorRect" parent="UI/MarginContainer/APIs/Saves/VBoxContainer/GridContainer/Control5"]
+[node name="BG" type="ColorRect" parent="UI/Content/APIs/Saves/VBoxContainer/GridContainer/Control5"]
 custom_minimum_size = Vector2(18, 18)
 layout_mode = 0
 offset_left = -1.0
@@ -348,19 +348,19 @@ offset_right = 17.0
 offset_bottom = 17.0
 color = Color(0, 0, 0, 1)
 
-[node name="ColorRect" type="ColorRect" parent="UI/MarginContainer/APIs/Saves/VBoxContainer/GridContainer/Control5"]
+[node name="ColorRect" type="ColorRect" parent="UI/Content/APIs/Saves/VBoxContainer/GridContainer/Control5"]
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 0
 offset_right = 16.0
 offset_bottom = 16.0
 
-[node name="Control6" type="Control" parent="UI/MarginContainer/APIs/Saves/VBoxContainer/GridContainer"]
+[node name="Control6" type="Control" parent="UI/Content/APIs/Saves/VBoxContainer/GridContainer"]
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
 script = ExtResource("12_72qp7")
 id = "CR6"
 
-[node name="BG" type="ColorRect" parent="UI/MarginContainer/APIs/Saves/VBoxContainer/GridContainer/Control6"]
+[node name="BG" type="ColorRect" parent="UI/Content/APIs/Saves/VBoxContainer/GridContainer/Control6"]
 custom_minimum_size = Vector2(18, 18)
 layout_mode = 0
 offset_left = -1.0
@@ -369,19 +369,19 @@ offset_right = 17.0
 offset_bottom = 17.0
 color = Color(0, 0, 0, 1)
 
-[node name="ColorRect" type="ColorRect" parent="UI/MarginContainer/APIs/Saves/VBoxContainer/GridContainer/Control6"]
+[node name="ColorRect" type="ColorRect" parent="UI/Content/APIs/Saves/VBoxContainer/GridContainer/Control6"]
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 0
 offset_right = 16.0
 offset_bottom = 16.0
 
-[node name="Control7" type="Control" parent="UI/MarginContainer/APIs/Saves/VBoxContainer/GridContainer"]
+[node name="Control7" type="Control" parent="UI/Content/APIs/Saves/VBoxContainer/GridContainer"]
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
 script = ExtResource("12_72qp7")
 id = "CR7"
 
-[node name="BG" type="ColorRect" parent="UI/MarginContainer/APIs/Saves/VBoxContainer/GridContainer/Control7"]
+[node name="BG" type="ColorRect" parent="UI/Content/APIs/Saves/VBoxContainer/GridContainer/Control7"]
 custom_minimum_size = Vector2(18, 18)
 layout_mode = 0
 offset_left = -1.0
@@ -390,19 +390,19 @@ offset_right = 17.0
 offset_bottom = 17.0
 color = Color(0, 0, 0, 1)
 
-[node name="ColorRect" type="ColorRect" parent="UI/MarginContainer/APIs/Saves/VBoxContainer/GridContainer/Control7"]
+[node name="ColorRect" type="ColorRect" parent="UI/Content/APIs/Saves/VBoxContainer/GridContainer/Control7"]
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 0
 offset_right = 16.0
 offset_bottom = 16.0
 
-[node name="Control8" type="Control" parent="UI/MarginContainer/APIs/Saves/VBoxContainer/GridContainer"]
+[node name="Control8" type="Control" parent="UI/Content/APIs/Saves/VBoxContainer/GridContainer"]
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
 script = ExtResource("12_72qp7")
 id = "CR8"
 
-[node name="BG" type="ColorRect" parent="UI/MarginContainer/APIs/Saves/VBoxContainer/GridContainer/Control8"]
+[node name="BG" type="ColorRect" parent="UI/Content/APIs/Saves/VBoxContainer/GridContainer/Control8"]
 custom_minimum_size = Vector2(18, 18)
 layout_mode = 0
 offset_left = -1.0
@@ -411,19 +411,19 @@ offset_right = 17.0
 offset_bottom = 17.0
 color = Color(0, 0, 0, 1)
 
-[node name="ColorRect" type="ColorRect" parent="UI/MarginContainer/APIs/Saves/VBoxContainer/GridContainer/Control8"]
+[node name="ColorRect" type="ColorRect" parent="UI/Content/APIs/Saves/VBoxContainer/GridContainer/Control8"]
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 0
 offset_right = 16.0
 offset_bottom = 16.0
 
-[node name="Control9" type="Control" parent="UI/MarginContainer/APIs/Saves/VBoxContainer/GridContainer"]
+[node name="Control9" type="Control" parent="UI/Content/APIs/Saves/VBoxContainer/GridContainer"]
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 2
 script = ExtResource("12_72qp7")
 id = "CR9"
 
-[node name="BG" type="ColorRect" parent="UI/MarginContainer/APIs/Saves/VBoxContainer/GridContainer/Control9"]
+[node name="BG" type="ColorRect" parent="UI/Content/APIs/Saves/VBoxContainer/GridContainer/Control9"]
 custom_minimum_size = Vector2(18, 18)
 layout_mode = 0
 offset_left = -1.0
@@ -432,55 +432,54 @@ offset_right = 17.0
 offset_bottom = 17.0
 color = Color(0, 0, 0, 1)
 
-[node name="ColorRect" type="ColorRect" parent="UI/MarginContainer/APIs/Saves/VBoxContainer/GridContainer/Control9"]
+[node name="ColorRect" type="ColorRect" parent="UI/Content/APIs/Saves/VBoxContainer/GridContainer/Control9"]
 custom_minimum_size = Vector2(16, 16)
 layout_mode = 0
 offset_right = 16.0
 offset_bottom = 16.0
 
-[node name="RandomiseSaveButton" type="Button" parent="UI/MarginContainer/APIs/Saves/VBoxContainer" node_paths=PackedStringArray("grid")]
+[node name="RandomiseSaveButton" type="Button" parent="UI/Content/APIs/Saves/VBoxContainer" node_paths=PackedStringArray("grid")]
 layout_mode = 2
 text = "Randomise"
 script = ExtResource("12_sshwt")
 grid = NodePath("../GridContainer")
 
-[node name="Feedback" type="VBoxContainer" parent="UI/MarginContainer/APIs"]
+[node name="Feedback" type="VBoxContainer" parent="UI/Content/APIs"]
 layout_mode = 2
 theme_override_constants/separation = 20
 
-[node name="Label" type="Label" parent="UI/MarginContainer/APIs/Feedback"]
+[node name="Label" type="Label" parent="UI/Content/APIs/Feedback"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 20
 text = "Feedback"
 
-[node name="GetCategoriesButton" type="Button" parent="UI/MarginContainer/APIs/Feedback"]
+[node name="GetCategoriesButton" type="Button" parent="UI/Content/APIs/Feedback"]
 layout_mode = 2
 text = "Get categories"
 script = ExtResource("18_vdjyg")
 
-[node name="SendFeedbackButton" type="Button" parent="UI/MarginContainer/APIs/Feedback"]
+[node name="SendFeedbackButton" type="Button" parent="UI/Content/APIs/Feedback"]
 layout_mode = 2
 text = "Send feedback"
 script = ExtResource("19_2r4rn")
-feedback_comment = "There is a bug in the game somewhere, go find it"
 
-[connection signal="pressed" from="UI/MarginContainer/APIs/Players_Continuity/Players/IdentifyButton" to="UI/MarginContainer/APIs/Players_Continuity/Players/IdentifyButton" method="_on_pressed"]
-[connection signal="pressed" from="UI/MarginContainer/APIs/Players_Continuity/Players/SetPropButton" to="UI/MarginContainer/APIs/Players_Continuity/Players/SetPropButton" method="_on_pressed"]
-[connection signal="pressed" from="UI/MarginContainer/APIs/Players_Continuity/Players/DeletePropButton" to="UI/MarginContainer/APIs/Players_Continuity/Players/DeletePropButton" method="_on_pressed"]
-[connection signal="pressed" from="UI/MarginContainer/APIs/Players_Continuity/Players/GetGroupButton" to="UI/MarginContainer/APIs/Players_Continuity/Players/GetGroupButton" method="_on_pressed"]
-[connection signal="pressed" from="UI/MarginContainer/APIs/Players_Continuity/Continuity/ToggleContinuityButton" to="UI/MarginContainer/APIs/Players_Continuity/Continuity/ToggleContinuityButton" method="_on_pressed"]
-[connection signal="pressed" from="UI/MarginContainer/APIs/Players_Continuity/Continuity/ToggleNetworkButton" to="UI/MarginContainer/APIs/Players_Continuity/Continuity/ToggleNetworkButton" method="_on_pressed"]
-[connection signal="pressed" from="UI/MarginContainer/APIs/Events/TrackEventButton" to="UI/MarginContainer/APIs/Events/TrackEventButton" method="_on_pressed"]
-[connection signal="pressed" from="UI/MarginContainer/APIs/Live config/GetConfigButton" to="UI/MarginContainer/APIs/Live config/GetConfigButton" method="_on_pressed"]
-[connection signal="pressed" from="UI/MarginContainer/APIs/Stats/TrackStatButton" to="UI/MarginContainer/APIs/Stats/TrackStatButton" method="_on_pressed"]
-[connection signal="pressed" from="UI/MarginContainer/APIs/Leaderboards/GetEntriesButton" to="UI/MarginContainer/APIs/Leaderboards/GetEntriesButton" method="_on_pressed"]
-[connection signal="pressed" from="UI/MarginContainer/APIs/Leaderboards/AddEntryButton" to="UI/MarginContainer/APIs/Leaderboards/AddEntryButton" method="_on_pressed"]
-[connection signal="pressed" from="UI/MarginContainer/APIs/Saves/GetSavesButton" to="UI/MarginContainer/APIs/Saves/GetSavesButton" method="_on_pressed"]
-[connection signal="pressed" from="UI/MarginContainer/APIs/Saves/LoadSaveButton" to="UI/MarginContainer/APIs/Saves/LoadSaveButton" method="_on_pressed"]
-[connection signal="pressed" from="UI/MarginContainer/APIs/Saves/CreateSaveButton" to="UI/MarginContainer/APIs/Saves/CreateSaveButton" method="_on_pressed"]
-[connection signal="pressed" from="UI/MarginContainer/APIs/Saves/UpdateSaveButton" to="UI/MarginContainer/APIs/Saves/UpdateSaveButton" method="_on_pressed"]
-[connection signal="pressed" from="UI/MarginContainer/APIs/Saves/DeleteSaveButton" to="UI/MarginContainer/APIs/Saves/DeleteSaveButton" method="_on_pressed"]
-[connection signal="pressed" from="UI/MarginContainer/APIs/Saves/VBoxContainer/RandomiseSaveButton" to="UI/MarginContainer/APIs/Saves/VBoxContainer/RandomiseSaveButton" method="_on_pressed"]
-[connection signal="pressed" from="UI/MarginContainer/APIs/Feedback/GetCategoriesButton" to="UI/MarginContainer/APIs/Feedback/GetCategoriesButton" method="_on_pressed"]
-[connection signal="pressed" from="UI/MarginContainer/APIs/Feedback/SendFeedbackButton" to="UI/MarginContainer/APIs/Feedback/SendFeedbackButton" method="_on_pressed"]
+[connection signal="pressed" from="UI/Content/APIs/Players_Continuity/Players/IdentifyButton" to="UI/Content/APIs/Players_Continuity/Players/IdentifyButton" method="_on_pressed"]
+[connection signal="pressed" from="UI/Content/APIs/Players_Continuity/Players/SetPropButton" to="UI/Content/APIs/Players_Continuity/Players/SetPropButton" method="_on_pressed"]
+[connection signal="pressed" from="UI/Content/APIs/Players_Continuity/Players/DeletePropButton" to="UI/Content/APIs/Players_Continuity/Players/DeletePropButton" method="_on_pressed"]
+[connection signal="pressed" from="UI/Content/APIs/Players_Continuity/Players/GetGroupButton" to="UI/Content/APIs/Players_Continuity/Players/GetGroupButton" method="_on_pressed"]
+[connection signal="pressed" from="UI/Content/APIs/Players_Continuity/Continuity/ToggleContinuityButton" to="UI/Content/APIs/Players_Continuity/Continuity/ToggleContinuityButton" method="_on_pressed"]
+[connection signal="pressed" from="UI/Content/APIs/Players_Continuity/Continuity/ToggleNetworkButton" to="UI/Content/APIs/Players_Continuity/Continuity/ToggleNetworkButton" method="_on_pressed"]
+[connection signal="pressed" from="UI/Content/APIs/Events/TrackEventButton" to="UI/Content/APIs/Events/TrackEventButton" method="_on_pressed"]
+[connection signal="pressed" from="UI/Content/APIs/Live config/GetConfigButton" to="UI/Content/APIs/Live config/GetConfigButton" method="_on_pressed"]
+[connection signal="pressed" from="UI/Content/APIs/Stats/TrackStatButton" to="UI/Content/APIs/Stats/TrackStatButton" method="_on_pressed"]
+[connection signal="pressed" from="UI/Content/APIs/Leaderboards/GetEntriesButton" to="UI/Content/APIs/Leaderboards/GetEntriesButton" method="_on_pressed"]
+[connection signal="pressed" from="UI/Content/APIs/Leaderboards/AddEntryButton" to="UI/Content/APIs/Leaderboards/AddEntryButton" method="_on_pressed"]
+[connection signal="pressed" from="UI/Content/APIs/Saves/GetSavesButton" to="UI/Content/APIs/Saves/GetSavesButton" method="_on_pressed"]
+[connection signal="pressed" from="UI/Content/APIs/Saves/LoadSaveButton" to="UI/Content/APIs/Saves/LoadSaveButton" method="_on_pressed"]
+[connection signal="pressed" from="UI/Content/APIs/Saves/CreateSaveButton" to="UI/Content/APIs/Saves/CreateSaveButton" method="_on_pressed"]
+[connection signal="pressed" from="UI/Content/APIs/Saves/UpdateSaveButton" to="UI/Content/APIs/Saves/UpdateSaveButton" method="_on_pressed"]
+[connection signal="pressed" from="UI/Content/APIs/Saves/DeleteSaveButton" to="UI/Content/APIs/Saves/DeleteSaveButton" method="_on_pressed"]
+[connection signal="pressed" from="UI/Content/APIs/Saves/VBoxContainer/RandomiseSaveButton" to="UI/Content/APIs/Saves/VBoxContainer/RandomiseSaveButton" method="_on_pressed"]
+[connection signal="pressed" from="UI/Content/APIs/Feedback/GetCategoriesButton" to="UI/Content/APIs/Feedback/GetCategoriesButton" method="_on_pressed"]
+[connection signal="pressed" from="UI/Content/APIs/Feedback/SendFeedbackButton" to="UI/Content/APIs/Feedback/SendFeedbackButton" method="_on_pressed"]
