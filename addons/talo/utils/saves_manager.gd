@@ -13,6 +13,11 @@ func read_offline_saves() -> Array[TaloGameSave]:
 		return []
 
 	var content = FileAccess.open_encrypted_with_pass(_offline_saves_path, FileAccess.READ, Talo.crypto_manager.get_key())
+	if content == null:
+		push_error("Failed to decrypt offline saves file")
+		DirAccess.remove_absolute(_offline_saves_path)
+		return []
+
 	var json = JSON.new()
 	json.parse(content.get_as_text())
 

@@ -27,6 +27,11 @@ func get_key() -> String:
 		return ""
 
 	var file = FileAccess.open_encrypted_with_pass(_key_file_path, FileAccess.READ, _get_pass())
+	if file == null:
+		push_error("Failed to decrypt crypto init file")
+		DirAccess.remove_absolute(_key_file_path)
+		return ""
+
 	var key = file.get_as_text()
 	file.close()
 	return key

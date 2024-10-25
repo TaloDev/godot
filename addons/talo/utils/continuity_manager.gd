@@ -46,6 +46,7 @@ func _read_requests() -> Array:
 
 	var content = FileAccess.open_encrypted_with_pass(_continuity_path, FileAccess.READ, Talo.crypto_manager.get_key())
 	if content == null:
+		push_error("Failed to decrypt continuity file")
 		DirAccess.remove_absolute(_continuity_path)
 		return []
 
