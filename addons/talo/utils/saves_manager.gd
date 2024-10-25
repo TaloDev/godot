@@ -13,6 +13,10 @@ func read_offline_saves() -> Array[TaloGameSave]:
 		return []
 
 	var content = FileAccess.open_encrypted_with_pass(_offline_saves_path, FileAccess.READ, Talo.crypto_manager.get_key())
+	if content == null:
+		TaloCryptoManager.handle_undecryptable_file(_offline_saves_path, "offline saves file")
+		return []
+
 	var json = JSON.new()
 	json.parse(content.get_as_text())
 

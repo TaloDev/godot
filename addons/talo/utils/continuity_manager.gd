@@ -46,7 +46,7 @@ func _read_requests() -> Array:
 
 	var content = FileAccess.open_encrypted_with_pass(_continuity_path, FileAccess.READ, Talo.crypto_manager.get_key())
 	if content == null:
-		DirAccess.remove_absolute(_continuity_path)
+		TaloCryptoManager.handle_undecryptable_file(_continuity_path, "continuity file")
 		return []
 
 	var json = JSON.new()
