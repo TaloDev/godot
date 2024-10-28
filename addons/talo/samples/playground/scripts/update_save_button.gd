@@ -14,6 +14,6 @@ func _on_pressed() -> void:
 	if result:
 		version = int(result.get_string(1))
 
-	var new_name = Talo.saves.current.display_name.replace("version %s" % [version], "version %s" % [version + 1])
+	var new_name = Talo.saves.current.display_name.replace("version %s" % version, "version %s" % (version + 1))
 
 	Talo.saves.update_current_save(new_name)

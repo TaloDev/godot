@@ -11,7 +11,7 @@ func register_fields() -> void:
 	register_field("clicks", clicks)
 
 func _set_button_text() -> void:
-	button.text = "%s clicks" % [clicks]
+	button.text = "%s clicks" % clicks
 
 func on_loaded(data: Dictionary) -> void:
 	clicks = data["clicks"]

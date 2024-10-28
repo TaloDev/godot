@@ -13,6 +13,10 @@ func read_offline_saves() -> Array[TaloGameSave]:
 		return []
 
 	var content = FileAccess.open_encrypted_with_pass(_offline_saves_path, FileAccess.READ, Talo.crypto_manager.get_key())
+	if content == null:
+		TaloCryptoManager.handle_undecryptable_file(_offline_saves_path, "offline saves file")
+		return []
+
 	var json = JSON.new()
 	json.parse(content.get_as_text())
 
@@ -97,7 +101,7 @@ func get_save_content() -> Dictionary:
 func replace_save(new_save: TaloGameSave) -> void:
 	var existing_saves = all_saves.filter(func (save): return save.id == new_save.id)
 	if existing_saves.is_empty():
-		push_error("Save %s cannot be replaced as it does not exist" % [new_save.id])
+		push_error("Save %s cannot be replaced as it does not exist" % new_save.id)
 		all_saves.push_back(new_save)
 	else:
 		all_saves[all_saves.find(existing_saves.front())] = new_save
