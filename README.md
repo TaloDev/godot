@@ -9,6 +9,7 @@ The Talo Godot Plugin is a lightweight wrapper around the [REST API](https://doc
 ## Get the plugin
 
 - [Godot Asset Library](https://godotengine.org/asset-library/asset/2936)
+- [GitHub releases](https://github.com/TaloDev/godot/releases)
 - [itch.io](https://sleepystudios.itch.io/talo-godot)
 
 ## Talo's key features
@@ -21,14 +22,14 @@ The Talo Godot Plugin is a lightweight wrapper around the [REST API](https://doc
 - ⚙️ [Live config](https://trytalo.com/live-config): Update game settings from the web with zero downtime.
 - 🔧 [Steamworks integration](https://trytalo.com/steamworks-integration): Hook into Steamworks for authentication and ownership checks.
 - 💬 [Game feedback](https://trytalo.com/feedback): Collect and manage feedback from your players.
-- 🛡️ [Continuity](https://trytalo.com/continuity): Keep your data in-sync even when your players are offline
+- 🛡️ [Continuity](https://trytalo.com/continuity): Keep your data in-sync even when your players are offline.
 
 ## Samples included with the plugin
 
-- 🔒 Authentication: a registration/login/account management flow, showing how to create player accounts and authenticate them
-- 🎮 Playground: a text-based playground allowing you to test identifying, events, stats and leaderboards
-- 🕹️ Leaderboards: a basic leaderboard UI, allowing you to add and update entries
-- 💾 Stateful buttons: showing how to save and load game state
+- 🔒 Authentication: a registration/login/account management flow, showing how to create player accounts and authenticate them.
+- 🎮 Playground: a text-based playground allowing you to test identifying, events, stats and leaderboards.
+- 🕹️ Leaderboards: a basic leaderboard UI, allowing you to add and update entries.
+- 💾 Stateful buttons: showing how to save and load game state.
 
 ## Documentation
 
