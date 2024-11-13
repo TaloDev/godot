@@ -25,6 +25,8 @@ func _on_submit_pressed() -> void:
 				validation_label.text = "Current password is incorrect"
 			TaloAuthError.ErrorCode.NEW_EMAIL_MATCHES_CURRENT_EMAIL:
 				validation_label.text = "New email must be different from the current email"
+			TaloAuthError.ErrorCode.INVALID_EMAIL:
+				validation_label.text = "Invalid email address"
 			_:
 				validation_label.text = Talo.player_auth.last_error.get_string()
 	else:
