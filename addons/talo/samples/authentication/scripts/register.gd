@@ -28,6 +28,8 @@ func _on_submit_button_pressed() -> void:
 		match Talo.player_auth.last_error.get_code():
 			TaloAuthError.ErrorCode.IDENTIFIER_TAKEN:
 				validation_label.text = "Username is already taken"
+			TaloAuthError.ErrorCode.INVALID_EMAIL:
+				validation_label.text = "Invalid email address"
 			_:
 				validation_label.text = Talo.player_auth.last_error.get_string()
 
