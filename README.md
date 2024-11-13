@@ -41,7 +41,7 @@ Talo is designed to be easily self-hosted. Take a look at our [self-hosting guid
 
 ## Join our community
 
-Have questions, want to share feedback or show off your game? [Join us on Discord](https://discord.gg/2RWwxXVY3v) to connect with other developers and get help from the Talo team.
+Have questions, want to share feedback or show off your game? [Join us on Discord](https://trytalo.com/discord) to connect with other developers and get help from the Talo team.
 
 ---
 
