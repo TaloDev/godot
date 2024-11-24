@@ -9,6 +9,7 @@ func _init(loadable: TaloLoadable) -> void:
 	object_name = loadable.get_path()
 	self.loadable = loadable
 
+## Register the fields that should be saved and loaded for this object.
 func register_loadable_fields():
 	if is_instance_valid(loadable):
 		loadable.clear_saved_fields()

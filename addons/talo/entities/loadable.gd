@@ -1,6 +1,13 @@
 class_name TaloLoadable extends Node
+## An object that can be saved and loaded.
+##
+## This class is used to save and load objects in the game. It should be inherited by a child class that implements register_fields() and on_loaded(). The saving and loading logic will be taken care of by the SavesAPI and SavesManager.
+##
+## @tutorial: https://docs.trytalo.com/docs/godot/saves
 
+## The unique identifier for this loadable.
 @export var id: String
+
 var _saved_fields: Dictionary
 
 func _ready() -> void:
@@ -27,18 +34,23 @@ func _load_data(save: TaloGameSave) -> void:
 
 	Talo.saves.set_object_loaded(id)
 
+## Clear all the saved data for this loadable.
 func clear_saved_fields() -> void:
 	_saved_fields.clear()
 
+## Register all the fields that should be saved and loaded. This must be implemented by the child class.
 func register_fields() -> void:
 	assert(false, "register_fields() must be implemented")
 
+## Register the given key with a value. When this object is saved, the value will be saved and loaded.
 func register_field(key: String, value: Variant) -> void:
 	_saved_fields[key] = value
 
+## Handle the loaded data. This must be implemented by the child class.
 func on_loaded(data: Dictionary) -> void:
 	assert(false, "on_loaded() must be implemented")
 
+## Handle if this object was previously destroyed. If it was, remove it from the scene.
 func handle_destroyed(data: Dictionary) -> bool:
 	var destroyed = data.has("meta.destroyed")
 	if destroyed:
@@ -46,6 +58,7 @@ func handle_destroyed(data: Dictionary) -> bool:
 
 	return destroyed
 
+## Serialise the saved fields.
 func get_saved_object_data() -> Array:
 	return _saved_fields.keys().map(
 	func (key: String):
