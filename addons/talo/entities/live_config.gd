@@ -1,4 +1,7 @@
 class_name TaloLiveConfig extends Node
+## The live config is a set of key-value pairs that can be updated in the Talo dashboard.
+##
+## @tutorial: https://docs.trytalo.com/docs/godot/live-config
 
 var props: Array[TaloProp] = []
 

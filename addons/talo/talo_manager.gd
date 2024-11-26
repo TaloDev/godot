@@ -8,7 +8,7 @@ var current_player: TaloPlayer:
 var settings: ConfigFile
 
 var players: PlayersAPI
-var events: EventsAPI # Send events
+var events: EventsAPI
 var game_config: GameConfigAPI
 var stats: StatsAPI
 var leaderboards: LeaderboardsAPI

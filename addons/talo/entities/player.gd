@@ -1,4 +1,5 @@
 class_name TaloPlayer extends TaloEntityWithProps
+## @tutorial: https://docs.trytalo.com/docs/godot/player-props
 
 var id: String
 var groups: Array[TaloPlayerGroupStub] = []
@@ -21,10 +22,10 @@ func delete_prop(key: String, update: bool = true) -> void:
 	if update:
 		await Talo.players.update()
 
-## Check if the player is in a group with the given group_id.
+## Check if the player is in a group with the given ID.
 func is_in_talo_group_id(group_id: String) -> bool:
 	return not groups.filter(func (group: TaloPlayerGroupStub): return group.id == group_id).is_empty()
 
-## Check if the player is in a group with the given group_name.
+## Check if the player is in a group with the given name.
 func is_in_talo_group_name(group_name: String) -> bool:
 	return not groups.filter(func (group: TaloPlayerGroupStub): return group.name == group_name).is_empty()

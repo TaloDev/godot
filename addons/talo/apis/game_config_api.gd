@@ -1,7 +1,7 @@
 class_name GameConfigAPI extends TaloAPI
 ## An interface for communicating with the Talo Live Config API.
 ##
-## This API is used to fetch the live config for your game. The live configuration is a set of key-value pairs that can be updated in real-time without requiring a new build of your game.
+## This API is used to fetch the live config for your game. The live config is a set of key-value pairs that can be updated in the Talo dashboard.
 ##
 ## @tutorial: https://docs.trytalo.com/docs/godot/live-config
 

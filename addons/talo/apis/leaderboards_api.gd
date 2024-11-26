@@ -52,7 +52,7 @@ func get_entries_for_current_player(internal_name: String, page: int) -> Array:
 	
 	return await get_entries(internal_name, page, Talo.current_alias.id)
 
-## Add an entry to a leaderboard. The props (key/value pairs) parameter is used to store additional data with the entry.
+## Add an entry to a leaderboard. The props (key-value pairs) parameter is used to store additional data with the entry.
 func add_entry(internal_name: String, score: float, props: Dictionary = {}) -> Array:
 	if Talo.identity_check() != OK:
 		return []

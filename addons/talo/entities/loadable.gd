@@ -1,7 +1,7 @@
 class_name TaloLoadable extends Node
 ## An object that can be saved and loaded.
 ##
-## This class is used to save and load objects in the game. It should be inherited by a child class that implements register_fields() and on_loaded(). The saving and loading logic will be taken care of by the SavesAPI and SavesManager.
+## This class is used to save and load objects in your game. It should be inherited by a child class that implements register_fields() and on_loaded(). The saving and loading logic is managed by the SavesAPI and SavesManager.
 ##
 ## @tutorial: https://docs.trytalo.com/docs/godot/saves
 

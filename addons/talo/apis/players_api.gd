@@ -3,7 +3,7 @@ class_name PlayersAPI extends TaloAPI
 ##
 ## This API is used to identify players and update player data.
 ##
-## @tutorial: https://docs.trytalo.com/docs/godot/players
+## @tutorial: https://docs.trytalo.com/docs/godot/identifying
 
 ## Emitted when a player has been identified.
 signal identified(player: TaloPlayer)
@@ -45,9 +45,9 @@ func merge(player_id1: String, player_id2: String) -> TaloPlayer:
 		_:
 			return null
 
-## Generate a mostly-unque identifier.
+## Generate a mostly-unique identifier.
 func generate_identifer() -> String:
-	var time_hash: String = String(TimeUtils.get_current_datetime_string()).sha256_text()
+	var time_hash: String = str(TimeUtils.get_timestamp_msec()).sha256_text()
 	var size = 12
 	var split_start: int = RandomNumberGenerator.new().randi_range(0, time_hash.length() - size)
 	return time_hash.substr(split_start, size)
