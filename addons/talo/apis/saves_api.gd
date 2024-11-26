@@ -1,34 +1,32 @@
 class_name SavesAPI extends TaloAPI
+## An interface for communicating with the Talo Saves API.
+##
+## This API allows you to save and load game data for your players. You can create, update, and delete saves, as well as load and unload them.
+##
+## @tutorial: https://docs.trytalo.com/docs/godot/saves
 
+## Emitted when the player's saves have been fetched and received.
 signal saves_loaded
+## Emitted when a save has been chosen.
 signal save_chosen(save: TaloGameSave)
+## Emitted when the chosen save has finished loading.
 signal save_loading_completed
 
 var _saves_manager = TaloSavesManager.new()
 
+## All of the player's fetched saves.
 var all:
 	get: return _saves_manager.all_saves
 
+## The latest save that was updated.
 var latest:
-	get: return get_latest_save()
+	get: return _saves_manager.get_latest_save()
 
+## The current save that has been chosen.
 var current:
 	get: return _saves_manager.current_save
 
-func get_latest_save() -> TaloGameSave:
-	var dupe = _saves_manager.all_saves.duplicate()
-	if dupe.is_empty():
-		return null
-
-	dupe.sort_custom(
-		func (a, b):
-			var time_a = Time.get_unix_time_from_datetime_string(a.updated_at)
-			var time_b = Time.get_unix_time_from_datetime_string(b.updated_at)
-			return time_a > time_b
-	)
-
-	return dupe.front()
-
+## Sync an offline save with an online save using the offline save data.
 func replace_save_with_offline_save(offline_save: TaloGameSave) -> TaloGameSave:
 	var res = await client.make_request(HTTPClient.METHOD_PATCH, "/%s" % offline_save.id, {
 		name=offline_save.display_name,
@@ -41,6 +39,7 @@ func replace_save_with_offline_save(offline_save: TaloGameSave) -> TaloGameSave:
 		_:
 			return null
 
+## Get all of the player's saves.
 func get_saves() -> Array[TaloGameSave]:
 	var saves: Array[TaloGameSave] = []
 	var offline_saves: Array[TaloGameSave] = _saves_manager.read_offline_saves()
@@ -76,15 +75,15 @@ func get_saves() -> Array[TaloGameSave]:
 
 	return _saves_manager.all_saves
 
-func set_chosen_save(save: TaloGameSave, load_save = true) -> void:
+## Set the chosen save and optionally (default true) load it.
+func choose_save(save: TaloGameSave, load_save = true) -> void:
 	_saves_manager.set_chosen_save(save, load_save)
 
-func choose_save(save: TaloGameSave) -> void:
-	set_chosen_save(save)
-
+## Unload the current save.
 func unload_current_save() -> void:
-	set_chosen_save(null)
+	_saves_manager.set_chosen_save(null, false)
 
+## Create a new save with the given name and content.
 func create_save(save_name: String, content: Dictionary = {}) -> TaloGameSave:
 	var save: TaloGameSave
 
@@ -95,7 +94,7 @@ func create_save(save_name: String, content: Dictionary = {}) -> TaloGameSave:
 		save = TaloGameSave.new({
 			name=save_name,
 			content=save_content,
-			updatedAt=TimeUtils.get_current_time_msec()
+			updatedAt=TimeUtils.get_current_datetime_string()
 		})
 	else:
 		var res = await client.make_request(HTTPClient.METHOD_POST, "/", {
@@ -109,19 +108,23 @@ func create_save(save_name: String, content: Dictionary = {}) -> TaloGameSave:
 		
 	_saves_manager.all_saves.push_back(save)
 	_saves_manager.update_offline_saves(save)
-	set_chosen_save(save)
+	choose_save(save)
 
 	return save
 
+## Register a loadable object to be saved and loaded.
 func register(loadable: TaloLoadable) -> void:
 	_saves_manager.register(loadable)
 
+## Mark an object as loaded.
 func set_object_loaded(id: String) -> void:
 	_saves_manager.set_object_loaded(id)
 
+## Update the currently loaded save using the current state of the game and with the given name.
 func update_current_save(new_name: String = "") -> TaloGameSave:
 	return await update_save(_saves_manager.current_save, new_name)
 
+## Update the given save using the current state of the game and with the given name.
 func update_save(save: TaloGameSave, new_name: String = "") -> TaloGameSave:
 	var content = _saves_manager.get_save_content()
 
@@ -130,7 +133,7 @@ func update_save(save: TaloGameSave, new_name: String = "") -> TaloGameSave:
 			save.display_name = new_name
 
 		save.content = content
-		save.updated_at = TimeUtils.get_current_time_msec()
+		save.updated_at = TimeUtils.get_current_datetime_string()
 	else:
 		if Talo.identity_check() != OK:
 			return
@@ -147,6 +150,7 @@ func update_save(save: TaloGameSave, new_name: String = "") -> TaloGameSave:
 	_saves_manager.replace_save(save)
 	return save
 
+## Delete the given save.
 func delete_save(save: TaloGameSave) -> void:
 	if not await Talo.is_offline():
 		if Talo.identity_check() != OK:

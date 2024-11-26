@@ -20,11 +20,13 @@ var _error_string = ""
 func _init(error_string: String) -> void:
 	_error_string = error_string
 
+## Get the human-readable player auth error message. 
 func get_string() -> String:
 	if _error_string == "API_ERROR":
 		return "API error - see the Errors Output for more details"
 
 	return _error_string
 
+## Get the player auth error code using the ErrorCode enum.
 func get_code() -> ErrorCode:
 	return ErrorCode.get(_error_string)

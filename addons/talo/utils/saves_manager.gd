@@ -110,3 +110,17 @@ func replace_save(new_save: TaloGameSave) -> void:
 		current_save = new_save
 
 	update_offline_saves(new_save)
+
+func get_latest_save() -> TaloGameSave:
+	var dupe = all_saves.duplicate()
+	if dupe.is_empty():
+		return null
+
+	dupe.sort_custom(
+		func (a, b):
+			var time_a = Time.get_unix_time_from_datetime_string(a.updated_at)
+			var time_b = Time.get_unix_time_from_datetime_string(b.updated_at)
+			return time_a > time_b
+	)
+
+	return dupe.front()
