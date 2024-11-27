@@ -64,7 +64,7 @@ func _load_config() -> void:
 
 		if (settings.get_value("", "access_key", "").is_empty()) && OS.is_debug_build():
 			print_rich("[color=yellow]Warning: Talo access_key in settings.cfg is empty[/color]")
-	
+
 func _load_apis() -> void:
 	players = preload("res://addons/talo/apis/players_api.gd").new("/v1/players")
 	events = preload("res://addons/talo/apis/events_api.gd").new("/v1/events")
@@ -76,7 +76,7 @@ func _load_apis() -> void:
 	player_auth = preload("res://addons/talo/apis/player_auth_api.gd").new("/v1/players/auth")
 	health_check = preload("res://addons/talo/apis/health_check_api.gd").new("/v1/health-check")
 	player_groups = preload("res://addons/talo/apis/player_groups_api.gd").new("/v1/player-groups")
-	
+
 	for api in [
 		players,
 		events,
