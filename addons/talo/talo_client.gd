@@ -22,7 +22,7 @@ func _simulate_offline_request():
 		PackedByteArray()
 	]
 
-func make_request(method: HTTPClient.Method, url: String, body: Dictionary = {}, headers: Array[String] = [], continuity: bool = false) -> Dictionary:	
+func make_request(method: HTTPClient.Method, url: String, body: Dictionary = {}, headers: Array[String] = [], continuity: bool = false) -> Dictionary:
 	var continuity_timestamp = TimeUtils.get_timestamp_msec()
 
 	var full_url = url if continuity else _build_full_url(url)
@@ -89,7 +89,7 @@ func _build_headers(extra_headers: Array[String] = []) -> Array[String]:
 			"X-Talo-Alias: %s" % Talo.current_alias.id
 		])
 
-	var session_token = Talo.player_auth.session_manager.load_session()
+	var session_token = Talo.player_auth.session_manager.get_token()
 	if session_token:
 		headers.append("X-Talo-Session: %s" % session_token)
 
