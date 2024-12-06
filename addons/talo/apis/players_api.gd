@@ -16,7 +16,8 @@ func identify(service: String, identifier: String) -> void:
 			Talo.current_alias = TaloPlayerAlias.new(res.body.alias)
 			identified.emit(Talo.current_player)
 		_:
-			Talo.player_auth.session_manager.clear_session()
+			if not await Talo.is_offline():
+				Talo.player_auth.session_manager.clear_session()
 
 ## Identify a player using a Steam ticket.
 func identify_steam(ticket: String, identity: String = "") -> void:
