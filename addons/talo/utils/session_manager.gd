@@ -1,32 +1,32 @@
 class_name TaloSessionManager extends Node
 
-var _config_file_path = "user://talo_session.cfg"
+var _session_config_path = "user://talo_session.cfg"
 var _verification_alias_id = ""
 
-func _load_config() -> ConfigFile:
+func _load_config(path: String) -> ConfigFile:
 	var config = ConfigFile.new()
-	config.load(_config_file_path)
+	config.load(path)
 	return config
 
 func _save_session(session_token: String) -> void:
 	var config = ConfigFile.new()
 	config.set_value("session", "token", session_token)
 	config.set_value("session", "identifier", Talo.current_alias.identifier)
-	config.save(_config_file_path)
+	config.save(_session_config_path)
 
 func clear_session() -> void:
-	var config = _load_config()
+	var config = _load_config(_session_config_path)
 
 	if config.has_section("session"):
 		config.erase_section("session")
-		config.save(_config_file_path)
+		config.save(_session_config_path)
 
-func load_session() -> String:
-	var config = _load_config()
+func get_token() -> String:
+	var config = _load_config(_session_config_path)
 	return config.get_value("session", "token", "")
 
 func get_identifier() -> String:
-	var config = _load_config()
+	var config = _load_config(_session_config_path)
 	return config.get_value("session", "identifier", "")
 
 func save_verification_alias_id(alias_id: int) -> void:

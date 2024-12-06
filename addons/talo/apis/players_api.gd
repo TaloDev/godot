@@ -28,7 +28,7 @@ func identify_steam(ticket: String, identity: String = "") -> void:
 
 ## Flush and sync the player's current data with Talo.
 func update() -> void:
-	var res = await client.make_request(HTTPClient.METHOD_PATCH, "/%s" % Talo.current_player.id, { props = Talo.current_player.get_serialized_props() })
+	var res = await client.make_request(HTTPClient.METHOD_PATCH, "/%s" % Talo.current_player.id, {props = Talo.current_player.get_serialized_props()})
 	match (res.status):
 		200:
 			Talo.current_alias.player = TaloPlayer.new(res.body.player)
