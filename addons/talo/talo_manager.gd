@@ -29,7 +29,9 @@ func _ready() -> void:
 	_init_crypto_manager()
 	_init_continuity()
 	_check_session()
+
 	get_tree().set_auto_accept_quit(false)
+	process_mode = ProcessMode.PROCESS_MODE_ALWAYS
 
 func _init_crypto_manager() -> void:
 	crypto_manager = TaloCryptoManager.new()
@@ -113,6 +115,6 @@ func _do_flush() -> void:
 		events.flush()
 
 func _check_session() -> void:
-	var session_token = player_auth.session_manager.load_session()
+	var session_token = player_auth.session_manager.get_token()
 	if not session_token.is_empty():
 		players.identify("talo", player_auth.session_manager.get_identifier())
