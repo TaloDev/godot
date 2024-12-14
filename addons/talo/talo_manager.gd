@@ -17,17 +17,21 @@ var feedback: FeedbackAPI
 var player_auth: PlayerAuthAPI
 var health_check: HealthCheckAPI
 var player_groups: PlayerGroupsAPI
+var channels: ChannelsAPI
 
 var live_config: TaloLiveConfig
 
 var crypto_manager: TaloCryptoManager
 var continuity_manager: TaloContinuityManager
 
+var socket: TaloSocket
+
 func _ready() -> void:
 	_load_config()
 	_load_apis()
 	_init_crypto_manager()
 	_init_continuity()
+	_init_socket()
 	_check_session()
 
 	get_tree().set_auto_accept_quit(false)
@@ -39,6 +43,13 @@ func _init_crypto_manager() -> void:
 func _init_continuity() -> void:
 	continuity_manager = TaloContinuityManager.new()
 	add_child(continuity_manager)
+
+func _init_socket() -> void:
+	socket = TaloSocket.new()
+	add_child(socket)
+
+	if Talo.settings.get_value("", "auto_connect_socket", true):
+		socket.init_connection()
 
 func _notification(what: int):
 	match what:
@@ -56,6 +67,8 @@ func _load_config() -> void:
 	if not FileAccess.file_exists(settings_path):
 		settings.set_value("", "access_key", "")
 		settings.set_value("", "api_url", "https://api.trytalo.com")
+		settings.set_value("", "socket_url", TaloSocket.default_socket_url)
+		settings.set_value("", "auto_connect_socket", true)
 		settings.set_value("", "handle_tree_quit", true)
 		settings.set_value("continuity", "enabled", true)
 		settings.save(settings_path)
@@ -78,6 +91,7 @@ func _load_apis() -> void:
 	player_auth = preload("res://addons/talo/apis/player_auth_api.gd").new("/v1/players/auth")
 	health_check = preload("res://addons/talo/apis/health_check_api.gd").new("/v1/health-check")
 	player_groups = preload("res://addons/talo/apis/player_groups_api.gd").new("/v1/player-groups")
+	channels = preload("res://addons/talo/apis/channels_api.gd").new("/v1/game-channels")
 
 	for api in [
 		players,
@@ -89,7 +103,8 @@ func _load_apis() -> void:
 		feedback,
 		player_auth,
 		health_check,
-		player_groups
+		player_groups,
+		channels
 	]:
 		add_child(api)
 

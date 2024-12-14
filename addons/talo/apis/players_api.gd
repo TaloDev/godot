@@ -14,6 +14,7 @@ func identify(service: String, identifier: String) -> void:
 	match (res.status):
 		200:
 			Talo.current_alias = TaloPlayerAlias.new(res.body.alias)
+			Talo.socket.set_socket_token(res.body.socketToken)
 			identified.emit(Talo.current_player)
 		_:
 			if not await Talo.is_offline():
