@@ -31,7 +31,7 @@ func register(identifier: String, password: String, email: String = "", verifica
 
 	match (res.status):
 		200:
-			session_manager.handle_session_created(res.body.alias, res.body.sessionToken)
+			session_manager.handle_session_created(res.body.alias, res.body.sessionToken, res.body.socketToken)
 			return OK
 		_:
 			return _handle_error(res)
@@ -48,7 +48,7 @@ func login(identifier: String, password: String) -> Array[Variant]: ## [Error, b
 			if res.body.has("verificationRequired"):
 				session_manager.save_verification_alias_id(res.body.aliasId)
 			else:
-				session_manager.handle_session_created(res.body.alias, res.body.sessionToken)
+				session_manager.handle_session_created(res.body.alias, res.body.sessionToken, res.body.socketToken)
 
 			return [OK, res.body.has("verificationRequired")]
 		_:
@@ -63,7 +63,7 @@ func verify(verification_code: String) -> Error:
 
 	match (res.status):
 		200:
-			session_manager.handle_session_created(res.body.alias, res.body.sessionToken)
+			session_manager.handle_session_created(res.body.alias, res.body.sessionToken, res.body.socketToken)
 			return OK
 		_:
 			return _handle_error(res)

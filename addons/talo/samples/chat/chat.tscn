@@ -1,0 +1,132 @@
+[gd_scene load_steps=3 format=3 uid="uid://b6am7sdy8k7gu"]
+
+[ext_resource type="Script" path="res://addons/talo/samples/chat/scripts/chat.gd" id="1_pqhos"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gim24"]
+content_margin_left = 5.0
+content_margin_top = 5.0
+content_margin_right = 5.0
+content_margin_bottom = 5.0
+
+[node name="Chat" type="Node2D"]
+script = ExtResource("1_pqhos")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1080.0
+offset_bottom = 720.0
+
+[node name="ChannelListLabel" type="Label" parent="Control"]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 164.0
+offset_bottom = 43.0
+text = "Available channels"
+
+[node name="ChannelList" type="Panel" parent="Control"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 60.0
+offset_right = 220.0
+offset_bottom = -80.0
+grow_vertical = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Control/ChannelList"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_gim24")
+horizontal_scroll_mode = 0
+
+[node name="Channels" type="VBoxContainer" parent="Control/ChannelList/ScrollContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ChatLabel" type="Label" parent="Control"]
+layout_mode = 0
+offset_left = 240.0
+offset_top = 20.0
+offset_right = 384.0
+offset_bottom = 43.0
+text = "Chat messages"
+
+[node name="Chat" type="Panel" parent="Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 240.0
+offset_top = 60.0
+offset_right = -20.0
+offset_bottom = -80.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Control/Chat"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxEmpty_gim24")
+
+[node name="Messages" type="VBoxContainer" parent="Control/Chat/ScrollContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ChatMessage" type="LineEdit" parent="Control"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -840.0
+offset_top = -60.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 0
+grow_vertical = 0
+placeholder_text = "Send a message"
+
+[node name="ChannelName" type="LineEdit" parent="Control"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1060.0
+offset_top = -60.0
+offset_right = -930.0
+offset_bottom = -20.0
+grow_horizontal = 0
+grow_vertical = 0
+placeholder_text = "Channel name"
+
+[node name="AddChannelButton" type="Button" parent="Control"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 160.0
+offset_top = -60.0
+offset_right = 220.0
+offset_bottom = -20.0
+grow_vertical = 0
+text = "Add"
+
+[connection signal="text_submitted" from="Control/ChatMessage" to="." method="_on_chat_message_text_submitted"]
+[connection signal="pressed" from="Control/AddChannelButton" to="." method="_on_add_channel_button_pressed"]
