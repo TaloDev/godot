@@ -14,6 +14,7 @@ func identify(service: String, identifier: String) -> void:
 	match (res.status):
 		200:
 			Talo.current_alias = TaloPlayerAlias.new(res.body.alias)
+			Talo.socket.set_socket_token(res.body.socketToken)
 			identified.emit(Talo.current_player)
 		_:
 			if not await Talo.is_offline():
@@ -47,7 +48,7 @@ func merge(player_id1: String, player_id2: String) -> TaloPlayer:
 			return null
 
 ## Generate a mostly-unique identifier.
-func generate_identifer() -> String:
+func generate_identifier() -> String:
 	var time_hash: String = str(TimeUtils.get_timestamp_msec()).sha256_text()
 	var size = 12
 	var split_start: int = RandomNumberGenerator.new().randi_range(0, time_hash.length() - size)

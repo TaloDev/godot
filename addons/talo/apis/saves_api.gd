@@ -15,15 +15,15 @@ signal save_loading_completed
 var _saves_manager = TaloSavesManager.new()
 
 ## All of the player's fetched saves.
-var all:
+var all: Array[TaloGameSave]:
 	get: return _saves_manager.all_saves
 
 ## The latest save that was updated.
-var latest:
+var latest: TaloGameSave:
 	get: return _saves_manager.get_latest_save()
 
 ## The current save that has been chosen.
-var current:
+var current: TaloGameSave:
 	get: return _saves_manager.current_save
 
 ## Sync an offline save with an online save using the offline save data.

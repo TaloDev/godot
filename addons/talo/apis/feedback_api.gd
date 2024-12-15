@@ -6,12 +6,13 @@ class_name FeedbackAPI extends TaloAPI
 ## @tutorial: https://docs.trytalo.com/docs/godot/feedback
 
 ## Get a list of feedback categories that are available for players to submit feedback.
-func get_categories() -> Array:
+func get_categories() -> Array[TaloFeedbackCategory]:
 	var res = await client.make_request(HTTPClient.METHOD_GET, "/categories")
 
 	match (res.status):
 		200:
-			var categories: Array = res.body.feedbackCategories.map(func (category: Dictionary): return TaloFeedbackCategory.new(category))
+			var categories: Array[TaloFeedbackCategory] = []
+			categories.assign(res.body.categories.map(func (category: Dictionary): return TaloFeedbackCategory.new(category)))
 			return categories
 		_:
 			return []
