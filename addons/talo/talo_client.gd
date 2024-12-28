@@ -26,7 +26,7 @@ func make_request(method: HTTPClient.Method, url: String, body: Dictionary = {},
 	var continuity_timestamp = TimeUtils.get_timestamp_msec()
 
 	var full_url = url if continuity else _build_full_url(url)
-	var all_headers = headers if continuity else build_headers(headers)
+	var all_headers = headers if continuity else _build_headers(headers)
 	var request_body = "" if body.keys().is_empty() else JSON.stringify(body)
 
 	var http_request = HTTPRequest.new()
@@ -74,7 +74,7 @@ func make_request(method: HTTPClient.Method, url: String, body: Dictionary = {},
 
 	return ret
 	
-static func build_headers(extra_headers: Array[String] = []) -> Array[String]:
+func _build_headers(extra_headers: Array[String] = []) -> Array[String]:
 	var headers: Array[String] = [
 		"Authorization: Bearer %s" % Talo.settings.get_value("", "access_key"),
 		"Content-Type: application/json",

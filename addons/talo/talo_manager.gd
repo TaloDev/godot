@@ -18,6 +18,7 @@ var player_auth: PlayerAuthAPI
 var health_check: HealthCheckAPI
 var player_groups: PlayerGroupsAPI
 var channels: ChannelsAPI
+var socket_tickets: SocketTicketsAPI
 
 var live_config: TaloLiveConfig
 
@@ -49,7 +50,7 @@ func _init_socket() -> void:
 	add_child(socket)
 
 	if Talo.settings.get_value("", "auto_connect_socket", true):
-		socket.init_connection()
+		socket.open_connection()
 
 func _notification(what: int):
 	match what:
@@ -92,6 +93,7 @@ func _load_apis() -> void:
 	health_check = preload("res://addons/talo/apis/health_check_api.gd").new("/v1/health-check")
 	player_groups = preload("res://addons/talo/apis/player_groups_api.gd").new("/v1/player-groups")
 	channels = preload("res://addons/talo/apis/channels_api.gd").new("/v1/game-channels")
+	socket_tickets = preload("res://addons/talo/apis/socket_tickets_api.gd").new("/v1/socket-tickets")
 
 	for api in [
 		players,
@@ -104,7 +106,8 @@ func _load_apis() -> void:
 		player_auth,
 		health_check,
 		player_groups,
-		channels
+		channels,
+		socket_tickets
 	]:
 		add_child(api)
 
