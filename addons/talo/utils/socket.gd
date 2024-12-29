@@ -36,14 +36,15 @@ func _identify_player() -> void:
 
 	send("v1.players.identify", payload)
 
-func _get_socket_url() -> String:
-	return Talo.settings.get_value("", "socket_url", default_socket_url)
+func _get_socket_url(ticket: String) -> String:
+	var url = Talo.settings.get_value("", "socket_url", default_socket_url)
+	return "%s/?ticket=%s" % [url, ticket]
 
-## Open the connection to the Talo Socket server. The access_key is used to authenticate the connection, so this method can be called before a player is identified.
-func init_connection():
-	_socket.handshake_headers = TaloClient.build_headers()
+## Open the connection to the Talo Socket server. A new ticket is created to authenticate the connection.
+func open_connection():
+	var ticket = await Talo.socket_tickets.create_ticket()
 
-	var err = _socket.connect_to_url(_get_socket_url())
+	var err = _socket.connect_to_url(_get_socket_url(ticket))
 	if err != OK:
 		print_rich("[color=yellow]Warning: Failed connecting to the Talo Socket: %s[/color]" % err)
 
