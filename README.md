@@ -19,9 +19,10 @@ The Talo Godot Plugin is a lightweight wrapper around the [REST API](https://doc
 - 🕹️ [Leaderboards](https://trytalo.com/leaderboards): Highly customisable leaderboards that can sync with Steamworks.
 - 💾 [Game saves](https://trytalo.com/saves): A simple and flexible way to load/save game state; also works offline.
 - 📊 [Game stats](https://trytalo.com/stats): Track global or per-player stats across your game; also syncs with Steamworks.
+- 💬 [Game channels](https://trytalo.com/channels): Send real-time messages between players subscribed to specific topics.
 - ⚙️ [Live config](https://trytalo.com/live-config): Update game settings from the web with zero downtime.
 - 🔧 [Steamworks integration](https://trytalo.com/steamworks-integration): Hook into Steamworks for authentication and ownership checks.
-- 💬 [Game feedback](https://trytalo.com/feedback): Collect and manage feedback from your players.
+- 🗣️ [Game feedback](https://trytalo.com/feedback): Collect and manage feedback from your players.
 - 🛡️ [Continuity](https://trytalo.com/continuity): Keep your data in-sync even when your players are offline.
 
 ## Samples included with the plugin
@@ -30,6 +31,7 @@ The Talo Godot Plugin is a lightweight wrapper around the [REST API](https://doc
 - 🎮 Playground: a text-based playground allowing you to test identifying, events, stats and leaderboards.
 - 🕹️ Leaderboards: a basic leaderboard UI, allowing you to add and update entries.
 - 💾 Stateful buttons: showing how to save and load game state.
+- 💬 Chat: showing how to send messages between channels in a chat room.
 
 ## Documentation
 
