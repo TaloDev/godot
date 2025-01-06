@@ -9,7 +9,8 @@ const _continuity_timestamp_header = "X-Talo-Continuity-Timestamp"
 const _excluded_endpoints: Array[String] = [
 	"/v1/health-check",
 	"/v1/players/auth",
-	"/v1/players/identify"
+	"/v1/players/identify",
+	"/v1/socket-tickets"
 ]
 
 func _ready() -> void:
