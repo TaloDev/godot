@@ -34,7 +34,7 @@ func sync_save(online_save: TaloGameSave, offline_save: TaloGameSave) -> TaloGam
 	var offline_updated_at = Time.get_unix_time_from_datetime_string(offline_save.updated_at)
 
 	if offline_updated_at > online_updated_at:
-		var save = await Talo.Saves.replace_save_with_offline_save(offline_save)
+		var save = await Talo.saves.replace_save_with_offline_save(offline_save)
 		return save
 
 	return online_save
