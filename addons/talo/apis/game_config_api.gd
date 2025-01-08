@@ -7,6 +7,15 @@ class_name GameConfigAPI extends TaloAPI
 
 ## Emitted when the live config has been loaded.
 signal live_config_loaded(live_config: TaloLiveConfig)
+signal live_config_updated(live_config: TaloLiveConfig)
+
+func _ready() -> void:
+	await Talo.init_completed
+	Talo.socket.message_received.connect(_on_message_received)
+
+func _on_message_received(res: String, data: Dictionary) -> void:
+	if res == "v1.live-config.updated":
+		live_config_updated.emit(TaloLiveConfig.new(data.config))
 
 ## Get the live config for your game.
 func get_live_config() -> void:
