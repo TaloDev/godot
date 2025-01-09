@@ -12,7 +12,7 @@ func get_categories() -> Array[TaloFeedbackCategory]:
 	match (res.status):
 		200:
 			var categories: Array[TaloFeedbackCategory] = []
-			categories.assign(res.body.categories.map(func (category: Dictionary): return TaloFeedbackCategory.new(category)))
+			categories.assign(res.body.feedbackCategories.map(func (category: Dictionary): return TaloFeedbackCategory.new(category)))
 			return categories
 		_:
 			return []

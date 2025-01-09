@@ -55,17 +55,7 @@ func get_saves() -> Array[TaloGameSave]:
 		match (res.status):
 			200:
 				online_saves.append_array(res.body.saves.map(func (data: Dictionary): return TaloGameSave.new(data)))
-				
-				if not offline_saves.is_empty():
-					for online_save in online_saves:
-						var filtered = offline_saves.filter(func (save: TaloGameSave): return save.id == online_save.id)
-						if not filtered.is_empty():
-							await _saves_manager.sync_save(online_save, filtered.front())
-					
-					var synced_saves = await _saves_manager.sync_offline_saves(offline_saves)
-					saves.append_array(synced_saves)
-				
-				saves.append_array(online_saves)
+				saves.append_array(await _saves_manager.get_synced_saves(online_saves))
 	
 	_saves_manager.all_saves = saves
 	saves_loaded.emit()

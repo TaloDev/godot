@@ -34,7 +34,8 @@ func sync_save(online_save: TaloGameSave, offline_save: TaloGameSave) -> TaloGam
 	var offline_updated_at = Time.get_unix_time_from_datetime_string(offline_save.updated_at)
 
 	if offline_updated_at > online_updated_at:
-		var save = await Talo.Saves.replace_save_with_offline_save(offline_save)
+		var save = await Talo.saves.replace_save_with_offline_save(offline_save)
+		delete_offline_save(offline_save)
 		return save
 
 	return online_save
@@ -54,6 +55,24 @@ func sync_offline_saves(offline_saves: Array[TaloGameSave]) -> Array[TaloGameSav
 			new_saves.push_back(save)
 	
 	return new_saves
+
+func get_synced_saves(online_saves: Array[TaloGameSave]) -> Array[TaloGameSave]:
+	var saves: Array[TaloGameSave] = []
+	var offline_saves: Array[TaloGameSave] = read_offline_saves()
+				
+	if not offline_saves.is_empty():
+		for online_save in online_saves:
+			var filtered = offline_saves.filter(func (save: TaloGameSave): return save.id == online_save.id)
+			if not filtered.is_empty():
+				var save = await sync_save(online_save, filtered.front())
+				saves.push_back(save)
+			else:
+				saves.push_back(online_save)
+		
+		var synced_saves = await sync_offline_saves(offline_saves)
+		saves.append_array(synced_saves)
+	
+	return saves
 
 func update_offline_saves(incoming_save: TaloGameSave) -> void:
 	var offline_saves: Array[TaloGameSave] = read_offline_saves()
