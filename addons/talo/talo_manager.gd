@@ -1,5 +1,7 @@
 extends Node
 
+signal init_completed
+
 var current_alias: TaloPlayerAlias
 var current_player: TaloPlayer:
 	get:
@@ -37,6 +39,7 @@ func _ready() -> void:
 
 	get_tree().set_auto_accept_quit(false)
 	process_mode = ProcessMode.PROCESS_MODE_ALWAYS
+	init_completed.emit()
 
 func _init_crypto_manager() -> void:
 	crypto_manager = TaloCryptoManager.new()
