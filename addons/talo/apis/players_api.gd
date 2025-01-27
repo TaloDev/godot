@@ -47,6 +47,15 @@ func merge(player_id1: String, player_id2: String) -> TaloPlayer:
 		_:
 			return null
 
+## Get a player by their ID.
+func find(player_id: String) -> TaloPlayer:
+	var res = await client.make_request(HTTPClient.METHOD_GET, "/%s" % player_id)
+	match (res.status):
+		200:
+			return TaloPlayer.new(res.body.player)
+		_:
+			return null
+
 ## Generate a mostly-unique identifier.
 func generate_identifier() -> String:
 	var time_hash: String = str(TimeUtils.get_timestamp_msec()).sha256_text()
