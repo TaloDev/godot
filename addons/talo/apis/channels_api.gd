@@ -5,6 +5,16 @@ class_name ChannelsAPI extends TaloAPI
 ##
 ## @tutorial: https://docs.trytalo.com/docs/godot/channels
 
+## Get a channel by its ID.
+func find(channel_id: int) -> TaloChannel:
+	var res = await client.make_request(HTTPClient.METHOD_GET, "/%s" % channel_id)
+
+	match (res.status):
+		200:
+			return TaloChannel.new(res.body.channel)
+		_:
+			return null
+
 ## Get a list of channels that players can join.
 func get_channels(page: int) -> Array:
 	var res = await client.make_request(HTTPClient.METHOD_GET, "?page=%s" % page)
