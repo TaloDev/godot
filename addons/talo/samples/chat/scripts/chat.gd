@@ -7,13 +7,18 @@ var _subscriptions: Array[TaloChannel] = []
 
 func _ready():
 	Talo.players.identified.connect(_on_identified)
-	Talo.socket.message_received.connect(_on_message_received)
+	Talo.channels.message_received.connect(_on_message_received)
+	Talo.player_presence.presence_changed.connect(_on_presence_changed)
 
 	if player_username.is_empty():
 		_add_chat_message("[SYSTEM] No player_username set, please set one in the Chat root node")
 		return
 
 	Talo.players.identify("username", player_username)
+
+func _on_presence_changed(presence: TaloPlayerPresence, online_changed: bool, custom_status_changed: bool) -> void:
+	if online_changed:
+		_add_chat_message("[SYSTEM] %s is now %s" % [presence.player_alias.identifier, "online" if presence.online else "offline"])
 
 func _on_identified(player: TaloPlayer) -> void:
 	_subscriptions = await Talo.channels.get_subscribed_channels()
@@ -24,11 +29,9 @@ func _on_identified(player: TaloPlayer) -> void:
 	for channel in channels:
 		_add_channel_label(channel.id, channel.display_name)
 
-func _on_message_received(res: String, data: Dictionary) -> void:
-	if res == "v1.channels.message":
-		if data.channel.id == _active_channel_id:
-			var alias = TaloPlayerAlias.new(data.playerAlias)
-			_add_chat_message("[%s] %s: %s" % [data.channel.name, alias.identifier, data.message])
+func _on_message_received(channel: TaloChannel, player_alias: TaloPlayerAlias, message: String) -> void:
+	if channel.id == _active_channel_id:
+		_add_chat_message("[%s] %s: %s" % [channel.display_name, player_alias.identifier, message])
 
 func _on_add_channel_button_pressed() -> void:
 	if %ChannelName.text.is_empty():
