@@ -5,6 +5,17 @@ class_name ChannelsAPI extends TaloAPI
 ##
 ## @tutorial: https://docs.trytalo.com/docs/godot/channels
 
+## Emitted when a message is received from a channel.
+signal message_received(channel: TaloChannel, player_alias: TaloPlayerAlias, message: String)
+
+func _ready():
+	await Talo.init_completed
+	Talo.socket.message_received.connect(_on_message_received)
+
+func _on_message_received(res: String, data: Dictionary) -> void:
+	if res == "v1.channels.message":
+		message_received.emit(TaloChannel.new(data.channel), TaloPlayerAlias.new(data.playerAlias), data.message)
+
 ## Get a channel by its ID.
 func find(channel_id: int) -> TaloChannel:
 	var res = await client.make_request(HTTPClient.METHOD_GET, "/%s" % channel_id)
@@ -111,7 +122,7 @@ func delete(channel_id: int) -> void:
 		return
 
 	var res = await client.make_request(HTTPClient.METHOD_DELETE, "/%s" % channel_id)
-	
+
 	match (res.status):
 		403:
 			push_error("Player does not have permissions to delete channel %s." % channel_id)
