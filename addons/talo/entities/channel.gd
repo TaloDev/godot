@@ -13,8 +13,9 @@ func _init(data: Dictionary):
 
 	id = data.id
 	display_name = data.name
-	owner_alias = TaloPlayerAlias.new(data.owner)
+	if data.owner:
+		owner_alias = TaloPlayerAlias.new(data.owner)
 	total_messages = data.totalMessages
-	member_count = data.memberCount
+	member_count = data.get('memberCount', 0) # TODO: socket messages don't currently send the memberCount
 	created_at = data.createdAt
 	updated_at = data.updatedAt

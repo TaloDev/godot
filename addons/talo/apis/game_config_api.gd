@@ -7,6 +7,8 @@ class_name GameConfigAPI extends TaloAPI
 
 ## Emitted when the live config has been loaded.
 signal live_config_loaded(live_config: TaloLiveConfig)
+
+## Emitted when the live config has been updated.
 signal live_config_updated(live_config: TaloLiveConfig)
 
 func _ready() -> void:
