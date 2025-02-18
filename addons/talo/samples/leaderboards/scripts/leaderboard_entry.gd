@@ -18,3 +18,6 @@ func set_data(entry: TaloLeaderboardEntry) -> void:
 	_set_username(entry.player_alias.identifier)
 	_set_score(entry.score)
 	_set_team(entry.get_prop("team", ""))
+
+	if not entry.deleted_at.is_empty():
+		text += " (archived)"

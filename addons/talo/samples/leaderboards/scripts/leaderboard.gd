@@ -3,6 +3,7 @@ extends Node2D
 var entry_scene = preload("res://addons/talo/samples/leaderboards/entry.tscn")
 
 @export var leaderboard_internal_name: String
+@export var include_archived: bool = false
 
 @onready var leaderboard_name: Label = %LeaderboardName
 @onready var entries_container: VBoxContainer = %Entries
@@ -49,7 +50,7 @@ func _load_entries() -> void:
 	var done = false
 
 	while !done:
-		var res = await Talo.leaderboards.get_entries(leaderboard_internal_name, page)
+		var res = await Talo.leaderboards.get_entries(leaderboard_internal_name, page, -1, include_archived)
 
 		if res.size() == 0:
 			_entries_error = true
