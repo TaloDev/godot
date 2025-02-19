@@ -22,13 +22,16 @@ func get_cached_entries_for_current_player(internal_name: String) -> Array:
 	)
 
 ## Get a list of entries for a leaderboard. The page parameter is used for pagination.
-func get_entries(internal_name: String, page: int, alias_id = -1) -> Array:
+func get_entries(internal_name: String, page: int, alias_id = -1, include_archived = false) -> Array:
 	var url = "/%s/entries?page=%s"
 	var url_data = [internal_name, page]
 
 	if alias_id != -1:
 		url += "&aliasId=%s"
 		url_data += alias_id
+
+	if include_archived:
+		url += "&withDeleted=1"
 
 	var res = await client.make_request(HTTPClient.METHOD_GET, url % url_data)
 
@@ -46,11 +49,11 @@ func get_entries(internal_name: String, page: int, alias_id = -1) -> Array:
 			return []
 
 ## Get a list of entries for a leaderboard for the current player. The page parameter is used for pagination.
-func get_entries_for_current_player(internal_name: String, page: int) -> Array:
+func get_entries_for_current_player(internal_name: String, page: int, include_archived = false) -> Array:
 	if Talo.identity_check() != OK:
 		return []
-	
-	return await get_entries(internal_name, page, Talo.current_alias.id)
+
+	return await get_entries(internal_name, page, Talo.current_alias.id, include_archived)
 
 ## Add an entry to a leaderboard. The props (key-value pairs) parameter is used to store additional data with the entry.
 func add_entry(internal_name: String, score: float, props: Dictionary = {}) -> Array:
