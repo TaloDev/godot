@@ -13,17 +13,17 @@ func get_cached_entries(internal_name: String) -> Array:
 	return _entries_manager.get_entries(internal_name)
 
 ## Get a list of all the entries that have been previously fetched or created for a leaderboard for the current player.
-func get_cached_entries_for_current_player(internal_name: String) -> Array:
+func get_cached_entries_for_current_player(internal_name: String) -> Array[TaloLeaderboardEntry]:
 	if Talo.identity_check() != OK:
 		return []
 
 	return _entries_manager.get_entries(internal_name).filter(
-		func (entry: TaloLeaderboardEntry):
+		func(entry: TaloLeaderboardEntry) -> bool:
 			return entry.player_alias.id == Talo.current_alias.id
 	)
 
 ## Get a list of entries for a leaderboard. The page parameter is used for pagination.
-func get_entries(internal_name: String, page: int, alias_id = -1, include_archived = false) -> Array:
+func get_entries(internal_name: String, page: int, alias_id = -1, include_archived = false) -> EntriesPage:
 	var url = "/%s/entries?page=%s"
 	var url_data = [internal_name, page]
 
@@ -38,32 +38,32 @@ func get_entries(internal_name: String, page: int, alias_id = -1, include_archiv
 
 	match (res.status):
 		200:
-			var entries: Array = res.body.entries.map(
-				func (data: Dictionary):
+			var entries: Array = Array(res.body.entries.map(
+				func(data: Dictionary):
 					var entry = TaloLeaderboardEntry.new(data)
 					_entries_manager.upsert_entry(internal_name, entry)
 
 					return entry
-			)
-			return [entries, res.body.count, res.body.isLastPage]
+			), TYPE_OBJECT, (TaloLeaderboardEntry as Script).get_instance_base_type(), TaloLeaderboardEntry)
+			return EntriesPage.new(entries, res.body.count, res.body.isLastPage)
 		_:
-			return []
+			return null
 
 ## Get a list of entries for a leaderboard for the current player. The page parameter is used for pagination.
-func get_entries_for_current_player(internal_name: String, page: int, include_archived = false) -> Array:
+func get_entries_for_current_player(internal_name: String, page: int, include_archived = false) -> EntriesPage:
 	if Talo.identity_check() != OK:
-		return []
+		return null
 
 	return await get_entries(internal_name, page, Talo.current_alias.id, include_archived)
 
 ## Add an entry to a leaderboard. The props (key-value pairs) parameter is used to store additional data with the entry.
-func add_entry(internal_name: String, score: float, props: Dictionary = {}) -> Array:
+func add_entry(internal_name: String, score: float, props: Dictionary = {}) -> AddEntryResult:
 	if Talo.identity_check() != OK:
-		return []
+		return null
 
-	var props_to_send = props.keys().map(func (key: String): return { key = key, value = str(props[key]) })
+	var props_to_send: Array = props.keys().map(func(key: String) -> Dictionary: return {key = key, value = str(props[key])})
 
-	var res = await client.make_request(HTTPClient.METHOD_POST, "/%s/entries" % internal_name, {
+	var res := await client.make_request(HTTPClient.METHOD_POST, "/%s/entries" % internal_name, {
 		score = score,
 		props = props_to_send
 	})
@@ -73,6 +73,25 @@ func add_entry(internal_name: String, score: float, props: Dictionary = {}) -> A
 			var entry = TaloLeaderboardEntry.new(res.body.entry)
 			_entries_manager.upsert_entry(internal_name, entry)
 
-			return [entry, res.body.updated]
+			return AddEntryResult.new(entry, res.body.updated)
 		_:
-			return []
+			return null
+
+# Structs
+class EntriesPage:
+	var entries: Array[TaloLeaderboardEntry]
+	var count: int
+	var is_last_page: bool
+
+	func _init(p_entries: Array[TaloLeaderboardEntry], p_count: int, p_is_last_page: bool) -> void:
+		entries = p_entries
+		count = p_count
+		is_last_page = p_is_last_page
+
+class AddEntryResult:
+	var entry: TaloLeaderboardEntry
+	var updated: bool
+
+	func _init(p_entry: TaloLeaderboardEntry, p_updated: bool) -> void:
+		entry = p_entry
+		updated = p_updated
