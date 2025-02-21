@@ -1,4 +1,5 @@
-class_name PlayerAuthAPI extends TaloAPI
+## PlayerAuthAPI
+extends TaloAPI
 ## An interface for communicating with the Talo Player Auth API.
 ##
 ## This API is used to handle player authentication in your game. It provides methods for registering, logging in and managing player accounts.

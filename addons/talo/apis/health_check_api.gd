@@ -1,4 +1,5 @@
-class_name HealthCheckAPI extends TaloAPI
+## HealthCheckAPI
+extends TaloAPI
 ## An interface for communicating with the Talo Health Check API.
 ##
 ## This API is used to check if Talo can be reached by Continuity. You shouldn't need to use this API directly in your game.

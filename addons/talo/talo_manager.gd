@@ -2,6 +2,20 @@ extends Node
 
 signal init_completed
 
+const PlayersAPI = preload("apis/players_api.gd")
+const EventsAPI = preload("apis/events_api.gd")
+const GameConfigAPI = preload("apis/game_config_api.gd")
+const StatsAPI = preload("apis/stats_api.gd")
+const LeaderboardsAPI = preload("apis/leaderboards_api.gd")
+const SavesAPI = preload("apis/saves_api.gd")
+const FeedbackAPI = preload("apis/feedback_api.gd")
+const PlayerAuthAPI = preload("apis/player_auth_api.gd")
+const HealthCheckAPI = preload("apis/health_check_api.gd")
+const PlayerGroupsAPI = preload("apis/player_groups_api.gd")
+const ChannelsAPI = preload("apis/channels_api.gd")
+const SocketTicketsAPI = preload("apis/socket_tickets_api.gd")
+const PlayerPresenceAPI = preload("apis/player_presence_api.gd")
+
 var current_alias: TaloPlayerAlias
 var current_player: TaloPlayer:
 	get:
@@ -9,6 +23,7 @@ var current_player: TaloPlayer:
 
 var settings: ConfigFile
 
+# APIs
 var players: PlayersAPI
 var events: EventsAPI
 var game_config: GameConfigAPI
@@ -86,19 +101,19 @@ func _load_config() -> void:
 			print_rich("[color=yellow]Warning: Talo access_key in settings.cfg is empty[/color]")
 
 func _load_apis() -> void:
-	players = preload("res://addons/talo/apis/players_api.gd").new("/v1/players")
-	events = preload("res://addons/talo/apis/events_api.gd").new("/v1/events")
-	game_config = preload("res://addons/talo/apis/game_config_api.gd").new("/v1/game-config")
-	stats = preload("res://addons/talo/apis/stats_api.gd").new("/v1/game-stats")
-	leaderboards = preload("res://addons/talo/apis/leaderboards_api.gd").new("/v1/leaderboards")
-	saves = preload("res://addons/talo/apis/saves_api.gd").new("/v1/game-saves")
-	feedback = preload("res://addons/talo/apis/feedback_api.gd").new("/v1/game-feedback")
-	player_auth = preload("res://addons/talo/apis/player_auth_api.gd").new("/v1/players/auth")
-	health_check = preload("res://addons/talo/apis/health_check_api.gd").new("/v1/health-check")
-	player_groups = preload("res://addons/talo/apis/player_groups_api.gd").new("/v1/player-groups")
-	channels = preload("res://addons/talo/apis/channels_api.gd").new("/v1/game-channels")
-	socket_tickets = preload("res://addons/talo/apis/socket_tickets_api.gd").new("/v1/socket-tickets")
-	player_presence = preload("res://addons/talo/apis/player_presence_api.gd").new("/v1/players/presence")
+	players = PlayersAPI.new("/v1/players")
+	events = EventsAPI.new("/v1/events")
+	game_config = GameConfigAPI.new("/v1/game-config")
+	stats = StatsAPI.new("/v1/game-stats")
+	leaderboards = LeaderboardsAPI.new("/v1/leaderboards")
+	saves = SavesAPI.new("/v1/game-saves")
+	feedback = FeedbackAPI.new("/v1/game-feedback")
+	player_auth = PlayerAuthAPI.new("/v1/players/auth")
+	health_check = HealthCheckAPI.new("/v1/health-check")
+	player_groups = PlayerGroupsAPI.new("/v1/player-groups")
+	channels = ChannelsAPI.new("/v1/game-channels")
+	socket_tickets = SocketTicketsAPI.new("/v1/socket-tickets")
+	player_presence = PlayerPresenceAPI.new("/v1/players/presence")
 
 	for api in [
 		players,

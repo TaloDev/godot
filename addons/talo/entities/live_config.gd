@@ -1,4 +1,4 @@
-class_name TaloLiveConfig extends Node
+class_name TaloLiveConfig extends RefCounted
 ## The live config is a set of key-value pairs that can be updated in the Talo dashboard.
 ##
 ## @tutorial: https://docs.trytalo.com/docs/godot/live-config

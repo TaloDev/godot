@@ -1,4 +1,4 @@
-class_name TaloFeedbackCategory extends Node
+class_name TaloFeedbackCategory extends RefCounted
 
 var id: int
 var internal_name: String

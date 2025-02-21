@@ -1,4 +1,4 @@
-class_name TaloSessionManager extends Node
+class_name TaloSessionManager extends RefCounted
 
 var _session_config_path = "user://talo_session.cfg"
 var _verification_alias_id = ""

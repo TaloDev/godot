@@ -1,4 +1,5 @@
-class_name FeedbackAPI extends TaloAPI
+## FeedbackAPI
+extends TaloAPI
 ## An interface for communicating with the Talo Feedback API.
 ##
 ## This API is used to submit feedback across different categories from your players.

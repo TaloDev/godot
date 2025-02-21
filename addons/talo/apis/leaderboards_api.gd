@@ -1,4 +1,5 @@
-class_name LeaderboardsAPI extends TaloAPI
+## LeaderboardsAPI
+extends TaloAPI
 ## An interface for communicating with the Talo Leaderboards API.
 ##
 ## This API is used to read and update leaderboards in your game. Leaderboards are used to track player scores and rankings.

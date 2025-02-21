@@ -1,4 +1,5 @@
-class_name StatsAPI extends TaloAPI
+## StatsAPI
+extends TaloAPI
 ## An interface for communicating with the Talo Stats API.
 ##
 ## This API is used to track player stats in your game. Stats are used to track player metrics both individually and globally.

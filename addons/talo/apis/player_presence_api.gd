@@ -1,4 +1,5 @@
-class_name PlayerPresenceAPI extends TaloAPI
+## PlayerPresenceAPI
+extends TaloAPI
 ## An interface for communicating with the Talo Player Presence API.
 ##
 ## This API is used to track and manage player presence in your game. Presence indicates whether players are online

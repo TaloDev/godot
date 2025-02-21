@@ -1,4 +1,5 @@
-class_name EventsAPI extends TaloAPI
+## EventsAPI
+extends TaloAPI
 ## An interface for communicating with the Talo Events API.
 ##
 ## This API is used to track events in your game. Events are used to measure user interactions such as button clicks, level completions and other kinds of game interactions.

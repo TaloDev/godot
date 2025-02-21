@@ -1,4 +1,4 @@
-class_name TaloPlayerGroup extends Node
+class_name TaloPlayerGroup extends RefCounted
 
 var id: String
 var display_name: String

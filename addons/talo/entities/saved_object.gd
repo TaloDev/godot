@@ -1,4 +1,4 @@
-class_name TaloSavedObject extends Node
+class_name TaloSavedObject extends RefCounted
 
 var id: String
 var object_name: String

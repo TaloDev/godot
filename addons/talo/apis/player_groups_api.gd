@@ -1,4 +1,5 @@
-class_name PlayerGroupsAPI extends TaloAPI
+## PlayerGroupsAPI
+extends TaloAPI
 ## An interface for communicating with the Talo Player Groups API.
 ##
 ## This API is used to fetch info about group memberships. Player groups are used to segment players into groups based on filter criteria.

@@ -1,4 +1,5 @@
-class_name ChannelsAPI extends TaloAPI
+## ChannelsAPI
+extends TaloAPI
 ## An interface for communicating with the Talo Channels API.
 ##
 ## This API is used to send messages between players who are subscribed to channels.

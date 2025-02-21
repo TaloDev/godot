@@ -1,4 +1,5 @@
-class_name PlayersAPI extends TaloAPI
+## PlayersAPI 
+extends TaloAPI
 ## An interface for communicating with the Talo Players API.
 ##
 ## This API is used to identify players and update player data.

@@ -1,4 +1,4 @@
-class_name TaloGameSave extends Node
+class_name TaloGameSave extends RefCounted
 
 var id: int
 var display_name: String

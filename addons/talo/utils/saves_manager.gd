@@ -1,4 +1,4 @@
-class_name TaloSavesManager extends Node
+class_name TaloSavesManager extends RefCounted
 
 var all_saves: Array[TaloGameSave] = []
 var current_save: TaloGameSave

@@ -1,4 +1,5 @@
-class_name SavesAPI extends TaloAPI
+## SavesAPI
+extends TaloAPI
 ## An interface for communicating with the Talo Saves API.
 ##
 ## This API allows you to save and load game data for your players. You can create, update, and delete saves, as well as load and unload them.
