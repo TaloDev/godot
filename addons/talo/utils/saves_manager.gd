@@ -53,7 +53,7 @@ func sync_offline_saves(offline_saves: Array[TaloGameSave]) -> Array[TaloGameSav
 			var save := await Talo.saves.create_save(offline_save.name, offline_save.content)
 			delete_offline_save(offline_save)
 			new_saves.push_back(save)
-	
+
 	return new_saves
 
 func get_synced_saves(online_saves: Array[TaloGameSave]) -> Array[TaloGameSave]:
@@ -102,15 +102,15 @@ func set_chosen_save(save: TaloGameSave, load_save: bool) -> void:
 		return
 
 	_loaded_loadables.clear()
-	Talo.saves.save_chosen.emit(save)
 
 func register(loadable: TaloLoadable) -> void:
 	_registered_saved_objects.push_back(TaloSavedObject.new(loadable))
 
-func set_object_loaded(id: String) -> void:
+func push_loaded_object(id: String) -> void:
 	_loaded_loadables.push_back(id)
-	if _loaded_loadables.size() == _registered_saved_objects.size():
-		Talo.saves.save_loading_completed.emit()
+
+func is_loading_completed() -> bool:
+	return _loaded_loadables.size() == _registered_saved_objects.size()
 
 func get_save_content() -> Dictionary:
 	return {

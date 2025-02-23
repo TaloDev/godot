@@ -69,6 +69,8 @@ func get_saves() -> Array[TaloGameSave]:
 ## Set the chosen save and optionally (default true) load it.
 func choose_save(save: TaloGameSave, load_save := true) -> void:
 	_saves_manager.set_chosen_save(save, load_save)
+	if load_save:
+		save_chosen.emit(save)
 
 ## Unload the current save.
 func unload_current_save() -> void:
@@ -109,7 +111,9 @@ func register(loadable: TaloLoadable) -> void:
 
 ## Mark an object as loaded.
 func set_object_loaded(id: String) -> void:
-	_saves_manager.set_object_loaded(id)
+	_saves_manager.push_loaded_object(id)
+	if _saves_manager.is_loading_completed():
+		save_loading_completed.emit()
 
 ## Update the currently loaded save using the current state of the game and with the given name.
 func update_current_save(new_name: String = "") -> TaloGameSave:
