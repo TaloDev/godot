@@ -8,8 +8,8 @@ var created_at: String
 var updated_at: String
 var deleted_at: String
 
-func _init(data: Dictionary):
-	super._init(data.props.map(func (prop): return TaloProp.new(prop.key, prop.value)))
+func _init(data: Dictionary) -> void:
+	super(data.props.map(func (prop: Dictionary) -> TaloProp: return TaloProp.new(prop.key, prop.value)))
 
 	id = data.id
 	position = data.position

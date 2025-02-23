@@ -2,19 +2,22 @@ class_name TaloClient extends Node
 
 var _base_url: String
 
-func _init(base_url: String):
+func _init(base_url: String) -> void:
 	_base_url = base_url
 	name = "Client"
 
-func _get_method_name(method: HTTPClient.Method):
+func _get_method_name(method: HTTPClient.Method) -> String:
 	match method:
 		HTTPClient.METHOD_GET: return "GET"
 		HTTPClient.METHOD_POST: return "POST"
 		HTTPClient.METHOD_PUT: return "PUT"
 		HTTPClient.METHOD_PATCH: return "PATCH"
 		HTTPClient.METHOD_DELETE: return "DELETE"
+		_:
+			assert(false, "Invalid HTTP method")
+			return ""
 
-func _simulate_offline_request():
+func _simulate_offline_request() -> Array:
 	return [
 		HTTPRequest.RESULT_CANT_CONNECT,
 		0,
@@ -23,22 +26,22 @@ func _simulate_offline_request():
 	]
 
 func make_request(method: HTTPClient.Method, url: String, body: Dictionary = {}, headers: Array[String] = [], continuity: bool = false) -> Dictionary:
-	var continuity_timestamp = TimeUtils.get_timestamp_msec()
+	var continuity_timestamp := TimeUtils.get_timestamp_msec()
 
-	var full_url = url if continuity else _build_full_url(url)
-	var all_headers = headers if continuity else _build_headers(headers)
-	var request_body = "" if body.keys().is_empty() else JSON.stringify(body)
+	var full_url := url if continuity else _build_full_url(url)
+	var all_headers := headers if continuity else _build_headers(headers)
+	var request_body := "" if body.keys().is_empty() else JSON.stringify(body)
 
-	var http_request = HTTPRequest.new()
+	var http_request := HTTPRequest.new()
 	add_child(http_request)
 	http_request.name = "%s %s" % [_get_method_name(method), url]
 
 	http_request.request(full_url, all_headers, method, request_body)
-	var res = _simulate_offline_request() if Talo.offline_mode_enabled() else await http_request.request_completed
-	var status = res[1]
+	var res := _simulate_offline_request() if Talo.offline_mode_enabled() else await http_request.request_completed as Array
+	var status := res[1] as HTTPClient.ResponseCode
 
-	var response_body = res[3]
-	var json = JSON.new()
+	var response_body := res[3] as PackedByteArray
+	var json := JSON.new()
 	json.parse(response_body.get_string_from_utf8())
 
 	if res[0] != HTTPRequest.RESULT_SUCCESS:
@@ -59,13 +62,13 @@ func make_request(method: HTTPClient.Method, url: String, body: Dictionary = {},
 	if Talo.settings.get_value("logging", "responses", false):
 		print_rich("[color=green]<-- %s %s[/color]" % [status, json.get_data()])
 
-	var ret = {
+	var ret := {
 		status = status,
 		body = json.get_data()
 	}
 
 	if ret.status >= 400:
-		handle_error(ret)
+		_handle_error(ret)
 
 	if res[0] != HTTPRequest.RESULT_SUCCESS or ret.status >= 500:
 		Talo.continuity_manager.push_request(method, full_url, body, all_headers, continuity_timestamp)
@@ -89,7 +92,7 @@ func _build_headers(extra_headers: Array[String] = []) -> Array[String]:
 			"X-Talo-Alias: %s" % Talo.current_alias.id
 		])
 
-	var session_token = Talo.player_auth.session_manager.get_token()
+	var session_token := Talo.player_auth.session_manager.get_token()
 	if session_token:
 		headers.append("X-Talo-Session: %s" % session_token)
 
@@ -104,7 +107,7 @@ func _build_full_url(url: String) -> String:
 		url
 	]
 
-func handle_error(res: Dictionary) -> void:
+func _handle_error(res: Dictionary) -> void:
 	if res.body != null:
 		if res.body.has("message"):
 			push_error("%s: %s" % [res.status, res.body.message])

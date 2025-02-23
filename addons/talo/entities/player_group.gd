@@ -1,7 +1,7 @@
 class_name TaloPlayerGroup extends RefCounted
 
 var id: String
-var display_name: String
+var name: String
 var description: String
 var rules: Array
 var rule_mode: String
@@ -10,16 +10,16 @@ var count: int
 var members: Array[TaloPlayer]
 var updated_at: String
 
-func _init(data: Dictionary):
+func _init(data: Dictionary) -> void:
 	id = data.id
-	display_name = data.name
+	name = data.name
 	description = data.description
 	rules = data.rules
 	rule_mode = data.ruleMode
 	members_visible = data.membersVisible
 	count = data.count
 	if data.has("members"):
-		members.assign(data.members.map(func (member): return TaloPlayer.new(member)))
+		members.assign(data.members.map(func (member: Dictionary) -> TaloPlayer: return TaloPlayer.new(member)))
 	else:
 		members = []
 	updated_at = data.updatedAt

@@ -1,8 +1,8 @@
 class_name TaloPlayerGroupStub extends RefCounted
 
 var id: String
-var display_name: String
+var name: String
 
-func _init(id: String, display_name: String):
-	self.id = id
-	self.display_name = display_name
+func _init(p_id: String, p_name: String) -> void:
+	self.id = p_id
+	self.name = p_name

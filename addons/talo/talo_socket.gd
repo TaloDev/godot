@@ -5,12 +5,12 @@ class_name TaloSocket extends Node
 ##
 ## @tutorial: https://docs.trytalo.com/docs/godot/socket
 
-static var default_socket_url = "wss://api.trytalo.com"
+const DEFAULT_SOCKET_URL := "wss://api.trytalo.com"
 
-var _socket = WebSocketPeer.new()
-var _temp_socket_token = ""
-var _socket_authenticated = false
-var _identified = false
+var _socket := WebSocketPeer.new()
+var _temp_socket_token := ""
+var _socket_authenticated := false
+var _identified := false
 
 ## Emitted when a message is received from the Talo Socket server. Not recommended for direct use. See the Talo docs for a list of responses and message structures.
 signal message_received(res: String, message: Dictionary)
@@ -25,26 +25,26 @@ func _identify_player() -> void:
 	if not _socket_authenticated:
 		return
 
-	var payload = {
+	var payload := {
 		playerAliasId = Talo.current_alias.id,
 		socketToken = _temp_socket_token
 	}
 
-	var session_token = Talo.player_auth.session_manager.get_token()
+	var session_token := Talo.player_auth.session_manager.get_token()
 	if not session_token.is_empty():
 		payload.sessionToken = session_token
 
 	send("v1.players.identify", payload)
 
 func _get_socket_url(ticket: String) -> String:
-	var url = Talo.settings.get_value("", "socket_url", default_socket_url)
+	var url := Talo.settings.get_value("", "socket_url", DEFAULT_SOCKET_URL) as String
 	return "%s/?ticket=%s" % [url, ticket]
 
 ## Open the connection to the Talo Socket server. A new ticket is created to authenticate the connection.
-func open_connection():
-	var ticket = await Talo.socket_tickets.create_ticket()
+func open_connection() -> void:
+	var ticket := await Talo.socket_tickets.create_ticket()
 
-	var err = _socket.connect_to_url(_get_socket_url(ticket))
+	var err := _socket.connect_to_url(_get_socket_url(ticket))
 	if err != OK:
 		print_rich("[color=yellow]Warning: Failed connecting to the Talo Socket: %s[/color]" % err)
 
@@ -78,15 +78,14 @@ func send(req: String, data: Dictionary = {}) -> int:
 	}))
 
 func _get_json() -> String:
-	var pkt = _socket.get_packet()
+	var pkt := _socket.get_packet()
 	return pkt.get_string_from_utf8()
 
 func _emit_message(message: String) -> void:
-	var json = JSON.new()
-	json.parse(message)
-
-	var res = json.get_data().res
-	var data = json.get_data().data
+	var msg_data :Variant = JSON.parse_string(message)
+	assert(msg_data is Dictionary)
+	var res := msg_data.res as String
+	var data := msg_data.data as Dictionary
 	message_received.emit(res, data)
 
 ## Close the connection to the Talo Socket server.
@@ -106,7 +105,7 @@ func _poll() -> void:
 		_reset_socket()
 
 	while _socket.get_ready_state() == _socket.STATE_OPEN and _socket.get_available_packet_count() > 0:
-		var message = _get_json()
+		var message := _get_json()
 		_emit_message(message)
 
 func _process(_delta: float) -> void:

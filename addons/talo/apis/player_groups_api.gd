@@ -8,7 +8,7 @@ extends TaloAPI
 
 ## Get the members of a group. If the group is public (as set in the dashboard), the members will be returned. If the group is private, only a membership count will be returned.
 func get_group(group_id: String) -> TaloPlayerGroup:
-	var res = await client.make_request(HTTPClient.METHOD_GET, "/%s" % group_id)
+	var res := await client.make_request(HTTPClient.METHOD_GET, "/%s" % group_id)
 
 	match (res.status):
 		200:

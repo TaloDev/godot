@@ -6,8 +6,8 @@ extends TaloAPI
 ##
 ## @tutorial: https://docs.trytalo.com/docs/godot/events
 
-var _queue = []
-var _min_queue_size = 10
+var _queue := []
+var _min_queue_size := 10
 
 func _get_window_mode() -> String:
 	match DisplayServer.window_get_mode():
@@ -30,23 +30,23 @@ func _build_meta_props() -> Array[TaloProp]:
 	]
 
 func _has_errors(errors: Array) -> bool:
-	return errors.any((func (err: Array): return err.size() > 0))
+	return errors.any((func (err: Array) -> bool: return err.size() > 0))
 
 ## Track an event with optional props (key-value pairs) and add it to the queue of events ready to be sent to the backend. If the queue reaches the minimum size, it will be flushed.
-func track(name: String, props: Dictionary = {}) -> void:
+func track(p_name: String, props: Dictionary = {}) -> void:
 	if Talo.identity_check() != OK:
 		return
 
-	var final_props = _build_meta_props()
+	var final_props := _build_meta_props()
 	final_props.append_array(
 		props
 			.keys()
-			.map(func (key: String): return TaloProp.new(key, str(props[key])))
+			.map(func (key: String) -> TaloProp: return TaloProp.new(key, str(props[key])))
 	)
 
 	_queue.push_back({
-		name = name,
-		props = final_props.map(func (prop: TaloProp): return prop.to_dictionary()),
+		name = p_name,
+		props = final_props.map(func (prop: TaloProp) -> Dictionary: return prop.to_dictionary()),
 		timestamp = TimeUtils.get_timestamp_msec()
 	})
 
@@ -58,7 +58,7 @@ func flush() -> void:
 	if _queue.size() == 0:
 		return
 
-	var res = await client.make_request(HTTPClient.METHOD_POST, "/", { events = _queue })
+	var res := await client.make_request(HTTPClient.METHOD_POST, "/", { events = _queue })
 	_queue.clear()
 
 	match (res.status):

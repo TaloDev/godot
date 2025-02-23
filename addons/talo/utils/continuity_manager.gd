@@ -24,18 +24,18 @@ func _ready() -> void:
 	connect("timeout", _on_timeout)
 	start()
 
-func push_request(method: HTTPClient.Method, url: String, body: Dictionary, headers: Array[String], timestamp: int):
+func push_request(method: HTTPClient.Method, url: String, body: Dictionary, headers: Array[String], timestamp: int) -> void:
 	if not Talo.settings.get_value("continuity", "enabled", true):
 		return
 
-	if _excluded_endpoints.any(func (endpoint: String): return url.find(endpoint) != -1):
+	if _excluded_endpoints.any(func (endpoint: String) -> bool: return url.find(endpoint) != -1):
 		return
 
 	_requests.push_back({
 		method = method,
 		url = url,
 		body = body,
-		headers = headers.filter(func (h: String): return h.find("Authorization") == -1),
+		headers = headers.filter(func (h: String) -> bool: return h.find("Authorization") == -1),
 		timestamp = timestamp
 	})
 
@@ -45,21 +45,18 @@ func _read_requests() -> Array:
 	if not FileAccess.file_exists(_continuity_path):
 		return []
 
-	var content = FileAccess.open_encrypted_with_pass(_continuity_path, FileAccess.READ, Talo.crypto_manager.get_key())
+	var content := FileAccess.open_encrypted_with_pass(_continuity_path, FileAccess.READ, Talo.crypto_manager.get_key())
 	if content == null:
 		TaloCryptoManager.handle_undecryptable_file(_continuity_path, "continuity file")
 		return []
 
-	var json = JSON.new()
-	json.parse(content.get_as_text())
+	return JSON.parse_string(content.get_as_text())
 
-	return json.get_data()
-
-func _write_requests():
-	var file = FileAccess.open_encrypted_with_pass(_continuity_path, FileAccess.WRITE, Talo.crypto_manager.get_key())
+func _write_requests() -> void:
+	var file := FileAccess.open_encrypted_with_pass(_continuity_path, FileAccess.WRITE, Talo.crypto_manager.get_key())
 	file.store_line(JSON.stringify(_requests))
 
-func _on_timeout():
+func _on_timeout() -> void:
 	if _requests.is_empty() || not (await Talo.health_check.ping()):
 		return
 
@@ -67,13 +64,13 @@ func _on_timeout():
 		if _requests.is_empty():
 			break
 
-		var req = _requests.pop_front()
+		var req := _requests.pop_front() as Dictionary
 		_write_requests()
 
 		var headers: Array[String] = ["Authorization: Bearer %s" % Talo.settings.get_value("", "access_key")]
 		headers.append_array(req.headers)
 
-		if not req.headers.any(func (h: String): return h.find(_continuity_timestamp_header) != -1):
+		if not req.headers.any(func (h: String) -> bool: return h.find(_continuity_timestamp_header) != -1):
 			headers.append("%s: %s" % [_continuity_timestamp_header, req.timestamp])
 
 		await _client.make_request(req.method, req.url, req.body, headers, true)

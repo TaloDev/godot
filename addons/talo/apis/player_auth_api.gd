@@ -12,7 +12,7 @@ enum LoginResult{
 	VERIFICATION_REQUIRED,
 }
 
-var session_manager = TaloSessionManager.new()
+var session_manager := TaloSessionManager.new()
 var last_error: TaloAuthError = null
 
 func _handle_error(res: Dictionary, ret: Variant = FAILED) -> Variant:
@@ -30,7 +30,7 @@ func register(identifier: String, password: String, email: String = "", verifica
 		push_error("Email is required when verification is enabled")
 		return FAILED
 
-	var res = await client.make_request(HTTPClient.METHOD_POST, "/register", {
+	var res := await client.make_request(HTTPClient.METHOD_POST, "/register", {
 		identifier = identifier,
 		password = password,
 		email = email,
@@ -46,7 +46,7 @@ func register(identifier: String, password: String, email: String = "", verifica
 
 ## Log in to an existing player account. If verification is required, a verification code will be sent to the player's email.
 func login(identifier: String, password: String) -> LoginResult:
-	var res = await client.make_request(HTTPClient.METHOD_POST, "/login", {
+	var res := await client.make_request(HTTPClient.METHOD_POST, "/login", {
 		identifier = identifier,
 		password = password
 	})
@@ -67,7 +67,7 @@ func login(identifier: String, password: String) -> LoginResult:
 
 ## Verify a player account using the verification code sent to the player's email.
 func verify(verification_code: String) -> Error:
-	var res = await client.make_request(HTTPClient.METHOD_POST, "/verify", {
+	var res := await client.make_request(HTTPClient.METHOD_POST, "/verify", {
 		aliasId = session_manager.get_verification_alias_id(),
 		code = verification_code
 	})
@@ -87,7 +87,7 @@ func logout() -> void:
 
 ## Change the password of the current player account.
 func change_password(current_password: String, new_password: String) -> Error:
-	var res = await client.make_request(HTTPClient.METHOD_POST, "/change_password", {
+	var res := await client.make_request(HTTPClient.METHOD_POST, "/change_password", {
 		currentPassword = current_password,
 		newPassword = new_password
 	})
@@ -100,7 +100,7 @@ func change_password(current_password: String, new_password: String) -> Error:
 
 ## Change the email of the current player account.
 func change_email(current_password: String, new_email: String) -> Error:
-	var res = await client.make_request(HTTPClient.METHOD_POST, "/change_email", {
+	var res := await client.make_request(HTTPClient.METHOD_POST, "/change_email", {
 		currentPassword = current_password,
 		newEmail = new_email
 	})
@@ -113,7 +113,7 @@ func change_email(current_password: String, new_email: String) -> Error:
 
 ## Send a password reset email to the player's email.
 func forgot_password(email: String) -> Error:
-	var res = await client.make_request(HTTPClient.METHOD_POST, "/forgot_password", {
+	var res := await client.make_request(HTTPClient.METHOD_POST, "/forgot_password", {
 		email = email
 	})
 
@@ -125,7 +125,7 @@ func forgot_password(email: String) -> Error:
 
 ## Reset the password of the player account using the code sent to the player's email.
 func reset_password(code: String, password: String) -> Error:
-	var res = await client.make_request(HTTPClient.METHOD_POST, "/reset_password", {
+	var res := await client.make_request(HTTPClient.METHOD_POST, "/reset_password", {
 		code = code,
 		password = password
 	})
@@ -138,7 +138,7 @@ func reset_password(code: String, password: String) -> Error:
 
 ## Toggle email verification for the current player account.
 func toggle_verification(current_password: String, verification_enabled: bool, email: String = "") -> Error:
-	var res = await client.make_request(HTTPClient.METHOD_PATCH, "/toggle_verification", {
+	var res := await client.make_request(HTTPClient.METHOD_PATCH, "/toggle_verification", {
 		currentPassword = current_password,
 		verificationEnabled = verification_enabled,
 		email = email
@@ -152,7 +152,7 @@ func toggle_verification(current_password: String, verification_enabled: bool, e
 
 ## Delete the current player account.
 func delete_account(current_password: String) -> Error:
-	var res = await client.make_request(HTTPClient.METHOD_DELETE, "/", {
+	var res := await client.make_request(HTTPClient.METHOD_DELETE, "/", {
 		currentPassword = current_password
 	})
 

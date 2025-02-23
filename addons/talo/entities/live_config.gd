@@ -5,10 +5,10 @@ class_name TaloLiveConfig extends RefCounted
 
 var props: Array[TaloProp] = []
 
-func _init(props: Array):
-	self.props.assign(props.map(func (prop): return TaloProp.new(prop.key, prop.value)))
+func _init(p_props: Array) -> void:
+	self.props.assign(p_props.map(func (prop: Dictionary) -> TaloProp: return TaloProp.new(prop.key, prop.value)))
 
 ## Get a property value by key. Returns the fallback value if the key is not found.
 func get_prop(key: String, fallback: String) -> String:
-	var filtered = props.filter(func (prop: TaloProp): return prop.key == key)
+	var filtered := props.filter(func (prop: TaloProp) -> bool: return prop.key == key)
 	return fallback if filtered.is_empty() else filtered.front().value

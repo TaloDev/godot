@@ -15,10 +15,10 @@ enum ErrorCode {
 	INVALID_EMAIL
 }
 
-var _error_string = ""
+var _error_string := ""
 
-func _init(error_string: String) -> void:
-	_error_string = error_string
+func _init(p_error_string: String) -> void:
+	_error_string = p_error_string
 
 ## Get the human-readable player auth error message. 
 func get_string() -> String:

@@ -71,7 +71,7 @@ func _init_socket() -> void:
 	if Talo.settings.get_value("", "auto_connect_socket", true):
 		socket.open_connection()
 
-func _notification(what: int):
+func _notification(what: int) -> void:
 	match what:
 		NOTIFICATION_WM_CLOSE_REQUEST:
 			_do_flush()
@@ -81,13 +81,13 @@ func _notification(what: int):
 			_do_flush()
 
 func _load_config() -> void:
-	var settings_path = "res://addons/talo/settings.cfg"
+	var settings_path := "res://addons/talo/settings.cfg"
 	settings = ConfigFile.new()
 
 	if not FileAccess.file_exists(settings_path):
 		settings.set_value("", "access_key", "")
 		settings.set_value("", "api_url", "https://api.trytalo.com")
-		settings.set_value("", "socket_url", TaloSocket.default_socket_url)
+		settings.set_value("", "socket_url", TaloSocket.DEFAULT_SOCKET_URL)
 		settings.set_value("", "auto_connect_socket", true)
 		settings.set_value("", "handle_tree_quit", true)
 		settings.set_value("continuity", "enabled", true)
@@ -115,7 +115,7 @@ func _load_apis() -> void:
 	socket_tickets = SocketTicketsAPI.new("/v1/socket-tickets")
 	player_presence = PlayerPresenceAPI.new("/v1/players/presence")
 
-	for api in [
+	for api: Node in [
 		players,
 		events,
 		game_config,
@@ -135,7 +135,7 @@ func _load_apis() -> void:
 func has_identity() -> bool:
 	return current_alias != null
 
-func identity_check(should_error = true) -> Error:
+func identity_check(should_error := true) -> Error:
 	if not has_identity():
 		if should_error:
 			push_error("You need to identify a player using Talo.players.identify() before doing this")
@@ -154,6 +154,6 @@ func _do_flush() -> void:
 		events.flush()
 
 func _check_session() -> void:
-	var session_token = player_auth.session_manager.get_token()
+	var session_token := player_auth.session_manager.get_token()
 	if not session_token.is_empty():
 		players.identify("talo", player_auth.session_manager.get_identifier())
