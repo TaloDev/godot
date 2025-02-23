@@ -85,20 +85,12 @@ func _load_config() -> void:
 	settings = ConfigFile.new()
 
 	if not FileAccess.file_exists(settings_path):
-		settings.set_value("", "access_key", "")
-		settings.set_value("", "api_url", "https://api.trytalo.com")
-		settings.set_value("", "socket_url", TaloSocket.DEFAULT_SOCKET_URL)
-		settings.set_value("", "auto_connect_socket", true)
-		settings.set_value("", "handle_tree_quit", true)
-		settings.set_value("continuity", "enabled", true)
-		settings.save(settings_path)
+		create_default_settings(settings_path)
 
-		print_rich("[color=green]Talo settings.cfg created! Please close the game and fill in your access_key.[/color]")
-	else:
-		settings.load(settings_path)
+	settings.load(settings_path)
 
-		if (settings.get_value("", "access_key", "").is_empty()) && OS.is_debug_build():
-			print_rich("[color=yellow]Warning: Talo access_key in settings.cfg is empty[/color]")
+	if (settings.get_value("", "access_key", "").is_empty()) && OS.is_debug_build():
+		print_rich("[color=yellow]Warning: Talo access_key in settings.cfg is empty[/color]")
 
 func _load_apis() -> void:
 	players = PlayersAPI.new("/v1/players")
@@ -157,3 +149,17 @@ func _check_session() -> void:
 	var session_token := player_auth.session_manager.get_token()
 	if not session_token.is_empty():
 		players.identify("talo", player_auth.session_manager.get_identifier())
+
+static func create_default_settings(settings_path: String) -> void:
+	if not FileAccess.file_exists(settings_path):
+		var default_settings := ConfigFile.new()
+
+		default_settings.set_value("", "access_key", "")
+		default_settings.set_value("", "api_url", "https://api.trytalo.com")
+		default_settings.set_value("", "socket_url", TaloSocket.DEFAULT_SOCKET_URL)
+		default_settings.set_value("", "auto_connect_socket", true)
+		default_settings.set_value("", "handle_tree_quit", true)
+		default_settings.set_value("continuity", "enabled", true)
+		default_settings.save(settings_path)
+
+		print_rich("[color=green]Talo settings.cfg created at \"%s\"! Please fill in your access_key.[/color]" % settings_path)
