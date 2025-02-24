@@ -1,4 +1,5 @@
-class_name FeedbackAPI extends TaloAPI
+## FeedbackAPI
+extends TaloAPI
 ## An interface for communicating with the Talo Feedback API.
 ##
 ## This API is used to submit feedback across different categories from your players.
@@ -7,12 +8,12 @@ class_name FeedbackAPI extends TaloAPI
 
 ## Get a list of feedback categories that are available for players to submit feedback.
 func get_categories() -> Array[TaloFeedbackCategory]:
-	var res = await client.make_request(HTTPClient.METHOD_GET, "/categories")
+	var res := await client.make_request(HTTPClient.METHOD_GET, "/categories")
 
 	match (res.status):
 		200:
 			var categories: Array[TaloFeedbackCategory] = []
-			categories.assign(res.body.feedbackCategories.map(func (category: Dictionary): return TaloFeedbackCategory.new(category)))
+			categories.assign(res.body.feedbackCategories.map(func (category: Dictionary) -> TaloFeedbackCategory: return TaloFeedbackCategory.new(category)))
 			return categories
 		_:
 			return []

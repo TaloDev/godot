@@ -1,4 +1,4 @@
-class_name TaloPlayerAlias extends Node
+class_name TaloPlayerAlias extends RefCounted
 
 var id: int
 var service: String
@@ -8,7 +8,7 @@ var last_seen_at: String
 var created_at: String
 var updated_at: String
 
-func _init(data: Dictionary):
+func _init(data: Dictionary) -> void:
 	id = data.id
 	service = data.service
 	identifier = data.identifier

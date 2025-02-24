@@ -2,6 +2,20 @@ extends Node
 
 signal init_completed
 
+const PlayersAPI = preload("apis/players_api.gd")
+const EventsAPI = preload("apis/events_api.gd")
+const GameConfigAPI = preload("apis/game_config_api.gd")
+const StatsAPI = preload("apis/stats_api.gd")
+const LeaderboardsAPI = preload("apis/leaderboards_api.gd")
+const SavesAPI = preload("apis/saves_api.gd")
+const FeedbackAPI = preload("apis/feedback_api.gd")
+const PlayerAuthAPI = preload("apis/player_auth_api.gd")
+const HealthCheckAPI = preload("apis/health_check_api.gd")
+const PlayerGroupsAPI = preload("apis/player_groups_api.gd")
+const ChannelsAPI = preload("apis/channels_api.gd")
+const SocketTicketsAPI = preload("apis/socket_tickets_api.gd")
+const PlayerPresenceAPI = preload("apis/player_presence_api.gd")
+
 var current_alias: TaloPlayerAlias
 var current_player: TaloPlayer:
 	get:
@@ -9,6 +23,7 @@ var current_player: TaloPlayer:
 
 var settings: ConfigFile
 
+# APIs
 var players: PlayersAPI
 var events: EventsAPI
 var game_config: GameConfigAPI
@@ -56,7 +71,7 @@ func _init_socket() -> void:
 	if Talo.settings.get_value("", "auto_connect_socket", true):
 		socket.open_connection()
 
-func _notification(what: int):
+func _notification(what: int) -> void:
 	match what:
 		NOTIFICATION_WM_CLOSE_REQUEST:
 			_do_flush()
@@ -66,41 +81,33 @@ func _notification(what: int):
 			_do_flush()
 
 func _load_config() -> void:
-	var settings_path = "res://addons/talo/settings.cfg"
+	var settings_path := "res://addons/talo/settings.cfg"
 	settings = ConfigFile.new()
 
 	if not FileAccess.file_exists(settings_path):
-		settings.set_value("", "access_key", "")
-		settings.set_value("", "api_url", "https://api.trytalo.com")
-		settings.set_value("", "socket_url", TaloSocket.default_socket_url)
-		settings.set_value("", "auto_connect_socket", true)
-		settings.set_value("", "handle_tree_quit", true)
-		settings.set_value("continuity", "enabled", true)
-		settings.save(settings_path)
+		create_default_settings(settings_path)
 
-		print_rich("[color=green]Talo settings.cfg created! Please close the game and fill in your access_key.[/color]")
-	else:
-		settings.load(settings_path)
+	settings.load(settings_path)
 
-		if (settings.get_value("", "access_key", "").is_empty()) && OS.is_debug_build():
-			print_rich("[color=yellow]Warning: Talo access_key in settings.cfg is empty[/color]")
+	if (settings.get_value("", "access_key", "").is_empty()) && OS.is_debug_build():
+		print_rich("[color=yellow]Warning: Talo access_key in settings.cfg is empty[/color]")
 
 func _load_apis() -> void:
-	players = preload("res://addons/talo/apis/players_api.gd").new("/v1/players")
-	events = preload("res://addons/talo/apis/events_api.gd").new("/v1/events")
-	game_config = preload("res://addons/talo/apis/game_config_api.gd").new("/v1/game-config")
-	stats = preload("res://addons/talo/apis/stats_api.gd").new("/v1/game-stats")
-	leaderboards = preload("res://addons/talo/apis/leaderboards_api.gd").new("/v1/leaderboards")
-	saves = preload("res://addons/talo/apis/saves_api.gd").new("/v1/game-saves")
-	feedback = preload("res://addons/talo/apis/feedback_api.gd").new("/v1/game-feedback")
-	player_auth = preload("res://addons/talo/apis/player_auth_api.gd").new("/v1/players/auth")
-	health_check = preload("res://addons/talo/apis/health_check_api.gd").new("/v1/health-check")
-	player_groups = preload("res://addons/talo/apis/player_groups_api.gd").new("/v1/player-groups")
-	channels = preload("res://addons/talo/apis/channels_api.gd").new("/v1/game-channels")
-	socket_tickets = preload("res://addons/talo/apis/socket_tickets_api.gd").new("/v1/socket-tickets")
-	player_presence = preload("res://addons/talo/apis/player_presence_api.gd").new("/v1/players/presence")
+	players = PlayersAPI.new("/v1/players")
+	events = EventsAPI.new("/v1/events")
+	game_config = GameConfigAPI.new("/v1/game-config")
+	stats = StatsAPI.new("/v1/game-stats")
+	leaderboards = LeaderboardsAPI.new("/v1/leaderboards")
+	saves = SavesAPI.new("/v1/game-saves")
+	feedback = FeedbackAPI.new("/v1/game-feedback")
+	player_auth = PlayerAuthAPI.new("/v1/players/auth")
+	health_check = HealthCheckAPI.new("/v1/health-check")
+	player_groups = PlayerGroupsAPI.new("/v1/player-groups")
+	channels = ChannelsAPI.new("/v1/game-channels")
+	socket_tickets = SocketTicketsAPI.new("/v1/socket-tickets")
+	player_presence = PlayerPresenceAPI.new("/v1/players/presence")
 
-	for api in [
+	for api: Node in [
 		players,
 		events,
 		game_config,
@@ -120,7 +127,7 @@ func _load_apis() -> void:
 func has_identity() -> bool:
 	return current_alias != null
 
-func identity_check(should_error = true) -> Error:
+func identity_check(should_error := true) -> Error:
 	if not has_identity():
 		if should_error:
 			push_error("You need to identify a player using Talo.players.identify() before doing this")
@@ -139,6 +146,20 @@ func _do_flush() -> void:
 		events.flush()
 
 func _check_session() -> void:
-	var session_token = player_auth.session_manager.get_token()
+	var session_token := player_auth.session_manager.get_token()
 	if not session_token.is_empty():
 		players.identify("talo", player_auth.session_manager.get_identifier())
+
+static func create_default_settings(settings_path: String) -> void:
+	if not FileAccess.file_exists(settings_path):
+		var default_settings := ConfigFile.new()
+
+		default_settings.set_value("", "access_key", "")
+		default_settings.set_value("", "api_url", "https://api.trytalo.com")
+		default_settings.set_value("", "socket_url", TaloSocket.DEFAULT_SOCKET_URL)
+		default_settings.set_value("", "auto_connect_socket", true)
+		default_settings.set_value("", "handle_tree_quit", true)
+		default_settings.set_value("continuity", "enabled", true)
+		default_settings.save(settings_path)
+
+		print_rich("[color=green]Talo settings.cfg created at \"%s\"! Please fill in your access_key.[/color]" % settings_path)

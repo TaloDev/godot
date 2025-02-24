@@ -18,17 +18,17 @@ func _load_data(save: TaloGameSave) -> void:
 	if not save:
 		return
 
-	var fields = {}
+	var fields := {}
 
-	var filtered = save.content.objects.filter(func (obj: Dictionary): return obj.id == id)
+	var filtered := save.content.objects.filter(func (obj: Dictionary) -> bool: return obj.id == id) as Array
 	if filtered.is_empty():
-		push_warning("Loadable with id '%s' not found in save '%s'" % [id, save.display_name])
+		push_warning("Loadable with id '%s' not found in save '%s'" % [id, save.name])
 		return
 
-	var saved_object = filtered.front()
+	var saved_object := filtered.front() as Dictionary
 
-	for item in saved_object.data:
-		fields[item.key] = type_convert(item.value, int(item.type))
+	for item: Dictionary in saved_object.data:
+		fields[item.key] = type_convert(item.value, item.type as int)
 
 	on_loaded(fields)
 
@@ -47,12 +47,12 @@ func register_field(key: String, value: Variant) -> void:
 	_saved_fields[key] = value
 
 ## Handle the loaded data. This must be implemented by the child class.
-func on_loaded(data: Dictionary) -> void:
+func on_loaded(_data: Dictionary) -> void:
 	assert(false, "on_loaded() must be implemented")
 
 ## Handle if this object was previously destroyed. If it was, remove it from the scene.
 func handle_destroyed(data: Dictionary) -> bool:
-	var destroyed = data.has("meta.destroyed")
+	var destroyed := data.has("meta.destroyed")
 	if destroyed:
 		queue_free()
 
@@ -61,7 +61,7 @@ func handle_destroyed(data: Dictionary) -> bool:
 ## Serialise the saved fields.
 func get_saved_object_data() -> Array:
 	return _saved_fields.keys().map(
-	func (key: String):
-		var value = _saved_fields[key]
+	func (key: String) -> Dictionary:
+		var value : Variant = _saved_fields[key]
 		return {key = key, value = str(value), type = str(typeof(value))}
 	)
