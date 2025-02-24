@@ -28,7 +28,7 @@ func get_entries(internal_name: String, page: int, alias_id = -1, include_archiv
 
 	if alias_id != -1:
 		url += "&aliasId=%s"
-		url_data += alias_id
+		url_data.append(alias_id)
 
 	if include_archived:
 		url += "&withDeleted=1"
