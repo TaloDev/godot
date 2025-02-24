@@ -145,9 +145,9 @@ func send_message(channel_id: int, message: String) -> void:
 class ChannelPage:
 	var channels: Array[TaloChannel]
 	var count: int
-	var is_last_page: bool
+	var last_page: bool
 
-	func _init(p_channels: Array[TaloChannel], p_count: int, p_is_last_page: bool) -> void:
+	func _init(p_channels: Array[TaloChannel], p_count: int, p_last_page: bool) -> void:
 		channels = p_channels
 		count = p_count
-		is_last_page = p_is_last_page
+		last_page = p_last_page
