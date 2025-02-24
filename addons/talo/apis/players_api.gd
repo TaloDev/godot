@@ -64,7 +64,7 @@ func find(player_id: String) -> TaloPlayer:
 
 ## Generate a mostly-unique identifier.
 func generate_identifier() -> String:
-	var time_hash: String = str(TimeUtils.get_timestamp_msec()).sha256_text()
+	var time_hash: String = str(TaloTimeUtils.get_timestamp_msec()).sha256_text()
 	var size := 12
 	var split_start: int = RandomNumberGenerator.new().randi_range(0, time_hash.length() - size)
 	return time_hash.substr(split_start, size)

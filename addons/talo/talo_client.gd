@@ -26,7 +26,7 @@ func _simulate_offline_request() -> Array:
 	]
 
 func make_request(method: HTTPClient.Method, url: String, body: Dictionary = {}, headers: Array[String] = [], continuity: bool = false) -> Dictionary:
-	var continuity_timestamp := TimeUtils.get_timestamp_msec()
+	var continuity_timestamp := TaloTimeUtils.get_timestamp_msec()
 
 	var full_url := url if continuity else _build_full_url(url)
 	var all_headers := headers if continuity else _build_headers(headers)

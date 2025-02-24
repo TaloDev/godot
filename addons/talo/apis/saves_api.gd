@@ -87,7 +87,7 @@ func create_save(save_name: String, content: Dictionary = {}) -> TaloGameSave:
 		save = TaloGameSave.new({
 			name = save_name,
 			content = save_content,
-			updatedAt = TimeUtils.get_current_datetime_string()
+			updatedAt = TaloTimeUtils.get_current_datetime_string()
 		})
 	else:
 		var res := await client.make_request(HTTPClient.METHOD_POST, "/", {
@@ -128,7 +128,7 @@ func update_save(save: TaloGameSave, new_name: String = "") -> TaloGameSave:
 			save.name = new_name
 
 		save.content = content
-		save.updated_at = TimeUtils.get_current_datetime_string()
+		save.updated_at = TaloTimeUtils.get_current_datetime_string()
 	else:
 		if Talo.identity_check() != OK:
 			return
