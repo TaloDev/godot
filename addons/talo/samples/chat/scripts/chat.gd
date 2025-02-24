@@ -23,8 +23,10 @@ func _on_presence_changed(presence: TaloPlayerPresence, online_changed: bool, cu
 func _on_identified(player: TaloPlayer) -> void:
 	_subscriptions = await Talo.channels.get_subscribed_channels()
 
-	var res = await Talo.channels.get_channels(0)
-	var channels = res[0]
+	var res := await Talo.channels.get_channels(0)
+	if not is_instance_valid(res):
+		return
+	var channels = res.channels
 	_add_chat_message("[SYSTEM] Found %s channel%s" % [channels.size(), "" if channels.size() == 1 else "s"])
 	for channel in channels:
 		_add_channel_label(channel.id, channel.name)
