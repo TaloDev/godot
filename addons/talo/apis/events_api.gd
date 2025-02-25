@@ -46,7 +46,7 @@ func track(name: String, props: Dictionary = {}) -> void:
 	_queue.push_back({
 		name = name,
 		props = final_props.map(func (prop: TaloProp): return prop.to_dictionary()),
-		timestamp = TimeUtils.get_timestamp_msec()
+		timestamp = TaloTimeUtils.get_timestamp_msec()
 	})
 
 	if _queue.size() >= _min_queue_size:

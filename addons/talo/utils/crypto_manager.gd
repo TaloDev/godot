@@ -5,7 +5,7 @@ var _key_file_path = "user://ti.bin"
 static func handle_undecryptable_file(path: String, what: String) -> void:
 	push_error("Failed to decrypt %s" % what)
 	var split_path = path.split(".")
-	var timestamp = TimeUtils.get_timestamp_msec()
+	var timestamp = TaloTimeUtils.get_timestamp_msec()
 	DirAccess.rename_absolute(path, "%s-invalid-%s.%s" % [split_path[0], timestamp, split_path[1]])
 
 func _get_pass() -> String:
