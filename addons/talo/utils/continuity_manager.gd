@@ -3,10 +3,10 @@ class_name TaloContinuityManager extends Timer
 var _client: TaloClient
 var _requests: Array = []
 
-const _continuity_path = "user://tc.bin"
-const _continuity_timestamp_header = "X-Talo-Continuity-Timestamp"
+const _CONTINUITY_PATH = "user://tc.bin"
+const _CONTINUITY_TIMESTAMP_HEADER = "X-Talo-Continuity-Timestamp"
 
-const _excluded_endpoints: Array[String] = [
+const _EXCLUDED_ENDPOINTS: Array[String] = [
 	"/v1/health-check",
 	"/v1/players/auth",
 	"/v1/players/identify",
@@ -28,7 +28,7 @@ func push_request(method: HTTPClient.Method, url: String, body: Dictionary, head
 	if not Talo.settings.get_value("continuity", "enabled", true):
 		return
 
-	if _excluded_endpoints.any(func (endpoint: String): return url.find(endpoint) != -1):
+	if _EXCLUDED_ENDPOINTS.any(func (endpoint: String): return url.find(endpoint) != -1):
 		return
 
 	_requests.push_back({
@@ -42,12 +42,12 @@ func push_request(method: HTTPClient.Method, url: String, body: Dictionary, head
 	_write_requests()
 
 func _read_requests() -> Array:
-	if not FileAccess.file_exists(_continuity_path):
+	if not FileAccess.file_exists(_CONTINUITY_PATH):
 		return []
 
-	var content = FileAccess.open_encrypted_with_pass(_continuity_path, FileAccess.READ, Talo.crypto_manager.get_key())
+	var content = FileAccess.open_encrypted_with_pass(_CONTINUITY_PATH, FileAccess.READ, Talo.crypto_manager.get_key())
 	if content == null:
-		TaloCryptoManager.handle_undecryptable_file(_continuity_path, "continuity file")
+		TaloCryptoManager.handle_undecryptable_file(_CONTINUITY_PATH, "continuity file")
 		return []
 
 	var json = JSON.new()
@@ -56,7 +56,7 @@ func _read_requests() -> Array:
 	return json.get_data()
 
 func _write_requests():
-	var file = FileAccess.open_encrypted_with_pass(_continuity_path, FileAccess.WRITE, Talo.crypto_manager.get_key())
+	var file = FileAccess.open_encrypted_with_pass(_CONTINUITY_PATH, FileAccess.WRITE, Talo.crypto_manager.get_key())
 	file.store_line(JSON.stringify(_requests))
 
 func _on_timeout():
@@ -73,7 +73,7 @@ func _on_timeout():
 		var headers: Array[String] = ["Authorization: Bearer %s" % Talo.settings.get_value("", "access_key")]
 		headers.append_array(req.headers)
 
-		if not req.headers.any(func (h: String): return h.find(_continuity_timestamp_header) != -1):
-			headers.append("%s: %s" % [_continuity_timestamp_header, req.timestamp])
+		if not req.headers.any(func (h: String): return h.find(_CONTINUITY_TIMESTAMP_HEADER) != -1):
+			headers.append("%s: %s" % [_CONTINUITY_TIMESTAMP_HEADER, req.timestamp])
 
 		await _client.make_request(req.method, req.url, req.body, headers, true)

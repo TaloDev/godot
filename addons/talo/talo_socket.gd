@@ -5,7 +5,7 @@ class_name TaloSocket extends Node
 ##
 ## @tutorial: https://docs.trytalo.com/docs/godot/socket
 
-static var default_socket_url = "wss://api.trytalo.com"
+const DEFAULT_SOCKET_URL = "wss://api.trytalo.com"
 
 var _socket = WebSocketPeer.new()
 var _temp_socket_token = ""
@@ -37,7 +37,7 @@ func _identify_player() -> void:
 	send("v1.players.identify", payload)
 
 func _get_socket_url(ticket: String) -> String:
-	var url = Talo.settings.get_value("", "socket_url", default_socket_url)
+	var url = Talo.settings.get_value("", "socket_url", DEFAULT_SOCKET_URL)
 	return "%s/?ticket=%s" % [url, ticket]
 
 ## Open the connection to the Talo Socket server. A new ticket is created to authenticate the connection.
