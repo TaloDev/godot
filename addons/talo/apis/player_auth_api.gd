@@ -6,7 +6,7 @@ class_name PlayerAuthAPI extends TaloAPI
 ## @tutorial: https://docs.trytalo.com/docs/godot/player-authentication
 
 var session_manager = TaloSessionManager.new()
-var last_error: Variant = null
+var last_error: TaloAuthError = null
 
 func _handle_error(res: Dictionary, ret: Variant = FAILED) -> Variant:
 	if res.body != null and res.body.has("errorCode"):
@@ -110,7 +110,7 @@ func forgot_password(email: String) -> Error:
 		204:
 			return OK
 		_:
-			return FAILED
+			return _handle_error(res)
 
 ## Reset the password of the player account using the code sent to the player's email.
 func reset_password(code: String, password: String) -> Error:
