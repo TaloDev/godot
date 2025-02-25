@@ -1,6 +1,6 @@
 class_name TaloCryptoManager extends Node
 
-var _key_file_path = "user://ti.bin"
+const _KEY_FILE_PATH = "user://ti.bin"
 
 static func handle_undecryptable_file(path: String, what: String) -> void:
 	push_error("Failed to decrypt %s" % what)
@@ -15,7 +15,7 @@ func _get_pass() -> String:
 	return OS.get_unique_id()
 
 func _init() -> void:
-	if not FileAccess.file_exists(_key_file_path):
+	if not FileAccess.file_exists(_KEY_FILE_PATH):
 		if _get_pass().is_empty():
 			push_error("Unable to create key file: cannot generate a suitable password")
 			return
@@ -23,17 +23,17 @@ func _init() -> void:
 		var crypto = Crypto.new()
 		var key = crypto.generate_random_bytes(32).hex_encode()
 
-		var file = FileAccess.open_encrypted_with_pass(_key_file_path, FileAccess.WRITE, _get_pass())
+		var file = FileAccess.open_encrypted_with_pass(_KEY_FILE_PATH, FileAccess.WRITE, _get_pass())
 		file.store_line(key)
 		file.close()
 
 func get_key() -> String:
-	if not FileAccess.file_exists(_key_file_path):
+	if not FileAccess.file_exists(_KEY_FILE_PATH):
 		_init()
 
-	var file = FileAccess.open_encrypted_with_pass(_key_file_path, FileAccess.READ, _get_pass())
+	var file = FileAccess.open_encrypted_with_pass(_KEY_FILE_PATH, FileAccess.READ, _get_pass())
 	if file == null:
-		handle_undecryptable_file(_key_file_path, "crypto init file")
+		handle_undecryptable_file(_KEY_FILE_PATH, "crypto init file")
 		return ""
 
 	var key = file.get_as_text()
