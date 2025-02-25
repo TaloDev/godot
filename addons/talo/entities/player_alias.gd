@@ -1,4 +1,4 @@
-class_name TaloPlayerAlias extends Node
+class_name TaloPlayerAlias extends RefCounted
 
 var id: int
 var service: String

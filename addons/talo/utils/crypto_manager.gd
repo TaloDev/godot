@@ -1,4 +1,4 @@
-class_name TaloCryptoManager extends Node
+class_name TaloCryptoManager extends RefCounted
 
 var _key_file_path = "user://ti.bin"
 

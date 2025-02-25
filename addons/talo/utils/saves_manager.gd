@@ -1,4 +1,4 @@
-class_name TaloSavesManager extends Node
+class_name TaloSavesManager extends RefCounted
 
 var all_saves: Array[TaloGameSave] = []
 var current_save: TaloGameSave
@@ -50,7 +50,7 @@ func sync_offline_saves(offline_saves: Array[TaloGameSave]) -> Array[TaloGameSav
 
 	for offline_save in offline_saves:
 		if offline_save.id < 0:
-			var save = await Talo.saves.create_save(offline_save.display_name, offline_save.content)
+			var save = await Talo.saves.create_save(offline_save.name, offline_save.content)
 			delete_offline_save(offline_save)
 			new_saves.push_back(save)
 	

@@ -1,4 +1,4 @@
-class_name TaloEntityWithProps extends Node
+class_name TaloEntityWithProps extends RefCounted
 
 var props: Array[TaloProp] = []
 

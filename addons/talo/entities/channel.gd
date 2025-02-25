@@ -1,7 +1,7 @@
 class_name TaloChannel extends TaloEntityWithProps
 
 var id: int
-var display_name: String
+var name: String
 var owner_alias: TaloPlayerAlias
 var total_messages: int
 var member_count: int
@@ -12,7 +12,7 @@ func _init(data: Dictionary):
 	super._init(data.props.map(func (prop): return TaloProp.new(prop.key, prop.value)))
 
 	id = data.id
-	display_name = data.name
+	name = data.name
 	if data.owner:
 		owner_alias = TaloPlayerAlias.new(data.owner)
 	total_messages = data.totalMessages
