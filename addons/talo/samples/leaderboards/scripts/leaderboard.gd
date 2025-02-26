@@ -50,14 +50,14 @@ func _load_entries() -> void:
 	var done = false
 
 	while !done:
-		var res = await Talo.leaderboards.get_entries(leaderboard_internal_name, page, -1, include_archived)
+		var res := await Talo.leaderboards.get_entries(leaderboard_internal_name, page, -1, include_archived)
 
-		if res.size() == 0:
+		if not is_instance_valid(res):
 			_entries_error = true
 			return
 
-		var entries = res[0]
-		var last_page = res[2]
+		var entries := res.entries
+		var last_page := res.last_page
 
 		if last_page:
 			done = true
@@ -71,8 +71,9 @@ func _on_submit_pressed() -> void:
 	var score = RandomNumberGenerator.new().randi_range(0, 100)
 	var team = "Blue" if RandomNumberGenerator.new().randi_range(0, 1) == 0 else "Red"
 
-	var res = await Talo.leaderboards.add_entry(leaderboard_internal_name, score, {team = team})
-	info_label.text = "You scored %s points for the %s team!%s" % [score, team, " Your highscore was updated!" if res[1] else ""]
+	var res := await Talo.leaderboards.add_entry(leaderboard_internal_name, score, {team = team})
+	assert(is_instance_valid(res))
+	info_label.text = "You scored %s points for the %s team!%s" % [score, team, " Your highscore was updated!" if res.updated else ""]
 
 	_build_entries()
 
