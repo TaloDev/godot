@@ -8,7 +8,7 @@ class_name ChannelsAPI extends TaloAPI
 ## Emitted when a message is received from a channel.
 signal message_received(channel: TaloChannel, player_alias: TaloPlayerAlias, message: String)
 
-func _ready():
+func _ready() -> void:
 	await Talo.init_completed
 	Talo.socket.message_received.connect(_on_message_received)
 
@@ -27,16 +27,16 @@ func find(channel_id: int) -> TaloChannel:
 			return null
 
 ## Get a list of channels that players can join.
-func get_channels(page: int) -> Array:
+func get_channels(page: int) -> ChannelPage:
 	var res = await client.make_request(HTTPClient.METHOD_GET, "?page=%s" % page)
 
 	match (res.status):
 		200:
 			var channels: Array[TaloChannel] = []
 			channels.assign(res.body.channels.map(func (channel: Dictionary): return TaloChannel.new(channel)))
-			return [channels, res.body.count, res.body.isLastPage]
+			return ChannelPage.new(channels, res.body.count, res.body.isLastPage)
 		_:
-			return []
+			return null
 
 ## Get a list of channels that the current player is subscribed to.
 func get_subscribed_channels() -> Array[TaloChannel]:
@@ -138,3 +138,15 @@ func send_message(channel_id: int, message: String) -> void:
 		},
 		message = message
 	})
+
+
+# Structs
+class ChannelPage:
+	var channels: Array[TaloChannel]
+	var count: int
+	var last_page: bool
+
+	func _init(channels: Array[TaloChannel], count: int, last_page: bool) -> void:
+		self.channels = channels
+		self.count = count
+		self.last_page = last_page
