@@ -5,6 +5,12 @@ class_name PlayerAuthAPI extends TaloAPI
 ##
 ## @tutorial: https://docs.trytalo.com/docs/godot/player-authentication
 
+enum LoginResult{
+	OK,
+	FAILED,
+	VERIFICATION_REQUIRED,
+}
+
 var session_manager = TaloSessionManager.new()
 var last_error: TaloAuthError = null
 
@@ -37,7 +43,7 @@ func register(identifier: String, password: String, email: String = "", verifica
 			return _handle_error(res)
 
 ## Log in to an existing player account. If verification is required, a verification code will be sent to the player's email.
-func login(identifier: String, password: String) -> Array[Variant]: ## [Error, bool]
+func login(identifier: String, password: String) -> LoginResult:
 	var res = await client.make_request(HTTPClient.METHOD_POST, "/login", {
 		identifier = identifier,
 		password = password
@@ -50,9 +56,12 @@ func login(identifier: String, password: String) -> Array[Variant]: ## [Error, b
 			else:
 				session_manager.handle_session_created(res.body.alias, res.body.sessionToken, res.body.socketToken)
 
-			return [OK, res.body.has("verificationRequired")]
+			if res.body.has("verificationRequired"):
+				return LoginResult.VERIFICATION_REQUIRED
+			else:
+				return LoginResult.OK
 		_:
-			return _handle_error(res, [FAILED, false])
+			return _handle_error(res, LoginResult.FAILED)
 
 ## Verify a player account using the verification code sent to the player's email.
 func verify(verification_code: String) -> Error:
