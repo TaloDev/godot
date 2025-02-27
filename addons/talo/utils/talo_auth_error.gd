@@ -1,4 +1,4 @@
-class_name TaloAuthError extends Node
+class_name TaloAuthError extends RefCounted
 
 enum ErrorCode {
 	API_ERROR,

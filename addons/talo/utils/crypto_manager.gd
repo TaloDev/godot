@@ -1,4 +1,4 @@
-class_name TaloCryptoManager extends Node
+class_name TaloCryptoManager extends RefCounted
 
 const _KEY_FILE_PATH = "user://ti.bin"
 

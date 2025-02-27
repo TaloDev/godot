@@ -1,8 +1,8 @@
-class_name TaloPlayerGroupStub extends Node
+class_name TaloPlayerGroupStub extends RefCounted
 
 var id: String
-var display_name: String
+var name: String
 
-func _init(id: String, display_name: String):
+func _init(id: String, name: String):
 	self.id = id
-	self.display_name = display_name
+	self.name = name

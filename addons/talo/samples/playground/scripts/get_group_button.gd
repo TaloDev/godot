@@ -9,6 +9,6 @@ func _on_pressed() -> void:
 
 	var group = await Talo.player_groups.get_group(group_id)
 	if group != null:
-		%ResponseLabel.text = "%s has %s player(s)" % [group.display_name, group.count]
+		%ResponseLabel.text = "%s has %s player(s)" % [group.name, group.count]
 	else:
 		%ResponseLabel.text = "Group %s not found" % group_id

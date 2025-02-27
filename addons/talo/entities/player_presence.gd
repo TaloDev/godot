@@ -1,4 +1,4 @@
-class_name TaloPlayerPresence extends Node
+class_name TaloPlayerPresence extends RefCounted
 
 var online: bool
 var custom_status: String

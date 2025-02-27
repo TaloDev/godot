@@ -1,4 +1,4 @@
-class_name TaloProp extends Node
+class_name TaloProp extends RefCounted
 
 var key: String
 var value: Variant

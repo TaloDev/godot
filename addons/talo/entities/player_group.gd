@@ -1,7 +1,7 @@
-class_name TaloPlayerGroup extends Node
+class_name TaloPlayerGroup extends RefCounted
 
 var id: String
-var display_name: String
+var name: String
 var description: String
 var rules: Array
 var rule_mode: String
@@ -12,7 +12,7 @@ var updated_at: String
 
 func _init(data: Dictionary):
 	id = data.id
-	display_name = data.name
+	name = data.name
 	description = data.description
 	rules = data.rules
 	rule_mode = data.ruleMode

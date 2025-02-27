@@ -1,12 +1,12 @@
-class_name TaloSavedObject extends Node
+class_name TaloSavedObject extends RefCounted
 
 var id: String
-var object_name: String
+var name: String
 var loadable: TaloLoadable
 
 func _init(loadable: TaloLoadable) -> void:
 	id = loadable.id
-	object_name = loadable.get_path()
+	name = loadable.get_path()
 	self.loadable = loadable
 
 ## Register the fields that should be saved and loaded for this object.
@@ -22,6 +22,6 @@ func to_dictionary() -> Dictionary:
 
 	return {
 		id = id,
-		name = object_name,
+		name = name,
 		data = destroyed_data if not is_instance_valid(loadable) else loadable.get_saved_object_data() 
 	}
