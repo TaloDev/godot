@@ -47,7 +47,7 @@ func make_request(method: HTTPClient.Method, url: String, body: Dictionary = {},
 				"Request failed: result %s, details: https://docs.godotengine.org/en/stable/classes/class_httprequest.html#enum-httprequest-result" % res[0]
 		})
 
-	if Talo.settings.get_value("logging", "requests", false):
+	if Talo.get_setting(Talo.Settings.LOGGING_REQUESTS):
 		print_rich("[color=%s]--> %s %s %s %s[/color]" % [
 			"yellow" if continuity else "orange",
 			"[CONTINUITY]" if continuity else "",
@@ -56,7 +56,7 @@ func make_request(method: HTTPClient.Method, url: String, body: Dictionary = {},
 			request_body
 		])
 	
-	if Talo.settings.get_value("logging", "responses", false):
+	if Talo.get_setting(Talo.Settings.LOGGING_RESPONSES):
 		print_rich("[color=green]<-- %s %s[/color]" % [status, json.get_data()])
 
 	var ret = {
@@ -76,7 +76,7 @@ func make_request(method: HTTPClient.Method, url: String, body: Dictionary = {},
 	
 func _build_headers(extra_headers: Array[String] = []) -> Array[String]:
 	var headers: Array[String] = [
-		"Authorization: Bearer %s" % Talo.settings.get_value("", "access_key"),
+		"Authorization: Bearer %s" % Talo.get_setting(Talo.Settings.ACCESS_KEY),
 		"Content-Type: application/json",
 		"Accept: application/json",
 		"X-Talo-Dev-Build: %s" % ("1" if OS.is_debug_build() else "0"),
@@ -99,7 +99,7 @@ func _build_headers(extra_headers: Array[String] = []) -> Array[String]:
 
 func _build_full_url(url: String) -> String:
 	return "%s%s%s" % [
-		Talo.settings.get_value("", "api_url"),
+		Talo.get_setting(Talo.Settings.API_URL),
 		_base_url,
 		url
 	]
