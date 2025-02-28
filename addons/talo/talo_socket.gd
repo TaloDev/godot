@@ -5,8 +5,6 @@ class_name TaloSocket extends Node
 ##
 ## @tutorial: https://docs.trytalo.com/docs/godot/socket
 
-const DEFAULT_SOCKET_URL = "wss://api.trytalo.com"
-
 var _socket = WebSocketPeer.new()
 var _temp_socket_token = ""
 var _socket_authenticated = false
@@ -37,7 +35,7 @@ func _identify_player() -> void:
 	send("v1.players.identify", payload)
 
 func _get_socket_url(ticket: String) -> String:
-	var url = Talo.settings.get_value("", "socket_url", DEFAULT_SOCKET_URL)
+	var url = Talo.get_setting(Talo.Settings.SOCKET_URL)
 	return "%s/?ticket=%s" % [url, ticket]
 
 ## Open the connection to the Talo Socket server. A new ticket is created to authenticate the connection.
@@ -49,7 +47,7 @@ func open_connection():
 		print_rich("[color=yellow]Warning: Failed connecting to the Talo Socket: %s[/color]" % err)
 
 func _on_message_received(res: String, data: Dictionary) -> void:
-	if Talo.settings.get_value("logging", "responses", false):
+	if Talo.get_setting(Talo.Settings.LOGGING_RESPONSES):
 		print_rich("[color=aqua]<-- %s %s[/color]" % [res, data])
 
 	match res:
@@ -69,7 +67,7 @@ func set_socket_token(token: String) -> void:
 
 ## Send a message to the Talo Socket server. Not recommended for direct use. See the Talo docs for available requests and message structures.
 func send(req: String, data: Dictionary = {}) -> int:
-	if Talo.settings.get_value("logging", "requests", false):
+	if Talo.get_setting(Talo.Settings.LOGGING_REQUESTS):
 		print_rich("[color=orange]--> %s %s[/color]" % [req, data])
 
 	return _socket.send_text(JSON.stringify({
