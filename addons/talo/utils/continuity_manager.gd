@@ -25,7 +25,7 @@ func _ready() -> void:
 	start()
 
 func push_request(method: HTTPClient.Method, url: String, body: Dictionary, headers: Array[String], timestamp: int):
-	if not Talo.settings.get_value("continuity", "enabled", true):
+	if not Talo.get_setting(Talo.Settings.CONTINUITY_ENABLED):
 		return
 
 	if _EXCLUDED_ENDPOINTS.any(func (endpoint: String): return url.find(endpoint) != -1):
@@ -70,7 +70,7 @@ func _on_timeout():
 		var req = _requests.pop_front()
 		_write_requests()
 
-		var headers: Array[String] = ["Authorization: Bearer %s" % Talo.settings.get_value("", "access_key")]
+		var headers: Array[String] = ["Authorization: Bearer %s" % Talo.get_setting(Talo.Settings.ACCESS_KEY)]
 		headers.append_array(req.headers)
 
 		if not req.headers.any(func (h: String): return h.find(_CONTINUITY_TIMESTAMP_HEADER) != -1):

@@ -7,8 +7,6 @@ var current_player: TaloPlayer:
 	get:
 		return null if not current_alias else current_alias.player
 
-var settings: ConfigFile
-
 var players: PlayersAPI
 var events: EventsAPI
 var game_config: GameConfigAPI
@@ -31,7 +29,7 @@ var continuity_manager: TaloContinuityManager
 var socket: TaloSocket
 
 func _ready() -> void:
-	_load_config()
+	_check_access_key()
 	_load_apis()
 	_init_crypto_manager()
 	_init_continuity()
@@ -53,37 +51,21 @@ func _init_socket() -> void:
 	socket = TaloSocket.new()
 	add_child(socket)
 
-	if Talo.settings.get_value("", "auto_connect_socket", true):
+	if Talo.get_setting(Talo.Settings.AUTO_CONNECT_SOCKET):
 		socket.open_connection()
 
 func _notification(what: int):
 	match what:
 		NOTIFICATION_WM_CLOSE_REQUEST:
 			_do_flush()
-			if Talo.settings.get_value("", "handle_tree_quit", true):
+			if Talo.get_setting(Talo.Settings.HANDLE_TREE_QUIT):
 				get_tree().quit()
 		NOTIFICATION_APPLICATION_FOCUS_OUT, NOTIFICATION_APPLICATION_PAUSED:
 			_do_flush()
 
-func _load_config() -> void:
-	var settings_path = "res://addons/talo/settings.cfg"
-	settings = ConfigFile.new()
-
-	if not FileAccess.file_exists(settings_path):
-		settings.set_value("", "access_key", "")
-		settings.set_value("", "api_url", "https://api.trytalo.com")
-		settings.set_value("", "socket_url", TaloSocket.DEFAULT_SOCKET_URL)
-		settings.set_value("", "auto_connect_socket", true)
-		settings.set_value("", "handle_tree_quit", true)
-		settings.set_value("continuity", "enabled", true)
-		settings.save(settings_path)
-
-		print_rich("[color=green]Talo settings.cfg created! Please close the game and fill in your access_key.[/color]")
-	else:
-		settings.load(settings_path)
-
-		if (settings.get_value("", "access_key", "").is_empty()) && OS.is_debug_build():
-			print_rich("[color=yellow]Warning: Talo access_key in settings.cfg is empty[/color]")
+func _check_access_key() -> void:
+	if OS.is_debug_build() and get_setting(Settings.ACCESS_KEY).is_empty():
+		print_rich("[color=yellow]Warning: Talo access_key in \"ProjectSettings\" is empty.[/color]")
 
 func _load_apis() -> void:
 	players = preload("res://addons/talo/apis/players_api.gd").new("/v1/players")
@@ -129,7 +111,7 @@ func identity_check(should_error = true) -> Error:
 	return OK
 
 func offline_mode_enabled() -> bool:
-	return settings.get_value("debug", "offline_mode", false)
+	return get_setting(Settings.DEBUG_OFFLINE_MODE)
 
 func is_offline() -> bool:
 	return offline_mode_enabled() or not await health_check.ping()
@@ -142,3 +124,13 @@ func _check_session() -> void:
 	var session_token = player_auth.session_manager.get_token()
 	if not session_token.is_empty():
 		players.identify("talo", player_auth.session_manager.get_identifier())
+
+# region Settings
+const Settings = TaloSettings.Settings
+
+static func set_setting(setting: String, value: Variant) -> void:
+	TaloSettings.set_setting(setting, value)
+
+static func get_setting(setting: String) -> Variant:
+	return TaloSettings.get_setting(setting)
+# endregion Settings

@@ -9,10 +9,6 @@ func _set_text(offline: bool):
 func _on_pressed() -> void:
 	var offline = Talo.offline_mode_enabled()
 
-	Talo.settings.set_value(
-		"debug",
-		"offline_mode",
-		not offline
-	)
+	Talo.set_setting(Talo.Settings.DEBUG_OFFLINE_MODE, not offline)
 	_set_text(not offline)
 	%ResponseLabel.text = "You are now " + ("offline" if not offline else "online")
