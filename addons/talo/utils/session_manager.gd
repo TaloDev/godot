@@ -1,4 +1,4 @@
-class_name TaloSessionManager extends Node
+class_name TaloSessionManager extends RefCounted
 
 var _verification_alias_id = ""
 

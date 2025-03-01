@@ -1,4 +1,4 @@
-class_name TaloLeaderboardEntriesManager extends Node
+class_name TaloLeaderboardEntriesManager extends RefCounted
 
 var _current_entries: Dictionary = {}
 

@@ -29,7 +29,7 @@ var current: TaloGameSave:
 ## Sync an offline save with an online save using the offline save data.
 func replace_save_with_offline_save(offline_save: TaloGameSave) -> TaloGameSave:
 	var res = await client.make_request(HTTPClient.METHOD_PATCH, "/%s" % offline_save.id, {
-		name=offline_save.display_name,
+		name=offline_save.name,
 		content=offline_save.content
 	})
 
@@ -124,7 +124,7 @@ func update_save(save: TaloGameSave, new_name: String = "") -> TaloGameSave:
 
 	if await Talo.is_offline():
 		if not new_name.is_empty():
-			save.display_name = new_name
+			save.name = new_name
 
 		save.content = content
 		save.updated_at = TaloTimeUtils.get_current_datetime_string()
@@ -133,7 +133,7 @@ func update_save(save: TaloGameSave, new_name: String = "") -> TaloGameSave:
 			return
 
 		var res = await client.make_request(HTTPClient.METHOD_PATCH, "/%s" % save.id, {
-			name=save.display_name if new_name.is_empty() else new_name,
+			name=save.name if new_name.is_empty() else new_name,
 			content=content
 		})
 
