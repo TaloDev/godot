@@ -57,9 +57,9 @@ func _load_entries() -> void:
 			return
 
 		var entries := res.entries
-		var last_page := res.last_page
+		var is_last_page := res.is_last_page
 
-		if last_page:
+		if is_last_page:
 			done = true
 		else:
 			page += 1

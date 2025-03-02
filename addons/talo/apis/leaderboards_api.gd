@@ -80,12 +80,12 @@ func add_entry(internal_name: String, score: float, props: Dictionary = {}) -> A
 class EntriesPage:
 	var entries: Array[TaloLeaderboardEntry]
 	var count: int
-	var last_page: bool
+	var is_last_page: bool
 
-	func _init(entries: Array[TaloLeaderboardEntry], count: int, last_page: bool) -> void:
+	func _init(entries: Array[TaloLeaderboardEntry], count: int, is_last_page: bool) -> void:
 		self.entries = entries
 		self.count = count
-		self.last_page = last_page
+		self.is_last_page = is_last_page
 
 class AddEntryResult:
 	var entry: TaloLeaderboardEntry

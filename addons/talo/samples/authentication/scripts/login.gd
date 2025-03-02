@@ -30,7 +30,7 @@ func _on_submit_pressed() -> void:
 		Talo.player_auth.LoginResult.VERIFICATION_REQUIRED:
 			verification_required.emit()
 		Talo.player_auth.LoginResult.OK:
-			print("Login success.")
+			pass
 
 func _on_forgot_password_pressed() -> void:
 	go_to_forgot_password.emit()
