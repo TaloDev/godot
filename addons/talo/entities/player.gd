@@ -5,10 +5,10 @@ var id: String
 var groups: Array[TaloPlayerGroupStub] = []
 
 func _init(data: Dictionary):
-	super._init([]) # Will be initialized correctly in update_from_raw_data().
+	super._init([])
 	update_from_raw_data(data)
 
-## Update the player from raw data.
+## Update the player from raw JSON data.
 func update_from_raw_data(data: Dictionary) -> void:
 	props.assign(data.props.map(func (prop): return TaloProp.new(prop.key, prop.value)))
 

@@ -5,7 +5,7 @@ class_name PlayerAuthAPI extends TaloAPI
 ##
 ## @tutorial: https://docs.trytalo.com/docs/godot/player-authentication
 
-enum LoginResult{
+enum LoginResult {
 	OK,
 	FAILED,
 	VERIFICATION_REQUIRED,

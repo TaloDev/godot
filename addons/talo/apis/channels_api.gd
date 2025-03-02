@@ -157,7 +157,6 @@ func send_message(channel_id: int, message: String) -> void:
 		message = message
 	})
 
-
 # Structs
 class ChannelPage:
 	var channels: Array[TaloChannel]
