@@ -66,3 +66,7 @@ window/stretch/mode="viewport"
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/talo/plugin.cfg")
+
+[rendering]
+
+textures/vram_compression/import_etc2_astc=true

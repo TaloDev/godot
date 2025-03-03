@@ -1,0 +1,30 @@
+name: CI
+
+on: push
+
+jobs:
+  build-check:
+    strategy:
+      matrix:
+        platform: ['Windows Desktop', 'macOS', 'Linux', 'Web']
+    runs-on: ${{ matrix.platform == 'macOS' && 'macos-latest' || 'ubuntu-latest' }}
+
+    steps:
+      - uses: actions/checkout@v4
+        name: Checkout
+        with:
+          lfs: true
+
+      - uses: chickensoft-games/setup-godot@v1
+        name: Set up Godot
+        with:
+          version: 4.3.0
+          use-dotnet: false
+          include-templates: true
+
+      - name: Build
+        run: |
+          output=$(godot --headless --export-release '${{ matrix.platform }}' 2>&1)
+          if echo "$output" | grep -q "SCRIPT ERROR"; then
+            exit 1
+          fi
