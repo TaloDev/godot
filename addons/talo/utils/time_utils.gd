@@ -1,4 +1,4 @@
-class_name TimeUtils extends Node
+class_name TaloTimeUtils extends RefCounted
 
 ## Get an ISO 8601 datetime string (YYYY-MM-DDTHH:MM:SS) from the current time.
 static func get_current_datetime_string() -> String:

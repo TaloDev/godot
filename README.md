@@ -25,7 +25,7 @@ channels](https://trytalo.com/channels): Send real-time messages between players
 - 🔧 [Steamworks integration](https://trytalo.com/steamworks-integration): Hook into Steamworks for authentication and ownership checks.
 - 🗣️ [Game feedback](https://trytalo.com/feedback): Collect and manage feedback from your players.
 - 🛡️ [Continuity](https://trytalo.com/continuity): Keep your data in-sync even when your players are offline.
-- 🔔 [Player presence](https://trytalo.com/player#presence): See if players are online and set custom statuses.
+- 🔔 [Player presence](https://trytalo.com/players#presence): See if players are online and set custom statuses.
 
 ## Samples included with the plugin
 

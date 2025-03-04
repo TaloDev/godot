@@ -29,7 +29,7 @@ var current: TaloGameSave:
 ## Sync an offline save with an online save using the offline save data.
 func replace_save_with_offline_save(offline_save: TaloGameSave) -> TaloGameSave:
 	var res = await client.make_request(HTTPClient.METHOD_PATCH, "/%s" % offline_save.id, {
-		name=offline_save.display_name,
+		name=offline_save.name,
 		content=offline_save.content
 	})
 
@@ -68,6 +68,8 @@ func get_saves() -> Array[TaloGameSave]:
 ## Set the chosen save and optionally (default true) load it.
 func choose_save(save: TaloGameSave, load_save = true) -> void:
 	_saves_manager.set_chosen_save(save, load_save)
+	if load_save:
+		save_chosen.emit(save)
 
 ## Unload the current save.
 func unload_current_save() -> void:
@@ -84,7 +86,7 @@ func create_save(save_name: String, content: Dictionary = {}) -> TaloGameSave:
 		save = TaloGameSave.new({
 			name=save_name,
 			content=save_content,
-			updatedAt=TimeUtils.get_current_datetime_string()
+			updatedAt=TaloTimeUtils.get_current_datetime_string()
 		})
 	else:
 		var res = await client.make_request(HTTPClient.METHOD_POST, "/", {
@@ -108,7 +110,9 @@ func register(loadable: TaloLoadable) -> void:
 
 ## Mark an object as loaded.
 func set_object_loaded(id: String) -> void:
-	_saves_manager.set_object_loaded(id)
+	_saves_manager.push_loaded_object(id)
+	if _saves_manager.is_loading_completed():
+		save_loading_completed.emit()
 
 ## Update the currently loaded save using the current state of the game and with the given name.
 func update_current_save(new_name: String = "") -> TaloGameSave:
@@ -120,16 +124,16 @@ func update_save(save: TaloGameSave, new_name: String = "") -> TaloGameSave:
 
 	if await Talo.is_offline():
 		if not new_name.is_empty():
-			save.display_name = new_name
+			save.name = new_name
 
 		save.content = content
-		save.updated_at = TimeUtils.get_current_datetime_string()
+		save.updated_at = TaloTimeUtils.get_current_datetime_string()
 	else:
 		if Talo.identity_check() != OK:
 			return
 
 		var res = await client.make_request(HTTPClient.METHOD_PATCH, "/%s" % save.id, {
-			name=save.display_name if new_name.is_empty() else new_name,
+			name=save.name if new_name.is_empty() else new_name,
 			content=content
 		})
 

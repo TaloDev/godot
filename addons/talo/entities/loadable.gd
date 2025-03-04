@@ -22,7 +22,7 @@ func _load_data(save: TaloGameSave) -> void:
 
 	var filtered = save.content.objects.filter(func (obj: Dictionary): return obj.id == id)
 	if filtered.is_empty():
-		push_warning("Loadable with id '%s' not found in save '%s'" % [id, save.display_name])
+		push_warning("Loadable with id '%s' not found in save '%s'" % [id, save.name])
 		return
 
 	var saved_object = filtered.front()

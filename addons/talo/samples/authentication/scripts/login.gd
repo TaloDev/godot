@@ -19,16 +19,18 @@ func _on_submit_pressed() -> void:
 		validation_label.text = "Password is required"
 		return
 
-	var res = await Talo.player_auth.login(username.text, password.text)
-	if res[0] != OK:
-		match Talo.player_auth.last_error.get_code():
-			TaloAuthError.ErrorCode.INVALID_CREDENTIALS:
-				validation_label.text = "Username or password is incorrect"
-			_:
-				validation_label.text = Talo.player_auth.last_error.get_string()
-	else:
-		if res[1]:
+	var res := await Talo.player_auth.login(username.text, password.text)
+	match res:
+		Talo.player_auth.LoginResult.FAILED:
+			match Talo.player_auth.last_error.get_code():
+				TaloAuthError.ErrorCode.INVALID_CREDENTIALS:
+					validation_label.text = "Username or password is incorrect"
+				_:
+					validation_label.text = Talo.player_auth.last_error.get_string()
+		Talo.player_auth.LoginResult.VERIFICATION_REQUIRED:
 			verification_required.emit()
+		Talo.player_auth.LoginResult.OK:
+			pass
 
 func _on_forgot_password_pressed() -> void:
 	go_to_forgot_password.emit()

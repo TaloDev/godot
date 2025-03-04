@@ -1,4 +1,4 @@
-class_name TaloSavesManager extends Node
+class_name TaloSavesManager extends RefCounted
 
 var all_saves: Array[TaloGameSave] = []
 var current_save: TaloGameSave
@@ -6,15 +6,15 @@ var current_save: TaloGameSave
 var _registered_saved_objects: Array[TaloSavedObject]
 var _loaded_loadables: Array[String]
 
-const _offline_saves_path = "user://ts.bin"
+const _OFFLINE_SAVES_PATH = "user://ts.bin"
 
 func read_offline_saves() -> Array[TaloGameSave]:
-	if not FileAccess.file_exists(_offline_saves_path):
+	if not FileAccess.file_exists(_OFFLINE_SAVES_PATH):
 		return []
 
-	var content = FileAccess.open_encrypted_with_pass(_offline_saves_path, FileAccess.READ, Talo.crypto_manager.get_key())
+	var content = FileAccess.open_encrypted_with_pass(_OFFLINE_SAVES_PATH, FileAccess.READ, Talo.crypto_manager.get_key())
 	if content == null:
-		TaloCryptoManager.handle_undecryptable_file(_offline_saves_path, "offline saves file")
+		TaloCryptoManager.handle_undecryptable_file(_OFFLINE_SAVES_PATH, "offline saves file")
 		return []
 
 	var json = JSON.new()
@@ -26,7 +26,7 @@ func read_offline_saves() -> Array[TaloGameSave]:
 	return res
 
 func write_offline_saves(offline_saves: Array[TaloGameSave]):
-	var saves = FileAccess.open_encrypted_with_pass(_offline_saves_path, FileAccess.WRITE, Talo.crypto_manager.get_key())
+	var saves = FileAccess.open_encrypted_with_pass(_OFFLINE_SAVES_PATH, FileAccess.WRITE, Talo.crypto_manager.get_key())
 	saves.store_line(JSON.stringify(offline_saves.map(func (save: TaloGameSave): return save.to_dictionary())))
 
 func sync_save(online_save: TaloGameSave, offline_save: TaloGameSave) -> TaloGameSave:
@@ -50,10 +50,10 @@ func sync_offline_saves(offline_saves: Array[TaloGameSave]) -> Array[TaloGameSav
 
 	for offline_save in offline_saves:
 		if offline_save.id < 0:
-			var save = await Talo.saves.create_save(offline_save.display_name, offline_save.content)
+			var save = await Talo.saves.create_save(offline_save.name, offline_save.content)
 			delete_offline_save(offline_save)
 			new_saves.push_back(save)
-	
+
 	return new_saves
 
 func get_synced_saves(online_saves: Array[TaloGameSave]) -> Array[TaloGameSave]:
@@ -102,15 +102,15 @@ func set_chosen_save(save: TaloGameSave, load_save: bool) -> void:
 		return
 
 	_loaded_loadables.clear()
-	Talo.saves.save_chosen.emit(save)
 
 func register(loadable: TaloLoadable) -> void:
 	_registered_saved_objects.push_back(TaloSavedObject.new(loadable))
 
-func set_object_loaded(id: String) -> void:
+func push_loaded_object(id: String) -> void:
 	_loaded_loadables.push_back(id)
-	if _loaded_loadables.size() == _registered_saved_objects.size():
-		Talo.saves.save_loading_completed.emit()
+
+func is_loading_completed() -> bool:
+	return _loaded_loadables.size() == _registered_saved_objects.size()
 
 func get_save_content() -> Dictionary:
 	return {

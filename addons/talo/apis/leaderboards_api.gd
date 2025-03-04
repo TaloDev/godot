@@ -22,13 +22,13 @@ func get_cached_entries_for_current_player(internal_name: String) -> Array:
 	)
 
 ## Get a list of entries for a leaderboard. The page parameter is used for pagination.
-func get_entries(internal_name: String, page: int, alias_id = -1, include_archived = false) -> Array:
+func get_entries(internal_name: String, page: int, alias_id = -1, include_archived = false) -> EntriesPage:
 	var url = "/%s/entries?page=%s"
 	var url_data = [internal_name, page]
 
 	if alias_id != -1:
 		url += "&aliasId=%s"
-		url_data += alias_id
+		url_data.append(alias_id)
 
 	if include_archived:
 		url += "&withDeleted=1"
@@ -37,32 +37,32 @@ func get_entries(internal_name: String, page: int, alias_id = -1, include_archiv
 
 	match (res.status):
 		200:
-			var entries: Array = res.body.entries.map(
-				func (data: Dictionary):
+			var entries: Array[TaloLeaderboardEntry] = Array(res.body.entries.map(
+				func(data: Dictionary):
 					var entry = TaloLeaderboardEntry.new(data)
 					_entries_manager.upsert_entry(internal_name, entry)
 
 					return entry
-			)
-			return [entries, res.body.count, res.body.isLastPage]
+			), TYPE_OBJECT, (TaloLeaderboardEntry as Script).get_instance_base_type(), TaloLeaderboardEntry)
+			return EntriesPage.new(entries, res.body.count, res.body.isLastPage)
 		_:
-			return []
+			return null
 
 ## Get a list of entries for a leaderboard for the current player. The page parameter is used for pagination.
-func get_entries_for_current_player(internal_name: String, page: int, include_archived = false) -> Array:
+func get_entries_for_current_player(internal_name: String, page: int, include_archived = false) -> EntriesPage:
 	if Talo.identity_check() != OK:
-		return []
+		return null
 
 	return await get_entries(internal_name, page, Talo.current_alias.id, include_archived)
 
 ## Add an entry to a leaderboard. The props (key-value pairs) parameter is used to store additional data with the entry.
-func add_entry(internal_name: String, score: float, props: Dictionary = {}) -> Array:
+func add_entry(internal_name: String, score: float, props: Dictionary = {}) -> AddEntryResult:
 	if Talo.identity_check() != OK:
-		return []
+		return null
 
-	var props_to_send = props.keys().map(func (key: String): return { key = key, value = str(props[key]) })
+	var props_to_send: Array = props.keys().map(func(key: String) -> Dictionary: return {key = key, value = str(props[key])})
 
-	var res = await client.make_request(HTTPClient.METHOD_POST, "/%s/entries" % internal_name, {
+	var res := await client.make_request(HTTPClient.METHOD_POST, "/%s/entries" % internal_name, {
 		score = score,
 		props = props_to_send
 	})
@@ -72,6 +72,25 @@ func add_entry(internal_name: String, score: float, props: Dictionary = {}) -> A
 			var entry = TaloLeaderboardEntry.new(res.body.entry)
 			_entries_manager.upsert_entry(internal_name, entry)
 
-			return [entry, res.body.updated]
+			return AddEntryResult.new(entry, res.body.updated)
 		_:
-			return []
+			return null
+
+# Structs
+class EntriesPage:
+	var entries: Array[TaloLeaderboardEntry]
+	var count: int
+	var is_last_page: bool
+
+	func _init(entries: Array[TaloLeaderboardEntry], count: int, is_last_page: bool) -> void:
+		self.entries = entries
+		self.count = count
+		self.is_last_page = is_last_page
+
+class AddEntryResult:
+	var entry: TaloLeaderboardEntry
+	var updated: bool
+
+	func _init(entry: TaloLeaderboardEntry, updated: bool) -> void:
+		self.entry = entry
+		self.updated = updated
