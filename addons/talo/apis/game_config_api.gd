@@ -22,7 +22,7 @@ func _on_message_received(res: String, data: Dictionary) -> void:
 ## Get the live config for your game.
 func get_live_config() -> TaloLiveConfig:
 	var res = await client.make_request(HTTPClient.METHOD_GET, "/")
-	match (res.status):
+	match res.status:
 		200:
 			Talo.live_config = TaloLiveConfig.new(res.body.config)
 			live_config_loaded.emit(Talo.live_config)

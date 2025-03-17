@@ -60,7 +60,7 @@ func flush() -> void:
 	var res = await client.make_request(HTTPClient.METHOD_POST, "/", { events = _queue })
 	_queue.clear()
 
-	match (res.status):
+	match res.status:
 		200:
 			if _has_errors(res.body.errors):
 				push_error("Failed to flush events: %s" % res.body.errors)

@@ -18,6 +18,9 @@ signal message_received(res: String, message: Dictionary)
 ## Emitted when the connection to the Talo Socket server is closed. The code and reason are provided.
 signal connection_closed(code: int, reason: String)
 
+## Emitted when an error is received from the Talo Socket server.
+signal error_received(err: TaloSocketError)
+
 func _ready() -> void:
 	message_received.connect(_on_message_received)
 
@@ -60,6 +63,8 @@ func _on_message_received(res: String, data: Dictionary) -> void:
 		"v1.players.identify.success":
 			_identified = true
 			_temp_socket_token = ""
+		"v1.error":
+			error_received.emit(TaloSocketError.new(data))
 
 ## A socket token is created for a player alias each time they are identified. This must be sent in order to validate the current socket session.
 func set_socket_token(token: String) -> void:

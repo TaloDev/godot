@@ -11,7 +11,7 @@ signal identified(player: TaloPlayer)
 ## Identify a player using a service (e.g. "username") and identifier (e.g. "bob").
 func identify(service: String, identifier: String) -> TaloPlayer:
 	var res = await client.make_request(HTTPClient.METHOD_GET, "/identify?service=%s&identifier=%s" % [service, identifier])
-	match (res.status):
+	match res.status:
 		200:
 			Talo.current_alias = TaloPlayerAlias.new(res.body.alias)
 			Talo.socket.set_socket_token(res.body.socketToken)
@@ -32,7 +32,7 @@ func identify_steam(ticket: String, identity: String = "") -> TaloPlayer:
 ## Flush and sync the player's current data with Talo.
 func update() -> TaloPlayer:
 	var res = await client.make_request(HTTPClient.METHOD_PATCH, "/%s" % Talo.current_player.id, { props = Talo.current_player.get_serialized_props() })
-	match (res.status):
+	match res.status:
 		200:
 			if is_instance_valid(Talo.current_alias.player):
 				Talo.current_alias.player.update_from_raw_data(res.body.player)
@@ -49,7 +49,7 @@ func merge(player_id1: String, player_id2: String) -> TaloPlayer:
 		playerId2 = player_id2
 	})
 
-	match (res.status):
+	match res.status:
 		200:
 			return TaloPlayer.new(res.body.player)
 		_:
@@ -58,7 +58,7 @@ func merge(player_id1: String, player_id2: String) -> TaloPlayer:
 ## Get a player by their ID.
 func find(player_id: String) -> TaloPlayer:
 	var res = await client.make_request(HTTPClient.METHOD_GET, "/%s" % player_id)
-	match (res.status):
+	match res.status:
 		200:
 			return TaloPlayer.new(res.body.player)
 		_:

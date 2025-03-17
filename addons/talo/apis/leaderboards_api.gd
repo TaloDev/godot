@@ -35,7 +35,7 @@ func get_entries(internal_name: String, page: int, alias_id = -1, include_archiv
 
 	var res = await client.make_request(HTTPClient.METHOD_GET, url % url_data)
 
-	match (res.status):
+	match res.status:
 		200:
 			var entries: Array[TaloLeaderboardEntry] = Array(res.body.entries.map(
 				func(data: Dictionary):
@@ -67,7 +67,7 @@ func add_entry(internal_name: String, score: float, props: Dictionary = {}) -> A
 		props = props_to_send
 	})
 
-	match (res.status):
+	match res.status:
 		200:
 			var entry = TaloLeaderboardEntry.new(res.body.entry)
 			_entries_manager.upsert_entry(internal_name, entry)
