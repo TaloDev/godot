@@ -35,7 +35,7 @@ func register(identifier: String, password: String, email: String = "", verifica
 		verificationEnabled = verification_enabled
 	})
 
-	match (res.status):
+	match res.status:
 		200:
 			session_manager.handle_session_created(res.body.alias, res.body.sessionToken, res.body.socketToken)
 			return OK
@@ -49,7 +49,7 @@ func login(identifier: String, password: String) -> LoginResult:
 		password = password
 	})
 
-	match (res.status):
+	match res.status:
 		200:
 			if res.body.has("verificationRequired"):
 				session_manager.save_verification_alias_id(res.body.aliasId)
@@ -70,7 +70,7 @@ func verify(verification_code: String) -> Error:
 		code = verification_code
 	})
 
-	match (res.status):
+	match res.status:
 		200:
 			session_manager.handle_session_created(res.body.alias, res.body.sessionToken, res.body.socketToken)
 			return OK
@@ -90,7 +90,7 @@ func change_password(current_password: String, new_password: String) -> Error:
 		newPassword = new_password
 	})
 
-	match (res.status):
+	match res.status:
 		204:
 			return OK
 		_:
@@ -103,7 +103,7 @@ func change_email(current_password: String, new_email: String) -> Error:
 		newEmail = new_email
 	})
 
-	match (res.status):
+	match res.status:
 		204:
 			return OK
 		_:
@@ -115,7 +115,7 @@ func forgot_password(email: String) -> Error:
 		email = email
 	})
 
-	match (res.status):
+	match res.status:
 		204:
 			return OK
 		_:
@@ -128,7 +128,7 @@ func reset_password(code: String, password: String) -> Error:
 		password = password
 	})
 
-	match (res.status):
+	match res.status:
 		204:
 			return OK
 		_:
@@ -142,7 +142,7 @@ func toggle_verification(current_password: String, verification_enabled: bool, e
 		email = email
 	})
 
-	match (res.status):
+	match res.status:
 		204:
 			return OK
 		_:
@@ -154,7 +154,7 @@ func delete_account(current_password: String) -> Error:
 		currentPassword = current_password
 	})
 
-	match (res.status):
+	match res.status:
 		204:
 			session_manager.clear_session()
 			Talo.current_alias = null
