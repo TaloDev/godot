@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=3 uid="uid://bg71kho7jirad"]
+[gd_scene load_steps=27 format=3 uid="uid://bg71kho7jirad"]
 
 [ext_resource type="Script" path="res://addons/talo/samples/playground/scripts/identify_button.gd" id="1_o53s3"]
 [ext_resource type="Script" path="res://addons/talo/samples/playground/scripts/identified_state.gd" id="1_qsdrr"]
@@ -19,6 +19,7 @@
 [ext_resource type="Script" path="res://addons/talo/samples/playground/scripts/flush_events_button.gd" id="11_ocslk"]
 [ext_resource type="Script" path="res://addons/talo/samples/playground/scripts/create_save_button.gd" id="12_4prkt"]
 [ext_resource type="Script" path="res://addons/talo/samples/playground/scripts/loadable_color_rect.gd" id="12_72qp7"]
+[ext_resource type="Script" path="res://addons/talo/samples/playground/scripts/get_stat_history_button.gd" id="12_dn76t"]
 [ext_resource type="Script" path="res://addons/talo/samples/playground/scripts/randomise_save_button.gd" id="12_sshwt"]
 [ext_resource type="Script" path="res://addons/talo/samples/playground/scripts/load_save_button.gd" id="12_t2845"]
 [ext_resource type="Script" path="res://addons/talo/samples/playground/scripts/update_save_button.gd" id="14_lvmju"]
@@ -58,7 +59,7 @@ theme_override_constants/margin_bottom = 40
 
 [node name="APIs" type="HBoxContainer" parent="UI/Content"]
 layout_mode = 2
-theme_override_constants/separation = 40
+theme_override_constants/separation = 30
 
 [node name="Players_Continuity" type="VBoxContainer" parent="UI/Content/APIs"]
 layout_mode = 2
@@ -163,6 +164,11 @@ text = "Stats"
 layout_mode = 2
 text = "Track stat"
 script = ExtResource("5_wpnvd")
+
+[node name="GetStatHistoryButton" type="Button" parent="UI/Content/APIs/Stats"]
+layout_mode = 2
+text = "Get stat history"
+script = ExtResource("12_dn76t")
 
 [node name="Leaderboards" type="VBoxContainer" parent="UI/Content/APIs"]
 layout_mode = 2
@@ -491,6 +497,7 @@ script = ExtResource("2_ncaxm")
 [connection signal="pressed" from="UI/Content/APIs/Events/FlushEventsButton" to="UI/Content/APIs/Events/FlushEventsButton" method="_on_pressed"]
 [connection signal="pressed" from="UI/Content/APIs/Live config/GetConfigButton" to="UI/Content/APIs/Live config/GetConfigButton" method="_on_pressed"]
 [connection signal="pressed" from="UI/Content/APIs/Stats/TrackStatButton" to="UI/Content/APIs/Stats/TrackStatButton" method="_on_pressed"]
+[connection signal="pressed" from="UI/Content/APIs/Stats/GetStatHistoryButton" to="UI/Content/APIs/Stats/GetStatHistoryButton" method="_on_pressed"]
 [connection signal="pressed" from="UI/Content/APIs/Leaderboards/GetEntriesButton" to="UI/Content/APIs/Leaderboards/GetEntriesButton" method="_on_pressed"]
 [connection signal="pressed" from="UI/Content/APIs/Leaderboards/AddEntryButton" to="UI/Content/APIs/Leaderboards/AddEntryButton" method="_on_pressed"]
 [connection signal="pressed" from="UI/Content/APIs/Saves/GetSavesButton" to="UI/Content/APIs/Saves/GetSavesButton" method="_on_pressed"]
