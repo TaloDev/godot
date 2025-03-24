@@ -27,7 +27,7 @@ var message := ""
 var cause := ""
 
 func _init(error_data: Dictionary) -> void:
-	req = error_data.get('req', 'unknown')
-	code = ErrorCode.get(error_data.get('errorCode'), 'API_ERROR')
-	message = error_data.get('message', '')
-	cause = error_data.get('cause', '')
+	req = error_data.get("req", "unknown")
+	code = ErrorCode.get(error_data.get("errorCode"), "API_ERROR")
+	message = error_data.get("message", "")
+	cause = error_data.get("cause", "")
