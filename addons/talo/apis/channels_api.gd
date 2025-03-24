@@ -52,7 +52,7 @@ func get_channels(page: int) -> ChannelPage:
 		200:
 			var channels: Array[TaloChannel] = []
 			channels.assign(res.body.channels.map(func (channel: Dictionary): return TaloChannel.new(channel)))
-			return ChannelPage.new(channels, res.body.count, res.body.isLastPage)
+			return ChannelPage.new(channels, res.body.count, res.body.itemsPerPage, res.body.isLastPage)
 		_:
 			return null
 
@@ -157,13 +157,14 @@ func send_message(channel_id: int, message: String) -> void:
 		message = message
 	})
 
-# Structs
 class ChannelPage:
 	var channels: Array[TaloChannel]
 	var count: int
+	var items_per_page: int
 	var is_last_page: bool
 
-	func _init(channels: Array[TaloChannel], count: int, is_last_page: bool) -> void:
+	func _init(channels: Array[TaloChannel], count: int, items_per_page: int, is_last_page: bool) -> void:
 		self.channels = channels
 		self.count = count
+		self.items_per_page = items_per_page
 		self.is_last_page = is_last_page
