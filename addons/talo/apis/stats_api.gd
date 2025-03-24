@@ -32,7 +32,7 @@ func track(internal_name: String, change: float = 1.0) -> TaloPlayerStat:
 	if Talo.identity_check() != OK:
 		return
 
-	var res = await client.make_request(HTTPClient.METHOD_PUT, "/%s" % internal_name, { change = change })
+	var res := await client.make_request(HTTPClient.METHOD_PUT, "/%s" % internal_name, { change = change })
 	return TaloPlayerStat.new(res.body.playerStat)
 
 ## Get a paginated array of changes to a player stat value (and its global value) over time. History items can be filtered by when they were tracked.
@@ -47,9 +47,9 @@ func get_history(internal_name: String, page: int = 0, start_date: String = "", 
 		query_params.append("endDate=%s" % end_date)
 
 	var query_string := "&".join(query_params)
-	var url = "/%s/history?%s" % [internal_name, query_string]
+	var url := "/%s/history?%s" % [internal_name, query_string]
 
-	var res = await client.make_request(HTTPClient.METHOD_GET, url)
+	var res := await client.make_request(HTTPClient.METHOD_GET, url)
 
 	match res.status:
 		200:
@@ -70,9 +70,9 @@ func get_global_history(internal_name: String, page: int = 0, player_id = "", st
 		query_params.append("endDate=%s" % end_date)
 
 	var query_string := "&".join(query_params)
-	var url = "/%s/global-history?%s" % [internal_name, query_string]
+	var url := "/%s/global-history?%s" % [internal_name, query_string]
 
-	var res = await client.make_request(HTTPClient.METHOD_GET, url)
+	var res := await client.make_request(HTTPClient.METHOD_GET, url)
 
 	match res.status:
 		200:

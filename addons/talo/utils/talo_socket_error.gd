@@ -15,16 +15,16 @@ enum ErrorCode {
 }
 
 ## The original req that triggered the error.
-var req := ""
+var req: String
 
 ## The socket error code using the ErrorCode enum.
-var code := ErrorCode.API_ERROR
+var code: ErrorCode
 
 ## The human-readable socket error message. 
-var message := ""
+var message: String
 
 ## The cause of the error. Only some error types will provide this.
-var cause := ""
+var cause: String
 
 func _init(error_data: Dictionary) -> void:
 	req = error_data.get("req", "unknown")
