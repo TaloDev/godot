@@ -12,7 +12,7 @@ signal save_chosen(save: TaloGameSave)
 ## Emitted when the chosen save has finished loading.
 signal save_loading_completed
 
-var _saves_manager = TaloSavesManager.new()
+var _saves_manager := TaloSavesManager.new()
 
 ## All of the player's fetched saves.
 var all: Array[TaloGameSave]:
@@ -28,9 +28,9 @@ var current: TaloGameSave:
 
 ## Sync an offline save with an online save using the offline save data.
 func replace_save_with_offline_save(offline_save: TaloGameSave) -> TaloGameSave:
-	var res = await client.make_request(HTTPClient.METHOD_PATCH, "/%s" % offline_save.id, {
-		name=offline_save.name,
-		content=offline_save.content
+	var res := await client.make_request(HTTPClient.METHOD_PATCH, "/%s" % offline_save.id, {
+		name = offline_save.name,
+		content = offline_save.content
 	})
 
 	match res.status:
@@ -51,7 +51,7 @@ func get_saves() -> Array[TaloGameSave]:
 		if Talo.identity_check() != OK:
 			return []
 
-		var res = await client.make_request(HTTPClient.METHOD_GET, "/")
+		var res := await client.make_request(HTTPClient.METHOD_GET, "/")
 		match res.status:
 			200:
 				online_saves.append_array(res.body.saves.map(func (data: Dictionary): return TaloGameSave.new(data)))
@@ -80,16 +80,16 @@ func create_save(save_name: String, content: Dictionary = {}) -> TaloGameSave:
 	var save: TaloGameSave
 
 	_saves_manager.register_fields_for_saved_objects()
-	var save_content = content if not content.is_empty() else _saves_manager.get_save_content()
+	var save_content := content if not content.is_empty() else _saves_manager.get_save_content()
 
 	if await Talo.is_offline():
 		save = TaloGameSave.new({
-			name=save_name,
-			content=save_content,
-			updatedAt=TaloTimeUtils.get_current_datetime_string()
+			name = save_name,
+			content = save_content,
+			updatedAt = TaloTimeUtils.get_current_datetime_string()
 		})
 	else:
-		var res = await client.make_request(HTTPClient.METHOD_POST, "/", {
+		var res := await client.make_request(HTTPClient.METHOD_POST, "/", {
 			name=save_name,
 			content=save_content
 		})
@@ -120,7 +120,7 @@ func update_current_save(new_name: String = "") -> TaloGameSave:
 
 ## Update the given save using the current state of the game and with the given name.
 func update_save(save: TaloGameSave, new_name: String = "") -> TaloGameSave:
-	var content = _saves_manager.get_save_content()
+	var content := _saves_manager.get_save_content()
 
 	if await Talo.is_offline():
 		if not new_name.is_empty():
@@ -132,7 +132,7 @@ func update_save(save: TaloGameSave, new_name: String = "") -> TaloGameSave:
 		if Talo.identity_check() != OK:
 			return
 
-		var res = await client.make_request(HTTPClient.METHOD_PATCH, "/%s" % save.id, {
+		var res := await client.make_request(HTTPClient.METHOD_PATCH, "/%s" % save.id, {
 			name=save.name if new_name.is_empty() else new_name,
 			content=content
 		})
@@ -150,7 +150,7 @@ func delete_save(save: TaloGameSave) -> void:
 		if Talo.identity_check() != OK:
 			return
 
-		var res = await client.make_request(HTTPClient.METHOD_DELETE, "/%s" % save.id)
+		var res := await client.make_request(HTTPClient.METHOD_DELETE, "/%s" % save.id)
 
 		match res.status:
 			_:

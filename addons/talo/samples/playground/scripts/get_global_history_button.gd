@@ -1,7 +1,7 @@
 extends Button
 
 @export var stat_name: String
-@export var player_id: String = ""
+@export var player_id: String
 
 func _on_pressed() -> void:
 	if stat_name.is_empty():

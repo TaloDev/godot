@@ -19,7 +19,7 @@ func _on_message_received(res: String, data: Dictionary) -> void:
 
 ## Get the presence status for a specific player.
 func get_presence(player_id: String) -> TaloPlayerPresence:
-	var res = await client.make_request(HTTPClient.METHOD_GET, "/%s" % player_id)
+	var res := await client.make_request(HTTPClient.METHOD_GET, "/%s" % player_id)
 
 	match res.status:
 		200:
@@ -32,7 +32,7 @@ func update_presence(online: bool, custom_status: String = "") -> TaloPlayerPres
 	if Talo.identity_check() != OK:
 		return null
 
-	var res = await client.make_request(HTTPClient.METHOD_PUT, "", {
+	var res := await client.make_request(HTTPClient.METHOD_PUT, "", {
 		online = online,
 		customStatus = custom_status
 	})

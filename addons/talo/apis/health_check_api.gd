@@ -7,5 +7,5 @@ class_name HealthCheckAPI extends TaloAPI
 
 ## Ping the Talo Health Check API to check if Talo can be reached.
 func ping() -> bool:
-	var res = await client.make_request(HTTPClient.METHOD_GET, "")
+	var res := await client.make_request(HTTPClient.METHOD_GET, "")
 	return res.status == 204

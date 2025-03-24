@@ -3,7 +3,7 @@ extends Node2D
 var entry_scene = preload("res://addons/talo/samples/leaderboards/entry.tscn")
 
 @export var leaderboard_internal_name: String
-@export var include_archived: bool = false
+@export var include_archived: bool
 
 @onready var leaderboard_name: Label = %LeaderboardName
 @onready var entries_container: VBoxContainer = %Entries
@@ -13,7 +13,7 @@ var entry_scene = preload("res://addons/talo/samples/leaderboards/entry.tscn")
 
 var _entries_error: bool
 var _filter: String = "All"
-var _filter_idx: int = 0
+var _filter_idx: int
 
 func _ready() -> void:
 	leaderboard_name.text = leaderboard_name.text.replace("{leaderboard}", leaderboard_internal_name)
@@ -46,8 +46,8 @@ func _build_entries() -> void:
 		_create_entry(entry)
 
 func _load_entries() -> void:
-	var page = 0
-	var done = false
+	var page := 0
+	var done := false
 
 	while !done:
 		var res := await Talo.leaderboards.get_entries(leaderboard_internal_name, page, -1, include_archived)
@@ -68,8 +68,8 @@ func _load_entries() -> void:
 
 func _on_submit_pressed() -> void:
 	await Talo.players.identify("username", username.text)
-	var score = RandomNumberGenerator.new().randi_range(0, 100)
-	var team = "Blue" if RandomNumberGenerator.new().randi_range(0, 1) == 0 else "Red"
+	var score := RandomNumberGenerator.new().randi_range(0, 100)
+	var team := "Blue" if RandomNumberGenerator.new().randi_range(0, 1) == 0 else "Red"
 
 	var res := await Talo.leaderboards.add_entry(leaderboard_internal_name, score, {team = team})
 	assert(is_instance_valid(res))

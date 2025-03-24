@@ -1,7 +1,7 @@
 class_name LoadableButton extends TaloLoadable
 
 var button: Button
-var clicks: int = 0
+var clicks: int
 
 func _ready() -> void:
 	super()

@@ -11,7 +11,7 @@ func _on_pressed() -> void:
 		%ResponseLabel.text = "leaderboard_name not set on AddEntryButton"
 		return
 
-	var score = RandomNumberGenerator.new().randi_range(1, 50)
+	var score := RandomNumberGenerator.new().randi_range(1, 50)
 	var res := await Talo.leaderboards.add_entry(leaderboard_name, score)
 
 	if is_instance_valid(res):

@@ -10,7 +10,7 @@ func _on_submit_pressed() -> void:
 		validation_label.text = "Verification code is required"
 		return
 
-	var res = await Talo.player_auth.verify(code.text)
+	var res := await Talo.player_auth.verify(code.text)
 	if res != OK:
 		match Talo.player_auth.last_error.get_code():
 			TaloAuthError.ErrorCode.VERIFICATION_CODE_INVALID:

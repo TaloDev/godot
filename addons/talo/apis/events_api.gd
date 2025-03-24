@@ -5,8 +5,8 @@ class_name EventsAPI extends TaloAPI
 ##
 ## @tutorial: https://docs.trytalo.com/docs/godot/events
 
-var _queue = []
-var _min_queue_size = 10
+var _queue: = []
+var _min_queue_size := 10
 
 func _get_window_mode() -> String:
 	match DisplayServer.window_get_mode():
@@ -36,7 +36,7 @@ func track(name: String, props: Dictionary = {}) -> void:
 	if Talo.identity_check() != OK:
 		return
 
-	var final_props = _build_meta_props()
+	var final_props := _build_meta_props()
 	final_props.append_array(
 		props
 			.keys()
@@ -57,7 +57,7 @@ func flush() -> void:
 	if _queue.size() == 0:
 		return
 
-	var res = await client.make_request(HTTPClient.METHOD_POST, "/", { events = _queue })
+	var res := await client.make_request(HTTPClient.METHOD_POST, "/", { events = _queue })
 	_queue.clear()
 
 	match res.status:
