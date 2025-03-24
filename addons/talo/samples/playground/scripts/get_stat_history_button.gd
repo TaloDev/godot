@@ -13,5 +13,6 @@ func _on_pressed() -> void:
 
 	var res := await Talo.stats.get_history(stat_name)
 	var changes := PackedStringArray(res.history.map(func(item): return str(item.change)))
+	var change_string := ", ".join(changes) if changes.size() > 0 else "no changes"
 
-	%ResponseLabel.text = "%s changed by: %s" % [stat_name, ", ".join(changes)]
+	%ResponseLabel.text = "%s changed by: %s" % [stat_name, change_string]
