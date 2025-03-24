@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://bg71kho7jirad"]
+[gd_scene load_steps=30 format=3 uid="uid://bg71kho7jirad"]
 
 [ext_resource type="Script" path="res://addons/talo/samples/playground/scripts/identify_button.gd" id="1_o53s3"]
 [ext_resource type="Script" path="res://addons/talo/samples/playground/scripts/identified_state.gd" id="1_qsdrr"]
@@ -16,8 +16,10 @@
 [ext_resource type="Script" path="res://addons/talo/samples/playground/scripts/get_saves_button.gd" id="8_4usai"]
 [ext_resource type="Script" path="res://addons/talo/samples/playground/scripts/get_entries_button.gd" id="8_8262a"]
 [ext_resource type="Script" path="res://addons/talo/samples/playground/scripts/add_entry_button.gd" id="9_3705v"]
+[ext_resource type="Script" path="res://addons/talo/samples/playground/scripts/get_all_stats_button.gd" id="11_7ujln"]
 [ext_resource type="Script" path="res://addons/talo/samples/playground/scripts/flush_events_button.gd" id="11_ocslk"]
 [ext_resource type="Script" path="res://addons/talo/samples/playground/scripts/create_save_button.gd" id="12_4prkt"]
+[ext_resource type="Script" path="res://addons/talo/samples/playground/scripts/get_stat_button.gd" id="12_05nmf"]
 [ext_resource type="Script" path="res://addons/talo/samples/playground/scripts/loadable_color_rect.gd" id="12_72qp7"]
 [ext_resource type="Script" path="res://addons/talo/samples/playground/scripts/get_stat_history_button.gd" id="12_dn76t"]
 [ext_resource type="Script" path="res://addons/talo/samples/playground/scripts/randomise_save_button.gd" id="12_sshwt"]
@@ -160,6 +162,16 @@ layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 20
 text = "Stats"
+
+[node name="GetAllStatsButton" type="Button" parent="UI/Content/APIs/Stats"]
+layout_mode = 2
+text = "Get all stats"
+script = ExtResource("11_7ujln")
+
+[node name="GetStatButton" type="Button" parent="UI/Content/APIs/Stats"]
+layout_mode = 2
+text = "Get stat"
+script = ExtResource("12_05nmf")
 
 [node name="TrackStatButton" type="Button" parent="UI/Content/APIs/Stats"]
 layout_mode = 2
@@ -502,6 +514,8 @@ script = ExtResource("2_ncaxm")
 [connection signal="pressed" from="UI/Content/APIs/Events/TrackEventButton" to="UI/Content/APIs/Events/TrackEventButton" method="_on_pressed"]
 [connection signal="pressed" from="UI/Content/APIs/Events/FlushEventsButton" to="UI/Content/APIs/Events/FlushEventsButton" method="_on_pressed"]
 [connection signal="pressed" from="UI/Content/APIs/Live config/GetConfigButton" to="UI/Content/APIs/Live config/GetConfigButton" method="_on_pressed"]
+[connection signal="pressed" from="UI/Content/APIs/Stats/GetAllStatsButton" to="UI/Content/APIs/Stats/GetAllStatsButton" method="_on_pressed"]
+[connection signal="pressed" from="UI/Content/APIs/Stats/GetStatButton" to="UI/Content/APIs/Stats/GetStatButton" method="_on_pressed"]
 [connection signal="pressed" from="UI/Content/APIs/Stats/TrackStatButton" to="UI/Content/APIs/Stats/TrackStatButton" method="_on_pressed"]
 [connection signal="pressed" from="UI/Content/APIs/Stats/GetStatHistoryButton" to="UI/Content/APIs/Stats/GetStatHistoryButton" method="_on_pressed"]
 [connection signal="pressed" from="UI/Content/APIs/Stats/GetGlobalHistoryButton" to="UI/Content/APIs/Stats/GetGlobalHistoryButton" method="_on_pressed"]

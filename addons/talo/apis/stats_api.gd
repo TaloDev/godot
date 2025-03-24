@@ -5,13 +5,35 @@ class_name StatsAPI extends TaloAPI
 ##
 ## @tutorial: https://docs.trytalo.com/docs/godot/stats
 
+## List all stats and their values.
+func get_stats() -> Array[TaloStat]:
+	var res := await client.make_request(HTTPClient.METHOD_GET, "")
+
+	match res.status:
+		200:
+			var stats: Array[TaloStat] = []
+			stats.assign(res.body.stats.map(func (stat: Dictionary): return TaloStat.new(stat)))
+			return stats
+		_:
+			return []
+
+## Get a stat by its internal name.
+func find(internal_name: String) -> TaloStat:
+	var res := await client.make_request(HTTPClient.METHOD_GET, "/%s" % internal_name)
+
+	match res.status:
+		200:
+			return TaloStat.new(res.body.stat)
+		_:
+			return null
+
 ## Track a stat for the current player. The stat will be updated by the change amount (default 1.0). Returns the updated player stat and global stat values.
 func track(internal_name: String, change: float = 1.0) -> TaloPlayerStat:
 	if Talo.identity_check() != OK:
 		return
 
 	var res = await client.make_request(HTTPClient.METHOD_PUT, "/%s" % internal_name, { change = change })
-	return TaloPlayerStat.new(res.body)
+	return TaloPlayerStat.new(res.body.playerStat)
 
 ## Get a paginated array of changes to a player stat value (and its global value) over time. History items can be filtered by when they were tracked.
 func get_history(internal_name: String, page: int = 0, start_date: String = "", end_date: String = "") -> StatHistoryPage:

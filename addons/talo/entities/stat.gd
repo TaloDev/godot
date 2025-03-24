@@ -20,9 +20,9 @@ func _init(data: Dictionary):
 	global = data.global
 	global_value = data.globalValue
 	default_value = data.defaultValue
-	max_change = data.maxChange
-	min_value = data.minValue
-	max_value = data.maxValue
+	max_change = data.maxChange if data.maxChange else INF
+	min_value = data.minValue if data.minValue else -INF
+	max_value = data.maxValue if data.maxValue else INF
 	min_time_between_updates = data.minTimeBetweenUpdates
 	created_at = data.createdAt
 	updated_at = data.updatedAt
