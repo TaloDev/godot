@@ -18,9 +18,9 @@ func _load_data(save: TaloGameSave) -> void:
 	if not save:
 		return
 
-	var fields = {}
+	var fields := {}
 
-	var filtered = save.content.objects.filter(func (obj: Dictionary): return obj.id == id)
+	var filtered := save.content.objects.filter(func (obj: Dictionary): return obj.id == id) as Array
 	if filtered.is_empty():
 		push_warning("Loadable with id '%s' not found in save '%s'" % [id, save.name])
 		return

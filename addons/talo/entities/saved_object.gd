@@ -18,7 +18,7 @@ func register_loadable_fields():
 func to_dictionary() -> Dictionary:
 	register_loadable_fields()
 
-	var destroyed_data = [{ key = "meta.destroyed", value = str(true), type = str(TYPE_BOOL) }]
+	var destroyed_data := [{ key = "meta.destroyed", value = str(true), type = str(TYPE_BOOL) }]
 
 	return {
 		id = id,

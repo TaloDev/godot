@@ -7,7 +7,7 @@ func _set_text(offline: bool):
 	text = "Go online" if offline else "Go offline"
 
 func _on_pressed() -> void:
-	var offline = Talo.offline_mode_enabled()
+	var offline := Talo.offline_mode_enabled()
 
 	Talo.settings.set_value(
 		"debug",

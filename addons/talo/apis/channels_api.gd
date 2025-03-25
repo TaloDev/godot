@@ -36,7 +36,7 @@ func _on_message_received(res: String, data: Dictionary) -> void:
 
 ## Get a channel by its ID.
 func find(channel_id: int) -> TaloChannel:
-	var res = await client.make_request(HTTPClient.METHOD_GET, "/%s" % channel_id)
+	var res := await client.make_request(HTTPClient.METHOD_GET, "/%s" % channel_id)
 
 	match res.status:
 		200:
@@ -46,7 +46,7 @@ func find(channel_id: int) -> TaloChannel:
 
 ## Get a list of channels that players can join.
 func get_channels(page: int) -> ChannelPage:
-	var res = await client.make_request(HTTPClient.METHOD_GET, "?page=%s" % page)
+	var res := await client.make_request(HTTPClient.METHOD_GET, "?page=%s" % page)
 
 	match res.status:
 		200:
@@ -61,7 +61,7 @@ func get_subscribed_channels() -> Array[TaloChannel]:
 	if Talo.identity_check() != OK:
 		return []
 
-	var res = await client.make_request(HTTPClient.METHOD_GET, "/subscriptions")
+	var res := await client.make_request(HTTPClient.METHOD_GET, "/subscriptions")
 
 	match res.status:
 		200:
@@ -76,9 +76,9 @@ func create(name: String, auto_cleanup: bool = false, props: Dictionary = {}) ->
 	if Talo.identity_check() != OK:
 		return
 
-	var props_to_send = props.keys().map(func (key: String): return { key = key, value = str(props[key]) })
+	var props_to_send := props.keys().map(func (key: String): return { key = key, value = str(props[key]) })
 
-	var res = await client.make_request(HTTPClient.METHOD_POST, "", {
+	var res := await client.make_request(HTTPClient.METHOD_POST, "", {
 		name = name,
 		autoCleanup = auto_cleanup,
 		props = props_to_send
@@ -95,7 +95,7 @@ func join(channel_id: int) -> TaloChannel:
 	if Talo.identity_check() != OK:
 		return
 
-	var res = await client.make_request(HTTPClient.METHOD_POST, "/%s/join" % channel_id)
+	var res := await client.make_request(HTTPClient.METHOD_POST, "/%s/join" % channel_id)
 
 	match res.status:
 		200:
@@ -115,7 +115,7 @@ func update(channel_id: int, name: String = "", new_owner_alias_id: int = -1, pr
 	if Talo.identity_check() != OK:
 		return
 
-	var data = {}
+	var data := {}
 	if not name.is_empty():
 		data.name = name
 	if new_owner_alias_id != -1:
@@ -123,7 +123,7 @@ func update(channel_id: int, name: String = "", new_owner_alias_id: int = -1, pr
 	if props.size() > 0:
 		data.props = props
 
-	var res = await client.make_request(HTTPClient.METHOD_PUT, "/%s" % channel_id, data)
+	var res := await client.make_request(HTTPClient.METHOD_PUT, "/%s" % channel_id, data)
 
 	match res.status:
 		200:
@@ -139,7 +139,7 @@ func delete(channel_id: int) -> void:
 	if Talo.identity_check() != OK:
 		return
 
-	var res = await client.make_request(HTTPClient.METHOD_DELETE, "/%s" % channel_id)
+	var res := await client.make_request(HTTPClient.METHOD_DELETE, "/%s" % channel_id)
 
 	match res.status:
 		403:

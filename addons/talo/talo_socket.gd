@@ -7,10 +7,10 @@ class_name TaloSocket extends Node
 
 const DEFAULT_SOCKET_URL = "wss://api.trytalo.com"
 
-var _socket = WebSocketPeer.new()
-var _temp_socket_token = ""
-var _socket_authenticated = false
-var _identified = false
+var _socket := WebSocketPeer.new()
+var _temp_socket_token: String
+var _socket_authenticated: bool
+var _identified: bool
 
 ## Emitted when a message is received from the Talo Socket server. Not recommended for direct use. See the Talo docs for a list of responses and message structures.
 signal message_received(res: String, message: Dictionary)
@@ -40,14 +40,14 @@ func _identify_player() -> void:
 	send("v1.players.identify", payload)
 
 func _get_socket_url(ticket: String) -> String:
-	var url = Talo.settings.get_value("", "socket_url", DEFAULT_SOCKET_URL)
+	var url := Talo.settings.get_value("", "socket_url", DEFAULT_SOCKET_URL)
 	return "%s/?ticket=%s" % [url, ticket]
 
 ## Open the connection to the Talo Socket server. A new ticket is created to authenticate the connection.
 func open_connection():
-	var ticket = await Talo.socket_tickets.create_ticket()
+	var ticket := await Talo.socket_tickets.create_ticket()
 
-	var err = _socket.connect_to_url(_get_socket_url(ticket))
+	var err := _socket.connect_to_url(_get_socket_url(ticket))
 	if err != OK:
 		print_rich("[color=yellow]Warning: Failed connecting to the Talo Socket: %s[/color]" % err)
 
@@ -83,11 +83,11 @@ func send(req: String, data: Dictionary = {}) -> int:
 	}))
 
 func _get_json() -> String:
-	var pkt = _socket.get_packet()
+	var pkt := _socket.get_packet()
 	return pkt.get_string_from_utf8()
 
 func _emit_message(message: String) -> void:
-	var json = JSON.new()
+	var json := JSON.new()
 	json.parse(message)
 
 	var res = json.get_data().res
@@ -111,7 +111,7 @@ func _poll() -> void:
 		_reset_socket()
 
 	while _socket.get_ready_state() == _socket.STATE_OPEN and _socket.get_available_packet_count() > 0:
-		var message = _get_json()
+		var message := _get_json()
 		_emit_message(message)
 
 func _process(_delta: float) -> void:

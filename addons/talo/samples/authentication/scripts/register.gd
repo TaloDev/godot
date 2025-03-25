@@ -23,7 +23,7 @@ func _on_submit_button_pressed() -> void:
 		validation_label.text = "Email is required when verification is enabled"
 		return
 
-	var res = await Talo.player_auth.register(username.text, password.text, email.text, enable_verification.button_pressed)
+	var res := await Talo.player_auth.register(username.text, password.text, email.text, enable_verification.button_pressed)
 	if res != OK:
 		match Talo.player_auth.last_error.get_code():
 			TaloAuthError.ErrorCode.IDENTIFIER_TAKEN:

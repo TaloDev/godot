@@ -18,7 +18,7 @@ func _on_submit_pressed() -> void:
 		validation_label.text = "New email is required"
 		return
 
-	var res = await Talo.player_auth.change_email(password.text, new_email.text)
+	var res := await Talo.player_auth.change_email(password.text, new_email.text)
 	if res != OK:
 		match Talo.player_auth.last_error.get_code():
 			TaloAuthError.ErrorCode.INVALID_CREDENTIALS:

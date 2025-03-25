@@ -1,33 +1,33 @@
 class_name TaloSessionManager extends RefCounted
 
-var _verification_alias_id = ""
+var _verification_alias_id: int
 
 const _SESSION_CONFIG_PATH = "user://talo_session.cfg"
 
 func _load_config(path: String) -> ConfigFile:
-	var config = ConfigFile.new()
+	var config := ConfigFile.new()
 	config.load(path)
 	return config
 
 func _save_session(session_token: String) -> void:
-	var config = ConfigFile.new()
+	var config := ConfigFile.new()
 	config.set_value("session", "token", session_token)
 	config.set_value("session", "identifier", Talo.current_alias.identifier)
 	config.save(_SESSION_CONFIG_PATH)
 
 func clear_session() -> void:
-	var config = _load_config(_SESSION_CONFIG_PATH)
+	var config := _load_config(_SESSION_CONFIG_PATH)
 
 	if config.has_section("session"):
 		config.erase_section("session")
 		config.save(_SESSION_CONFIG_PATH)
 
 func get_token() -> String:
-	var config = _load_config(_SESSION_CONFIG_PATH)
+	var config := _load_config(_SESSION_CONFIG_PATH)
 	return config.get_value("session", "token", "")
 
 func get_identifier() -> String:
-	var config = _load_config(_SESSION_CONFIG_PATH)
+	var config := _load_config(_SESSION_CONFIG_PATH)
 	return config.get_value("session", "identifier", "")
 
 func save_verification_alias_id(alias_id: int) -> void:
