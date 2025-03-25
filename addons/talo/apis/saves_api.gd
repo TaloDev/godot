@@ -33,7 +33,7 @@ func replace_save_with_offline_save(offline_save: TaloGameSave) -> TaloGameSave:
 		content=offline_save.content
 	})
 
-	match (res.status):
+	match res.status:
 		200:
 			return TaloGameSave.new(res.body.save)
 		_:
@@ -52,7 +52,7 @@ func get_saves() -> Array[TaloGameSave]:
 			return []
 
 		var res = await client.make_request(HTTPClient.METHOD_GET, "/")
-		match (res.status):
+		match res.status:
 			200:
 				online_saves.append_array(res.body.saves.map(func (data: Dictionary): return TaloGameSave.new(data)))
 				saves.append_array(await _saves_manager.get_synced_saves(online_saves))
@@ -94,7 +94,7 @@ func create_save(save_name: String, content: Dictionary = {}) -> TaloGameSave:
 			content=save_content
 		})
 
-		match (res.status):
+		match res.status:
 			200:
 				save = TaloGameSave.new(res.body.save)
 		
@@ -137,7 +137,7 @@ func update_save(save: TaloGameSave, new_name: String = "") -> TaloGameSave:
 			content=content
 		})
 
-		match (res.status):
+		match res.status:
 			200:
 				save = TaloGameSave.new(res.body.save)
 

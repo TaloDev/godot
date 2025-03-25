@@ -21,7 +21,7 @@ func _on_message_received(res: String, data: Dictionary) -> void:
 func get_presence(player_id: String) -> TaloPlayerPresence:
 	var res = await client.make_request(HTTPClient.METHOD_GET, "/%s" % player_id)
 
-	match (res.status):
+	match res.status:
 		200:
 			return TaloPlayerPresence.new(res.body.presence)
 		_:
@@ -37,7 +37,7 @@ func update_presence(online: bool, custom_status: String = "") -> TaloPlayerPres
 		customStatus = custom_status
 	})
 
-	match (res.status):
+	match res.status:
 		200:
 			return TaloPlayerPresence.new(res.body.presence)
 		_:

@@ -35,7 +35,7 @@ func get_entries(internal_name: String, page: int, alias_id = -1, include_archiv
 
 	var res = await client.make_request(HTTPClient.METHOD_GET, url % url_data)
 
-	match (res.status):
+	match res.status:
 		200:
 			var entries: Array[TaloLeaderboardEntry] = Array(res.body.entries.map(
 				func(data: Dictionary):
@@ -44,7 +44,7 @@ func get_entries(internal_name: String, page: int, alias_id = -1, include_archiv
 
 					return entry
 			), TYPE_OBJECT, (TaloLeaderboardEntry as Script).get_instance_base_type(), TaloLeaderboardEntry)
-			return EntriesPage.new(entries, res.body.count, res.body.isLastPage)
+			return EntriesPage.new(entries, res.body.count, res.body.itemsPerPage, res.body.isLastPage)
 		_:
 			return null
 
@@ -67,7 +67,7 @@ func add_entry(internal_name: String, score: float, props: Dictionary = {}) -> A
 		props = props_to_send
 	})
 
-	match (res.status):
+	match res.status:
 		200:
 			var entry = TaloLeaderboardEntry.new(res.body.entry)
 			_entries_manager.upsert_entry(internal_name, entry)
@@ -76,15 +76,16 @@ func add_entry(internal_name: String, score: float, props: Dictionary = {}) -> A
 		_:
 			return null
 
-# Structs
 class EntriesPage:
 	var entries: Array[TaloLeaderboardEntry]
 	var count: int
+	var items_per_page: int
 	var is_last_page: bool
 
-	func _init(entries: Array[TaloLeaderboardEntry], count: int, is_last_page: bool) -> void:
+	func _init(entries: Array[TaloLeaderboardEntry], count: int, items_per_page: int, is_last_page: bool) -> void:
 		self.entries = entries
 		self.count = count
+		self.items_per_page = items_per_page
 		self.is_last_page = is_last_page
 
 class AddEntryResult:

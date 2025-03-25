@@ -9,7 +9,7 @@ class_name FeedbackAPI extends TaloAPI
 func get_categories() -> Array[TaloFeedbackCategory]:
 	var res = await client.make_request(HTTPClient.METHOD_GET, "/categories")
 
-	match (res.status):
+	match res.status:
 		200:
 			var categories: Array[TaloFeedbackCategory] = []
 			categories.assign(res.body.feedbackCategories.map(func (category: Dictionary): return TaloFeedbackCategory.new(category)))

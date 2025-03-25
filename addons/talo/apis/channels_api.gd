@@ -38,7 +38,7 @@ func _on_message_received(res: String, data: Dictionary) -> void:
 func find(channel_id: int) -> TaloChannel:
 	var res = await client.make_request(HTTPClient.METHOD_GET, "/%s" % channel_id)
 
-	match (res.status):
+	match res.status:
 		200:
 			return TaloChannel.new(res.body.channel)
 		_:
@@ -48,11 +48,11 @@ func find(channel_id: int) -> TaloChannel:
 func get_channels(page: int) -> ChannelPage:
 	var res = await client.make_request(HTTPClient.METHOD_GET, "?page=%s" % page)
 
-	match (res.status):
+	match res.status:
 		200:
 			var channels: Array[TaloChannel] = []
 			channels.assign(res.body.channels.map(func (channel: Dictionary): return TaloChannel.new(channel)))
-			return ChannelPage.new(channels, res.body.count, res.body.isLastPage)
+			return ChannelPage.new(channels, res.body.count, res.body.itemsPerPage, res.body.isLastPage)
 		_:
 			return null
 
@@ -63,7 +63,7 @@ func get_subscribed_channels() -> Array[TaloChannel]:
 
 	var res = await client.make_request(HTTPClient.METHOD_GET, "/subscriptions")
 
-	match (res.status):
+	match res.status:
 		200:
 			var channels: Array[TaloChannel] = []
 			channels.assign(res.body.channels.map(func (channel: Dictionary): return TaloChannel.new(channel)))
@@ -84,7 +84,7 @@ func create(name: String, auto_cleanup: bool = false, props: Dictionary = {}) ->
 		props = props_to_send
 	})
 
-	match (res.status):
+	match res.status:
 		200:
 			return TaloChannel.new(res.body.channel)
 		_:
@@ -97,7 +97,7 @@ func join(channel_id: int) -> TaloChannel:
 
 	var res = await client.make_request(HTTPClient.METHOD_POST, "/%s/join" % channel_id)
 
-	match (res.status):
+	match res.status:
 		200:
 			return TaloChannel.new(res.body.channel)
 		_:
@@ -125,7 +125,7 @@ func update(channel_id: int, name: String = "", new_owner_alias_id: int = -1, pr
 
 	var res = await client.make_request(HTTPClient.METHOD_PUT, "/%s" % channel_id, data)
 
-	match (res.status):
+	match res.status:
 		200:
 			return TaloChannel.new(res.body.channel)
 		403:
@@ -141,7 +141,7 @@ func delete(channel_id: int) -> void:
 
 	var res = await client.make_request(HTTPClient.METHOD_DELETE, "/%s" % channel_id)
 
-	match (res.status):
+	match res.status:
 		403:
 			push_error("Player does not have permissions to delete channel %s." % channel_id)
 
@@ -157,13 +157,14 @@ func send_message(channel_id: int, message: String) -> void:
 		message = message
 	})
 
-# Structs
 class ChannelPage:
 	var channels: Array[TaloChannel]
 	var count: int
+	var items_per_page: int
 	var is_last_page: bool
 
-	func _init(channels: Array[TaloChannel], count: int, is_last_page: bool) -> void:
+	func _init(channels: Array[TaloChannel], count: int, items_per_page: int, is_last_page: bool) -> void:
 		self.channels = channels
 		self.count = count
+		self.items_per_page = items_per_page
 		self.is_last_page = is_last_page
