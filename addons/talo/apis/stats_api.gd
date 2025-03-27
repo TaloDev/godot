@@ -81,6 +81,7 @@ func get_global_history(internal_name: String, page: int = 0, player_id = "", st
 			return GlobalStatHistoryPage.new(
 				history,
 				res.body.globalValue,
+				res.body.playerValue,
 				res.body.count,
 				res.body.itemsPerPage,
 				res.body.isLastPage
@@ -114,16 +115,30 @@ class GlobalValueMetrics:
 		average_value = data.averageValue
 		average_change = data.averageChange
 
+class PlayerValueMetrics:
+	var min_value: float
+	var max_value: float
+	var median_value: float
+	var average_value: float
+
+	func _init(data: Dictionary):
+		min_value = data.minValue
+		max_value = data.maxValue
+		median_value = data.medianValue
+		average_value = data.averageValue
+
 class GlobalStatHistoryPage:
 	var history: Array[TaloPlayerStatSnapshot]
 	var global_value: GlobalValueMetrics
+	var player_value: PlayerValueMetrics
 	var count: int
 	var items_per_page: int
 	var is_last_page: bool
 
-	func _init(history: Array[TaloPlayerStatSnapshot], global_value: Dictionary, count: int, items_per_page: int, is_last_page: bool) -> void:
+	func _init(history: Array[TaloPlayerStatSnapshot], global_value: Dictionary, player_value: Dictionary, count: int, items_per_page: int, is_last_page: bool) -> void:
 		self.history = history
 		self.global_value = GlobalValueMetrics.new(global_value)
+		self.player_value = PlayerValueMetrics.new(player_value)
 		self.count = count
 		self.items_per_page = items_per_page
 		self.is_last_page = is_last_page
