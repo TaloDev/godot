@@ -8,16 +8,16 @@ class_name LeaderboardsAPI extends TaloAPI
 var _entries_manager := TaloLeaderboardEntriesManager.new()
 
 ## Get a list of all the entries that have been previously fetched or created for a leaderboard.
-func get_cached_entries(internal_name: String) -> Array:
+func get_cached_entries(internal_name: String) -> Array[TaloLeaderboardEntry]:
 	return _entries_manager.get_entries(internal_name)
 
 ## Get a list of all the entries that have been previously fetched or created for a leaderboard for the current player.
-func get_cached_entries_for_current_player(internal_name: String) -> Array:
+func get_cached_entries_for_current_player(internal_name: String) -> Array[TaloLeaderboardEntry]:
 	if Talo.identity_check() != OK:
 		return []
 
 	return _entries_manager.get_entries(internal_name).filter(
-		func (entry: TaloLeaderboardEntry):
+		func (entry: TaloLeaderboardEntry) -> bool:
 			return entry.player_alias.id == Talo.current_alias.id
 	)
 
