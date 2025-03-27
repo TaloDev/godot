@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://10aipp4jmgtd"]
 
-[ext_resource type="Script" path="res://addons/talo/samples/leaderboards/scripts/leaderboard.gd" id="1_ul1ks"]
+[ext_resource type="Script" uid="uid://b130i3slrurbc" path="res://addons/talo/samples/leaderboards/scripts/leaderboard.gd" id="1_ul1ks"]
 [ext_resource type="Theme" uid="uid://ce2uyi827vc5x" path="res://addons/talo/samples/authentication/assets/theme.tres" id="2_aw1ey"]
 
 [node name="Leaderboard" type="Node2D"]

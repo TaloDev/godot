@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://dv6o0q01wov2o"]
 
-[ext_resource type="Script" path="res://addons/talo/samples/authentication/scripts/verify.gd" id="1_idjpk"]
+[ext_resource type="Script" uid="uid://djje4dcxkijj3" path="res://addons/talo/samples/authentication/scripts/verify.gd" id="1_idjpk"]
 [ext_resource type="Theme" uid="uid://ce2uyi827vc5x" path="res://addons/talo/samples/authentication/assets/theme.tres" id="2_8uapl"]
 
 [node name="Verify" type="Node2D"]

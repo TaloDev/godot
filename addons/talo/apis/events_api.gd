@@ -5,7 +5,7 @@ class_name EventsAPI extends TaloAPI
 ##
 ## @tutorial: https://docs.trytalo.com/docs/godot/events
 
-var _queue: = []
+var _queue := []
 var _min_queue_size := 10
 
 func _get_window_mode() -> String:
