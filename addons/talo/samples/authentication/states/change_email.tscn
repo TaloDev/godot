@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://b6mypp2qa8m4u"]
 
-[ext_resource type="Script" path="res://addons/talo/samples/authentication/scripts/change_email.gd" id="1_qamph"]
+[ext_resource type="Script" uid="uid://vflrdq5hi1n4" path="res://addons/talo/samples/authentication/scripts/change_email.gd" id="1_qamph"]
 [ext_resource type="Theme" uid="uid://ce2uyi827vc5x" path="res://addons/talo/samples/authentication/assets/theme.tres" id="2_5w58c"]
 
 [node name="ChangeEmail" type="Node2D"]
