@@ -10,14 +10,16 @@ func _on_pressed() -> void:
 
 	var res := await Talo.stats.get_global_history(stat_name, 0, player_id)
 	if res:
-		var global_value := res.global_value
+		var global_metrics := res.global_value
+		var player_metrics := res.player_value
 
-		%ResponseLabel.text = "Min: %s, max: %s, median: %s, average: %s, average change: %s" % [
-			global_value.min_value,
-			global_value.max_value,
-			global_value.median_value,
-			global_value.average_value,
-			global_value.average_change
+		%ResponseLabel.text = "Min: %s, max: %s, median: %s, average: %s, average change: %s, average player value: %s" % [
+			global_metrics.min_value,
+			global_metrics.max_value,
+			global_metrics.median_value,
+			global_metrics.average_value,
+			global_metrics.average_change,
+			player_metrics.average_value
 		]
 	else:
 		%ResponseLabel.text = "Could not fetch global history, is your stat global?"
