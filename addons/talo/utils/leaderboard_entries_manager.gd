@@ -2,10 +2,10 @@ class_name TaloLeaderboardEntriesManager extends RefCounted
 
  # String -> Array[TaloLeaderboardEntry]
  # TODO: update when nested typed collections are supported
-var _current_entries: Dictionary = {} 
+var _current_entries: Dictionary = {}
 
 func get_entries(internal_name: String) -> Array[TaloLeaderboardEntry]:
-	return _current_entries.get(internal_name, [])
+	return _current_entries.get(internal_name, Array([], TYPE_OBJECT, "RefCounted", TaloLeaderboardEntry))
 
 func upsert_entry(internal_name: String, entry: TaloLeaderboardEntry) -> void:
 	var named_entries: Array[TaloLeaderboardEntry] = []

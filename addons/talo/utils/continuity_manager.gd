@@ -60,7 +60,7 @@ func _write_requests():
 	file.store_line(JSON.stringify(_requests))
 
 func _on_timeout():
-	if _requests.is_empty() || not (await Talo.health_check.ping()):
+	if _requests.is_empty() or not (await Talo.health_check.ping()):
 		return
 
 	for i in range(10):
