@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://b6am7sdy8k7gu"]
 
-[ext_resource type="Script" path="res://addons/talo/samples/chat/scripts/chat.gd" id="1_pqhos"]
+[ext_resource type="Script" uid="uid://cj4v4kri7ymn" path="res://addons/talo/samples/chat/scripts/chat.gd" id="1_pqhos"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_gim24"]
 content_margin_left = 5.0

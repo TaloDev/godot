@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://bjopxp3rhpinb"]
 
-[ext_resource type="Script" path="res://addons/talo/samples/authentication/scripts/register.gd" id="1_n3mxk"]
+[ext_resource type="Script" uid="uid://vymday6fb02a" path="res://addons/talo/samples/authentication/scripts/register.gd" id="1_n3mxk"]
 [ext_resource type="Theme" uid="uid://ce2uyi827vc5x" path="res://addons/talo/samples/authentication/assets/theme.tres" id="2_rmohq"]
 
 [node name="Register" type="Node2D"]

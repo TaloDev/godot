@@ -7,7 +7,7 @@ class_name SocketTicketsAPI extends TaloAPI
 
 ## Create a new socket ticket.
 func create_ticket() -> String:
-	var res = await client.make_request(HTTPClient.METHOD_POST, "")
+	var res := await client.make_request(HTTPClient.METHOD_POST, "")
 
 	match res.status:
 		200:

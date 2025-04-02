@@ -7,12 +7,12 @@ func _init(props: Array) -> void:
 
 ## Get a property value by key. Returns the fallback value if the key is not found.
 func get_prop(key: String, fallback: String = "") -> String:
-	var filtered = props.filter(func (prop: TaloProp): return prop.key == key && prop.value != null)
+	var filtered := props.filter(func (prop: TaloProp): return prop.key == key && prop.value != null)
 	return fallback if filtered.is_empty() else filtered.front().value
 
 ## Set a property by key and value.
 func set_prop(key: String, value: String) -> void:
-	var filtered = props.filter(func (prop: TaloProp): return prop.key == key)
+	var filtered := props.filter(func (prop: TaloProp): return prop.key == key)
 	if filtered.is_empty():
 		props.push_back(TaloProp.new(key, value))
 	else:

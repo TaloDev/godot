@@ -1,7 +1,7 @@
 [gd_scene load_steps=11 format=3 uid="uid://bwh4ytfs4g7js"]
 
 [ext_resource type="PackedScene" uid="uid://bjopxp3rhpinb" path="res://addons/talo/samples/authentication/states/register.tscn" id="1_5qw25"]
-[ext_resource type="Script" path="res://addons/talo/samples/authentication/scripts/authentication.gd" id="1_aqcrf"]
+[ext_resource type="Script" uid="uid://dn2sal6firbmh" path="res://addons/talo/samples/authentication/scripts/authentication.gd" id="1_aqcrf"]
 [ext_resource type="PackedScene" uid="uid://co0uou3idf65q" path="res://addons/talo/samples/authentication/states/login.tscn" id="2_fsclp"]
 [ext_resource type="PackedScene" uid="uid://dv6o0q01wov2o" path="res://addons/talo/samples/authentication/states/verify.tscn" id="3_njdp7"]
 [ext_resource type="PackedScene" uid="uid://b6mypp2qa8m4u" path="res://addons/talo/samples/authentication/states/change_email.tscn" id="4_vngav"]

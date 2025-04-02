@@ -7,7 +7,7 @@ func _ready() -> void:
 	Talo.players.identify("username", username)
 
 func _on_identified(_player: TaloPlayer) -> void:
-	var saves = await Talo.saves.get_saves()
+	var saves := await Talo.saves.get_saves()
 	if saves.is_empty():
 		await Talo.saves.create_save("save")
 

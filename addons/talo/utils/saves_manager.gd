@@ -12,12 +12,12 @@ func read_offline_saves() -> Array[TaloGameSave]:
 	if not FileAccess.file_exists(_OFFLINE_SAVES_PATH):
 		return []
 
-	var content = FileAccess.open_encrypted_with_pass(_OFFLINE_SAVES_PATH, FileAccess.READ, Talo.crypto_manager.get_key())
+	var content := FileAccess.open_encrypted_with_pass(_OFFLINE_SAVES_PATH, FileAccess.READ, Talo.crypto_manager.get_key())
 	if content == null:
 		TaloCryptoManager.handle_undecryptable_file(_OFFLINE_SAVES_PATH, "offline saves file")
 		return []
 
-	var json = JSON.new()
+	var json := JSON.new()
 	json.parse(content.get_as_text())
 
 	var res: Array[TaloGameSave] = []
@@ -26,15 +26,15 @@ func read_offline_saves() -> Array[TaloGameSave]:
 	return res
 
 func write_offline_saves(offline_saves: Array[TaloGameSave]):
-	var saves = FileAccess.open_encrypted_with_pass(_OFFLINE_SAVES_PATH, FileAccess.WRITE, Talo.crypto_manager.get_key())
+	var saves := FileAccess.open_encrypted_with_pass(_OFFLINE_SAVES_PATH, FileAccess.WRITE, Talo.crypto_manager.get_key())
 	saves.store_line(JSON.stringify(offline_saves.map(func (save: TaloGameSave): return save.to_dictionary())))
 
 func sync_save(online_save: TaloGameSave, offline_save: TaloGameSave) -> TaloGameSave:
-	var online_updated_at = Time.get_unix_time_from_datetime_string(online_save.updated_at)
-	var offline_updated_at = Time.get_unix_time_from_datetime_string(offline_save.updated_at)
+	var online_updated_at := Time.get_unix_time_from_datetime_string(online_save.updated_at)
+	var offline_updated_at := Time.get_unix_time_from_datetime_string(offline_save.updated_at)
 
 	if offline_updated_at > online_updated_at:
-		var save = await Talo.saves.replace_save_with_offline_save(offline_save)
+		var save := await Talo.saves.replace_save_with_offline_save(offline_save)
 		delete_offline_save(offline_save)
 		return save
 
@@ -50,7 +50,7 @@ func sync_offline_saves(offline_saves: Array[TaloGameSave]) -> Array[TaloGameSav
 
 	for offline_save in offline_saves:
 		if offline_save.id < 0:
-			var save = await Talo.saves.create_save(offline_save.name, offline_save.content)
+			var save := await Talo.saves.create_save(offline_save.name, offline_save.content)
 			delete_offline_save(offline_save)
 			new_saves.push_back(save)
 
@@ -62,21 +62,21 @@ func get_synced_saves(online_saves: Array[TaloGameSave]) -> Array[TaloGameSave]:
 				
 	if not offline_saves.is_empty():
 		for online_save in online_saves:
-			var filtered = offline_saves.filter(func (save: TaloGameSave): return save.id == online_save.id)
+			var filtered := offline_saves.filter(func (save: TaloGameSave): return save.id == online_save.id)
 			if not filtered.is_empty():
-				var save = await sync_save(online_save, filtered.front())
+				var save := await sync_save(online_save, filtered.front())
 				saves.push_back(save)
 			else:
 				saves.push_back(online_save)
 		
-		var synced_saves = await sync_offline_saves(offline_saves)
+		var synced_saves := await sync_offline_saves(offline_saves)
 		saves.append_array(synced_saves)
 	
 	return saves
 
 func update_offline_saves(incoming_save: TaloGameSave) -> void:
-	var offline_saves: Array[TaloGameSave] = read_offline_saves()
-	var updated = false
+	var offline_saves := read_offline_saves()
+	var updated := false
 
 	for i in range(offline_saves.size()):
 		if offline_saves[i].id == incoming_save.id:
@@ -118,7 +118,7 @@ func get_save_content() -> Dictionary:
 	}
 
 func replace_save(new_save: TaloGameSave) -> void:
-	var existing_saves = all_saves.filter(func (save): return save.id == new_save.id)
+	var existing_saves := all_saves.filter(func (save): return save.id == new_save.id)
 	if existing_saves.is_empty():
 		push_error("Save %s cannot be replaced as it does not exist" % new_save.id)
 		all_saves.push_back(new_save)
@@ -131,14 +131,14 @@ func replace_save(new_save: TaloGameSave) -> void:
 	update_offline_saves(new_save)
 
 func get_latest_save() -> TaloGameSave:
-	var dupe = all_saves.duplicate()
+	var dupe := all_saves.duplicate()
 	if dupe.is_empty():
 		return null
 
 	dupe.sort_custom(
 		func (a, b):
-			var time_a = Time.get_unix_time_from_datetime_string(a.updated_at)
-			var time_b = Time.get_unix_time_from_datetime_string(b.updated_at)
+			var time_a := Time.get_unix_time_from_datetime_string(a.updated_at)
+			var time_b := Time.get_unix_time_from_datetime_string(b.updated_at)
 			return time_a > time_b
 	)
 

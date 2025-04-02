@@ -5,26 +5,26 @@ class_name LeaderboardsAPI extends TaloAPI
 ##
 ## @tutorial: https://docs.trytalo.com/docs/godot/leaderboards
 
-var _entries_manager = TaloLeaderboardEntriesManager.new()
+var _entries_manager := TaloLeaderboardEntriesManager.new()
 
 ## Get a list of all the entries that have been previously fetched or created for a leaderboard.
-func get_cached_entries(internal_name: String) -> Array:
+func get_cached_entries(internal_name: String) -> Array[TaloLeaderboardEntry]:
 	return _entries_manager.get_entries(internal_name)
 
 ## Get a list of all the entries that have been previously fetched or created for a leaderboard for the current player.
-func get_cached_entries_for_current_player(internal_name: String) -> Array:
+func get_cached_entries_for_current_player(internal_name: String) -> Array[TaloLeaderboardEntry]:
 	if Talo.identity_check() != OK:
 		return []
 
 	return _entries_manager.get_entries(internal_name).filter(
-		func (entry: TaloLeaderboardEntry):
+		func (entry: TaloLeaderboardEntry) -> bool:
 			return entry.player_alias.id == Talo.current_alias.id
 	)
 
 ## Get a list of entries for a leaderboard. The page parameter is used for pagination.
 func get_entries(internal_name: String, page: int, alias_id = -1, include_archived = false) -> EntriesPage:
-	var url = "/%s/entries?page=%s"
-	var url_data = [internal_name, page]
+	var url := "/%s/entries?page=%s"
+	var url_data := [internal_name, page]
 
 	if alias_id != -1:
 		url += "&aliasId=%s"
@@ -33,13 +33,13 @@ func get_entries(internal_name: String, page: int, alias_id = -1, include_archiv
 	if include_archived:
 		url += "&withDeleted=1"
 
-	var res = await client.make_request(HTTPClient.METHOD_GET, url % url_data)
+	var res := await client.make_request(HTTPClient.METHOD_GET, url % url_data)
 
 	match res.status:
 		200:
 			var entries: Array[TaloLeaderboardEntry] = Array(res.body.entries.map(
 				func(data: Dictionary):
-					var entry = TaloLeaderboardEntry.new(data)
+					var entry := TaloLeaderboardEntry.new(data)
 					_entries_manager.upsert_entry(internal_name, entry)
 
 					return entry
@@ -60,7 +60,7 @@ func add_entry(internal_name: String, score: float, props: Dictionary = {}) -> A
 	if Talo.identity_check() != OK:
 		return null
 
-	var props_to_send: Array = props.keys().map(func(key: String) -> Dictionary: return {key = key, value = str(props[key])})
+	var props_to_send := props.keys().map(func(key: String) -> Dictionary: return {key = key, value = str(props[key])})
 
 	var res := await client.make_request(HTTPClient.METHOD_POST, "/%s/entries" % internal_name, {
 		score = score,

@@ -18,7 +18,7 @@ jobs:
       - uses: chickensoft-games/setup-godot@v1
         name: Set up Godot
         with:
-          version: 4.3.0
+          version: 4.4.1
           use-dotnet: false
           include-templates: true
 

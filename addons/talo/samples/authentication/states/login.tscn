@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://co0uou3idf65q"]
 
-[ext_resource type="Script" path="res://addons/talo/samples/authentication/scripts/login.gd" id="1_enqms"]
+[ext_resource type="Script" uid="uid://bkvrg5x0p3hn4" path="res://addons/talo/samples/authentication/scripts/login.gd" id="1_enqms"]
 [ext_resource type="Theme" uid="uid://ce2uyi827vc5x" path="res://addons/talo/samples/authentication/assets/theme.tres" id="2_77km8"]
 
 [node name="Login" type="Node2D"]

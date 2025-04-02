@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://d17bvaxw1qew4"]
 
-[ext_resource type="Script" path="res://addons/talo/samples/authentication/scripts/delete_account.gd" id="1_ggdf5"]
+[ext_resource type="Script" uid="uid://bnojd38smydqq" path="res://addons/talo/samples/authentication/scripts/delete_account.gd" id="1_ggdf5"]
 [ext_resource type="Theme" uid="uid://ce2uyi827vc5x" path="res://addons/talo/samples/authentication/assets/theme.tres" id="2_n2cbx"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xxxlc"]

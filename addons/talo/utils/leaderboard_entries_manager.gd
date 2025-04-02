@@ -1,22 +1,24 @@
 class_name TaloLeaderboardEntriesManager extends RefCounted
 
+ # String -> Array[TaloLeaderboardEntry]
+ # TODO: update when nested typed collections are supported
 var _current_entries: Dictionary = {}
 
-func get_entries(internal_name: String) -> Array:
-	return _current_entries.get(internal_name, [])
+func get_entries(internal_name: String) -> Array[TaloLeaderboardEntry]:
+	return _current_entries.get(internal_name, Array([], TYPE_OBJECT, "RefCounted", TaloLeaderboardEntry))
 
 func upsert_entry(internal_name: String, entry: TaloLeaderboardEntry) -> void:
-	if not _current_entries.has(internal_name):
-		_current_entries[internal_name] = []
-	else:
-		_current_entries[internal_name] = _current_entries[internal_name].filter(
-			func (e: TaloLeaderboardEntry): return e.id != entry.id
-		)
+	var named_entries: Array[TaloLeaderboardEntry] = []
+	named_entries = _current_entries.get_or_add(internal_name, named_entries).filter(
+		func (e: TaloLeaderboardEntry) -> bool: return e.id != entry.id
+	)
 
-	if entry.position >= _current_entries[internal_name].size():
-		_current_entries[internal_name].append(entry)
+	if entry.position >= named_entries.size():
+		named_entries.append(entry)
 	else:
-		_current_entries[internal_name].insert(entry.position, entry)
+		named_entries.insert(entry.position, entry)
 
-	for idx in range(entry.position, _current_entries[internal_name].size()):
-		_current_entries[internal_name][idx].position = idx
+	for idx in range(entry.position, named_entries.size()):
+		named_entries[idx].position = idx
+
+	_current_entries[internal_name] = named_entries

@@ -18,7 +18,7 @@ func _on_submit_pressed() -> void:
 		validation_label.text = "New password is required"
 		return
 
-	var res = await Talo.player_auth.reset_password(code.text, new_password.text)
+	var res := await Talo.player_auth.reset_password(code.text, new_password.text)
 	if res != OK:
 		match Talo.player_auth.last_error.get_code():
 			TaloAuthError.ErrorCode.PASSWORD_RESET_CODE_INVALID:

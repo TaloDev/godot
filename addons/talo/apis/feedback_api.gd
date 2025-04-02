@@ -7,7 +7,7 @@ class_name FeedbackAPI extends TaloAPI
 
 ## Get a list of feedback categories that are available for players to submit feedback.
 func get_categories() -> Array[TaloFeedbackCategory]:
-	var res = await client.make_request(HTTPClient.METHOD_GET, "/categories")
+	var res := await client.make_request(HTTPClient.METHOD_GET, "/categories")
 
 	match res.status:
 		200:
