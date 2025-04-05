@@ -21,7 +21,7 @@ func read_offline_saves() -> Array[TaloGameSave]:
 	json.parse(content.get_as_text())
 
 	var res: Array[TaloGameSave] = []
-	res.assign(json.get_data().map(func (data: Dictionary): return TaloGameSave.new(data)))
+	res.assign(json.data.map(func (data: Dictionary): return TaloGameSave.new(data)))
 
 	return res
 

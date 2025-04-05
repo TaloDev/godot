@@ -53,7 +53,7 @@ func _read_requests() -> Array:
 	var json := JSON.new()
 	json.parse(content.get_as_text())
 
-	return json.get_data()
+	return json.data
 
 func _write_requests():
 	var file := FileAccess.open_encrypted_with_pass(_CONTINUITY_PATH, FileAccess.WRITE, Talo.crypto_manager.get_key())

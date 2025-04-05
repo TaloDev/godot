@@ -90,8 +90,8 @@ func _emit_message(message: String) -> void:
 	var json := JSON.new()
 	json.parse(message)
 
-	var res = json.get_data().res
-	var data = json.get_data().data
+	var res = json.data.res
+	var data = json.data.data
 	message_received.emit(res, data)
 
 ## Close the connection to the Talo Socket server.
