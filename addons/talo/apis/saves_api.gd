@@ -68,8 +68,6 @@ func get_saves() -> Array[TaloGameSave]:
 ## Set the chosen save and optionally (default true) load it.
 func choose_save(save: TaloGameSave, load_save = true) -> void:
 	_saves_manager.set_chosen_save(save, load_save)
-	if load_save:
-		save_chosen.emit(save)
 
 ## Unload the current save.
 func unload_current_save() -> void:
@@ -78,8 +76,6 @@ func unload_current_save() -> void:
 ## Create a new save with the given name and content.
 func create_save(save_name: String, content: Dictionary = {}) -> TaloGameSave:
 	var save: TaloGameSave
-
-	_saves_manager.register_fields_for_saved_objects()
 	var save_content := content if not content.is_empty() else _saves_manager.get_save_content()
 
 	if await Talo.is_offline():
@@ -107,12 +103,6 @@ func create_save(save_name: String, content: Dictionary = {}) -> TaloGameSave:
 ## Register a loadable object to be saved and loaded.
 func register(loadable: TaloLoadable) -> void:
 	_saves_manager.register(loadable)
-
-## Mark an object as loaded.
-func set_object_loaded(id: String) -> void:
-	_saves_manager.push_loaded_object(id)
-	if _saves_manager.is_loading_completed():
-		save_loading_completed.emit()
 
 ## Update the currently loaded save using the current state of the game and with the given name.
 func update_current_save(new_name: String = "") -> TaloGameSave:
@@ -161,3 +151,7 @@ func delete_save(save: TaloGameSave) -> void:
 
 	if _saves_manager.current_save and _saves_manager.current_save.id == save.id:
 		unload_current_save()
+
+## Get the format version for the current save.
+func get_format_version() -> String:
+	return _saves_manager.get_format_version()

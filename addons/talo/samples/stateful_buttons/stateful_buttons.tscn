@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://cbmprpim3xigq"]
 
-[ext_resource type="Script" uid="uid://ceb1i0adxqrb8" path="res://addons/talo/samples/saves/stateful_buttons_manager.gd" id="1_0jiiv"]
-[ext_resource type="Script" uid="uid://c1gm0arpfk0eb" path="res://addons/talo/samples/saves/loadable_button.gd" id="2_ge7ge"]
+[ext_resource type="Script" uid="uid://ceb1i0adxqrb8" path="res://addons/talo/samples/stateful_buttons/stateful_buttons_manager.gd" id="1_0jiiv"]
+[ext_resource type="Script" uid="uid://c1gm0arpfk0eb" path="res://addons/talo/samples/stateful_buttons/loadable_button.gd" id="2_ge7ge"]
 
 [node name="StatefulButtons" type="Node2D"]
 script = ExtResource("1_0jiiv")
