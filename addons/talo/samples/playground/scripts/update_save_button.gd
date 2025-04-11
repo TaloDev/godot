@@ -2,7 +2,7 @@ extends Button
 
 func _on_pressed() -> void:
 	if not Talo.saves.current:
-		push_error("No save currently loaded")
+		%ResponseLabel.text = "No save currently loaded"
 		return
 
 	var version := 0
@@ -16,4 +16,5 @@ func _on_pressed() -> void:
 
 	var new_name := Talo.saves.current.name.replace("version %s" % version, "version %s" % (version + 1))
 
-	Talo.saves.update_current_save(new_name)
+	await Talo.saves.update_current_save(new_name)
+	%ResponseLabel.text = "Updated save, new name is: %s" % new_name
