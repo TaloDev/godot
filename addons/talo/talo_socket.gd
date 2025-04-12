@@ -12,6 +12,9 @@ var _temp_socket_token: String
 var _socket_authenticated: bool
 var _identified: bool
 
+func _init() -> void:
+	name = "TaloSocket"
+
 ## Emitted when a message is received from the Talo Socket server. Not recommended for direct use. See the Talo docs for a list of responses and message structures.
 signal message_received(res: String, message: Dictionary)
 

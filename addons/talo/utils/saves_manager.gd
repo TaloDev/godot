@@ -3,8 +3,10 @@ class_name TaloSavesManager extends RefCounted
 var all_saves: Array[TaloGameSave] = []
 var current_save: TaloGameSave
 
-var _registered_saved_objects: Array[TaloSavedObject]
-var _loaded_loadables: Array[String]
+var _saved_objects: Dictionary[String, TaloSavedObject] = {}
+var _loadables: Dictionary[String, TaloLoadable] = {}
+
+var _format_version := "godot.v2"
 
 const _OFFLINE_SAVES_PATH = "user://ts.bin"
 
@@ -59,7 +61,7 @@ func sync_offline_saves(offline_saves: Array[TaloGameSave]) -> Array[TaloGameSav
 func get_synced_saves(online_saves: Array[TaloGameSave]) -> Array[TaloGameSave]:
 	var saves: Array[TaloGameSave] = []
 	var offline_saves: Array[TaloGameSave] = read_offline_saves()
-				
+
 	if not offline_saves.is_empty():
 		for online_save in online_saves:
 			var filtered := offline_saves.filter(func (save: TaloGameSave): return save.id == online_save.id)
@@ -68,10 +70,10 @@ func get_synced_saves(online_saves: Array[TaloGameSave]) -> Array[TaloGameSave]:
 				saves.push_back(save)
 			else:
 				saves.push_back(online_save)
-		
+
 		var synced_saves := await sync_offline_saves(offline_saves)
 		saves.append_array(synced_saves)
-	
+
 	return saves
 
 func update_offline_saves(incoming_save: TaloGameSave) -> void:
@@ -92,29 +94,41 @@ func update_offline_saves(incoming_save: TaloGameSave) -> void:
 
 	write_offline_saves(offline_saves)
 
-func register_fields_for_saved_objects():
-	for saved_object in _registered_saved_objects:
-		saved_object.register_loadable_fields()
-
 func set_chosen_save(save: TaloGameSave, load_save: bool) -> void:
 	current_save = save
 	if not load_save:
 		return
 
-	_loaded_loadables.clear()
+	Talo.saves.save_chosen.emit(save)
+
+	for object in save.content.get("objects", []):
+		var saved_object := TaloSavedObject.new(object)
+		_saved_objects.set(object.id, saved_object)
+
+		var matching_loadable = _loadables.get(saved_object.id)
+		if matching_loadable:
+			saved_object.register_loadable(matching_loadable)
+
+	Talo.saves.save_loading_completed.emit()
 
 func register(loadable: TaloLoadable) -> void:
-	_registered_saved_objects.push_back(TaloSavedObject.new(loadable))
+	_loadables.set(loadable.id, loadable)
 
-func push_loaded_object(id: String) -> void:
-	_loaded_loadables.push_back(id)
-
-func is_loading_completed() -> bool:
-	return _loaded_loadables.size() == _registered_saved_objects.size()
+	# create a new saved object in case it isn't in the save file yet
+	var saved_object := TaloSavedObject.new({
+		id = loadable.id,
+		name = loadable.get_path(),
+		data = loadable.get_latest_data()
+	})
+	saved_object.register_loadable(loadable, false)
+	_saved_objects.set(loadable.id, saved_object)
 
 func get_save_content() -> Dictionary:
 	return {
-		objects = _registered_saved_objects.map(func (saved_object: TaloSavedObject): return saved_object.to_dictionary())
+		version = _format_version,
+		objects = _saved_objects.values().map(
+			func (saved_object: TaloSavedObject): return saved_object.to_dictionary()
+		)
 	}
 
 func replace_save(new_save: TaloGameSave) -> void:
@@ -143,3 +157,10 @@ func get_latest_save() -> TaloGameSave:
 	)
 
 	return dupe.front()
+
+func get_format_version() -> String:
+	var default := "godot.v1" # version 1 didn't have this key, so fallback to it
+	if not current_save:
+		return default
+
+	return current_save.content.get("version", default)
