@@ -12,6 +12,9 @@ var _temp_socket_token: String
 var _socket_authenticated: bool
 var _identified: bool
 
+func _init() -> void:
+	name = "TaloSocket"
+
 ## Emitted when a message is received from the Talo Socket server. Not recommended for direct use. See the Talo docs for a list of responses and message structures.
 signal message_received(res: String, message: Dictionary)
 
@@ -90,8 +93,8 @@ func _emit_message(message: String) -> void:
 	var json := JSON.new()
 	json.parse(message)
 
-	var res = json.get_data().res
-	var data = json.get_data().data
+	var res = json.data.res
+	var data = json.data.data
 	message_received.emit(res, data)
 
 ## Close the connection to the Talo Socket server.

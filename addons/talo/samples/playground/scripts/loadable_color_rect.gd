@@ -3,8 +3,8 @@ class_name LoadableColorRect extends TaloLoadable
 var color_rect: ColorRect
 
 func _ready() -> void:
-	super()
 	color_rect = get_child(1)
+	super()
 
 func register_fields() -> void:
 	register_field("r", color_rect.color.r)

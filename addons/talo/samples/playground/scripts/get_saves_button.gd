@@ -1,4 +1,5 @@
 extends Button
 
 func _on_pressed() -> void:
-	Talo.saves.get_saves()
+	var saves = await Talo.saves.get_saves()
+	%ResponseLabel.text = "Found %s saves" % saves.size()

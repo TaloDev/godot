@@ -61,11 +61,11 @@ func make_request(method: HTTPClient.Method, url: String, body: Dictionary = {},
 		])
 	
 	if Talo.settings.get_value("logging", "responses", false):
-		print_rich("[color=green]<-- %s %s[/color]" % [status, json.get_data()])
+		print_rich("[color=green]<-- %s %s[/color]" % [status, json.data])
 
 	var ret = {
 		status = status,
-		body = json.get_data()
+		body = json.data
 	}
 
 	if ret.status >= 400:

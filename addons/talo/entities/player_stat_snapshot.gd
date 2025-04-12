@@ -10,5 +10,5 @@ func _init(data: Dictionary):
 	player_alias = TaloPlayerAlias.new(data.playerAlias)
 	change = data.change
 	value = data.value
-	global_value = data.globalValue
+	global_value = data.get("globalValue", 0.0)
 	created_at = data.createdAt

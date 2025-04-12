@@ -1,0 +1,35 @@
+[gd_scene load_steps=3 format=3 uid="uid://4ffkl87wxptv"]
+
+[ext_resource type="PackedScene" uid="uid://b0jdoni6crl0s" path="res://addons/talo/samples/multiscene_saves/scenes/portal.tscn" id="1_olj8c"]
+[ext_resource type="PackedScene" uid="uid://b3b4ek8meeflf" path="res://addons/talo/samples/multiscene_saves/scenes/player.tscn" id="2_r5twb"]
+
+[node name="StartingZone" type="Node2D"]
+
+[node name="Map" type="Polygon2D" parent="."]
+color = Color(0.937255, 0.666667, 0.466667, 1)
+polygon = PackedVector2Array(269, -108, 284, 25, 218, 162, 38, 236, -173, 212, -300, 14, -196, -165, 7, -244)
+
+[node name="Portal" parent="." instance=ExtResource("1_olj8c")]
+position = Vector2(103, -166)
+rotation = 0.47822
+to_level = "green_zone"
+spawn_point = Vector2(-262, -136)
+
+[node name="ClickToMove" type="Label" parent="."]
+offset_left = -65.0
+offset_top = 50.0
+offset_right = 65.0
+offset_bottom = 78.0
+theme_override_font_sizes/font_size = 20
+text = "Click to move"
+
+[node name="VisitThePortal" type="Label" parent="."]
+offset_left = 66.0
+offset_top = -252.0
+offset_right = 209.0
+offset_bottom = -224.0
+rotation = 0.47822
+theme_override_font_sizes/font_size = 20
+text = "Visit the portal"
+
+[node name="Player" parent="." instance=ExtResource("2_r5twb")]

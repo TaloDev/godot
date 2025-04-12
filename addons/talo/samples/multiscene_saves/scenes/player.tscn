@@ -1,0 +1,43 @@
+[gd_scene load_steps=5 format=3 uid="uid://b3b4ek8meeflf"]
+
+[ext_resource type="Texture2D" uid="uid://b3naludt1ank2" path="res://icon.png" id="1_rswej"]
+[ext_resource type="Script" uid="uid://pjwribovgraj" path="res://addons/talo/samples/multiscene_saves/scripts/loadable_player.gd" id="1_t5o6r"]
+[ext_resource type="Script" uid="uid://cbm1re05xae6k" path="res://addons/talo/samples/multiscene_saves/scripts/player_controller.gd" id="2_bg0gd"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_mdugq"]
+radius = 450.0
+
+[node name="Player" type="CharacterBody2D"]
+scale = Vector2(0.05, 0.05)
+script = ExtResource("2_bg0gd")
+
+[node name="Loadable" type="Node2D" parent="."]
+script = ExtResource("1_t5o6r")
+username = "saves_demo_player"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_mdugq")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_rswej")
+
+[node name="Camera" type="Camera2D" parent="."]
+unique_name_in_owner = true
+zoom = Vector2(1.5, 1.5)
+
+[node name="Stars" type="Label" parent="."]
+unique_name_in_owner = true
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -1000.0
+offset_top = 464.0
+offset_right = 1000.0
+offset_bottom = 1010.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_font_sizes/font_size = 350
+text = "0 stars"
+horizontal_alignment = 1

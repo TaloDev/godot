@@ -32,7 +32,8 @@ channels](https://trytalo.com/channels): Send real-time messages between players
 - 🔒 Authentication: a registration/login/account management flow, showing how to create player accounts and authenticate them.
 - 🎮 Playground: a text-based playground allowing you to test identifying, events, stats and leaderboards.
 - 🕹️ Leaderboards: a basic leaderboard UI, allowing you to add and update entries.
-- 💾 Stateful buttons: showing how to save and load game state.
+- 💾 Multi-scene saves: a small game showing how to persist save data across multiple scenes.
+- 💾 Stateful buttons: a simple demo showing how to save and load game state.
 - 💬 Chat: showing how to send messages between channels in a chat room.
 
 ## Documentation

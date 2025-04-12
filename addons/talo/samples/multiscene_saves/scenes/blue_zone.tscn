@@ -1,0 +1,44 @@
+[gd_scene load_steps=4 format=3 uid="uid://c4doqk5ectldu"]
+
+[ext_resource type="PackedScene" uid="uid://ci52f1pjsppv3" path="res://addons/talo/samples/multiscene_saves/scenes/star.tscn" id="1_h5eft"]
+[ext_resource type="PackedScene" uid="uid://b0jdoni6crl0s" path="res://addons/talo/samples/multiscene_saves/scenes/portal.tscn" id="2_yfx2i"]
+[ext_resource type="PackedScene" uid="uid://b3b4ek8meeflf" path="res://addons/talo/samples/multiscene_saves/scenes/player.tscn" id="3_v3fgw"]
+
+[node name="BlueZone" type="Node2D"]
+
+[node name="Map" type="Polygon2D" parent="."]
+color = Color(0.277352, 0.505327, 0.795826, 1)
+polygon = PackedVector2Array(86, -140, 240, -128, 430, -135, 488, 81, 227, 319, 8.73462, 225.248, -107, 285, -378, 217, -315, -2, -359, -186, -175, -303, 2, -263)
+
+[node name="Star1" parent="." instance=ExtResource("1_h5eft")]
+position = Vector2(350, -80)
+id = "blue_zone_star1"
+
+[node name="Star2" parent="." instance=ExtResource("1_h5eft")]
+position = Vector2(-250, -51)
+id = "blue_zone_star2"
+
+[node name="Star3" parent="." instance=ExtResource("1_h5eft")]
+position = Vector2(-222, 165)
+id = "blue_zone_star3"
+
+[node name="Star4" parent="." instance=ExtResource("1_h5eft")]
+position = Vector2(216, 245)
+id = "blue_zone_star4"
+
+[node name="Star5" parent="." instance=ExtResource("1_h5eft")]
+position = Vector2(221, 49)
+id = "blue_zone_star5"
+
+[node name="Star6" parent="." instance=ExtResource("1_h5eft")]
+position = Vector2(-99, -178)
+id = "blue_zone_star6"
+
+[node name="Portal" parent="." instance=ExtResource("2_yfx2i")]
+position = Vector2(-233, -237)
+rotation = 1.00356
+to_level = "green_zone"
+spawn_point = Vector2(225, 166)
+
+[node name="Player" parent="." instance=ExtResource("3_v3fgw")]
+position = Vector2(-192, -175)
