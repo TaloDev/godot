@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://b0jdoni6crl0s"]
 
-[ext_resource type="Script" uid="uid://bnkfuweqaugsr" path="res://addons/talo/samples/saves/scripts/portal.gd" id="1_dmas5"]
+[ext_resource type="Script" uid="uid://bnkfuweqaugsr" path="res://addons/talo/samples/multiscene_saves/scripts/portal.gd" id="1_dmas5"]
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_mdugq"]
 

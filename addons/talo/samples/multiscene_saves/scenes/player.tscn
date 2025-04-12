@@ -1,8 +1,8 @@
 [gd_scene load_steps=5 format=3 uid="uid://b3b4ek8meeflf"]
 
 [ext_resource type="Texture2D" uid="uid://b3naludt1ank2" path="res://icon.png" id="1_rswej"]
-[ext_resource type="Script" uid="uid://pjwribovgraj" path="res://addons/talo/samples/saves/scripts/loadable_player.gd" id="1_t5o6r"]
-[ext_resource type="Script" uid="uid://cbm1re05xae6k" path="res://addons/talo/samples/saves/scripts/player_controller.gd" id="2_bg0gd"]
+[ext_resource type="Script" uid="uid://pjwribovgraj" path="res://addons/talo/samples/multiscene_saves/scripts/loadable_player.gd" id="1_t5o6r"]
+[ext_resource type="Script" uid="uid://cbm1re05xae6k" path="res://addons/talo/samples/multiscene_saves/scripts/player_controller.gd" id="2_bg0gd"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_mdugq"]
 radius = 450.0

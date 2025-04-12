@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://c4doqk5ectldu"]
 
-[ext_resource type="PackedScene" uid="uid://ci52f1pjsppv3" path="res://addons/talo/samples/saves/scenes/star.tscn" id="1_h5eft"]
-[ext_resource type="PackedScene" uid="uid://b0jdoni6crl0s" path="res://addons/talo/samples/saves/scenes/portal.tscn" id="2_yfx2i"]
-[ext_resource type="PackedScene" uid="uid://b3b4ek8meeflf" path="res://addons/talo/samples/saves/scenes/player.tscn" id="3_v3fgw"]
+[ext_resource type="PackedScene" uid="uid://ci52f1pjsppv3" path="res://addons/talo/samples/multiscene_saves/scenes/star.tscn" id="1_h5eft"]
+[ext_resource type="PackedScene" uid="uid://b0jdoni6crl0s" path="res://addons/talo/samples/multiscene_saves/scenes/portal.tscn" id="2_yfx2i"]
+[ext_resource type="PackedScene" uid="uid://b3b4ek8meeflf" path="res://addons/talo/samples/multiscene_saves/scenes/player.tscn" id="3_v3fgw"]
 
 [node name="BlueZone" type="Node2D"]
 

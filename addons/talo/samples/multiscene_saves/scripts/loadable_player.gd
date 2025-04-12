@@ -9,9 +9,9 @@ var spawn_level := "starting_zone"
 var spawn_point := Vector2.ZERO
 
 @onready var levels: Dictionary[String, Resource] = {
-	"starting_zone" = load("res://addons/talo/samples/saves/starting_zone.tscn"),
-	"green_zone" = load("res://addons/talo/samples/saves/scenes/green_zone.tscn"),
-	"blue_zone" = load("res://addons/talo/samples/saves/scenes/blue_zone.tscn")
+	"starting_zone" = load("res://addons/talo/samples/multiscene_saves/starting_zone.tscn"),
+	"green_zone" = load("res://addons/talo/samples/multiscene_saves/scenes/green_zone.tscn"),
+	"blue_zone" = load("res://addons/talo/samples/multiscene_saves/scenes/blue_zone.tscn")
 }
 
 func _toggle_scene_visibility(visible: bool):
