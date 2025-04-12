@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://dovcg8jsebxeg"]
+[gd_scene load_steps=3 format=3 uid="uid://4ffkl87wxptv"]
 
 [ext_resource type="PackedScene" uid="uid://b0jdoni6crl0s" path="res://addons/talo/samples/saves/scenes/portal.tscn" id="1_olj8c"]
 [ext_resource type="PackedScene" uid="uid://b3b4ek8meeflf" path="res://addons/talo/samples/saves/scenes/player.tscn" id="2_r5twb"]
