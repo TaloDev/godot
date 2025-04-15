@@ -71,8 +71,8 @@ func get_subscribed_channels() -> Array[TaloChannel]:
 		_:
 			return []
 
-## Create a new channel. The player who creates this channel will automatically become the owner. If auto cleanup is enabled, the channel will be deleted when the owner or the last member leaves.
-func create(name: String, auto_cleanup: bool = false, props: Dictionary = {}) -> TaloChannel:
+## Create a new channel. The player who creates this channel will automatically become the owner. If auto cleanup is enabled, the channel will be deleted when the owner or the last member leaves. Private channels can only be joined by players who have been invited to the channel.
+func create(name: String, auto_cleanup: bool = false, props: Dictionary = {}, private: bool = false) -> TaloChannel:
 	if Talo.identity_check() != OK:
 		return
 
@@ -81,7 +81,8 @@ func create(name: String, auto_cleanup: bool = false, props: Dictionary = {}) ->
 	var res := await client.make_request(HTTPClient.METHOD_POST, "", {
 		name = name,
 		autoCleanup = auto_cleanup,
-		props = props_to_send
+		props = props_to_send,
+		private = private
 	})
 
 	match res.status:
