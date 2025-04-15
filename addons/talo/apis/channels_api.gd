@@ -158,6 +158,19 @@ func send_message(channel_id: int, message: String) -> void:
 		message = message
 	})
 
+## Invite a player to a channel. The invitee will automatically join the channel. This will only work if the current player is the owner of the channel.
+func invite(channel_id: int, player_alias_id: int) -> void:
+	if Talo.identity_check() != OK:
+		return
+
+	var res = await client.make_request(HTTPClient.METHOD_POST, "/%s/invite" % channel_id, {
+		inviteeAliasId = player_alias_id
+	})
+
+	match res.status:
+		403:
+			push_error("Player does not have permissions to invite players to channel %s." % channel_id)
+
 class ChannelPage:
 	var channels: Array[TaloChannel]
 	var count: int
