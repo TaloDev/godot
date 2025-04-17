@@ -15,7 +15,8 @@ signal player_left(channel: TaloChannel, player_alias: TaloPlayerAlias)
 signal channel_ownership_transferred(channel: TaloChannel, new_owner_player_alias: TaloPlayerAlias)
 ## Emitted when a channel is deleted.
 signal channel_deleted(channel: TaloChannel)
-
+## Emitted when a channel is updated.
+signal channel_updated(channel: TaloChannel, changed_properties: Array[String])
 
 func _ready() -> void:
 	await Talo.init_completed
@@ -33,6 +34,10 @@ func _on_message_received(res: String, data: Dictionary) -> void:
 			player_left.emit(TaloChannel.new(data.channel), TaloPlayerAlias.new(data.newOwner))
 		"v1.channels.deleted":
 			channel_deleted.emit(TaloChannel.new(data.channel))
+		"v1.channels.updated":
+			var changed_properties: Array[String] = []
+			changed_properties.assign(data.changedProperties)
+			channel_updated.emit(TaloChannel.new(data.channel), changed_properties)
 
 ## Get a channel by its ID.
 func find(channel_id: int) -> TaloChannel:
