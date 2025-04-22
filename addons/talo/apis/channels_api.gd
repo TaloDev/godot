@@ -15,7 +15,8 @@ signal player_left(channel: TaloChannel, player_alias: TaloPlayerAlias)
 signal channel_ownership_transferred(channel: TaloChannel, new_owner_player_alias: TaloPlayerAlias)
 ## Emitted when a channel is deleted.
 signal channel_deleted(channel: TaloChannel)
-
+## Emitted when a channel is updated.
+signal channel_updated(channel: TaloChannel, changed_properties: Array[String])
 
 func _ready() -> void:
 	await Talo.init_completed
@@ -33,6 +34,10 @@ func _on_message_received(res: String, data: Dictionary) -> void:
 			player_left.emit(TaloChannel.new(data.channel), TaloPlayerAlias.new(data.newOwner))
 		"v1.channels.deleted":
 			channel_deleted.emit(TaloChannel.new(data.channel))
+		"v1.channels.updated":
+			var changed_properties: Array[String] = []
+			changed_properties.assign(data.changedProperties)
+			channel_updated.emit(TaloChannel.new(data.channel), changed_properties)
 
 ## Get a channel by its ID.
 func find(channel_id: int) -> TaloChannel:
@@ -71,8 +76,8 @@ func get_subscribed_channels() -> Array[TaloChannel]:
 		_:
 			return []
 
-## Create a new channel. The player who creates this channel will automatically become the owner. If auto cleanup is enabled, the channel will be deleted when the owner or the last member leaves.
-func create(name: String, auto_cleanup: bool = false, props: Dictionary = {}) -> TaloChannel:
+## Create a new channel. The player who creates this channel will automatically become the owner. If auto cleanup is enabled, the channel will be deleted when the owner or the last member leaves. Private channels can only be joined by players who have been invited to the channel.
+func create(name: String, auto_cleanup: bool = false, props: Dictionary = {}, private: bool = false) -> TaloChannel:
 	if Talo.identity_check() != OK:
 		return
 
@@ -81,7 +86,8 @@ func create(name: String, auto_cleanup: bool = false, props: Dictionary = {}) ->
 	var res := await client.make_request(HTTPClient.METHOD_POST, "", {
 		name = name,
 		autoCleanup = auto_cleanup,
-		props = props_to_send
+		props = props_to_send,
+		private = private
 	})
 
 	match res.status:
@@ -156,6 +162,19 @@ func send_message(channel_id: int, message: String) -> void:
 		},
 		message = message
 	})
+
+## Invite a player to a channel. The invitee will automatically join the channel. This will only work if the current player is the owner of the channel.
+func invite(channel_id: int, player_alias_id: int) -> void:
+	if Talo.identity_check() != OK:
+		return
+
+	var res = await client.make_request(HTTPClient.METHOD_POST, "/%s/invite" % channel_id, {
+		inviteeAliasId = player_alias_id
+	})
+
+	match res.status:
+		403:
+			push_error("Player does not have permissions to invite players to channel %s." % channel_id)
 
 class ChannelPage:
 	var channels: Array[TaloChannel]
