@@ -176,6 +176,21 @@ func invite(channel_id: int, player_alias_id: int) -> void:
 		403:
 			push_error("Player does not have permissions to invite players to channel %s." % channel_id)
 
+## Get the members of a channel.
+func get_members(channel_id: int) -> Array[TaloPlayerAlias]:
+	if Talo.identity_check() != OK:
+		return []
+
+	var res := await client.make_request(HTTPClient.METHOD_GET, "/%s/members" % channel_id)
+
+	match res.status:
+		200:
+			var members: Array[TaloPlayerAlias] = []
+			members.assign(res.body.members.map(func (member: Dictionary): return TaloPlayerAlias.new(member)))
+			return members
+		_:
+			return []
+
 class ChannelPage:
 	var channels: Array[TaloChannel]
 	var count: int
