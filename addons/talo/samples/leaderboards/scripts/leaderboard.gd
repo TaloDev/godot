@@ -50,7 +50,11 @@ func _load_entries() -> void:
 	var done := false
 
 	while !done:
-		var res := await Talo.leaderboards.get_entries(leaderboard_internal_name, page, -1, include_archived)
+		var options := Talo.leaderboards.GetEntriesOptions.new()
+		options.page = page
+		options.include_archived = include_archived
+
+		var res := await Talo.leaderboards.get_entries(leaderboard_internal_name, options)
 
 		if not is_instance_valid(res):
 			_entries_error = true

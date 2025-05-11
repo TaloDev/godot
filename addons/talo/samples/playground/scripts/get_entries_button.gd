@@ -7,7 +7,9 @@ func _on_pressed() -> void:
 		%ResponseLabel.text = "leaderboard_name not set on GetEntriesButton"
 		return
 
-	var res := await Talo.leaderboards.get_entries(leaderboard_name, 0)
+	var options := Talo.leaderboards.GetEntriesOptions.new()
+	options.page = 0
+	var res := await Talo.leaderboards.get_entries(leaderboard_name, options)
 
 	if is_instance_valid(res):
 		var entries := res.entries
