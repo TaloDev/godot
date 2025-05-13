@@ -13,6 +13,8 @@ func identify(service: String, identifier: String) -> TaloPlayer:
 	var res := await client.make_request(HTTPClient.METHOD_GET, "/identify?service=%s&identifier=%s" % [service, identifier])
 	match res.status:
 		200:
+			Talo.socket.reset_connection()
+
 			Talo.current_alias = TaloPlayerAlias.new(res.body.alias)
 			Talo.socket.set_socket_token(res.body.socketToken)
 			identified.emit(Talo.current_player)

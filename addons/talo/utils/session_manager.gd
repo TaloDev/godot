@@ -16,6 +16,9 @@ func _save_session(session_token: String) -> void:
 	config.save(_SESSION_CONFIG_PATH)
 
 func clear_session() -> void:
+	Talo.current_alias = null
+	Talo.socket.reset_connection()
+
 	var config := _load_config(_SESSION_CONFIG_PATH)
 
 	if config.has_section("session"):
