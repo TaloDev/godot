@@ -81,7 +81,6 @@ func verify(verification_code: String) -> Error:
 func logout() -> void:
 	await client.make_request(HTTPClient.METHOD_POST, "/logout")
 	session_manager.clear_session()
-	Talo.current_alias = null
 
 ## Change the password of the current player account.
 func change_password(current_password: String, new_password: String) -> Error:
@@ -157,7 +156,6 @@ func delete_account(current_password: String) -> Error:
 	match res.status:
 		204:
 			session_manager.clear_session()
-			Talo.current_alias = null
 			return OK
 		_:
 			return _handle_error(res)
