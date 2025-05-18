@@ -105,7 +105,7 @@ func _build_full_url(url: String) -> String:
 	return "%s%s%s" % [
 		Talo.settings.get_value("", "api_url"),
 		_base_url,
-		url
+		url.replace(" ", "%20")
 	]
 
 func handle_error(res: Dictionary) -> void:

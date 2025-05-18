@@ -101,6 +101,15 @@ func _emit_message(message: String) -> void:
 func close_connection(code: int = 1000, reason: String = "") -> void:
 	_socket.close(code, reason)
 
+## Close the current connection and create a new connection to the Talo Socket server.
+func reset_connection() -> void:
+	if not _identified:
+		return
+
+	close_connection()
+	_reset_socket()
+	open_connection()
+
 func _reset_socket() -> void:
 	connection_closed.emit(_socket.get_close_code(), _socket.get_close_reason())
 	_socket = WebSocketPeer.new()
