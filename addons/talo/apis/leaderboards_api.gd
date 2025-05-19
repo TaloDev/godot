@@ -37,9 +37,9 @@ func get_entries(internal_name: String, options = GetEntriesOptions.new()) -> En
 		url += "&propKey=%s"
 		url_data.append(options.prop_key)
 
-	if options.prop_value != "":
-		url += "&propValue=%s"
-		url_data.append(options.prop_value)
+		if options.prop_value != "":
+			url += "&propValue=%s"
+			url_data.append(options.prop_value)
 
 	var res := await client.make_request(HTTPClient.METHOD_GET, url % url_data)
 

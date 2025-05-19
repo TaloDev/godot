@@ -50,8 +50,19 @@ func find(channel_id: int) -> TaloChannel:
 			return null
 
 ## Get a list of channels that players can join.
-func get_channels(page: int) -> ChannelPage:
-	var res := await client.make_request(HTTPClient.METHOD_GET, "?page=%s" % page)
+func get_channels(options: GetChannelsOptions = GetChannelsOptions.new()) -> ChannelPage:
+	var url := "?page=%s"
+	var url_data := [options.page]
+
+	if options.prop_key != "":
+		url += "&propKey=%s"
+		url_data.append(options.prop_key)
+
+		if options.prop_value != "":
+			url += "&propValue=%s"
+			url_data.append(options.prop_value)
+
+	var res := await client.make_request(HTTPClient.METHOD_GET, url % url_data)
 
 	match res.status:
 		200:
@@ -62,11 +73,22 @@ func get_channels(page: int) -> ChannelPage:
 			return null
 
 ## Get a list of channels that the current player is subscribed to.
-func get_subscribed_channels() -> Array[TaloChannel]:
+func get_subscribed_channels(options: GetSubscribedChannelsOptions = GetSubscribedChannelsOptions.new()) -> Array[TaloChannel]:
 	if Talo.identity_check() != OK:
 		return []
 
-	var res := await client.make_request(HTTPClient.METHOD_GET, "/subscriptions")
+	var url := "/subscriptions"
+	var url_data := []
+
+	if options.prop_key != "":
+		url += "?propKey=%s"
+		url_data.append(options.prop_key)
+
+		if options.prop_value != "":
+			url += "&propValue=%s"
+			url_data.append(options.prop_value)
+
+	var res := await client.make_request(HTTPClient.METHOD_GET, url % url_data)
 
 	match res.status:
 		200:
@@ -202,3 +224,12 @@ class ChannelPage:
 		self.count = count
 		self.items_per_page = items_per_page
 		self.is_last_page = is_last_page
+
+class GetChannelsOptions:
+	var page: int = 0
+	var prop_key: String = ""
+	var prop_value: String = ""
+
+class GetSubscribedChannelsOptions:
+	var prop_key: String = ""
+	var prop_value: String = ""

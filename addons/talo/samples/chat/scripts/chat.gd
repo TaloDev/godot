@@ -23,7 +23,10 @@ func _on_presence_changed(presence: TaloPlayerPresence, online_changed: bool, cu
 func _on_identified(player: TaloPlayer) -> void:
 	_subscriptions = await Talo.channels.get_subscribed_channels()
 
-	var res := await Talo.channels.get_channels(0)
+	var options := Talo.channels.GetChannelsOptions.new()
+	options.page = 0
+	var res := await Talo.channels.get_channels(options)
+
 	assert(is_instance_valid(res))
 	var channels := res.channels
 
