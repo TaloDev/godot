@@ -42,7 +42,11 @@ func _on_add_channel_button_pressed() -> void:
 	if %ChannelName.text.is_empty():
 		return
 
-	var channel := await Talo.channels.create(%ChannelName.text, true)
+	var options := Talo.channels.CreateChannelOptions.new()
+	options.name = %ChannelName.text
+	options.auto_cleanup = true
+
+	var channel := await Talo.channels.create(options)
 	if channel:
 		_subscriptions.append(channel)
 		_add_channel_label(channel.id, channel.name)
