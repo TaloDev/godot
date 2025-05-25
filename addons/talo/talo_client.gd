@@ -71,7 +71,7 @@ func make_request(method: HTTPClient.Method, url: String, body: Dictionary = {},
 	if ret.status >= 400:
 		handle_error(ret)
 
-	if res.result != HTTPRequest.RESULT_SUCCESS or ret.status >= 500:
+	if res.result != HTTPRequest.RESULT_SUCCESS or ret.status > 500:
 		Talo.continuity_manager.push_request(method, full_url, body, all_headers, continuity_timestamp)
 
 	http_request.queue_free()

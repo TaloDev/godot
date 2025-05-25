@@ -23,7 +23,10 @@ func _on_presence_changed(presence: TaloPlayerPresence, online_changed: bool, cu
 func _on_identified(player: TaloPlayer) -> void:
 	_subscriptions = await Talo.channels.get_subscribed_channels()
 
-	var res := await Talo.channels.get_channels(0)
+	var options := Talo.channels.GetChannelsOptions.new()
+	options.page = 0
+	var res := await Talo.channels.get_channels(options)
+
 	assert(is_instance_valid(res))
 	var channels := res.channels
 
@@ -39,7 +42,11 @@ func _on_add_channel_button_pressed() -> void:
 	if %ChannelName.text.is_empty():
 		return
 
-	var channel := await Talo.channels.create(%ChannelName.text, true)
+	var options := Talo.channels.CreateChannelOptions.new()
+	options.name = %ChannelName.text
+	options.auto_cleanup = true
+
+	var channel := await Talo.channels.create(options)
 	if channel:
 		_subscriptions.append(channel)
 		_add_channel_label(channel.id, channel.name)
