@@ -10,7 +10,7 @@ signal message_received(channel: TaloChannel, player_alias: TaloPlayerAlias, mes
 ## Emitted when a player is joined to a channel.
 signal player_joined(channel: TaloChannel, player_alias: TaloPlayerAlias)
 ## Emitted when a player is left from a channel.
-signal player_left(channel: TaloChannel, player_alias: TaloPlayerAlias)
+signal player_left(channel: TaloChannel, player_alias: TaloPlayerAlias, reason: ChannelLeavingReason)
 ## Emitted when a channel's ownership transferred.
 signal channel_ownership_transferred(channel: TaloChannel, new_owner_player_alias: TaloPlayerAlias)
 ## Emitted when a channel is deleted.
@@ -29,7 +29,7 @@ func _on_message_received(res: String, data: Dictionary) -> void:
 		"v1.channels.player-joined":
 			player_joined.emit(TaloChannel.new(data.channel), TaloPlayerAlias.new(data.playerAlias))
 		"v1.channels.player-left":
-			player_left.emit(TaloChannel.new(data.channel), TaloPlayerAlias.new(data.playerAlias))
+			player_left.emit(TaloChannel.new(data.channel), TaloPlayerAlias.new(data.playerAlias), data.meta.reason)
 		"v1.channels.ownership-transferred":
 			player_left.emit(TaloChannel.new(data.channel), TaloPlayerAlias.new(data.newOwner))
 		"v1.channels.deleted":
@@ -243,3 +243,8 @@ class CreateChannelOptions:
 	var props: Dictionary = {}
 	var private: bool = false
 	var temporary_membership: bool = false
+
+enum ChannelLeavingReason {
+	DEFAULT,
+	TEMPORARY_MEMBERSHIP
+}
