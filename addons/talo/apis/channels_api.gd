@@ -10,7 +10,7 @@ signal message_received(channel: TaloChannel, player_alias: TaloPlayerAlias, mes
 ## Emitted when a player is joined to a channel.
 signal player_joined(channel: TaloChannel, player_alias: TaloPlayerAlias)
 ## Emitted when a player is left from a channel.
-signal player_left(channel: TaloChannel, player_alias: TaloPlayerAlias)
+signal player_left(channel: TaloChannel, player_alias: TaloPlayerAlias, reason: ChannelLeavingReason)
 ## Emitted when a channel's ownership transferred.
 signal channel_ownership_transferred(channel: TaloChannel, new_owner_player_alias: TaloPlayerAlias)
 ## Emitted when a channel is deleted.
@@ -29,7 +29,7 @@ func _on_message_received(res: String, data: Dictionary) -> void:
 		"v1.channels.player-joined":
 			player_joined.emit(TaloChannel.new(data.channel), TaloPlayerAlias.new(data.playerAlias))
 		"v1.channels.player-left":
-			player_left.emit(TaloChannel.new(data.channel), TaloPlayerAlias.new(data.playerAlias))
+			player_left.emit(TaloChannel.new(data.channel), TaloPlayerAlias.new(data.playerAlias), data.meta.reason)
 		"v1.channels.ownership-transferred":
 			player_left.emit(TaloChannel.new(data.channel), TaloPlayerAlias.new(data.newOwner))
 		"v1.channels.deleted":
@@ -98,18 +98,21 @@ func get_subscribed_channels(options: GetSubscribedChannelsOptions = GetSubscrib
 		_:
 			return []
 
-## Create a new channel. The player who creates this channel will automatically become the owner. If auto cleanup is enabled, the channel will be deleted when the owner or the last member leaves. Private channels can only be joined by players who have been invited to the channel.
-func create(name: String, auto_cleanup: bool = false, props: Dictionary = {}, private: bool = false) -> TaloChannel:
+## Create a new channel. The player who creates this channel will automatically become the owner. If auto cleanup is enabled, the channel will be deleted when the owner or the last member leaves. Private channels can only be joined by players who have been invited to the channel. Channels with temporary membership will remove players at the end of their session.
+func create(options: CreateChannelOptions = CreateChannelOptions.new()) -> TaloChannel:
 	if Talo.identity_check() != OK:
 		return
 
-	var props_to_send := props.keys().map(func (key: String): return { key = key, value = str(props[key]) })
+	var props_to_send := options.props \
+		.keys() \
+		.map(func (key: String): return { key = key, value = str(options.props[key]) })
 
 	var res := await client.make_request(HTTPClient.METHOD_POST, "", {
-		name = name,
-		autoCleanup = auto_cleanup,
+		name = options.name,
+		autoCleanup = options.auto_cleanup,
 		props = props_to_send,
-		private = private
+		private = options.private,
+		temporaryMembership = options.temporary_membership
 	})
 
 	match res.status:
@@ -233,3 +236,15 @@ class GetChannelsOptions:
 class GetSubscribedChannelsOptions:
 	var prop_key: String = ""
 	var prop_value: String = ""
+
+class CreateChannelOptions:
+	var name: String = ""
+	var auto_cleanup: bool = false
+	var props: Dictionary = {}
+	var private: bool = false
+	var temporary_membership: bool = false
+
+enum ChannelLeavingReason {
+	DEFAULT,
+	TEMPORARY_MEMBERSHIP
+}
