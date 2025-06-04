@@ -35,6 +35,7 @@ channels](https://trytalo.com/channels): Send real-time messages between players
 - 💾 Multi-scene saves: a small game showing how to persist save data across multiple scenes.
 - 💾 Stateful buttons: a simple demo showing how to save and load game state.
 - 💬 Chat: showing how to send messages between channels in a chat room.
+- 🤝 Channel storage: showing how to store data that can be accessed by other players using channels.
 
 ## Documentation
 
