@@ -39,7 +39,7 @@ func _build_entries() -> void:
 
 	var entries = Talo.leaderboards.get_cached_entries(leaderboard_internal_name)
 	if _filter != "All":
-		entries = entries.filter(func(entry: TaloLeaderboardEntry): return entry.get_prop("team", "") == _filter)
+		entries = entries.filter(func (entry: TaloLeaderboardEntry): return entry.get_prop("team", "") == _filter)
 
 	for entry in entries:
 		entry.position = entries.find(entry)
