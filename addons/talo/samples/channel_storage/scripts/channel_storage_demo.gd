@@ -30,7 +30,7 @@ func _ready() -> void:
 		}
 		demo_channel = await Talo.channels.create(create_options)
 
-	await Talo.players.identify("temp", Talo.players.generate_identifier())
+	await Talo.players.identify("temp_username", Talo.players.generate_identifier())
 	await Talo.channels.join(demo_channel.id)
 
 	if not prop_key.is_empty():
