@@ -12,6 +12,12 @@ var demo_channel: TaloChannel
 func _ready() -> void:
 	Talo.channels.channel_storage_props_updated.connect(_on_channel_props_updated)
 
+	Talo.channels.channel_storage_props_failed_to_set.connect(
+		func (channel: TaloChannel, failed_props: Array[TaloChannelStoragePropError]):
+			for prop in failed_props:
+				print("%s: %s" % [prop.key, prop.error])
+	)
+
 	prop_live_value_label.text = "Set a prop to see live updates"
 	prop_updated_label.text = "No prop key set"
 

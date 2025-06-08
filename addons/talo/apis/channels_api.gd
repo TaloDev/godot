@@ -20,7 +20,7 @@ signal channel_updated(channel: TaloChannel, changed_properties: Array[String])
 ## Emitted when channel storage props are updated or deleted.
 signal channel_storage_props_updated(channel: TaloChannel, upserted_props: Array[TaloChannelStorageProp], deleted_props: Array[TaloChannelStorageProp])
 ## Emitted when one or more storage props were not successfully set.
-signal channel_storage_props_failed_to_set(channel: TaloChannel, failed_props: Array[ChannelStoragePropError])
+signal channel_storage_props_failed_to_set(channel: TaloChannel, failed_props: Array[TaloChannelStoragePropError])
 
 var _storage_manager := TaloChannelStorageManager.new()
 
@@ -260,8 +260,10 @@ func set_storage_props(channel_id: int, props: Dictionary[String, Variant]) -> v
 	match res.status:
 		200:
 			if res.body.failedProps.size() > 0:
-				var failed_props: Array[ChannelStoragePropError] = []
-				failed_props.assign(res.body.failedProps.map(func (prop: Dictionary): return ChannelStoragePropError.new(prop.key, prop.error)))
+				var failed_props: Array[TaloChannelStoragePropError] = []
+				failed_props.assign(res.body.failedProps.map(
+					func (prop: Dictionary): return TaloChannelStoragePropError.new(prop.key, prop.error))
+				)
 				channel_storage_props_failed_to_set.emit(TaloChannel.new(res.body.channel), failed_props)
 
 class ChannelPage:
@@ -296,11 +298,3 @@ enum ChannelLeavingReason {
 	DEFAULT,
 	TEMPORARY_MEMBERSHIP
 }
-
-class ChannelStoragePropError:
-	var key: String
-	var error: String
-
-	func _init(key: String, error: String) -> void:
-		self.key = key
-		self.error = error
