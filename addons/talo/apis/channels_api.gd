@@ -17,10 +17,17 @@ signal channel_ownership_transferred(channel: TaloChannel, new_owner_player_alia
 signal channel_deleted(channel: TaloChannel)
 ## Emitted when a channel is updated.
 signal channel_updated(channel: TaloChannel, changed_properties: Array[String])
+## Emitted when channel storage props are updated or deleted.
+signal channel_storage_props_updated(channel: TaloChannel, upserted_props: Array[TaloChannelStorageProp], deleted_props: Array[TaloChannelStorageProp])
+## Emitted when one or more storage props were not successfully set.
+signal channel_storage_props_failed_to_set(channel: TaloChannel, failed_props: Array[ChannelStoragePropError])
+
+var _storage_manager := TaloChannelStorageManager.new()
 
 func _ready() -> void:
 	await Talo.init_completed
 	Talo.socket.message_received.connect(_on_message_received)
+	channel_storage_props_updated.connect(_storage_manager.on_props_updated)
 
 func _on_message_received(res: String, data: Dictionary) -> void:
 	match res:
@@ -31,13 +38,19 @@ func _on_message_received(res: String, data: Dictionary) -> void:
 		"v1.channels.player-left":
 			player_left.emit(TaloChannel.new(data.channel), TaloPlayerAlias.new(data.playerAlias), data.meta.reason)
 		"v1.channels.ownership-transferred":
-			player_left.emit(TaloChannel.new(data.channel), TaloPlayerAlias.new(data.newOwner))
+			channel_ownership_transferred.emit(TaloChannel.new(data.channel), TaloPlayerAlias.new(data.newOwner))
 		"v1.channels.deleted":
 			channel_deleted.emit(TaloChannel.new(data.channel))
 		"v1.channels.updated":
 			var changed_properties: Array[String] = []
 			changed_properties.assign(data.changedProperties)
 			channel_updated.emit(TaloChannel.new(data.channel), changed_properties)
+		"v1.channels.storage.updated":
+			var upserted_props: Array[TaloChannelStorageProp] = []
+			upserted_props.assign(data.upsertedProps.map(func (prop: Dictionary): return TaloChannelStorageProp.new(prop)))
+			var deleted_props: Array[TaloChannelStorageProp] = []
+			deleted_props.assign(data.deletedProps.map(func (prop: Dictionary): return TaloChannelStorageProp.new(prop)))
+			channel_storage_props_updated.emit(TaloChannel.new(data.channel), upserted_props, deleted_props)
 
 ## Get a channel by its ID.
 func find(channel_id: int) -> TaloChannel:
@@ -142,7 +155,7 @@ func leave(channel_id: int) -> void:
 	await client.make_request(HTTPClient.METHOD_POST, "/%s/leave" % channel_id)
 
 ## Update a channel. This will only work if the current player is the owner of the channel.
-func update(channel_id: int, name: String = "", new_owner_alias_id: int = -1, props: Dictionary = {}) -> TaloChannel:
+func update(channel_id: int, name: String = "", new_owner_alias_id: int = -1, props: Dictionary[String, Variant] = {}) -> TaloChannel:
 	if Talo.identity_check() != OK:
 		return
 
@@ -152,7 +165,7 @@ func update(channel_id: int, name: String = "", new_owner_alias_id: int = -1, pr
 	if new_owner_alias_id != -1:
 		data.ownerAliasId = new_owner_alias_id
 	if props.size() > 0:
-		data.props = props
+		data.props = TaloPropUtils.dictionary_to_array(props)
 
 	var res := await client.make_request(HTTPClient.METHOD_PUT, "/%s" % channel_id, data)
 
@@ -216,6 +229,41 @@ func get_members(channel_id: int) -> Array[TaloPlayerAlias]:
 		_:
 			return []
 
+func get_storage_prop(channel_id: int, prop_key: String, bust_cache: bool = false) -> TaloChannelStorageProp:
+	if Talo.identity_check() != OK:
+		return null
+
+	if not bust_cache:
+		return await _storage_manager.get_prop(channel_id, prop_key)
+
+	var res := await client.make_request(HTTPClient.METHOD_GET, "/%s/storage?propKey=%s" % [channel_id, prop_key])
+
+	match res.status:
+		200:
+			if not res.body.prop:
+				return null
+
+			var prop := TaloChannelStorageProp.new(res.body.prop)
+			_storage_manager.upsert_prop(channel_id, prop)
+			return prop
+		_:
+			return null
+
+func set_storage_props(channel_id: int, props: Dictionary[String, Variant]) -> void:
+	if Talo.identity_check() != OK:
+		return
+
+	var res := await client.make_request(HTTPClient.METHOD_PUT, "/%s/storage" % channel_id, {
+		props = TaloPropUtils.dictionary_to_array(props)
+	})
+
+	match res.status:
+		200:
+			if res.body.failedProps.size() > 0:
+				var failed_props: Array[ChannelStoragePropError] = []
+				failed_props.assign(res.body.failedProps.map(func (prop: Dictionary): return ChannelStoragePropError.new(prop.key, prop.error)))
+				channel_storage_props_failed_to_set.emit(TaloChannel.new(res.body.channel), failed_props)
+
 class ChannelPage:
 	var channels: Array[TaloChannel]
 	var count: int
@@ -240,7 +288,7 @@ class GetSubscribedChannelsOptions:
 class CreateChannelOptions:
 	var name: String = ""
 	var auto_cleanup: bool = false
-	var props: Dictionary = {}
+	var props: Dictionary[String, String] = {}
 	var private: bool = false
 	var temporary_membership: bool = false
 
@@ -248,3 +296,11 @@ enum ChannelLeavingReason {
 	DEFAULT,
 	TEMPORARY_MEMBERSHIP
 }
+
+class ChannelStoragePropError:
+	var key: String
+	var error: String
+
+	func _init(key: String, error: String) -> void:
+		self.key = key
+		self.error = error

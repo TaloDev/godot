@@ -1,7 +1,7 @@
 extends Button
 
 @export var event_name: String
-@export var event_props: Dictionary = { prop1 = "value1" }
+@export var event_props: Dictionary[String, String] = { prop1 = "value1" }
 @export var flush_immediately: bool
 
 func _on_pressed() -> void:
