@@ -15,6 +15,7 @@ func _ready() -> void:
 
 	prop_live_value_label.text = "Set a prop to see live updates"
 	prop_updated_label.text = "No prop key set"
+	await Talo.players.identify("temp_username", Talo.players.generate_identifier())
 
 	var get_options := Talo.channels.GetChannelsOptions.new()
 	get_options.prop_key = "channel-storage-demo"
@@ -30,7 +31,6 @@ func _ready() -> void:
 		}
 		demo_channel = await Talo.channels.create(create_options)
 
-	await Talo.players.identify("temp_username", Talo.players.generate_identifier())
 	await Talo.channels.join(demo_channel.id)
 
 	if not prop_key.is_empty():
