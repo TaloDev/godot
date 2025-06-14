@@ -32,20 +32,16 @@ func _has_errors(errors: Array) -> bool:
 	return errors.any((func (err: Array): return err.size() > 0))
 
 ## Track an event with optional props (key-value pairs) and add it to the queue of events ready to be sent to the backend. If the queue reaches the minimum size, it will be flushed.
-func track(name: String, props: Dictionary = {}) -> void:
+func track(name: String, props: Dictionary[String, Variant] = {}) -> void:
 	if Talo.identity_check() != OK:
 		return
 
 	var final_props := _build_meta_props()
-	final_props.append_array(
-		props
-			.keys()
-			.map(func (key: String): return TaloProp.new(key, str(props[key])))
-	)
+	final_props.append_array(TaloPropUtils.dictionary_to_prop_array(props))
 
 	_queue.push_back({
 		name = name,
-		props = final_props.map(func (prop: TaloProp): return prop.to_dictionary()),
+		props = TaloPropUtils.serialise_prop_array(final_props),
 		timestamp = TaloTimeUtils.get_timestamp_msec()
 	})
 

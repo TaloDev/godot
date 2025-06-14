@@ -1,0 +1,47 @@
+#!/bin/bash
+
+cd addons/talo
+
+PLUGIN_CFG="plugin.cfg"
+TALO_CLIENT_GD="talo_client.gd"
+
+if [ ! -f "$PLUGIN_CFG" ]; then
+    echo "Error: $PLUGIN_CFG not found."
+    exit 1
+fi
+
+if [ ! -f "$TALO_CLIENT_GD" ]; then
+    echo "Error: $TALO_CLIENT_GD not found."
+    exit 1
+fi
+
+# `grep -E '^version='` finds the line starting with 'version='.
+# `sed -E 's/version="([^"]+)"/\1/'` extracts the version string between quotes.
+NEW_VERSION=$(grep -E '^version=' "$PLUGIN_CFG" | sed -E 's/version="([^"]+)"/\1/')
+
+if [ -z "$NEW_VERSION" ]; then
+    echo "Error: could not extract version from $PLUGIN_CFG."
+    exit 1
+fi
+
+echo "Detected new version: $NEW_VERSION"
+
+# `sed -i.bak` edits the file in place and creates a backup with .bak extension.
+# the regex `(const TALO_CLIENT_VERSION = \")[^\"]+(\")` captures the parts before and after the version.
+# `\1$NEW_VERSION\2` reconstructs the line with the new version inserted.
+sed -i.bak -E "s/(const TALO_CLIENT_VERSION = \")[^\"]+(\")/\1$NEW_VERSION\2/" "$TALO_CLIENT_GD"
+
+if [ $? -ne 0 ]; then
+    echo "Error: failed to update version in $TALO_CLIENT_GD."
+    rm -f "$TALO_CLIENT_GD.bak" # Clean up the backup file if an error occurred
+    exit 1
+fi
+
+rm -f "$TALO_CLIENT_GD.bak"
+
+git add "$TALO_CLIENT_GD"
+
+echo "Successfully updated $TALO_CLIENT_GD with version $NEW_VERSION."
+echo "Pre-commit hook finished."
+
+exit 0

@@ -46,7 +46,7 @@ func get_entries(internal_name: String, options = GetEntriesOptions.new()) -> En
 	match res.status:
 		200:
 			var entries: Array[TaloLeaderboardEntry] = Array(res.body.entries.map(
-				func(data: Dictionary):
+				func (data: Dictionary):
 					var entry := TaloLeaderboardEntry.new(data)
 					_entries_manager.upsert_entry(internal_name, entry)
 
@@ -65,15 +65,13 @@ func get_entries_for_current_player(internal_name: String, options = GetEntriesO
 	return await get_entries(internal_name, options)
 
 ## Add an entry to a leaderboard. The props (key-value pairs) parameter is used to store additional data with the entry.
-func add_entry(internal_name: String, score: float, props: Dictionary = {}) -> AddEntryResult:
+func add_entry(internal_name: String, score: float, props: Dictionary[String, Variant] = {}) -> AddEntryResult:
 	if Talo.identity_check() != OK:
 		return null
 
-	var props_to_send := props.keys().map(func(key: String) -> Dictionary: return {key = key, value = str(props[key])})
-
 	var res := await client.make_request(HTTPClient.METHOD_POST, "/%s/entries" % internal_name, {
 		score = score,
-		props = props_to_send
+		props = TaloPropUtils.dictionary_to_array(props)
 	})
 
 	match res.status:

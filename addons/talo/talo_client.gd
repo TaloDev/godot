@@ -1,5 +1,8 @@
 class_name TaloClient extends Node
 
+# automatically updated with a pre-commit hook
+const TALO_CLIENT_VERSION = "0.29.0"
+
 var _base_url: String
 
 func _init(base_url: String):
@@ -84,7 +87,8 @@ func _build_headers(extra_headers: Array[String] = []) -> Array[String]:
 		"Content-Type: application/json",
 		"Accept: application/json",
 		"X-Talo-Dev-Build: %s" % ("1" if OS.is_debug_build() else "0"),
-		"X-Talo-Include-Dev-Data: %s" % ("1" if OS.is_debug_build() else "0")
+		"X-Talo-Include-Dev-Data: %s" % ("1" if OS.is_debug_build() else "0"),
+		"X-Talo-Client: godot:%s" % TALO_CLIENT_VERSION
 	]
 	
 	if Talo.current_alias:

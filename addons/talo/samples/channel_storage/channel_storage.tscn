@@ -1,0 +1,67 @@
+[gd_scene load_steps=2 format=3 uid="uid://cw6g72wpjl0g8"]
+
+[ext_resource type="Script" uid="uid://u7gy82vw7fn6" path="res://addons/talo/samples/channel_storage/scripts/channel_storage_demo.gd" id="1_1wlas"]
+
+[node name="ChannelStorage" type="Node2D"]
+script = ExtResource("1_1wlas")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1080.0
+offset_bottom = 720.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -450.0
+offset_top = -208.5
+offset_right = 450.0
+offset_bottom = 208.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 20
+
+[node name="PropKey" type="LineEdit" parent="Control/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Prop key"
+
+[node name="PropValue" type="LineEdit" parent="Control/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Prop value"
+
+[node name="PropLiveValueLabel" type="Label" parent="Control/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "%s live value is: %s"
+
+[node name="PropUpdatedLabel" type="Label" parent="Control/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "%s was last updated %s by %s"
+
+[node name="UpsertPropButton" type="Button" parent="Control/VBoxContainer"]
+layout_mode = 2
+text = "Upsert"
+
+[node name="DeletePropButton" type="Button" parent="Control/VBoxContainer"]
+layout_mode = 2
+text = "Delete"
+
+[node name="InfoLabel" type="Label" parent="Control/VBoxContainer"]
+custom_minimum_size = Vector2(900, 0)
+layout_mode = 2
+text = "
+How to use this demo: go to \"Debug > Customize Run Instances...\" and select \"Enable Multiple Instances\".
+
+Enter a prop key and value, then upsert it. You can also prefill the prop by setting the \"Prop Key\" exported variable on the root \"ChannelStorage\" node. You will see changes to your selected prop key in real time."
+autowrap_mode = 2
+
+[connection signal="pressed" from="Control/VBoxContainer/UpsertPropButton" to="." method="_on_upsert_prop_button_pressed"]
+[connection signal="pressed" from="Control/VBoxContainer/DeletePropButton" to="." method="_on_delete_prop_button_pressed"]
