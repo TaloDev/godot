@@ -23,4 +23,7 @@ static func dictionary_to_prop_array(props: Dictionary[String, Variant]) -> Arra
 	return ret
 
 static func serialise_prop_array(props: Array[TaloProp]) -> Array[Dictionary]:
-	return props.map(func (prop: TaloProp): return prop.to_dictionary())
+	var ret: Array[Dictionary] = []
+	var mapped_props = props.map(func (prop: TaloProp): return prop.to_dictionary())
+	ret.assign(mapped_props)
+	return ret
