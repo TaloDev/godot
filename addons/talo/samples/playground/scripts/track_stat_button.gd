@@ -12,4 +12,8 @@ func _on_pressed() -> void:
 		return
 
 	var res := await Talo.stats.track(stat_name)
+	if not is_instance_valid(res):
+		%ResponseLabel.text = "Failed to track %s" % stat_name
+		return
+
 	%ResponseLabel.text = "Stat incremented: %s, new value is %s" % [stat_name, res.value]
