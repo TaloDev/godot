@@ -33,7 +33,12 @@ func track(internal_name: String, change: float = 1.0) -> TaloPlayerStat:
 		return
 
 	var res := await client.make_request(HTTPClient.METHOD_PUT, "/%s" % internal_name, { change = change })
-	return TaloPlayerStat.new(res.body.playerStat)
+
+	match res.status:
+		200:
+			return TaloPlayerStat.new(res.body.playerStat)
+		_:
+			return null
 
 ## Get a paginated array of changes to a player stat value (and its global value) over time. History items can be filtered by when they were tracked.
 func get_history(internal_name: String, page: int = 0, start_date: String = "", end_date: String = "") -> StatHistoryPage:

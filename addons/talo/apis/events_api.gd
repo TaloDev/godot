@@ -32,7 +32,7 @@ func _has_errors(errors: Array) -> bool:
 	return errors.any((func (err: Array): return err.size() > 0))
 
 ## Track an event with optional props (key-value pairs) and add it to the queue of events ready to be sent to the backend. If the queue reaches the minimum size, it will be flushed.
-func track(name: String, props: Dictionary[String, Variant] = {}) -> void:
+func track(name: String, props: Dictionary[String, String] = {}) -> void:
 	if Talo.identity_check() != OK:
 		return
 

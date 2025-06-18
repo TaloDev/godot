@@ -13,7 +13,7 @@ static func dictionary_to_array(props: Dictionary[String, Variant]) -> Array[Dic
 	ret.assign(mapped_props)
 	return ret
 
-static func dictionary_to_prop_array(props: Dictionary[String, Variant]) -> Array[TaloProp]:
+static func dictionary_to_prop_array(props: Dictionary[String, String]) -> Array[TaloProp]:
 	var ret: Array[TaloProp] = []
 	var mapped_props := props.keys().map(
 		func (key: String):
