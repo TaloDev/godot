@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://bg71kho7jirad"]
+[gd_scene load_steps=31 format=3 uid="uid://bg71kho7jirad"]
 
 [ext_resource type="Script" uid="uid://caukqabpein8y" path="res://addons/talo/samples/playground/scripts/identify_button.gd" id="1_o53s3"]
 [ext_resource type="Script" uid="uid://b8sqvkjr862hc" path="res://addons/talo/samples/playground/scripts/identified_state.gd" id="1_qsdrr"]
@@ -24,6 +24,7 @@
 [ext_resource type="Script" uid="uid://0ii4skasvnun" path="res://addons/talo/samples/playground/scripts/get_stat_history_button.gd" id="12_dn76t"]
 [ext_resource type="Script" uid="uid://jlqywlqta7x2" path="res://addons/talo/samples/playground/scripts/randomise_save_button.gd" id="12_sshwt"]
 [ext_resource type="Script" uid="uid://e7o24oda43k5" path="res://addons/talo/samples/playground/scripts/load_save_button.gd" id="12_t2845"]
+[ext_resource type="Script" uid="uid://cduh1u0gtu1xf" path="res://addons/talo/samples/playground/scripts/get_player_stat_button.gd" id="13_814oc"]
 [ext_resource type="Script" uid="uid://d2xemrkvvbehq" path="res://addons/talo/samples/playground/scripts/get_global_history_button.gd" id="13_recjy"]
 [ext_resource type="Script" uid="uid://dujbepgthemyv" path="res://addons/talo/samples/playground/scripts/update_save_button.gd" id="14_lvmju"]
 [ext_resource type="Script" uid="uid://qrvgsfbol2pi" path="res://addons/talo/samples/playground/scripts/delete_save_button.gd" id="15_iq1bk"]
@@ -172,6 +173,11 @@ script = ExtResource("11_7ujln")
 layout_mode = 2
 text = "Get stat"
 script = ExtResource("12_05nmf")
+
+[node name="GetPlayerStatButton" type="Button" parent="UI/Content/APIs/Stats"]
+layout_mode = 2
+text = "Get player stat"
+script = ExtResource("13_814oc")
 
 [node name="TrackStatButton" type="Button" parent="UI/Content/APIs/Stats"]
 layout_mode = 2
@@ -516,6 +522,7 @@ script = ExtResource("2_ncaxm")
 [connection signal="pressed" from="UI/Content/APIs/Live config/GetConfigButton" to="UI/Content/APIs/Live config/GetConfigButton" method="_on_pressed"]
 [connection signal="pressed" from="UI/Content/APIs/Stats/GetAllStatsButton" to="UI/Content/APIs/Stats/GetAllStatsButton" method="_on_pressed"]
 [connection signal="pressed" from="UI/Content/APIs/Stats/GetStatButton" to="UI/Content/APIs/Stats/GetStatButton" method="_on_pressed"]
+[connection signal="pressed" from="UI/Content/APIs/Stats/GetPlayerStatButton" to="UI/Content/APIs/Stats/GetPlayerStatButton" method="_on_pressed"]
 [connection signal="pressed" from="UI/Content/APIs/Stats/TrackStatButton" to="UI/Content/APIs/Stats/TrackStatButton" method="_on_pressed"]
 [connection signal="pressed" from="UI/Content/APIs/Stats/GetStatHistoryButton" to="UI/Content/APIs/Stats/GetStatHistoryButton" method="_on_pressed"]
 [connection signal="pressed" from="UI/Content/APIs/Stats/GetGlobalHistoryButton" to="UI/Content/APIs/Stats/GetGlobalHistoryButton" method="_on_pressed"]
