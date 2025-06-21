@@ -4,7 +4,7 @@ extends Button
 
 func _on_pressed() -> void:
 	if stat_name.is_empty():
-		%ResponseLabel.text = "stat_name not set on GetStatHistoryButton"
+		%ResponseLabel.text = "stat_name not set on GetStatButton"
 		return
 
 	var res := await Talo.stats.find(stat_name)
