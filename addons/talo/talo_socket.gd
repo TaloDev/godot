@@ -55,8 +55,8 @@ func open_connection():
 		print_rich("[color=yellow]Warning: Failed connecting to the Talo Socket: %s[/color]" % err)
 
 func _on_message_received(res: String, data: Dictionary) -> void:
-	if Talo.settings.get_value("logging", "responses", false):
-		print_rich("[color=aqua]<-- %s %s[/color]" % [res, data])
+	if Talo.settings.get_value("logging", "responses", false) and Talo.is_debug_build():
+		print_rich("[color=aqua]--> WSS %s %s[/color]" % [res, data])
 
 	match res:
 		"v1.connected":
@@ -77,8 +77,8 @@ func set_socket_token(token: String) -> void:
 
 ## Send a message to the Talo Socket server. Not recommended for direct use. See the Talo docs for available requests and message structures.
 func send(req: String, data: Dictionary = {}) -> int:
-	if Talo.settings.get_value("logging", "requests", false):
-		print_rich("[color=orange]--> %s %s[/color]" % [req, data])
+	if Talo.settings.get_value("logging", "requests", false) and Talo.is_debug_build():
+		print_rich("[color=orange]<-- WSS %s %s[/color]" % [req, data])
 
 	return _socket.send_text(JSON.stringify({
 		req = req,

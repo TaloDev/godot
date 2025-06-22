@@ -142,3 +142,6 @@ func _check_session() -> void:
 	var session_token := player_auth.session_manager.get_token()
 	if not session_token.is_empty():
 		players.identify("talo", player_auth.session_manager.get_identifier())
+
+func is_debug_build() -> bool:
+	return OS.is_debug_build()
