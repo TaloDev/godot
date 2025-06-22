@@ -54,17 +54,22 @@ func make_request(method: HTTPClient.Method, url: String, body: Dictionary = {},
 				"Request failed: result %s, details: https://docs.godotengine.org/en/stable/classes/class_httprequest.html#enum-httprequest-result" % res.result
 		})
 
-	if Talo.settings.get_value("logging", "requests", false):
-		print_rich("[color=%s]--> %s %s %s %s[/color]" % [
+	if Talo.settings.get_value("logging", "requests", false) and Talo.is_debug_build():
+		print_rich("[color=%s]<-- %s %s%s %s[/color]" % [
 			"yellow" if continuity else "orange",
-			"[CONTINUITY]" if continuity else "",
 			_get_method_name(method),
 			full_url,
+			" [CONTINUITY]" if continuity else "",
 			request_body
 		])
 
-	if Talo.settings.get_value("logging", "responses", false):
-		print_rich("[color=green]<-- %s %s[/color]" % [status, json.data])
+	if Talo.settings.get_value("logging", "responses", false) and Talo.is_debug_build():
+		print_rich("[color=green]--> %s %s %s %s[/color]" % [
+			_get_method_name(method),
+			full_url,
+			"[%s]" % status,
+			json.data
+		])
 
 	var ret = {
 		status = status,
@@ -86,8 +91,8 @@ func _build_headers(extra_headers: Array[String] = []) -> Array[String]:
 		"Authorization: Bearer %s" % Talo.settings.get_value("", "access_key"),
 		"Content-Type: application/json",
 		"Accept: application/json",
-		"X-Talo-Dev-Build: %s" % ("1" if OS.is_debug_build() else "0"),
-		"X-Talo-Include-Dev-Data: %s" % ("1" if OS.is_debug_build() else "0"),
+		"X-Talo-Dev-Build: %s" % ("1" if Talo.is_debug_build() else "0"),
+		"X-Talo-Include-Dev-Data: %s" % ("1" if Talo.is_debug_build() else "0"),
 		"X-Talo-Client: godot:%s" % TALO_CLIENT_VERSION
 	]
 
