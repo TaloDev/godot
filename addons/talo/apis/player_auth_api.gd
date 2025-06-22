@@ -11,6 +11,12 @@ enum LoginResult {
 	VERIFICATION_REQUIRED,
 }
 
+## Emitted when the game loads and a valid session is found.
+signal session_found()
+
+## Emitted when the game loads and no valid session is found.
+signal session_not_found()
+
 var session_manager := TaloSessionManager.new()
 var last_error: TaloAuthError = null
 
