@@ -28,6 +28,14 @@ func _handle_error(res: Dictionary, ret: Variant = FAILED) -> Variant:
 
 	return ret
 
+## Identify the player if they have a valid session.
+func start_session() -> void:
+	if session_manager.check_for_session():
+		session_found.emit()
+		Talo.players.identify("talo", session_manager.get_identifier())
+	else:
+		session_not_found.emit()
+
 ## Register a new player account. If verification is enabled, a valid email will be required to verify all logins.
 func register(identifier: String, password: String, email: String = "", verification_enabled: bool = false) -> Error:
 	if verification_enabled and email.is_empty():
