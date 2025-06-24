@@ -30,6 +30,12 @@ func _build_response(http_request: HTTPRequest) -> TaloClientResponse:
 	return TaloClientResponse.new(res[0], res[1], res[2], res[3])
 
 func make_request(method: HTTPClient.Method, url: String, body: Dictionary = {}, headers: Array[String] = [], continuity: bool = false) -> Dictionary:
+	if not Talo.settings.access_key:
+		return {
+			status = 0,
+			body = {}
+		}
+
 	var continuity_timestamp := TaloTimeUtils.get_timestamp_msec()
 
 	var full_url := url if continuity else _build_full_url(url)
@@ -71,7 +77,7 @@ func make_request(method: HTTPClient.Method, url: String, body: Dictionary = {},
 			json.data
 		])
 
-	var ret = {
+	var ret := {
 		status = status,
 		body = json.data
 	}

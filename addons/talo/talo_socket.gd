@@ -48,6 +48,9 @@ func _get_socket_url(ticket: String) -> String:
 
 ## Open the connection to the Talo Socket server. A new ticket is created to authenticate the connection.
 func open_connection():
+	if not Talo.settings.access_key:
+		return
+
 	var ticket := await Talo.socket_tickets.create_ticket()
 
 	var err := _socket.connect_to_url(_get_socket_url(ticket))

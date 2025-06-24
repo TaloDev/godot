@@ -83,7 +83,7 @@ func _init() -> void:
 	else:
 		_config_file.load(SETTINGS_PATH)
 
-		if (access_key.is_empty()) && is_debug_build():
+		if access_key.is_empty() && is_debug_build():
 			print_rich("[color=yellow]Warning: Talo access_key in settings.cfg is empty[/color]")
 
 func is_debug_build() -> bool:
