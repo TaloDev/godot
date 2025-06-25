@@ -1,4 +1,7 @@
 class_name TaloSettings extends RefCounted
+## Talo's configuration options.
+##
+## @tutorial: https://docs.trytalo.com/docs/godot/settings-reference
 
 var _config_file: ConfigFile
 
@@ -47,7 +50,7 @@ var continuity_enabled: bool:
 	set(value):
 		_config_file.set_value("continuity", "enabled", value)
 
-# If enabled, network requests will be logged to the console
+# If enabled, requests to the Talo API will be logged to the console
 var log_requests: bool:
 	get:
 		return _config_file.get_value("logging", "requests", false) and is_debug_build()
