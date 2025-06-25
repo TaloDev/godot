@@ -27,13 +27,33 @@ func find(internal_name: String) -> TaloStat:
 		_:
 			return null
 
+## Get a player stat by the stat's internal name.
+func find_player_stat(internal_name: String) -> TaloPlayerStat:
+	if Talo.identity_check() != OK:
+		return null
+
+	var res := await client.make_request(HTTPClient.METHOD_GET, "/%s/player-stat" % internal_name)
+
+	match res.status:
+		200:
+			if res.body.playerStat == null:
+				return null
+			return TaloPlayerStat.new(res.body.playerStat)
+		_:
+			return null
+
 ## Track a stat for the current player. The stat will be updated by the change amount (default 1.0). Returns the updated player stat and global stat values.
 func track(internal_name: String, change: float = 1.0) -> TaloPlayerStat:
 	if Talo.identity_check() != OK:
 		return
 
 	var res := await client.make_request(HTTPClient.METHOD_PUT, "/%s" % internal_name, { change = change })
-	return TaloPlayerStat.new(res.body.playerStat)
+
+	match res.status:
+		200:
+			return TaloPlayerStat.new(res.body.playerStat)
+		_:
+			return null
 
 ## Get a paginated array of changes to a player stat value (and its global value) over time. History items can be filtered by when they were tracked.
 func get_history(internal_name: String, page: int = 0, start_date: String = "", end_date: String = "") -> StatHistoryPage:

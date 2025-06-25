@@ -10,7 +10,7 @@ static func handle_undecryptable_file(path: String, what: String) -> void:
 
 func _get_pass() -> String:
 	if OS.has_feature("web"):
-		return Talo.settings.get_value("", "access_key")
+		return Talo.settings.access_key
 
 	return OS.get_unique_id()
 

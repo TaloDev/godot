@@ -11,6 +11,12 @@ enum LoginResult {
 	VERIFICATION_REQUIRED,
 }
 
+## Emitted when Talo.player_auth.start_session() is called and a valid session is found.
+signal session_found()
+
+## Emitted when Talo.player_auth.start_session() is called and no valid session is found.
+signal session_not_found()
+
 var session_manager := TaloSessionManager.new()
 var last_error: TaloAuthError = null
 
@@ -21,6 +27,14 @@ func _handle_error(res: Dictionary, ret: Variant = FAILED) -> Variant:
 		last_error = TaloAuthError.new("API_ERROR")
 
 	return ret
+
+## Identify the player if they have a valid session.
+func start_session() -> void:
+	if session_manager.check_for_session():
+		session_found.emit()
+		Talo.players.identify("talo", session_manager.get_identifier())
+	else:
+		session_not_found.emit()
 
 ## Register a new player account. If verification is enabled, a valid email will be required to verify all logins.
 func register(identifier: String, password: String, email: String = "", verification_enabled: bool = false) -> Error:

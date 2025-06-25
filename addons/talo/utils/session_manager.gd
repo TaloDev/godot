@@ -44,3 +44,6 @@ func handle_session_created(alias: Dictionary, session_token: String, socket_tok
 	Talo.players.identified.emit(Talo.current_player)
 	_save_session(session_token)
 	Talo.socket.set_socket_token(socket_token)
+
+func check_for_session() -> bool:
+	return not get_token().is_empty()

@@ -25,16 +25,10 @@ func _ready() -> void:
 	start()
 
 func push_request(method: HTTPClient.Method, url: String, body: Dictionary, headers: Array[String], timestamp: int):
-	if not Talo.settings.get_value("continuity", "enabled", true):
-		return
-
-	if _EXCLUDED_ENDPOINTS.any(func (endpoint: String): return url.find(endpoint) != -1):
-		return
-
 	_requests.push_back({
 		method = method,
 		url = url,
-		body = body,
+		body = body.duplicate(true),
 		headers = headers.filter(func (h: String): return h.find("Authorization") == -1),
 		timestamp = timestamp
 	})
@@ -70,10 +64,29 @@ func _on_timeout():
 		var req := _requests.pop_front()
 		_write_requests()
 
-		var headers: Array[String] = ["Authorization: Bearer %s" % Talo.settings.get_value("", "access_key")]
+		var headers: Array[String] = ["Authorization: Bearer %s" % Talo.settings.access_key]
 		headers.append_array(req.headers)
 
 		if not req.headers.any(func (h: String): return h.find(_CONTINUITY_TIMESTAMP_HEADER) != -1):
 			headers.append("%s: %s" % [_CONTINUITY_TIMESTAMP_HEADER, req.timestamp])
 
 		await _client.make_request(req.method, req.url, req.body, headers, true)
+
+func request_can_be_replayed(method: HTTPClient.Method, url: String, res: TaloClient.TaloClientResponse) -> bool:
+	if not Talo.settings.continuity_enabled:
+		return false
+
+	if _EXCLUDED_ENDPOINTS.any(func (endpoint: String): return url.find(endpoint) != -1):
+		return false
+
+	var allowed_methods := [
+		HTTPClient.Method.METHOD_POST,
+		HTTPClient.Method.METHOD_PUT,
+		HTTPClient.Method.METHOD_PATCH,
+		HTTPClient.Method.METHOD_DELETE
+	]
+
+	if not allowed_methods.has(method):
+		return false
+
+	return res.result != HTTPRequest.RESULT_SUCCESS or res.response_code > 500

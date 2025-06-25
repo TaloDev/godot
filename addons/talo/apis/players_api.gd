@@ -8,8 +8,16 @@ class_name PlayersAPI extends TaloAPI
 ## Emitted when a player has been identified.
 signal identified(player: TaloPlayer)
 
+## Emitted when identification starts.
+signal identification_started()
+
+## Emitted when identification fails.
+signal identification_failed()
+
 ## Identify a player using a service (e.g. "username") and identifier (e.g. "bob").
 func identify(service: String, identifier: String) -> TaloPlayer:
+	identification_started.emit()
+
 	var res := await client.make_request(HTTPClient.METHOD_GET, "/identify?service=%s&identifier=%s" % [service, identifier])
 	match res.status:
 		200:
@@ -22,6 +30,8 @@ func identify(service: String, identifier: String) -> TaloPlayer:
 		_:
 			if not await Talo.is_offline():
 				Talo.player_auth.session_manager.clear_session()
+
+			identification_failed.emit()
 			return null
 
 ## Identify a player using a Steam ticket.
