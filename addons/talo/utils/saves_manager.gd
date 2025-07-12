@@ -102,11 +102,6 @@ func set_chosen_save(save: TaloGameSave, load_save: bool) -> void:
 	Talo.saves.save_chosen.emit(save)
 	_match_loadables(save)
 
-func unload_current_save():
-	_saved_objects.clear()
-	_loadables.clear()
-	set_chosen_save(null, false)
-
 func _match_loadables(save: TaloGameSave) -> void:
 	for object in save.content.get("objects", []):
 		var saved_object := TaloSavedObject.new(object)
@@ -117,6 +112,11 @@ func _match_loadables(save: TaloGameSave) -> void:
 			saved_object.register_loadable(matching_loadable)
 
 	Talo.saves.save_loading_completed.emit()
+
+func unload_current_save():
+	_saved_objects.clear()
+	_loadables.clear()
+	set_chosen_save(null, false)
 
 func register(loadable: TaloLoadable) -> void:
 	_loadables.set(loadable.id, loadable)
