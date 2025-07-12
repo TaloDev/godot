@@ -82,7 +82,7 @@ func send(req: String, data: Dictionary = {}) -> int:
 
 	return _socket.send_text(JSON.stringify({
 		req = req,
-		data = data 
+		data = data
 	}))
 
 func _get_json() -> String:
