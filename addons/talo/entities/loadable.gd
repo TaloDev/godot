@@ -26,7 +26,7 @@ func hydrate(data: Array[Dictionary]) -> void:
 
 	on_loaded(fields)
 
-## Register all the fields that should be saved and loaded.
+## Register all the fields that should be saved and loaded. This can remain unimplemented if you only care about the loadable's presence in the scene.
 func register_fields() -> void:
 	pass
 

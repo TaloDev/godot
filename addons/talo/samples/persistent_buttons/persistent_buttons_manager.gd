@@ -10,5 +10,5 @@ func _on_identified(_player: TaloPlayer) -> void:
 	var saves := await Talo.saves.get_saves()
 	if saves.is_empty():
 		await Talo.saves.create_save("save")
-
-	await Talo.saves.choose_save(Talo.saves.all.front())
+	else:
+		await Talo.saves.choose_save(Talo.saves.all.front())

@@ -100,7 +100,9 @@ func set_chosen_save(save: TaloGameSave, load_save: bool) -> void:
 		return
 
 	Talo.saves.save_chosen.emit(save)
+	_match_loadables(save)
 
+func _match_loadables(save: TaloGameSave) -> void:
 	for object in save.content.get("objects", []):
 		var saved_object := TaloSavedObject.new(object)
 		_saved_objects.set(object.id, saved_object)
@@ -111,17 +113,24 @@ func set_chosen_save(save: TaloGameSave, load_save: bool) -> void:
 
 	Talo.saves.save_loading_completed.emit()
 
+func unload_current_save():
+	_saved_objects.clear()
+	_loadables.clear()
+	set_chosen_save(null, false)
+
 func register(loadable: TaloLoadable) -> void:
 	_loadables.set(loadable.id, loadable)
 
-	# create a new saved object in case it isn't in the save file yet
-	var saved_object := TaloSavedObject.new({
-		id = loadable.id,
-		name = loadable.get_path(),
-		data = loadable.get_latest_data()
-	})
-	saved_object.register_loadable(loadable, false)
-	_saved_objects.set(loadable.id, saved_object)
+	if (_saved_objects.has(loadable.id)):
+		_saved_objects.get(loadable.id).register_loadable(loadable)
+	else:
+		var saved_object = TaloSavedObject.new({
+			id = loadable.id,
+			name = loadable.get_path(),
+			data = loadable.get_latest_data()
+		})
+		saved_object.register_loadable(loadable, false) # no need to hydrate, the data will match
+		_saved_objects.set(loadable.id, saved_object)
 
 func get_save_content() -> Dictionary:
 	return {

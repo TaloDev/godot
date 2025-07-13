@@ -1,7 +1,5 @@
 extends TaloLoadable
 
-@export var username = "generate_identifier"
-
 @onready var character_body: CharacterBody2D = get_parent()
 
 var stars := 0
@@ -14,25 +12,34 @@ var spawn_point := Vector2.ZERO
 	"blue_zone" = load("res://addons/talo/samples/multiscene_saves/scenes/blue_zone.tscn")
 }
 
+func _should_identify():
+	var alias_matches := Talo.current_alias and Talo.current_alias.identifier == id
+	return not alias_matches
+
 func _toggle_scene_visibility(visible: bool):
 	character_body.get_parent().visible = visible
 
-func _ready():
+func _prepare_player():
 	_toggle_scene_visibility(false)
 	%Stars.visible = false
 
-	Talo.players.identified.connect(_on_identified)
-	Talo.players.identify("username", username)
+	id = character_body.get_username()
+	if _should_identify():
+		Talo.players.identify("username", id)
 
-	id = username
+func _ready():
+	Talo.players.identified.connect(_on_identified)
+	Talo.saves.save_unloaded.connect(func (_save): change_scene("starting_zone"))
+	_prepare_player()
+
 	# register the loadable
 	super()
 
 func _on_identified(_player: TaloPlayer):
 	var saves := await Talo.saves.get_saves()
 	if saves.is_empty():
-		# the save is automatically chosen when its created
-		await Talo.saves.create_save("save")
+		# the save is automatically chosen after it is created
+		await Talo.saves.create_save("save (%s)" % Talo.current_alias.identifier)
 	else:
 		await Talo.saves.choose_save(Talo.saves.all.front())
 

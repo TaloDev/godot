@@ -11,6 +11,8 @@ signal saves_loaded
 signal save_chosen(save: TaloGameSave)
 ## Emitted when the chosen save has finished loading.
 signal save_loading_completed
+## Emitted when the current save is unloaded.
+signal save_unloaded(save: TaloGameSave)
 
 var _saves_manager := TaloSavesManager.new()
 
@@ -71,7 +73,10 @@ func choose_save(save: TaloGameSave, load_save = true) -> void:
 
 ## Unload the current save.
 func unload_current_save() -> void:
-	_saves_manager.set_chosen_save(null, false)
+	if current:
+		save_unloaded.emit(current)
+
+	_saves_manager.unload_current_save()
 
 ## Create a new save with the given name and content.
 func create_save(save_name: String, content: Dictionary = {}) -> TaloGameSave:
