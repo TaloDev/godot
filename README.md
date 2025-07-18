@@ -9,7 +9,7 @@ Talo is the easiest way to add leaderboards, player authentication, socket-based
 - [GitHub releases](https://github.com/TaloDev/godot/releases)
 - [itch.io](https://sleepystudios.itch.io/talo-godot)
 
-## Talo's key features
+## Features
 
 - 👥 [Player management](https://trytalo.com/players): Persist player data across sessions, create segments and handle authentication.
 - ⚡️ [Event tracking](https://trytalo.com/events): Track in-game player actions individually and globally.
