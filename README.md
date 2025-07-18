@@ -1,10 +1,6 @@
 # Talo Godot Plugin: self-hostable game dev tools
 
-Talo is the easiest way to add leaderboards, player authentication, socket-based multiplayer and more to your game.
-
-Using the Talo Dashboard, you can visualise and analyse your game data to help make better data-driven decisions.
-
-The Talo Godot Plugin is a lightweight wrapper around the [REST API](https://docs.trytalo.com/docs/http/authentication). It also includes handy utilities and a collection of ready-to-use samples.
+Talo's Godot plugin is the easiest way to add leaderboards, player authentication, socket-based multiplayer and more to your game. Using the Talo Dashboard, you can visualise and analyse your game data to help make better data-driven decisions.
 
 ## Get the plugin
 
