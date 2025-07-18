@@ -30,7 +30,7 @@ Talo is the easiest way to add leaderboards, player authentication, socket-based
 - 🕹️ **Leaderboards**: a basic leaderboard UI, allowing you to add and update entries.
 - 💾 **Multi-scene saves**: a small game showing how to persist save data across multiple scenes.
 - 💾 **Persistent buttons**: a simple demo showing how to save and load game state.
-- 💬 **Chat**: showing how to send messages between channels in a chat room.
+- 💬 **Chat**: showing how to send messages between players in a chat room using channels.
 - 🤝 **Channel storage**: showing how to store data that can be accessed by other players using channels.
 
 ## Links
