@@ -39,7 +39,7 @@ Talo is the easiest way to add leaderboards, player authentication, socket-based
 - [Godot plugin docs](https://docs.trytalo.com/docs/godot/install)
 - [Self-hosting examples](https://github.com/talodev/hosting)
 
-## Contributing to Talo
+## Contributing
 
 Thinking about contributing to Talo? We’d love the help! Head over to our [contribution guide](CONTRIBUTING.md) to learn how to set up the project, run tests, and start adding new features.
 
