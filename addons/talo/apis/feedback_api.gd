@@ -17,7 +17,7 @@ func get_categories() -> Array[TaloFeedbackCategory]:
 		_:
 			return []
 
-## Submit feedback for a specific category. Optionally, add props for extra context.
+## Submit feedback for a specific category. Optionally add props for extra context.
 func send(category_internal_name: String, comment: String, props: Dictionary[String, String] = {}) -> void:
 	if Talo.identity_check() != OK:
 		return
