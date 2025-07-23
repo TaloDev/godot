@@ -1,26 +1,22 @@
-# Talo Godot Plugin: self-hostable game dev tools
+# Talo Godot plugin: self-hostable game dev tools
 
-Talo is a collection of tools and APIs designed to make game development easier and to help you make better data-driven decisions.
-
-From essentials like player management, stats and leaderboards to advanced APIs for game saves, event tracking and player authentication.
-
-The Talo Godot Plugin is a lightweight wrapper around the [REST API](https://docs.trytalo.com/docs/http/authentication). It also includes handy utilities and a collection of ready-to-use samples.
+Talo is the easiest way to add leaderboards, player authentication, socket-based multiplayer and more to your game. Using the Talo Dashboard, you can visualise and analyse your game data to make data-driven decisions.
 
 ## Get the plugin
 
 - [Godot Asset Library](https://godotengine.org/asset-library/asset/2936)
+- [Godot Asset Store](https://store-beta.godotengine.org/asset/talo/talo-game-services/)
 - [GitHub releases](https://github.com/TaloDev/godot/releases)
 - [itch.io](https://sleepystudios.itch.io/talo-godot)
 
-## Talo's key features
+## Features
 
 - 👥 [Player management](https://trytalo.com/players): Persist player data across sessions, create segments and handle authentication.
 - ⚡️ [Event tracking](https://trytalo.com/events): Track in-game player actions individually and globally.
 - 🕹️ [Leaderboards](https://trytalo.com/leaderboards): Highly customisable leaderboards that can sync with Steamworks.
 - 💾 [Game saves](https://trytalo.com/saves): A simple and flexible way to load/save game state; also works offline.
 - 📊 [Game stats](https://trytalo.com/stats): Track global or per-player stats across your game; also syncs with Steamworks.
-- 💬 [Game 
-channels](https://trytalo.com/channels): Send real-time messages between players subscribed to specific topics.
+- 💬 [Game channels](https://trytalo.com/channels): Send real-time messages between players subscribed to specific topics.
 - ⚙️ [Live config](https://trytalo.com/live-config): Update game settings from the web with zero downtime.
 - 🔧 [Steamworks integration](https://trytalo.com/steamworks-integration): Hook into Steamworks for authentication and ownership checks.
 - 🗣️ [Game feedback](https://trytalo.com/feedback): Collect and manage feedback from your players.
@@ -29,26 +25,24 @@ channels](https://trytalo.com/channels): Send real-time messages between players
 
 ## Samples included with the plugin
 
-- 🔒 Authentication: a registration/login/account management flow, showing how to create player accounts and authenticate them.
-- 🎮 Playground: a text-based playground allowing you to test identifying, events, stats and leaderboards.
-- 🕹️ Leaderboards: a basic leaderboard UI, allowing you to add and update entries.
-- 💾 Multi-scene saves: a small game showing how to persist save data across multiple scenes.
-- 💾 Persistent buttons: a simple demo showing how to save and load game state.
-- 💬 Chat: showing how to send messages between channels in a chat room.
-- 🤝 Channel storage: showing how to store data that can be accessed by other players using channels.
+- 🔒 **Authentication**: a registration/login/account management flow, showing how to create player accounts and authenticate them.
+- 🎮 **Playground**: a text-based playground allowing you to test identifying, events, stats and leaderboards.
+- 🕹️ **Leaderboards**: a basic leaderboard UI, allowing you to add and update entries.
+- 💾 **Multi-scene saves**: a small game showing how to persist save data across multiple scenes.
+- 💾 **Persistent buttons**: a simple demo showing how to save and load game state.
+- 💬 **Chat**: showing how to send messages between players in a chat room using channels.
+- 🤝 **Channel storage**: showing how to store data that can be accessed by other players using channels.
 
-## Documentation
+## Links
 
-Check out the [full Talo docs](https://docs.trytalo.com) for setup instructions, detailed API docs/examples and configuration options.
+- [Website](https://trytalo.com)
+- [Godot plugin docs](https://docs.trytalo.com/docs/godot/install)
+- [Self-hosting examples](https://github.com/talodev/hosting)
 
-## Self-hosting your own Talo instance
+## Contributing
 
-Talo is designed to be easily self-hosted. Take a look at our [self-hosting guide](https://docs.trytalo.com/docs/selfhosting/overview) and the [GitHub repo](https://github.com/TaloDev/hosting) for examples on how to get started.
+Thinking about contributing to Talo? We’d love the help! Head over to our [contribution guide](CONTRIBUTING.md) to learn how to set up the project, run tests, and start adding new features.
 
-## Join our community
+## Join the community
 
 Have questions, want to share feedback or show off your game? [Join us on Discord](https://trytalo.com/discord) to connect with other developers and get help from the Talo team.
-
----
-
-Find all the details about Talo on our [website](https://trytalo.com)!
