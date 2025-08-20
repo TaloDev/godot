@@ -9,6 +9,9 @@ signal logout_success
 
 func _ready() -> void:
 	Talo.players.identified.connect(_on_player_identified)
+	# identified signal emitted before the connection were made
+	if Talo.current_player:
+		_on_player_identified(Talo.current_player)
 
 func _on_player_identified(player: TaloPlayer) -> void:
 	username.text = "What would you like to do,\n%s?" % Talo.current_alias.identifier

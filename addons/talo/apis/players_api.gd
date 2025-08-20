@@ -14,23 +14,38 @@ signal identification_started()
 ## Emitted when identification fails.
 signal identification_failed()
 
+func _handle_identify_success(alias: TaloPlayerAlias, socket_token: String = "") -> TaloPlayer:
+	if not await Talo.is_offline():
+		Talo.socket.reset_connection()
+
+	Talo.current_alias = alias
+
+	if not socket_token.is_empty():
+		Talo.socket.set_socket_token(socket_token)
+
+	identified.emit(Talo.current_player)
+	return Talo.current_player
+
 ## Identify a player using a service (e.g. "username") and identifier (e.g. "bob").
 func identify(service: String, identifier: String) -> TaloPlayer:
 	identification_started.emit()
 
+	if await Talo.is_offline():
+		var offline_alias := TaloPlayerAlias.get_offline_alias()
+		if offline_alias and TaloPlayerAlias.offline_alias_matches_request(offline_alias, service, identifier):
+			return await _handle_identify_success(offline_alias)
+		else:
+			identification_failed.emit()
+			return null
+
 	var res := await client.make_request(HTTPClient.METHOD_GET, "/identify?service=%s&identifier=%s" % [service, identifier])
 	match res.status:
 		200:
-			Talo.socket.reset_connection()
-
-			Talo.current_alias = TaloPlayerAlias.new(res.body.alias)
-			Talo.socket.set_socket_token(res.body.socketToken)
-			identified.emit(Talo.current_player)
-			return Talo.current_player
+			var alias_data = res.body.alias
+			TaloPlayerAlias.write_offline_alias(alias_data)
+			return await _handle_identify_success(TaloPlayerAlias.new(alias_data), res.body.socketToken)
 		_:
-			if not await Talo.is_offline():
-				Talo.player_auth.session_manager.clear_session()
-
+			Talo.player_auth.session_manager.clear_session()
 			identification_failed.emit()
 			return null
 

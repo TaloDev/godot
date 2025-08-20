@@ -15,6 +15,10 @@ func _ready() -> void:
 	_configure_signals()
 	_make_state_visible(login)
 
+	# identified signal emitted before the connection were made
+	if Talo.current_alias:
+		_make_state_visible(in_game)
+
 func _make_state_visible(state: Node2D):
 	for child in all_states.get_children():
 		child.visible = child == state
