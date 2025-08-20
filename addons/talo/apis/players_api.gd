@@ -32,7 +32,7 @@ func identify(service: String, identifier: String) -> TaloPlayer:
 
 	if await Talo.is_offline():
 		var offline_alias := TaloPlayerAlias.get_offline_alias()
-		if offline_alias and TaloPlayerAlias.offline_alias_matches_request(offline_alias, service, identifier):
+		if offline_alias and offline_alias.matches_request(service, identifier):
 			return await _handle_identify_success(offline_alias)
 		else:
 			identification_failed.emit()
@@ -41,9 +41,9 @@ func identify(service: String, identifier: String) -> TaloPlayer:
 	var res := await client.make_request(HTTPClient.METHOD_GET, "/identify?service=%s&identifier=%s" % [service, identifier])
 	match res.status:
 		200:
-			var alias_data = res.body.alias
-			TaloPlayerAlias.write_offline_alias(alias_data)
-			return await _handle_identify_success(TaloPlayerAlias.new(alias_data), res.body.socketToken)
+			var alias = TaloPlayerAlias.new(res.body.alias)
+			alias.write_offline_alias()
+			return await _handle_identify_success(alias, res.body.socketToken)
 		_:
 			Talo.player_auth.session_manager.clear_session()
 			identification_failed.emit()
@@ -65,6 +65,8 @@ func update() -> TaloPlayer:
 				Talo.current_alias.player.update_from_raw_data(res.body.player)
 			else:
 				Talo.current_alias.player = TaloPlayer.new(res.body.player)
+
+			Talo.current_alias.write_offline_alias()
 			return Talo.current_player
 		_:
 			return null

@@ -10,6 +10,8 @@ var last_seen_at: String
 var created_at: String
 var updated_at: String
 
+var _offline_data: Dictionary
+
 func _init(data: Dictionary):
 	id = data.id
 	service = data.service
@@ -18,12 +20,16 @@ func _init(data: Dictionary):
 	last_seen_at = data.lastSeenAt
 	created_at = data.createdAt
 	updated_at = data.updatedAt
+	_offline_data = data
 
-static func write_offline_alias(data: Dictionary):
+## Cache the offline alias data
+func write_offline_alias():
 	if Talo.settings.cache_player_on_identify:
+		_offline_data.player = player.get_offline_data()
 		var file := FileAccess.open_encrypted_with_pass(_OFFLINE_DATA_PATH, FileAccess.WRITE, Talo.crypto_manager.get_key())
-		file.store_line(JSON.stringify(data))
+		file.store_line(JSON.stringify(_offline_data))
 
+## Get the offline alias data
 static func get_offline_alias() -> TaloPlayerAlias:
 	if not Talo.settings.cache_player_on_identify or not FileAccess.file_exists(_OFFLINE_DATA_PATH):
 		return null
@@ -38,8 +44,9 @@ static func get_offline_alias() -> TaloPlayerAlias:
 
 	return TaloPlayerAlias.new(json.data)
 
-static func offline_alias_matches_request(offline_alias: TaloPlayerAlias, service: String, identifier: String) -> bool:
-	var match = offline_alias.service == service and offline_alias.identifier == identifier
+## Check if this alias matches the identify request
+func matches_request(service: String, identifier: String) -> bool:
+	var match = self.service == service and self.identifier == identifier
 	if not match:
 		var dir := DirAccess.open("user://")
 		dir.remove(_OFFLINE_DATA_PATH)
