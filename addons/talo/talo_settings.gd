@@ -79,7 +79,7 @@ var auto_start_session: bool:
 		_config_file.set_value("player_auth", "auto_start_session", value)
 
 # If enabled, Talo will automatically cache the player after a successful online identification
-# When an offline identification is attempted, Talo will use the cached player data
+# If the player is offline and tries to identify in later sessions, Talo will attempt to use the cached the player data
 var cache_player_on_identify: bool:
 	get:
 		return _config_file.get_value("", "cache_player_on_identify", true)
