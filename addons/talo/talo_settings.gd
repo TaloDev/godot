@@ -78,6 +78,14 @@ var auto_start_session: bool:
 	set(value):
 		_config_file.set_value("player_auth", "auto_start_session", value)
 
+# If enabled, Talo will automatically cache the player after a successful online identification
+# When an offline identification is attempted, Talo will use the cached player data
+var cache_player_on_identify: bool:
+	get:
+		return _config_file.get_value("", "cache_player_on_identify", true)
+	set(value):
+		_config_file.set_value("", "cache_player_on_identify", value)
+
 func _init() -> void:
 	_config_file = ConfigFile.new()
 
@@ -90,6 +98,7 @@ func _init() -> void:
 		handle_tree_quit = handle_tree_quit
 		continuity_enabled = continuity_enabled
 		auto_start_session = auto_start_session
+		cache_player_on_identify = cache_player_on_identify
 		save_config()
 
 		print_rich("[color=green]Talo settings.cfg created! Please close the game and fill in your access_key.[/color]")

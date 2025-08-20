@@ -20,11 +20,12 @@ func _init(data: Dictionary):
 	updated_at = data.updatedAt
 
 static func write_offline_alias(data: Dictionary):
-	var file := FileAccess.open_encrypted_with_pass(_OFFLINE_DATA_PATH, FileAccess.WRITE, Talo.crypto_manager.get_key())
-	file.store_line(JSON.stringify(data))
+	if Talo.settings.cache_player_on_identify:
+		var file := FileAccess.open_encrypted_with_pass(_OFFLINE_DATA_PATH, FileAccess.WRITE, Talo.crypto_manager.get_key())
+		file.store_line(JSON.stringify(data))
 
 static func get_offline_alias() -> TaloPlayerAlias:
-	if not FileAccess.file_exists(_OFFLINE_DATA_PATH):
+	if not Talo.settings.cache_player_on_identify or not FileAccess.file_exists(_OFFLINE_DATA_PATH):
 		return null
 
 	var content := FileAccess.open_encrypted_with_pass(_OFFLINE_DATA_PATH, FileAccess.READ, Talo.crypto_manager.get_key())
