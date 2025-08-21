@@ -28,19 +28,21 @@ func write_offline_alias():
 		_offline_data.player = player.get_offline_data()
 		var file := FileAccess.open_encrypted_with_pass(_OFFLINE_DATA_PATH, FileAccess.WRITE, Talo.crypto_manager.get_key())
 		file.store_line(JSON.stringify(_offline_data))
+		file.close()
 
 ## Get the offline alias data
 static func get_offline_alias() -> TaloPlayerAlias:
 	if not Talo.settings.cache_player_on_identify or not FileAccess.file_exists(_OFFLINE_DATA_PATH):
 		return null
 
-	var content := FileAccess.open_encrypted_with_pass(_OFFLINE_DATA_PATH, FileAccess.READ, Talo.crypto_manager.get_key())
-	if content == null:
+	var file := FileAccess.open_encrypted_with_pass(_OFFLINE_DATA_PATH, FileAccess.READ, Talo.crypto_manager.get_key())
+	if file == null:
 		TaloCryptoManager.handle_undecryptable_file(_OFFLINE_DATA_PATH, "offline alias file")
 		return null
 
 	var json := JSON.new()
-	json.parse(content.get_as_text())
+	json.parse(file.get_as_text())
+	file.close()
 
 	return TaloPlayerAlias.new(json.data)
 
