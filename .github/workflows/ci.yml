@@ -15,7 +15,7 @@ jobs:
         with:
           lfs: true
 
-      - uses: chickensoft-games/setup-godot@v1
+      - uses: chickensoft-games/setup-godot@v2
         name: Set up Godot
         with:
           version: 4.4.1
