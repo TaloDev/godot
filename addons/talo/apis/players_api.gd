@@ -14,23 +14,33 @@ signal identification_started()
 ## Emitted when identification fails.
 signal identification_failed()
 
+func _handle_identify_success(alias: TaloPlayerAlias, socket_token: String = "") -> TaloPlayer:
+	if not await Talo.is_offline():
+		Talo.socket.reset_connection()
+
+	Talo.current_alias = alias
+
+	if not socket_token.is_empty():
+		Talo.socket.set_socket_token(socket_token)
+
+	identified.emit(Talo.current_player)
+	return Talo.current_player
+
 ## Identify a player using a service (e.g. "username") and identifier (e.g. "bob").
 func identify(service: String, identifier: String) -> TaloPlayer:
 	identification_started.emit()
 
+	if await Talo.is_offline():
+		return await identify_offline(service, identifier)
+
 	var res := await client.make_request(HTTPClient.METHOD_GET, "/identify?service=%s&identifier=%s" % [service, identifier])
 	match res.status:
 		200:
-			Talo.socket.reset_connection()
-
-			Talo.current_alias = TaloPlayerAlias.new(res.body.alias)
-			Talo.socket.set_socket_token(res.body.socketToken)
-			identified.emit(Talo.current_player)
-			return Talo.current_player
+			var alias = TaloPlayerAlias.new(res.body.alias)
+			alias.write_offline_alias()
+			return await _handle_identify_success(alias, res.body.socketToken)
 		_:
-			if not await Talo.is_offline():
-				Talo.player_auth.session_manager.clear_session()
-
+			Talo.player_auth.session_manager.clear_session()
 			identification_failed.emit()
 			return null
 
@@ -50,6 +60,8 @@ func update() -> TaloPlayer:
 				Talo.current_alias.player.update_from_raw_data(res.body.player)
 			else:
 				Talo.current_alias.player = TaloPlayer.new(res.body.player)
+
+			Talo.current_alias.write_offline_alias()
 			return Talo.current_player
 		_:
 			return null
@@ -82,3 +94,12 @@ func generate_identifier() -> String:
 	var size := 12
 	var split_start := RandomNumberGenerator.new().randi_range(0, time_hash.length() - size)
 	return time_hash.substr(split_start, size)
+
+## Attempt to identify a player when they're offline
+func identify_offline(service: String, identifier: String) -> TaloPlayer:
+	var offline_alias := TaloPlayerAlias.get_offline_alias()
+	if offline_alias != null and offline_alias.matches_identify_request(service, identifier):
+		return await _handle_identify_success(offline_alias)
+	else:
+		identification_failed.emit()
+		return null

@@ -24,9 +24,12 @@ func _clear_username() -> void:
 func get_username() -> String:
 	if FileAccess.file_exists(_username_file_path):
 		var file := FileAccess.open(_username_file_path, FileAccess.READ)
-		return file.get_as_text()
+		var content := file.get_as_text()
+		file.close()
+		return content
 	else:
 		var file := FileAccess.open(_username_file_path, FileAccess.WRITE)
 		var username := Talo.players.generate_identifier()
 		file.store_string(username)
+		file.close()
 		return username
