@@ -31,12 +31,7 @@ func identify(service: String, identifier: String) -> TaloPlayer:
 	identification_started.emit()
 
 	if await Talo.is_offline():
-		var offline_alias := TaloPlayerAlias.get_offline_alias()
-		if offline_alias != null and offline_alias.matches_identify_request(service, identifier):
-			return await _handle_identify_success(offline_alias)
-		else:
-			identification_failed.emit()
-			return null
+		return await identify_offline(service, identifier)
 
 	var res := await client.make_request(HTTPClient.METHOD_GET, "/identify?service=%s&identifier=%s" % [service, identifier])
 	match res.status:
@@ -99,3 +94,12 @@ func generate_identifier() -> String:
 	var size := 12
 	var split_start := RandomNumberGenerator.new().randi_range(0, time_hash.length() - size)
 	return time_hash.substr(split_start, size)
+
+## Attempt to identify a player when they're offline
+func identify_offline(service: String, identifier: String) -> TaloPlayer:
+	var offline_alias := TaloPlayerAlias.get_offline_alias()
+	if offline_alias != null and offline_alias.matches_identify_request(service, identifier):
+		return await _handle_identify_success(offline_alias)
+	else:
+		identification_failed.emit()
+		return null
