@@ -48,8 +48,9 @@ jobs:
             - Performance considerations
             - Security concerns
             - Backwards compatibility
+            - Documentation: public methods (not prefixed with _) should generally have docstrings (##) and classes should contain the @tutorial tag
             
-            Be constructive and helpful in your feedback.
+            Be constructive and helpful in your feedback. Test coverage is currently not a priority.
 
           use_sticky_comment: true
           
