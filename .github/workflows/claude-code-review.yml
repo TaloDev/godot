@@ -53,6 +53,7 @@ jobs:
             For each of the points above, do not point out what works well, only what could be improved (if anything).
             Be constructive and helpful in your feedback but do not repeat yourself - only summarise potential issues.
             Test coverage is currently not a priority.
+            Prefix section headers with emojis and use dividers for better readability.
 
           use_sticky_comment: true
           
