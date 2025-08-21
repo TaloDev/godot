@@ -47,7 +47,7 @@ static func get_offline_alias() -> TaloPlayerAlias:
 	return TaloPlayerAlias.new(json.data)
 
 ## Check if this alias matches the identify request
-func matches_request(service: String, identifier: String) -> bool:
+func matches_identify_request(service: String, identifier: String) -> bool:
 	var match = self.service == service and self.identifier == identifier
 	if not match:
 		var dir := DirAccess.open("user://")
