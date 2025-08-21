@@ -32,7 +32,7 @@ func identify(service: String, identifier: String) -> TaloPlayer:
 
 	if await Talo.is_offline():
 		var offline_alias := TaloPlayerAlias.get_offline_alias()
-		if offline_alias and offline_alias.matches_identify_request(service, identifier):
+		if offline_alias != null and offline_alias.matches_identify_request(service, identifier):
 			return await _handle_identify_success(offline_alias)
 		else:
 			identification_failed.emit()
