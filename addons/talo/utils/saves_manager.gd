@@ -14,13 +14,14 @@ func read_offline_saves() -> Array[TaloGameSave]:
 	if not FileAccess.file_exists(_OFFLINE_SAVES_PATH):
 		return []
 
-	var content := FileAccess.open_encrypted_with_pass(_OFFLINE_SAVES_PATH, FileAccess.READ, Talo.crypto_manager.get_key())
-	if content == null:
+	var saves := FileAccess.open_encrypted_with_pass(_OFFLINE_SAVES_PATH, FileAccess.READ, Talo.crypto_manager.get_key())
+	if saves == null:
 		TaloCryptoManager.handle_undecryptable_file(_OFFLINE_SAVES_PATH, "offline saves file")
 		return []
 
 	var json := JSON.new()
-	json.parse(content.get_as_text())
+	json.parse(saves.get_as_text())
+	saves.close()
 
 	var res: Array[TaloGameSave] = []
 	res.assign(json.data.map(func (data: Dictionary): return TaloGameSave.new(data)))
@@ -30,6 +31,7 @@ func read_offline_saves() -> Array[TaloGameSave]:
 func write_offline_saves(offline_saves: Array[TaloGameSave]):
 	var saves := FileAccess.open_encrypted_with_pass(_OFFLINE_SAVES_PATH, FileAccess.WRITE, Talo.crypto_manager.get_key())
 	saves.store_line(JSON.stringify(offline_saves.map(func (save: TaloGameSave): return save.to_dictionary())))
+	saves.close()
 
 func sync_save(online_save: TaloGameSave, offline_save: TaloGameSave) -> TaloGameSave:
 	var online_updated_at := Time.get_unix_time_from_datetime_string(online_save.updated_at)

@@ -39,19 +39,21 @@ func _read_requests() -> Array:
 	if not FileAccess.file_exists(_CONTINUITY_PATH):
 		return []
 
-	var content := FileAccess.open_encrypted_with_pass(_CONTINUITY_PATH, FileAccess.READ, Talo.crypto_manager.get_key())
-	if content == null:
+	var file := FileAccess.open_encrypted_with_pass(_CONTINUITY_PATH, FileAccess.READ, Talo.crypto_manager.get_key())
+	if file == null:
 		TaloCryptoManager.handle_undecryptable_file(_CONTINUITY_PATH, "continuity file")
 		return []
 
 	var json := JSON.new()
-	json.parse(content.get_as_text())
+	json.parse(file.get_as_text())
+	file.close()
 
 	return json.data
 
 func _write_requests():
 	var file := FileAccess.open_encrypted_with_pass(_CONTINUITY_PATH, FileAccess.WRITE, Talo.crypto_manager.get_key())
 	file.store_line(JSON.stringify(_requests))
+	file.close()
 
 func _on_timeout():
 	if _requests.is_empty() or not (await Talo.health_check.ping()):
