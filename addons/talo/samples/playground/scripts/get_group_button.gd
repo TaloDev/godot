@@ -7,8 +7,8 @@ func _on_pressed() -> void:
 		%ResponseLabel.text = "group_id not set on GetGroupButton"
 		return
 
-	var group := await Talo.player_groups.get_group(group_id)
-	if group != null:
-		%ResponseLabel.text = "%s has %s player(s)" % [group.name, group.count]
+	var group_page := await Talo.player_groups.get_group(group_id)
+	if group_page.group != null:
+		%ResponseLabel.text = "%s has %s player(s)" % [group_page.group.name, group_page.count]
 	else:
 		%ResponseLabel.text = "Group %s not found" % group_id
