@@ -22,7 +22,7 @@ func get_cached_entries_for_current_player(internal_name: String) -> Array[TaloL
 	)
 
 ## Get a list of entries for a leaderboard. The options include "page", "alias_id", "include_archived", "prop_key" and "prop_value" for additional filtering.
-func get_entries(internal_name: String, options = GetEntriesOptions.new()) -> EntriesPage:
+func get_entries(internal_name: String, options := GetEntriesOptions.new()) -> EntriesPage:
 	var url := "/%s/entries?page=%s"
 	var url_data := [internal_name, options.page]
 
@@ -56,7 +56,7 @@ func get_entries(internal_name: String, options = GetEntriesOptions.new()) -> En
 		_:
 			return null
 
-func get_entries_for_current_player(internal_name: String, options = GetEntriesOptions.new()) -> EntriesPage:
+func get_entries_for_current_player(internal_name: String, options := GetEntriesOptions.new()) -> EntriesPage:
 	if Talo.identity_check() != OK:
 		return null
 
