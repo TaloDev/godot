@@ -1,9 +1,10 @@
-[gd_scene load_steps=32 format=3 uid="uid://bg71kho7jirad"]
+[gd_scene load_steps=33 format=3 uid="uid://bg71kho7jirad"]
 
 [ext_resource type="Script" uid="uid://caukqabpein8y" path="res://addons/talo/samples/playground/scripts/identify_button.gd" id="1_o53s3"]
 [ext_resource type="Script" uid="uid://b8sqvkjr862hc" path="res://addons/talo/samples/playground/scripts/identified_state.gd" id="1_qsdrr"]
 [ext_resource type="Script" uid="uid://kr81pchfe6rk" path="res://addons/talo/samples/playground/scripts/open_docs_button.gd" id="2_l4sgx"]
 [ext_resource type="Script" uid="uid://b4wo31voksqh3" path="res://addons/talo/samples/playground/scripts/identified_label.gd" id="2_ncaxm"]
+[ext_resource type="Script" uid="uid://cvpi0se3wk1oe" path="res://addons/talo/samples/playground/scripts/clear_identity_button.gd" id="3_6fyh0"]
 [ext_resource type="Script" uid="uid://di22ttcji0mvs" path="res://addons/talo/samples/playground/scripts/response_label.gd" id="3_bdtqj"]
 [ext_resource type="Script" uid="uid://14qix2gkp2a8" path="res://addons/talo/samples/playground/scripts/track_event_button.gd" id="4_vboi8"]
 [ext_resource type="Script" uid="uid://dlo0wibtjxpyb" path="res://addons/talo/samples/playground/scripts/get_config_button.gd" id="5_blrul"]
@@ -84,6 +85,11 @@ text = "Players"
 layout_mode = 2
 text = "Identify"
 script = ExtResource("1_o53s3")
+
+[node name="ClearIdentityButton" type="Button" parent="UI/Content/APIs/Players_Continuity/Players"]
+layout_mode = 2
+text = "Clear identity"
+script = ExtResource("3_6fyh0")
 
 [node name="SetPropButton" type="Button" parent="UI/Content/APIs/Players_Continuity/Players"]
 layout_mode = 2
@@ -526,6 +532,7 @@ text = "Player not identified"
 script = ExtResource("2_ncaxm")
 
 [connection signal="pressed" from="UI/Content/APIs/Players_Continuity/Players/IdentifyButton" to="UI/Content/APIs/Players_Continuity/Players/IdentifyButton" method="_on_pressed"]
+[connection signal="pressed" from="UI/Content/APIs/Players_Continuity/Players/ClearIdentityButton" to="UI/Content/APIs/Players_Continuity/Players/ClearIdentityButton" method="_on_pressed"]
 [connection signal="pressed" from="UI/Content/APIs/Players_Continuity/Players/SetPropButton" to="UI/Content/APIs/Players_Continuity/Players/SetPropButton" method="_on_pressed"]
 [connection signal="pressed" from="UI/Content/APIs/Players_Continuity/Players/DeletePropButton" to="UI/Content/APIs/Players_Continuity/Players/DeletePropButton" method="_on_pressed"]
 [connection signal="pressed" from="UI/Content/APIs/Players_Continuity/Players/GetGroupButton" to="UI/Content/APIs/Players_Continuity/Players/GetGroupButton" method="_on_pressed"]

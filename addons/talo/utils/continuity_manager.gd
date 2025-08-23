@@ -92,3 +92,7 @@ func request_can_be_replayed(method: HTTPClient.Method, url: String, res: TaloCl
 		return false
 
 	return res.result != HTTPRequest.RESULT_SUCCESS or res.response_code > 500
+
+func clear_requests() -> void:
+	_requests.clear()
+	_write_requests()
