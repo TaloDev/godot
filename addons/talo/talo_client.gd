@@ -38,6 +38,7 @@ func make_request(method: HTTPClient.Method, url: String, body: Dictionary = {},
 
 	var http_request := HTTPRequest.new()
 	add_child(http_request)
+	http_request.timeout = 5
 	http_request.name = "%s %s" % [_get_method_name(method), url]
 
 	http_request.request(full_url, all_headers, method, request_body)
