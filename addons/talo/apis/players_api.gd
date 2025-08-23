@@ -95,7 +95,7 @@ func generate_identifier() -> String:
 	var split_start := RandomNumberGenerator.new().randi_range(0, time_hash.length() - size)
 	return time_hash.substr(split_start, size)
 
-## Attempt to identify a player when they're offline
+## Attempt to identify a player when they're offline.
 func identify_offline(service: String, identifier: String) -> TaloPlayer:
 	var offline_alias := TaloPlayerAlias.get_offline_alias()
 	if offline_alias != null and offline_alias.matches_identify_request(service, identifier):
@@ -103,3 +103,26 @@ func identify_offline(service: String, identifier: String) -> TaloPlayer:
 	else:
 		identification_failed.emit()
 		return null
+
+## Search for players by IDs, prop values and alias identifiers.
+func search(query: String, page: int = 0) -> SearchPage:
+	var res := await client.make_request(HTTPClient.METHOD_GET, "/search?query=%s&page=%s" % [query, page])
+	match res.status:
+		200:
+			var players: Array[TaloPlayer] = []
+			players.assign(res.body.players.map(func (player: Dictionary): return TaloPlayer.new(player)))
+			return SearchPage.new(players, res.body.count, res.body.itemsPerPage, res.body.isLastPage)
+		_:
+			return null
+
+class SearchPage:
+	var players: Array[TaloPlayer]
+	var count: int
+	var items_per_page: int
+	var is_last_page: bool
+
+	func _init(players: Array[TaloPlayer], count: int, items_per_page: int, is_last_page: bool) -> void:
+		self.players = players
+		self.count = count
+		self.items_per_page = items_per_page
+		self.is_last_page = is_last_page
