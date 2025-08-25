@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://bg71kho7jirad"]
+[gd_scene load_steps=32 format=3 uid="uid://bg71kho7jirad"]
 
 [ext_resource type="Script" uid="uid://caukqabpein8y" path="res://addons/talo/samples/playground/scripts/identify_button.gd" id="1_o53s3"]
 [ext_resource type="Script" uid="uid://b8sqvkjr862hc" path="res://addons/talo/samples/playground/scripts/identified_state.gd" id="1_qsdrr"]
@@ -9,6 +9,7 @@
 [ext_resource type="Script" uid="uid://dlo0wibtjxpyb" path="res://addons/talo/samples/playground/scripts/get_config_button.gd" id="5_blrul"]
 [ext_resource type="Script" uid="uid://w0ed6vrr44bi" path="res://addons/talo/samples/playground/scripts/set_prop_button.gd" id="5_fpvjp"]
 [ext_resource type="Script" uid="uid://drtclyykhc1m4" path="res://addons/talo/samples/playground/scripts/track_stat_button.gd" id="5_wpnvd"]
+[ext_resource type="Script" uid="uid://c5fdfmihbeprl" path="res://addons/talo/samples/playground/scripts/search_players_button.gd" id="6_7bao7"]
 [ext_resource type="Script" uid="uid://bxtgq6w8bk1g2" path="res://addons/talo/samples/playground/scripts/delete_prop_button.gd" id="6_it1yx"]
 [ext_resource type="Script" uid="uid://b4f4adbsitp4" path="res://addons/talo/samples/playground/scripts/toggle_continuity_button.gd" id="6_pvyh2"]
 [ext_resource type="Script" uid="uid://cb1clc2ajdd08" path="res://addons/talo/samples/playground/scripts/get_group_button.gd" id="7_5qx11"]
@@ -98,6 +99,19 @@ script = ExtResource("6_it1yx")
 layout_mode = 2
 text = "Get group"
 script = ExtResource("7_5qx11")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/Content/APIs/Players_Continuity/Players"]
+layout_mode = 2
+
+[node name="SearchLineEdit" type="LineEdit" parent="UI/Content/APIs/Players_Continuity/Players/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+placeholder_text = "Search..."
+
+[node name="SearchPlayersButton" type="Button" parent="UI/Content/APIs/Players_Continuity/Players/VBoxContainer"]
+layout_mode = 2
+text = "Search players"
+script = ExtResource("6_7bao7")
 
 [node name="Continuity" type="VBoxContainer" parent="UI/Content/APIs/Players_Continuity"]
 layout_mode = 2
@@ -515,6 +529,7 @@ script = ExtResource("2_ncaxm")
 [connection signal="pressed" from="UI/Content/APIs/Players_Continuity/Players/SetPropButton" to="UI/Content/APIs/Players_Continuity/Players/SetPropButton" method="_on_pressed"]
 [connection signal="pressed" from="UI/Content/APIs/Players_Continuity/Players/DeletePropButton" to="UI/Content/APIs/Players_Continuity/Players/DeletePropButton" method="_on_pressed"]
 [connection signal="pressed" from="UI/Content/APIs/Players_Continuity/Players/GetGroupButton" to="UI/Content/APIs/Players_Continuity/Players/GetGroupButton" method="_on_pressed"]
+[connection signal="pressed" from="UI/Content/APIs/Players_Continuity/Players/VBoxContainer/SearchPlayersButton" to="UI/Content/APIs/Players_Continuity/Players/VBoxContainer/SearchPlayersButton" method="_on_pressed"]
 [connection signal="pressed" from="UI/Content/APIs/Players_Continuity/Continuity/ToggleContinuityButton" to="UI/Content/APIs/Players_Continuity/Continuity/ToggleContinuityButton" method="_on_pressed"]
 [connection signal="pressed" from="UI/Content/APIs/Players_Continuity/Continuity/ToggleNetworkButton" to="UI/Content/APIs/Players_Continuity/Continuity/ToggleNetworkButton" method="_on_pressed"]
 [connection signal="pressed" from="UI/Content/APIs/Events/TrackEventButton" to="UI/Content/APIs/Events/TrackEventButton" method="_on_pressed"]
