@@ -17,6 +17,7 @@ func _ready() -> void:
 
 func _on_message_received(res: String, data: Dictionary) -> void:
 	if res == "v1.live-config.updated":
+		Talo.live_config = TaloLiveConfig.new(data.config)
 		live_config_updated.emit(TaloLiveConfig.new(data.config))
 
 ## Get the live config for your game.
