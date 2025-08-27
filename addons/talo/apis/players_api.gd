@@ -14,6 +14,9 @@ signal identification_started()
 ## Emitted when identification fails.
 signal identification_failed()
 
+## Emitted after calling clear_identity().
+signal identity_cleared()
+
 func _handle_identify_success(alias: TaloPlayerAlias, socket_token: String = "") -> TaloPlayer:
 	if not await Talo.is_offline():
 		Talo.socket.reset_connection()
@@ -53,6 +56,9 @@ func identify_steam(ticket: String, identity: String = "") -> TaloPlayer:
 
 ## Flush and sync the player's current data with Talo.
 func update() -> TaloPlayer:
+	if Talo.identity_check() != OK:
+		return null
+
 	var res := await client.make_request(HTTPClient.METHOD_PATCH, "/%s" % Talo.current_player.id, { props = Talo.current_player.get_serialized_props() })
 	match res.status:
 		200:
@@ -114,6 +120,21 @@ func search(query: String, page: int = 0) -> SearchPage:
 			return SearchPage.new(players, res.body.count, res.body.itemsPerPage, res.body.isLastPage)
 		_:
 			return null
+
+## Clears the current player identity. Pending events and continuity requests will also be cleared.
+func clear_identity() -> void:
+	if Talo.identity_check() != OK:
+		return
+
+	Talo.current_alias.delete_offline_alias()
+
+	# clears the alias and resets the socket (doesn't require auth)
+	Talo.player_auth.session_manager.clear_session()
+
+	Talo.events.clear_queue()
+	Talo.continuity_manager.clear_requests()
+
+	identity_cleared.emit()
 
 class SearchPage:
 	var players: Array[TaloPlayer]
