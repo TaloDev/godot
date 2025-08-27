@@ -17,16 +17,33 @@ func _ready() -> void:
 
 func _on_message_received(res: String, data: Dictionary) -> void:
 	if res == "v1.live-config.updated":
-		Talo.live_config = TaloLiveConfig.new(data.config)
-		live_config_updated.emit(TaloLiveConfig.new(data.config))
+		_handle_new_live_config(TaloLiveConfig.new(data.config), true)
+
+func _handle_new_live_config(new_live_config: TaloLiveConfig, updated: bool = false) -> TaloLiveConfig:
+	Talo.live_config = new_live_config
+
+	if updated:
+		live_config_updated.emit(new_live_config)
+	else:
+		live_config_loaded.emit(new_live_config)
+
+	if not await Talo.is_offline():
+		new_live_config.write_offline_config()
+
+	return new_live_config
 
 ## Get the live config for your game.
 func get_live_config() -> TaloLiveConfig:
+	if await Talo.is_offline():
+		var offline_config := TaloLiveConfig.get_offline_config()
+		if offline_config != null:
+			return await _handle_new_live_config(offline_config)
+		else:
+			return null
+
 	var res := await client.make_request(HTTPClient.METHOD_GET, "/")
 	match res.status:
 		200:
-			Talo.live_config = TaloLiveConfig.new(res.body.config)
-			live_config_loaded.emit(Talo.live_config)
-			return Talo.live_config
+			return await _handle_new_live_config(TaloLiveConfig.new(res.body.config))
 		_:
 			return null
