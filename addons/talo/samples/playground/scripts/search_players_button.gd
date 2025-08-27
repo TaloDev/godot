@@ -14,4 +14,8 @@ func _on_pressed() -> void:
 		%ResponseLabel.text = "No players found"
 		return
 
-	%ResponseLabel.text = "Found %s results" % search_page.count
+	var identifiers = []
+	for player in search_page.players:
+		identifiers.append(player.get_alias().identifier)
+
+	%ResponseLabel.text = "Found %s results: %s" % [search_page.count, ", ".join(identifiers)]
