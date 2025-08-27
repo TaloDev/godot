@@ -256,7 +256,7 @@ func get_members(channel_id: int, options := GetMembersOptions.new()) -> Members
 		_:
 			return null
 
-# Get a storage prop for a channel. Optionally, ensure the latest version of the prop is returned.
+## Get a storage prop for a channel. Optionally, ensure the latest version of the prop is returned.
 func get_storage_prop(channel_id: int, prop_key: String, bust_cache: bool = false) -> TaloChannelStorageProp:
 	if Talo.identity_check() != OK:
 		return null
@@ -277,7 +277,7 @@ func get_storage_prop(channel_id: int, prop_key: String, bust_cache: bool = fals
 		_:
 			return null
 
-# Set storage props for a channel.
+## Set storage props for a channel.
 func set_storage_props(channel_id: int, props: Dictionary[String, Variant]) -> void:
 	if Talo.identity_check() != OK:
 		return
