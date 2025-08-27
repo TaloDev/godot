@@ -39,3 +39,11 @@ static func get_offline_config() -> TaloLiveConfig:
 	file.close()
 
 	return TaloLiveConfig.new(json.data)
+
+## Get the last modified time of the offline live config file.
+func get_offline_config_last_modified() -> int:
+	if not FileAccess.file_exists(_OFFLINE_DATA_PATH):
+		return 0
+
+	var modified_time := FileAccess.get_modified_time(_OFFLINE_DATA_PATH)
+	return modified_time if typeof(modified_time) == TYPE_INT else 0
