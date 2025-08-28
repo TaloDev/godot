@@ -14,6 +14,9 @@ signal identification_started()
 ## Emitted when identification fails.
 signal identification_failed()
 
+## Emitted after calling clear_identity().
+signal identity_cleared()
+
 func _handle_identify_success(alias: TaloPlayerAlias, socket_token: String = "") -> TaloPlayer:
 	if not await Talo.is_offline():
 		Talo.socket.reset_connection()
@@ -53,6 +56,9 @@ func identify_steam(ticket: String, identity: String = "") -> TaloPlayer:
 
 ## Flush and sync the player's current data with Talo.
 func update() -> TaloPlayer:
+	if Talo.identity_check() != OK:
+		return null
+
 	var res := await client.make_request(HTTPClient.METHOD_PATCH, "/%s" % Talo.current_player.id, { props = Talo.current_player.get_serialized_props() })
 	match res.status:
 		200:
@@ -95,7 +101,7 @@ func generate_identifier() -> String:
 	var split_start := RandomNumberGenerator.new().randi_range(0, time_hash.length() - size)
 	return time_hash.substr(split_start, size)
 
-## Attempt to identify a player when they're offline
+## Attempt to identify a player when they're offline.
 func identify_offline(service: String, identifier: String) -> TaloPlayer:
 	var offline_alias := TaloPlayerAlias.get_offline_alias()
 	if offline_alias != null and offline_alias.matches_identify_request(service, identifier):
@@ -103,3 +109,41 @@ func identify_offline(service: String, identifier: String) -> TaloPlayer:
 	else:
 		identification_failed.emit()
 		return null
+
+## Search for players by IDs, prop values and alias identifiers.
+func search(query: String, page: int = 0) -> SearchPage:
+	var res := await client.make_request(HTTPClient.METHOD_GET, "/search?query=%s&page=%s" % [query, page])
+	match res.status:
+		200:
+			var players: Array[TaloPlayer] = []
+			players.assign(res.body.players.map(func (player: Dictionary): return TaloPlayer.new(player)))
+			return SearchPage.new(players, res.body.count, res.body.itemsPerPage, res.body.isLastPage)
+		_:
+			return null
+
+## Clears the current player identity. Pending events and continuity requests will also be cleared.
+func clear_identity() -> void:
+	if Talo.identity_check() != OK:
+		return
+
+	Talo.current_alias.delete_offline_alias()
+
+	# clears the alias and resets the socket (doesn't require auth)
+	Talo.player_auth.session_manager.clear_session()
+
+	Talo.events.clear_queue()
+	Talo.continuity_manager.clear_requests()
+
+	identity_cleared.emit()
+
+class SearchPage:
+	var players: Array[TaloPlayer]
+	var count: int
+	var items_per_page: int
+	var is_last_page: bool
+
+	func _init(players: Array[TaloPlayer], count: int, items_per_page: int, is_last_page: bool) -> void:
+		self.players = players
+		self.count = count
+		self.items_per_page = items_per_page
+		self.is_last_page = is_last_page

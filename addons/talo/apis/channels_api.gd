@@ -215,20 +215,48 @@ func invite(channel_id: int, player_alias_id: int) -> void:
 			push_error("Player does not have permissions to invite players to channel %s." % channel_id)
 
 ## Get the members of a channel.
-func get_members(channel_id: int) -> Array[TaloPlayerAlias]:
+func get_members(channel_id: int, options := GetMembersOptions.new()) -> MembersPage:
 	if Talo.identity_check() != OK:
-		return []
+		return null
 
-	var res := await client.make_request(HTTPClient.METHOD_GET, "/%s/members" % channel_id)
+	var url := "/%s/members?page=%s"
+	var url_data := [channel_id, options.page]
+
+	if options.player_id != "":
+		url += "&playerId=%s"
+		url_data.append(options.player_id)
+
+	if options.alias_id != -1:
+		url += "&aliasId=%s"
+		url_data.append(options.alias_id)
+
+	if options.identifier != "":
+		url += "&identifier=%s"
+		url_data.append(options.identifier)
+
+	if options.prop_key != "":
+		url += "&propKey=%s"
+		url_data.append(options.prop_key)
+
+		if options.prop_value != "":
+			url += "&propValue=%s"
+			url_data.append(options.prop_value)
+
+	if options.player_group_id != "":
+		url += "&playerGroupId=%s"
+		url_data.append(options.player_group_id)
+
+	var res := await client.make_request(HTTPClient.METHOD_GET, url % url_data)
 
 	match res.status:
 		200:
 			var members: Array[TaloPlayerAlias] = []
 			members.assign(res.body.members.map(func (member: Dictionary): return TaloPlayerAlias.new(member)))
-			return members
+			return MembersPage.new(members, res.body.count, res.body.itemsPerPage, res.body.isLastPage)
 		_:
-			return []
+			return null
 
+## Get a storage prop for a channel. Optionally, ensure the latest version of the prop is returned.
 func get_storage_prop(channel_id: int, prop_key: String, bust_cache: bool = false) -> TaloChannelStorageProp:
 	if Talo.identity_check() != OK:
 		return null
@@ -249,6 +277,7 @@ func get_storage_prop(channel_id: int, prop_key: String, bust_cache: bool = fals
 		_:
 			return null
 
+## Set storage props for a channel.
 func set_storage_props(channel_id: int, props: Dictionary[String, Variant]) -> void:
 	if Talo.identity_check() != OK:
 		return
@@ -298,3 +327,24 @@ enum ChannelLeavingReason {
 	DEFAULT,
 	TEMPORARY_MEMBERSHIP
 }
+
+class GetMembersOptions:
+	var page: int = 0
+	var player_id: String = ""
+	var alias_id: int = -1
+	var identifier: String = ""
+	var prop_key: String = ""
+	var prop_value: String = ""
+	var player_group_id: String = ""
+
+class MembersPage:
+	var members: Array[TaloPlayerAlias]
+	var count: int
+	var items_per_page: int
+	var is_last_page: bool
+
+	func _init(members: Array[TaloPlayerAlias], count: int, items_per_page: int, is_last_page: bool) -> void:
+		self.members = members
+		self.count = count
+		self.items_per_page = items_per_page
+		self.is_last_page = is_last_page

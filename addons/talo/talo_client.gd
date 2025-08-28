@@ -1,7 +1,7 @@
 class_name TaloClient extends Node
 
 # automatically updated with a pre-commit hook
-const TALO_CLIENT_VERSION = "0.33.0"
+const TALO_CLIENT_VERSION = "0.34.0"
 
 var _base_url: String
 
@@ -38,6 +38,7 @@ func make_request(method: HTTPClient.Method, url: String, body: Dictionary = {},
 
 	var http_request := HTTPRequest.new()
 	add_child(http_request)
+	http_request.timeout = 5
 	http_request.name = "%s %s" % [_get_method_name(method), url]
 
 	http_request.request(full_url, all_headers, method, request_body)
@@ -136,7 +137,13 @@ class TaloClientResponse:
 	var body: PackedByteArray
 
 	func _init(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray) -> void:
-		self.result = result
-		self.response_code = response_code
+		# web builds return RESULT_NO_RESPONSE (6) + status 0 for HTTP 204 responses
+		if result == HTTPRequest.RESULT_NO_RESPONSE and response_code == 0:
+			self.result = HTTPRequest.RESULT_SUCCESS
+			self.response_code = HTTPClient.RESPONSE_NO_CONTENT
+		else:
+			self.result = result
+			self.response_code = response_code
+
 		self.headers = headers
 		self.body = body
