@@ -137,7 +137,13 @@ class TaloClientResponse:
 	var body: PackedByteArray
 
 	func _init(result: int, response_code: int, headers: PackedStringArray, body: PackedByteArray) -> void:
-		self.result = result
-		self.response_code = response_code
+		# web builds return RESULT_NO_RESPONSE (6) + status 0 for HTTP 204 responses
+		if result == HTTPRequest.RESULT_NO_RESPONSE and response_code == 0:
+			self.result = HTTPRequest.RESULT_SUCCESS
+			self.response_code = HTTPClient.RESPONSE_NO_CONTENT
+		else:
+			self.result = result
+			self.response_code = response_code
+
 		self.headers = headers
 		self.body = body
