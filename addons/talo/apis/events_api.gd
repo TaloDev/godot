@@ -63,7 +63,7 @@ func flush() -> void:
 
 	_lock_flushes = true
 	_events_to_flush.append_array(_queue)
-	clear_queue()
+	_queue.clear()
 
 	var res := await client.make_request(HTTPClient.METHOD_POST, "/", { events = _events_to_flush })
 
