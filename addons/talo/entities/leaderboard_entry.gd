@@ -26,7 +26,7 @@ func _init(data: Dictionary):
 
 	leaderboard_name = data.leaderboardName
 	leaderboard_internal_name = data.leaderboardInternalName
-	leaderboard_sort_mode = LeaderboardSortMode.ASC if data.leaderboardSortMode == 'asc' else LeaderboardSortMode.DESC
+	leaderboard_sort_mode = LeaderboardSortMode.ASC if data.leaderboardSortMode.to_lower() == 'asc' else LeaderboardSortMode.DESC
 
 	created_at = data.createdAt
 	updated_at = data.updatedAt
