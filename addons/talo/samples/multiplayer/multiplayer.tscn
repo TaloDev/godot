@@ -1,0 +1,31 @@
+[gd_scene load_steps=2 format=3 uid="uid://d2y2fyjhcu688"]
+
+[ext_resource type="Script" path="res://addons/talo/samples/multiplayer/scripts/multiplayer.gd" id="1_uay0c"]
+
+[node name="Multiplayer" type="Node2D"]
+script = ExtResource("1_uay0c")
+
+[node name="Identify" type="VBoxContainer" parent="."]
+unique_name_in_owner = true
+offset_left = 16.0
+offset_top = 16.0
+offset_right = 400.0
+offset_bottom = 74.0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Identify"]
+layout_mode = 2
+
+[node name="IdentifierLineEdit" type="LineEdit" parent="Identify/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "identifier..."
+
+[node name="IdentifyButton" type="Button" parent="Identify/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Identify"
+
+[node name="MessageLabel" type="Label" parent="Identify"]
+unique_name_in_owner = true
+layout_mode = 2
