@@ -112,7 +112,8 @@ func identify_offline(service: String, identifier: String) -> TaloPlayer:
 
 ## Search for players by IDs, prop values and alias identifiers.
 func search(query: String, page: int = 0) -> SearchPage:
-	var res := await client.make_request(HTTPClient.METHOD_GET, "/search?query=%s&page=%s" % [query, page])
+	var encoded_query := query.strip_edges().uri_encode()
+	var res := await client.make_request(HTTPClient.METHOD_GET, "/search?query=%s&page=%s" % [encoded_query, page])
 	match res.status:
 		200:
 			var players: Array[TaloPlayer] = []

@@ -41,11 +41,13 @@ theme_override_constants/separation = 24
 
 [node name="LeaderboardName" type="Label" parent="UI/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true
+custom_minimum_size = Vector2(1000, 0)
 layout_mode = 2
 size_flags_vertical = 0
 theme = ExtResource("2_aw1ey")
 text = "{leaderboard} entries"
 horizontal_alignment = 1
+autowrap_mode = 2
 
 [node name="InfoLabel" type="Label" parent="UI/MarginContainer/VBoxContainer"]
 unique_name_in_owner = true

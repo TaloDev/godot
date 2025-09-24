@@ -2,7 +2,7 @@ extends Node2D
 
 var entry_scene = preload("res://addons/talo/samples/leaderboards/entry.tscn")
 
-@export var leaderboard_internal_name: String
+@export var leaderboard_internal_name: String = ""
 @export var include_archived: bool
 
 @onready var leaderboard_name: Label = %LeaderboardName

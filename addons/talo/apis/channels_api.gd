@@ -277,6 +277,30 @@ func get_storage_prop(channel_id: int, prop_key: String, bust_cache: bool = fals
 		_:
 			return null
 
+## Get many storage props for a channel. Optionally, ensure the latest versions of the props are returned.
+func list_storage_props(channel_id: int, prop_keys: Array[String], bust_cache: bool = false) -> Array[TaloChannelStorageProp]:
+	if Talo.identity_check() != OK:
+		return []
+
+	if not bust_cache:
+		return await _storage_manager.list_props(channel_id, prop_keys)
+
+	var url := "/%s/storage/list" % channel_id
+	if prop_keys.size() > 0:
+		url += "?" + ("&".join(prop_keys.map(func(key): return "propKeys=%s" % key)))
+	var res := await client.make_request(HTTPClient.METHOD_GET, url)
+
+	match res.status:
+		200:
+			var props: Array[TaloChannelStorageProp] = []
+			for prop_data in res.body.props:
+				var prop := TaloChannelStorageProp.new(prop_data)
+				_storage_manager.upsert_prop(channel_id, prop)
+				props.append(prop)
+			return props
+		_:
+			return []
+
 ## Set storage props for a channel.
 func set_storage_props(channel_id: int, props: Dictionary[String, Variant]) -> void:
 	if Talo.identity_check() != OK:
