@@ -57,7 +57,8 @@ func get_saves() -> Array[TaloGameSave]:
 		match res.status:
 			200:
 				online_saves.append_array(res.body.saves.map(func (data: Dictionary): return TaloGameSave.new(data)))
-				saves.append_array(await _saves_manager.get_synced_saves(online_saves))
+				var synced_saves := await _saves_manager.get_synced_saves(online_saves)
+				saves.append_array(synced_saves)
 	
 	_saves_manager.all_saves = saves
 	saves_loaded.emit()
@@ -146,10 +147,8 @@ func delete_save(save: TaloGameSave) -> void:
 			return
 
 		var res := await client.make_request(HTTPClient.METHOD_DELETE, "/%s" % save.id)
-
-		match res.status:
-			_:
-				return
+		if res.status != 204:
+			return
 	
 	_saves_manager.all_saves = _saves_manager.all_saves.filter(func (s: TaloGameSave): s.id != save.id)
 	_saves_manager.delete_offline_save(save)
