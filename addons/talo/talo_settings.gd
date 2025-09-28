@@ -8,6 +8,9 @@ var _config_file: ConfigFile
 const SETTINGS_PATH := "res://addons/talo/settings.cfg"
 const DEFAULT_API_URL := "https://api.trytalo.com"
 
+const DEV_FEATURE_TAG := "talo_dev"
+const LIVE_FEATURE_TAG := "talo_live"
+
 ## Your Talo access key, allowing you to connect to the Talo API and access data based on its scopes
 var access_key: String:
 	get:
@@ -109,7 +112,11 @@ func _init() -> void:
 			print_rich("[color=yellow]Warning: Talo access_key in settings.cfg is empty[/color]")
 
 func is_debug_build() -> bool:
-	return OS.is_debug_build()
+	if OS.has_feature(LIVE_FEATURE_TAG):
+		return false
+	if OS.has_feature(DEV_FEATURE_TAG):
+		return true
+	return OS.is_debug_build() 
 
 ## Save the Talo settings to the config file
 func save_config():
