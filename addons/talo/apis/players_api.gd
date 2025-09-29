@@ -17,6 +17,10 @@ signal identification_failed()
 ## Emitted after calling clear_identity().
 signal identity_cleared()
 
+func _ready() -> void:
+	await Talo.init_completed
+	Talo.health_check.connection_restored.connect(_on_connection_restored)
+
 func _handle_identify_success(alias: TaloPlayerAlias, socket_token: String = "") -> TaloPlayer:
 	if not await Talo.is_offline():
 		Talo.socket.reset_connection()
@@ -136,6 +140,24 @@ func clear_identity() -> void:
 	Talo.continuity_manager.clear_requests()
 
 	identity_cleared.emit()
+
+## Create a new socket token. The Talo socket will use this token to identify the player.
+func create_socket_token() -> String:
+	if Talo.identity_check() != OK:
+		return ""
+	
+	var res := await client.make_request(HTTPClient.METHOD_POST, "/socket-token")
+	match res.status:
+		200:
+			return res.body.socketToken
+		_:
+			return ""
+
+func _on_connection_restored():
+	await Talo.socket.reset_connection()
+	if Talo.identity_check() == OK:
+		var socket_token := await create_socket_token()
+		Talo.socket.set_socket_token(socket_token)
 
 class SearchPage:
 	var players: Array[TaloPlayer]
