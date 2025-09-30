@@ -103,9 +103,6 @@ func close_connection(code: int = 1000, reason: String = "") -> void:
 
 ## Close the current connection and create a new connection to the Talo Socket server.
 func reset_connection() -> void:
-	if not _identified:
-		return
-
 	close_connection()
 	_reset_socket()
 	open_connection()
