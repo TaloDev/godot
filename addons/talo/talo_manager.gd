@@ -1,7 +1,7 @@
 extends Node
 
 ## Emitted when Talo has finished setting up internal dependencies.
-signal init_completed
+signal init_completed()
 
 ## Emitted when internet connectivity is lost.
 signal connection_lost()
