@@ -1,6 +1,13 @@
 extends Node
 
-signal init_completed
+## Emitted when Talo has finished setting up internal dependencies.
+signal init_completed()
+
+## Emitted when internet connectivity is lost.
+signal connection_lost()
+
+## Emitted when internet connectivity is restored.
+signal connection_restored()
 
 var current_alias: TaloPlayerAlias
 var current_player: TaloPlayer:
