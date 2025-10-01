@@ -108,7 +108,7 @@ func handle_post_response_healthcheck(url: String, res: TaloClient.TaloClientRes
 		# if offline mode is enabled, check if it should be disabled
 		if Talo.health_check.get_last_status() == Talo.health_check.HealthCheckStatus.FAILED:
 			await Talo.health_check.ping()
-	elif not success:
+	else:
 		# if offline mode isn't enabled, check if it should be enabled
 		if Talo.health_check.get_last_status() != Talo.health_check.HealthCheckStatus.FAILED:
 			await Talo.health_check.ping()
