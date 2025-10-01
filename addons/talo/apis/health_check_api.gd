@@ -11,12 +11,6 @@ enum HealthCheckStatus {
 	UNKNOWN
 }
 
-## Emitted when internet connectivity is lost.
-signal connection_lost()
-
-## Emitted when internet connectivity is restored.
-signal connection_restored()
-
 var _last_health_check_status := HealthCheckStatus.UNKNOWN
 
 ## Ping the Talo Health Check API to check if Talo can be reached.
@@ -28,11 +22,11 @@ func ping() -> bool:
 	if success:
 		_last_health_check_status = HealthCheckStatus.OK
 		if failed_last_health_check:
-			connection_restored.emit()
+			Talo.connection_restored.emit()
 	else:
 		_last_health_check_status = HealthCheckStatus.FAILED
 		if not failed_last_health_check:
-			connection_lost.emit()
+			Talo.connection_lost.emit()
 
 	return success
 
