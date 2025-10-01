@@ -18,8 +18,7 @@ signal identification_failed()
 signal identity_cleared()
 
 func _ready() -> void:
-	await Talo.init_completed
-	Talo.health_check.connection_restored.connect(_on_connection_restored)
+	Talo.connection_restored.connect(_on_connection_restored)
 
 func _handle_identify_success(alias: TaloPlayerAlias, socket_token: String = "") -> TaloPlayer:
 	if not await Talo.is_offline():
@@ -155,7 +154,7 @@ func create_socket_token() -> String:
 
 func _on_connection_restored():
 	await Talo.socket.reset_connection()
-	if Talo.identity_check() == OK:
+	if Talo.identity_check(false) == OK:
 		var socket_token := await create_socket_token()
 		Talo.socket.set_socket_token(socket_token)
 
