@@ -1,7 +1,7 @@
 class_name TaloClient extends Node
 
 # automatically updated with a pre-commit hook
-const TALO_CLIENT_VERSION = "0.35.0"
+const TALO_CLIENT_VERSION = "0.36.0"
 
 var _base_url: String
 
@@ -65,10 +65,10 @@ func make_request(method: HTTPClient.Method, url: String, body: Dictionary = {},
 		])
 
 	if Talo.settings.log_responses:
-		print_rich("[color=green]--> %s %s %s %s[/color]" % [
+		print_rich("[color=green]--> %s %s [%s] %s[/color]" % [
 			_get_method_name(method),
 			full_url,
-			"[%s]" % status,
+			status,
 			json.data
 		])
 
@@ -78,8 +78,9 @@ func make_request(method: HTTPClient.Method, url: String, body: Dictionary = {},
 	}
 
 	if ret.status >= 400:
-		handle_error(ret)
+		handle_error(method, url, ret)
 
+	await Talo.continuity_manager.handle_post_response_healthcheck(full_url, res)
 	if Talo.continuity_manager.request_can_be_replayed(method, full_url, res):
 		Talo.continuity_manager.push_request(method, full_url, body, all_headers, continuity_timestamp)
 
@@ -118,17 +119,17 @@ func _build_full_url(url: String) -> String:
 		url.replace(" ", "%20")
 	]
 
-func handle_error(res: Dictionary) -> void:
+func handle_error(method: HTTPClient.Method, url: String, res: Dictionary) -> void:
 	if res.body != null:
 		if res.body.has("message"):
-			push_error("%s: %s" % [res.status, res.body.message])
+			push_error("%s %s [%s]: %s" % [_get_method_name(method), url, res.status, res.body.message])
 			return
 
 		if res.body.has("errors"):
-			push_error("%s: %s" % [res.status, res.body.errors])
+			push_error("%s %s [%s]: %s" % [_get_method_name(method), url, res.status, res.body.errors])
 			return
 
-	push_error("%s: Unknown error" % res.status)
+	push_error("%s %s [%s]: Unknown error" % [_get_method_name(method), url, res.status])
 
 class TaloClientResponse:
 	var result: int

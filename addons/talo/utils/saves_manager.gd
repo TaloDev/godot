@@ -64,17 +64,19 @@ func get_synced_saves(online_saves: Array[TaloGameSave]) -> Array[TaloGameSave]:
 	var saves: Array[TaloGameSave] = []
 	var offline_saves: Array[TaloGameSave] = read_offline_saves()
 
-	if not offline_saves.is_empty():
+	if offline_saves.is_empty():
+		saves.append_array(online_saves)
+	else:
 		for online_save in online_saves:
 			var filtered := offline_saves.filter(func (save: TaloGameSave): return save.id == online_save.id)
 			if not filtered.is_empty():
-				var save := await sync_save(online_save, filtered.front())
-				saves.push_back(save)
+				var synced_save := await sync_save(online_save, filtered.front())
+				saves.push_back(synced_save)
 			else:
 				saves.push_back(online_save)
 
-		var synced_saves := await sync_offline_saves(offline_saves)
-		saves.append_array(synced_saves)
+		var synced_offline_saves := await sync_offline_saves(offline_saves)
+		saves.append_array(synced_offline_saves)
 
 	return saves
 

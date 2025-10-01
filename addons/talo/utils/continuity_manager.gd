@@ -6,8 +6,9 @@ var _requests: Array = []
 const _CONTINUITY_PATH = "user://tc.bin"
 const _CONTINUITY_TIMESTAMP_HEADER = "X-Talo-Continuity-Timestamp"
 
+const _HEALTH_CHECK_ENDPOINT := "/v1/health-check"
 const _EXCLUDED_ENDPOINTS: Array[String] = [
-	"/v1/health-check",
+	_HEALTH_CHECK_ENDPOINT,
 	"/v1/players/auth",
 	"/v1/players/identify",
 	"/v1/socket-tickets"
@@ -96,3 +97,18 @@ func request_can_be_replayed(method: HTTPClient.Method, url: String, res: TaloCl
 func clear_requests() -> void:
 	_requests.clear()
 	_write_requests()
+
+func handle_post_response_healthcheck(url: String, res: TaloClient.TaloClientResponse):
+	if url.find(_HEALTH_CHECK_ENDPOINT) != -1:
+		return
+
+	var success := true if res.result == HTTPRequest.RESULT_SUCCESS else false
+
+	if success:
+		# if offline mode is enabled, check if it should be disabled
+		if Talo.health_check.get_last_status() == Talo.health_check.HealthCheckStatus.FAILED:
+			await Talo.health_check.ping()
+	else:
+		# if offline mode isn't enabled, check if it should be enabled
+		if Talo.health_check.get_last_status() != Talo.health_check.HealthCheckStatus.FAILED:
+			await Talo.health_check.ping()
