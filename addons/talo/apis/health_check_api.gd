@@ -25,14 +25,14 @@ func ping() -> bool:
 	var success := true if res.status == 204 else false
 	var failed_last_health_check := true if _last_health_check_status == HealthCheckStatus.FAILED else false
 
-	if not success:
-		_last_health_check_status = HealthCheckStatus.FAILED
-		if not failed_last_health_check:
-			connection_lost.emit()
-	elif success:
+	if success:
 		_last_health_check_status = HealthCheckStatus.OK
 		if failed_last_health_check:
 			connection_restored.emit()
+	elif not success:
+		_last_health_check_status = HealthCheckStatus.FAILED
+		if not failed_last_health_check:
+			connection_lost.emit()
 
 	return success
 
