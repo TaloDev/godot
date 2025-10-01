@@ -29,7 +29,7 @@ func ping() -> bool:
 		_last_health_check_status = HealthCheckStatus.OK
 		if failed_last_health_check:
 			connection_restored.emit()
-	elif not success:
+	else:
 		_last_health_check_status = HealthCheckStatus.FAILED
 		if not failed_last_health_check:
 			connection_lost.emit()
