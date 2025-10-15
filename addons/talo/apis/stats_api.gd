@@ -109,6 +109,21 @@ func get_global_history(internal_name: String, page: int = 0, player_id = "", st
 		_:
 			return null
 
+## Get all the current player's stats.
+func list_player_stats() -> Array[TaloPlayerStat]:
+	if Talo.identity_check() != OK:
+		return []
+
+	var res := await client.make_request(HTTPClient.METHOD_GET, "/player-stats")
+
+	match res.status:
+		200:
+			var player_stats: Array[TaloPlayerStat] = []
+			player_stats.assign(res.body.playerStats.map(func (player_stat: Dictionary): return TaloPlayerStat.new(player_stat)))
+			return player_stats
+		_:
+			return []
+
 class StatHistoryPage:
 	var history: Array[TaloPlayerStatSnapshot]
 	var count: int
