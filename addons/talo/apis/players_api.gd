@@ -76,7 +76,7 @@ func update() -> TaloPlayer:
 			return null
 
 ## Merge all of the data from player_id2 into player_id1 and delete player_id2.
-func merge(player_id1: String, player_id2: String) -> TaloPlayer:
+func merge(player_id1: String, player_id2: String, options := MergeOptions.new()) -> TaloPlayer:
 	var res := await client.make_request(HTTPClient.METHOD_POST, "/merge", {
 		playerId1 = player_id1,
 		playerId2 = player_id2
@@ -84,7 +84,12 @@ func merge(player_id1: String, player_id2: String) -> TaloPlayer:
 
 	match res.status:
 		200:
-			return TaloPlayer.new(res.body.player)
+			var player := TaloPlayer.new(res.body.player)
+			if options.post_merge_identity_service != "":
+				var alias := player.get_alias(options.post_merge_identity_service)
+				if alias != null:
+					await identify(alias.service, alias.identifier)
+			return player
 		_:
 			return null
 
@@ -169,3 +174,6 @@ class SearchPage:
 		self.count = count
 		self.items_per_page = items_per_page
 		self.is_last_page = is_last_page
+
+class MergeOptions:
+	var post_merge_identity_service: String = ""
