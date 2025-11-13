@@ -41,8 +41,8 @@ func get_verification_alias_id() -> int:
 
 func handle_session_created(alias: Dictionary, session_token: String, socket_token: String) -> void:
 	Talo.current_alias = TaloPlayerAlias.new(alias)
-	Talo.players.identified.emit(Talo.current_player)
 	_save_session(session_token)
+	Talo.players.identified.emit(Talo.current_player)
 	Talo.socket.set_socket_token(socket_token)
 
 func check_for_session() -> bool:

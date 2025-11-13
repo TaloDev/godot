@@ -140,8 +140,8 @@ func update_save(save: TaloGameSave, new_name: String = "") -> TaloGameSave:
 	_saves_manager.replace_save(save)
 	return save
 
-## Delete the given save.
-func delete_save(save: TaloGameSave) -> void:
+## Delete the given save. Optionally unload the save if it is the current save (default false).
+func delete_save(save: TaloGameSave, unload_if_current_save: bool = false) -> void:
 	if not await Talo.is_offline():
 		if Talo.identity_check() != OK:
 			return
@@ -153,7 +153,8 @@ func delete_save(save: TaloGameSave) -> void:
 	_saves_manager.all_saves = _saves_manager.all_saves.filter(func (s: TaloGameSave): s.id != save.id)
 	_saves_manager.delete_offline_save(save)
 
-	if _saves_manager.current_save and _saves_manager.current_save.id == save.id:
+	var is_current_save := _saves_manager.current_save and _saves_manager.current_save.id == save.id
+	if unload_if_current_save and is_current_save:
 		unload_current_save()
 
 ## Get the format version for the current save.
