@@ -21,6 +21,7 @@ func _ready() -> void:
 
 	_requests = _read_requests()
 
+	ignore_time_scale = true
 	wait_time = 10
 	connect("timeout", _on_timeout)
 	start()
