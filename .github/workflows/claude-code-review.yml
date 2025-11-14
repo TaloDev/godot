@@ -57,6 +57,20 @@ jobs:
             - Focus only on changes introduced in this PR, not pre-existing code issues
             - Test coverage is currently not a priority
 
+            **Review Workflow (Follow these steps):**
+            1. **Analysis Phase**: Review the PR diff and identify potential issues
+            2. **Validation Phase**: For each issue you find, verify it by:
+               - Re-reading the relevant code carefully
+               - Checking if your suggested fix is actually different from the current code
+               - Confirming the issue violates documented standards (check CLAUDE.md)
+               - Ensuring your criticism is actionable and specific
+            3. **Draft Phase**: Write your review only after validating all issues
+            4. **Quality Check**: Before posting, remove any issues where:
+               - Your "before" and "after" code snippets are identical
+               - You're uncertain or use phrases like "appears", "might", "should verify"
+               - The issue is theoretical without clear impact
+            5. **Post Phase**: Only post the review if you have concrete, validated feedback
+
             **Edge Case Policy:**
             Only flag edge cases that meet ALL of these criteria:
             1. Realistic: Could happen in normal usage or common error scenarios
