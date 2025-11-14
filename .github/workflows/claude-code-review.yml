@@ -78,20 +78,11 @@ jobs:
             - If the PR looks good overall, say so clearly rather than forcing criticism
 
             **Comment Management (IMPORTANT):**
-            Before posting your review, clean up old comments from the claude user:
-            
-            1. Find and delete existing comments:
+            Post your review using this command, which will edit your last comment if one exists, or create a new one:
             ```bash
-              gh pr view ${{ github.event.pull_request.number }} --repo ${{ github.repository }} --json comments --jq '.comments[] | select(.author.login == "claude") | .id' | while read -r comment_id; do
-                gh api -X DELETE /repos/${{ github.repository }}/issues/comments/$comment_id 2>/dev/null || true
-              done
-            ```
-            
-            2. Then post your new review:
-            ```bash
-              gh pr comment ${{ github.event.pull_request.number }} --repo ${{ github.repository }} --body "<review>"
+              gh pr comment ${{ github.event.pull_request.number }} --repo ${{ github.repository }} --edit-last --create-if-none --body "<review>"
             ```
 
             Ensure proper escaping of quotes and special characters in the comment body. Use single quotes around the body and escape any single quotes inside with '\''
           claude_args: |
-            --allowedTools "Bash(cat:*),Bash(gh pr:*),Bash(gh api:*)"
+            --allowedTools "Read,Bash(gh pr:*),Grep,Glob"
