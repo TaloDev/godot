@@ -37,6 +37,8 @@ jobs:
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           prompt: |
+            You are reviewing PR #${{ github.event.pull_request.number }} in the repository ${{ github.repository }}.
+
             Review this pull request and provide feedback focused only on improvements needed (not what works well):
 
             **Categories to check:**
@@ -47,9 +49,10 @@ jobs:
             5. Backwards compatibility
 
             **Process:**
-            - First, get the PR number from the GitHub context (it should be available in the environment)
-            - View the PR diff using `gh pr view $PR_NUMBER --json files,title,body,additions,deletions` and related commands
-            - Review the CLAUDE.md file in the repository root for style conventions
+            - The PR number is: ${{ github.event.pull_request.number }}
+            - View the PR using: `gh pr view ${{ github.event.pull_request.number }} --repo ${{ github.repository }}`
+            - Read CLAUDE.md to understand best practices
+            - View the PR diff using: `gh pr diff ${{ github.event.pull_request.number }} --repo ${{ github.repository }}`
             - If an issue spans multiple categories, list it only once in the most relevant section
             - Prioritize by severity: 🔴 Critical → 🟡 Major → 🔵 Minor
             - Focus only on changes introduced in this PR, not pre-existing code issues
@@ -75,28 +78,21 @@ jobs:
             - If the PR looks good overall, say so clearly rather than forcing criticism
 
             **Comment Management (IMPORTANT):**
-            Before posting your review, clean up old comments:
+            Before posting your review, clean up old comments from the claude user:
             
-            1. Find all existing comments from the claude user:
+            1. Find and delete existing comments:
             ```bash
-              gh pr view $PR_NUMBER --json comments --jq '.comments[] | select(.author.login == "claude") | .id' > /tmp/comment_ids.txt
+              gh pr view ${{ github.event.pull_request.number }} --repo ${{ github.repository }} --json comments --jq '.comments[] | select(.author.login == "claude") | .id' | while read -r comment_id; do
+                gh api -X DELETE /repos/${{ github.repository }}/issues/comments/$comment_id 2>/dev/null || true
+              done
             ```
             
-            2. Delete each old comment:
+            2. Then post your new review:
             ```bash
-              while read -r comment_id; do
-                gh api -X DELETE "/repos/$(gh repo view --json nameWithOwner -q .nameWithOwner)/issues/comments/$comment_id" || true
-              done < /tmp/comment_ids.txt
-            ```
-            
-            3. Then post your new review:
-            ```bash
-              gh pr comment $PR_NUMBER --body "<review>"
+              gh pr comment ${{ github.event.pull_request.number }} --repo ${{ github.repository }} --body "<review>"
             ```
 
-            Ensure proper escaping of quotes and special characters in the comment body.
+            Ensure proper escaping of quotes and special characters in the comment body. Use single quotes around the body and escape any single quotes inside with '\''
 
             Note: Test coverage is currently not a priority. Focus on the code quality and correctness of changes in this PR.
-          # See https://github.com/anthropics/claude-code-action/blob/main/docs/usage.md
-          # or https://docs.anthropic.com/en/docs/claude-code/sdk#command-line for available options
-          claude_args: '--model sonnet --allowed-tools "Bash(gh *)"'
+          claude_args: '--model sonnet --allowed-tools "Bash(cat *),Bash(test *),Bash([ *),Bash(gh pr view *),Bash(gh pr diff *),Bash(gh pr comment *),Bash(gh api *)"'
