@@ -86,7 +86,7 @@ func _load_apis() -> void:
 	saves = preload("res://addons/talo/apis/saves_api.gd").new("/v1/game-saves")
 	feedback = preload("res://addons/talo/apis/feedback_api.gd").new("/v1/game-feedback")
 	player_auth = preload("res://addons/talo/apis/player_auth_api.gd").new("/v1/players/auth")
-	health_check = preload("res://addons/talo/apis/health_check_api.gd").new("/v1/health-check")
+	health_check = preload("res://addons/talo/apis/health_check_api.gd").new("/public/health")
 	player_groups = preload("res://addons/talo/apis/player_groups_api.gd").new("/v1/player-groups")
 	channels = preload("res://addons/talo/apis/channels_api.gd").new("/v1/game-channels")
 	socket_tickets = preload("res://addons/talo/apis/socket_tickets_api.gd").new("/v1/socket-tickets")

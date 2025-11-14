@@ -6,7 +6,7 @@ var _requests: Array = []
 const _CONTINUITY_PATH = "user://tc.bin"
 const _CONTINUITY_TIMESTAMP_HEADER = "X-Talo-Continuity-Timestamp"
 
-const _HEALTH_CHECK_ENDPOINT := "/v1/health-check"
+const _HEALTH_CHECK_ENDPOINT := "/public/health"
 const _EXCLUDED_ENDPOINTS: Array[String] = [
 	_HEALTH_CHECK_ENDPOINT,
 	"/v1/players/auth",
@@ -22,9 +22,8 @@ func _ready() -> void:
 	_requests = _read_requests()
 
 	ignore_time_scale = true
-	wait_time = 10
-	connect("timeout", _on_timeout)
-	start()
+	timeout.connect(_on_timeout)
+	start(10)
 
 func push_request(method: HTTPClient.Method, url: String, body: Dictionary, headers: Array[String], timestamp: int):
 	_requests.push_back({
