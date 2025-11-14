@@ -94,4 +94,4 @@ jobs:
 
             Ensure proper escaping of quotes and special characters in the comment body. Use single quotes around the body and escape any single quotes inside with '\''
           claude_args: |
-            '--allowedTools "Bash(cat *),Bash(gh pr *),Bash(gh api *)"'
+            --allowedTools "Bash(cat *),Bash(gh pr *),Bash(gh api *)"
