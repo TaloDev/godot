@@ -89,6 +89,13 @@ var cache_player_on_identify: bool:
 	set(value):
 		_config_file.set_value("", "cache_player_on_identify", value)
 
+## Number of seconds to wait before sending debounced requests (e.g. player updates, save updates and health checks)
+var debounce_timer_seconds: float:
+	get:
+		return _config_file.get_value("", "debounce_timer_seconds", 1.0)
+	set(value):
+		_config_file.set_value("", "debounce_timer_seconds", value)
+
 func _init() -> void:
 	_config_file = ConfigFile.new()
 
@@ -102,6 +109,7 @@ func _init() -> void:
 		continuity_enabled = continuity_enabled
 		auto_start_session = auto_start_session
 		cache_player_on_identify = cache_player_on_identify
+		debounce_timer_seconds = debounce_timer_seconds
 		save_config()
 
 		print_rich("[color=green]Talo settings.cfg created! Please close the game and fill in your access_key.[/color]")
