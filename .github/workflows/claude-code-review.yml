@@ -55,6 +55,7 @@ jobs:
             - If an issue spans multiple categories, list it only once in the most relevant section
             - Prioritize by severity: 🔴 Critical → 🟡 Major → 🔵 Minor
             - Focus only on changes introduced in this PR, not pre-existing code issues
+            - Test coverage is currently not a priority
 
             **Edge Case Policy:**
             Only flag edge cases that meet ALL of these criteria:
@@ -92,6 +93,5 @@ jobs:
             ```
 
             Ensure proper escaping of quotes and special characters in the comment body. Use single quotes around the body and escape any single quotes inside with '\''
-
-            Note: Test coverage is currently not a priority. Focus on the code quality and correctness of changes in this PR.
-          claude_args: '--model sonnet --allowed-tools "Bash(cat *),Bash(test *),Bash([ *),Bash(gh pr view *),Bash(gh pr diff *),Bash(gh pr comment *),Bash(gh api *)"'
+          claude_args: |
+            '--allowedTools "Bash(cat *),Bash(gh pr *),Bash(gh api *)"'
