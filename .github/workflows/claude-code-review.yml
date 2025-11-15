@@ -42,7 +42,7 @@ jobs:
 
             **Categories to check:**
             1. Code quality and best practices
-            2. Potential bugs or issues  
+            2. Potential bugs or issues
             3. Performance considerations
             4. Security concerns
             5. Backwards compatibility
