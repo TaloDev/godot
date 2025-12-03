@@ -4,6 +4,7 @@ class_name TaloPlayer extends TaloEntityWithProps
 var id: String
 var aliases: Array[TaloPlayerAlias] = []
 var groups: Array[TaloPlayerGroupStub] = []
+var presence: TaloPlayerPresence
 
 var _offline_data: Dictionary
 
@@ -18,6 +19,12 @@ func update_from_raw_data(data: Dictionary) -> void:
 	id = data.id
 	if data.has("aliases"):
 		aliases.assign(data.aliases.map(func (alias): return TaloPlayerAlias.new(alias)))
+
+	var presence_data = data.get("presence")
+	if presence_data == null:
+		presence_data = TaloPlayerPresence.get_default_data()
+	presence = TaloPlayerPresence.new(presence_data)
+
 	groups.assign(data.groups.map(func (group): return TaloPlayerGroupStub.new(group.id, group.name)))
 
 	_offline_data = data

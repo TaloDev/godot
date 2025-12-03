@@ -29,6 +29,7 @@ var player_groups: PlayerGroupsAPI
 var channels: ChannelsAPI
 var socket_tickets: SocketTicketsAPI
 var player_presence: PlayerPresenceAPI
+var player_relationships: PlayerRelationshipsAPI
 
 var live_config: TaloLiveConfig
 
@@ -91,6 +92,7 @@ func _load_apis() -> void:
 	channels = preload("res://addons/talo/apis/channels_api.gd").new("/v1/game-channels")
 	socket_tickets = preload("res://addons/talo/apis/socket_tickets_api.gd").new("/v1/socket-tickets")
 	player_presence = preload("res://addons/talo/apis/player_presence_api.gd").new("/v1/players/presence")
+	player_relationships = preload("res://addons/talo/apis/player_relationships_api.gd").new()
 
 	for api in [
 		players,
@@ -105,7 +107,8 @@ func _load_apis() -> void:
 		player_groups,
 		channels,
 		socket_tickets,
-		player_presence
+		player_presence,
+		player_relationships
 	]:
 		add_child(api)
 
