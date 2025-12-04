@@ -84,8 +84,8 @@ func add_entry(internal_name: String, score: float, props: Dictionary[String, Va
 
 	match res.status:
 		200:
-			var entry = TaloLeaderboardEntry.new(res.body.entry)
-			_entries_manager.upsert_entry(internal_name, entry)
+			var entry := TaloLeaderboardEntry.new(res.body.entry)
+			_entries_manager.upsert_entry(internal_name, entry, true)
 
 			return AddEntryResult.new(entry, res.body.updated)
 		_:
