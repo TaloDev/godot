@@ -115,8 +115,7 @@ Key utilities in [addons/talo/utils/](addons/talo/utils/):
 ## GDScript Standards
 
 This project enforces **strict type safety** - all warnings are set to error level (2) in [project.godot](project.godot:24-58):
-- All variables must be explicitly typed (`var foo: String`)
-- No inferred declarations
+- All variables must be explicitly typed (`var foo: String`) unless their type can be easily inferred using the `:=` operator
 - No unsafe property/method access
 - No unsafe casts or call arguments
 - All function parameters and return types must be typed
