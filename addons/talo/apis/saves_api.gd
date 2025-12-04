@@ -28,6 +28,15 @@ var latest: TaloGameSave:
 var current: TaloGameSave:
 	get: return _saves_manager.current_save
 
+var _update_timer := TaloDebounceTimer.new(_handle_update_timer_timeout)
+
+func _ready() -> void:
+	add_child(_update_timer)
+
+func _handle_update_timer_timeout() -> void:
+	if _saves_manager.current_save:
+		await update_save(_saves_manager.current_save)
+
 ## Sync an offline save with an online save using the offline save data.
 func replace_save_with_offline_save(offline_save: TaloGameSave) -> TaloGameSave:
 	var res := await client.make_request(HTTPClient.METHOD_PATCH, "/%s" % offline_save.id, {
@@ -112,25 +121,37 @@ func register(loadable: TaloLoadable) -> void:
 
 ## Update the currently loaded save using the current state of the game and with the given name.
 func update_current_save(new_name: String = "") -> TaloGameSave:
-	return await update_save(_saves_manager.current_save, new_name)
+	if not _saves_manager.current_save:
+		return null
+
+	# if the save is being renamed, sync it immediately
+	if not new_name.is_empty():
+		return await update_save(_saves_manager.current_save, new_name)
+	# else, update the save locally and queue it for syncing
+	else:
+		_update_timer.debounce()
+		_saves_manager.current_save.content = _saves_manager.get_save_content()
+		return _saves_manager.current_save
 
 ## Update the given save using the current state of the game and with the given name.
 func update_save(save: TaloGameSave, new_name: String = "") -> TaloGameSave:
+	var is_offline := await Talo.is_offline()
+	var can_update_save := Talo.identity_check() == OK or is_offline
+	if not can_update_save:
+		return null
+
+	if not new_name.is_empty():
+		save.name = new_name
+
 	var content := _saves_manager.get_save_content()
+	save.content = content
 
-	if await Talo.is_offline():
-		if not new_name.is_empty():
-			save.name = new_name
-
-		save.content = content
+	if is_offline:
 		save.updated_at = TaloTimeUtils.get_current_datetime_string()
 	else:
-		if Talo.identity_check() != OK:
-			return
-
 		var res := await client.make_request(HTTPClient.METHOD_PATCH, "/%s" % save.id, {
-			name=save.name if new_name.is_empty() else new_name,
-			content=content
+			name=save.name,
+			content=save.content
 		})
 
 		match res.status:

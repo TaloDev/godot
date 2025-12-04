@@ -17,8 +17,14 @@ signal identification_failed()
 ## Emitted after calling clear_identity().
 signal identity_cleared()
 
+var _update_timer := TaloDebounceTimer.new(_handle_update_timer_timeout)
+
 func _ready() -> void:
 	Talo.connection_restored.connect(_on_connection_restored)
+	add_child(_update_timer)
+
+func _handle_update_timer_timeout() -> void:
+	await Talo.players.update()
 
 func _handle_identify_success(alias: TaloPlayerAlias, socket_token: String = "") -> TaloPlayer:
 	if not await Talo.is_offline():
@@ -56,6 +62,10 @@ func identify_steam(ticket: String, identity: String = "") -> TaloPlayer:
 		return await identify("steam", ticket)
 	else:
 		return await identify("steam", "%s:%s" % [identity, ticket])
+
+## Queue a debounced update to the current player. The timer will reset every time this method is called.
+func debounce_update() -> void:
+	_update_timer.debounce()
 
 ## Flush and sync the player's current data with Talo.
 func update() -> TaloPlayer:

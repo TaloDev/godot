@@ -26,13 +26,13 @@ func update_from_raw_data(data: Dictionary) -> void:
 func set_prop(key: String, value: String, update: bool = true) -> void:
 	super.set_prop(key, value)
 	if update:
-		await Talo.players.update()
+		Talo.players.debounce_update()
 
 ## Delete a property by key. Optionally sync the player (default true) with Talo.
 func delete_prop(key: String, update: bool = true) -> void:
 	super.delete_prop(key)
 	if update:
-		await Talo.players.update()
+		Talo.players.debounce_update()
 
 ## Check if the player is in a group with the given ID.
 func is_in_talo_group_id(group_id: String) -> bool:
