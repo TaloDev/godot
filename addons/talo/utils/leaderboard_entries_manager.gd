@@ -37,7 +37,7 @@ func upsert_entry(internal_name: String, entry: TaloLeaderboardEntry, bump_posit
 		func (e: TaloLeaderboardEntry) -> bool: return e.id != entry.id
 	)
 
-	var insert_pos: int = _find_insert_position(named_entries, entry)
+	var insert_pos := _find_insert_position(named_entries, entry)
 	named_entries.insert(insert_pos, entry)
 
 	# bump positions when this is called via add_entry()
