@@ -1,0 +1,210 @@
+[gd_scene load_steps=2 format=3 uid="uid://cxy83rqs3i7v"]
+
+[ext_resource type="Script" uid="uid://78stqdsnxi4m" path="res://addons/talo/samples/friends_list/scripts/friends_list.gd" id="1_friends_list"]
+
+[node name="FriendsList" type="Node2D"]
+script = ExtResource("1_friends_list")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 1152.0
+offset_bottom = 648.0
+
+[node name="Title" type="Label" parent="Control"]
+layout_mode = 0
+offset_left = 441.0
+offset_top = 28.0
+offset_right = 641.0
+offset_bottom = 62.0
+theme_override_font_sizes/font_size = 24
+text = "Friends Demo"
+horizontal_alignment = 1
+
+[node name="YourNameLabel" type="Label" parent="Control"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 21.0
+offset_top = 33.0
+offset_right = 321.0
+offset_bottom = 59.0
+theme_override_colors/font_color = Color(0.4, 0.8, 1, 1)
+theme_override_font_sizes/font_size = 18
+text = "You are: Loading..."
+
+[node name="LeftPanel" type="Panel" parent="Control"]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_left = 25.0
+offset_top = 86.0
+offset_right = 275.0
+offset_bottom = -4.0
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/LeftPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 10
+
+[node name="PlayersLabel" type="Label" parent="Control/LeftPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Online Players"
+
+[node name="PlayersScroll" type="ScrollContainer" parent="Control/LeftPanel/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="PlayersList" type="VBoxContainer" parent="Control/LeftPanel/VBoxContainer/PlayersScroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HSeparator1" type="HSeparator" parent="Control/LeftPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="SubscriptionsLabel" type="Label" parent="Control/LeftPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "My Friends"
+
+[node name="SubscriptionsScroll" type="ScrollContainer" parent="Control/LeftPanel/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="SubscriptionsList" type="VBoxContainer" parent="Control/LeftPanel/VBoxContainer/SubscriptionsScroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CenterPanel" type="Panel" parent="Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 295.0
+offset_top = 86.0
+offset_right = -365.0
+offset_bottom = -74.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/CenterPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="FeedLabel" type="Label" parent="Control/CenterPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "Activity Feed"
+
+[node name="FeedScroll" type="ScrollContainer" parent="Control/CenterPanel/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Feed" type="VBoxContainer" parent="Control/CenterPanel/VBoxContainer/FeedScroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="RightPanel" type="Panel" parent="Control"]
+layout_mode = 1
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -347.0
+offset_top = 86.0
+offset_right = -97.0
+offset_bottom = -4.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/RightPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 10
+
+[node name="IncomingRequestsLabel" type="Label" parent="Control/RightPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Incoming Requests"
+
+[node name="IncomingRequestsScroll" type="ScrollContainer" parent="Control/RightPanel/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="PendingRequestsList" type="VBoxContainer" parent="Control/RightPanel/VBoxContainer/IncomingRequestsScroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HSeparator" type="HSeparator" parent="Control/RightPanel/VBoxContainer"]
+layout_mode = 2
+
+[node name="OutgoingRequestsLabel" type="Label" parent="Control/RightPanel/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Outgoing Requests"
+
+[node name="OutgoingRequestsScroll" type="ScrollContainer" parent="Control/RightPanel/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="OutgoingRequestsList" type="VBoxContainer" parent="Control/RightPanel/VBoxContainer/OutgoingRequestsScroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BottomPanel" type="Panel" parent="Control"]
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 295.0
+offset_top = -54.0
+offset_right = -365.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/BottomPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 10
+
+[node name="BroadcastInput" type="LineEdit" parent="Control/BottomPanel/HBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Share an update with your friends..."
+
+[node name="SendButton" type="Button" parent="Control/BottomPanel/HBoxContainer"]
+layout_mode = 2
+text = "Broadcast"
+
+[connection signal="text_submitted" from="Control/BottomPanel/HBoxContainer/BroadcastInput" to="." method="_on_broadcast_input_text_submitted"]
+[connection signal="pressed" from="Control/BottomPanel/HBoxContainer/SendButton" to="." method="_on_send_broadcast_pressed"]
