@@ -127,3 +127,7 @@ func _poll() -> void:
 
 func _process(_delta: float) -> void:
 	_poll()
+
+## Check if the socket is identified with the current player
+func is_identified() -> bool:
+	return _identified

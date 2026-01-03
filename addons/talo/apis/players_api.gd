@@ -27,7 +27,7 @@ func _handle_update_timer_timeout() -> void:
 	await Talo.players.update()
 
 func _handle_identify_success(alias: TaloPlayerAlias, socket_token: String = "") -> TaloPlayer:
-	if not await Talo.is_offline():
+	if not await Talo.is_offline() and Talo.socket.is_identified():
 		Talo.socket.reset_connection()
 
 	Talo.current_alias = alias
