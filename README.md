@@ -32,7 +32,8 @@ Talo is the easiest way to add leaderboards, player authentication, peer-to-peer
 - 💾 **Multi-scene saves**: a small game showing how to persist save data across multiple scenes.
 - 💾 **Persistent buttons**: a simple demo showing how to save and load game state.
 - 💬 **Chat**: showing how to send messages between players in a chat room using channels.
-- 🤝 **Channel storage**: showing how to store data that can be accessed by other players using channels.
+- 📦 **Channel storage**: showing how to store data that can be accessed by other players using channels.
+- 🤝 **Friends list**: a friends list UI with friend statuses, incoming/outgoing requests and player-to-player broadcasts.
 
 ## Links
 
