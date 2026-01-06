@@ -22,7 +22,7 @@ Talo is the easiest way to add leaderboards, player authentication, peer-to-peer
 - 🗣️ [Game feedback](https://trytalo.com/feedback): Collect and manage feedback from your players.
 - 🛡️ [Continuity](https://trytalo.com/continuity): Keep your data in-sync even when your players are offline.
 - 🔔 [Player presence](https://trytalo.com/players#presence): See if players are online and set custom statuses.
-- 🤝 [Player relationships](https://trytalo.com/player-relationships) (for friends, followers and social systems)
+- 🤝 [Player relationships](https://trytalo.com/player-relationships): Easily add friends, followers and social systems to your game.
 
 ## Samples included with the plugin
 
