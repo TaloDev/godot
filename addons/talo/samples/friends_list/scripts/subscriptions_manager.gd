@@ -47,7 +47,7 @@ func load_outgoing_requests() -> void:
 	outgoing_requests_updated.emit()
 
 func send_friend_request(alias: TaloPlayerAlias) -> bool:
-	var subscription := await Talo.player_relationships.subscribe_to(alias.id, Talo.player_relationships.RelationshipType.BIDIRECTIONAL)
+	var subscription := await Talo.player_relationships.subscribe_to(alias.id, TaloPlayerAliasSubscription.RelationshipType.BIDIRECTIONAL)
 	return subscription != null
 
 func accept_friend_request(alias: TaloPlayerAlias) -> bool:

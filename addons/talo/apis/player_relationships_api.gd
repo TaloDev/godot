@@ -7,11 +7,6 @@ class_name PlayerRelationshipsAPI extends TaloAPI
 ##
 ## @tutorial: https://docs.trytalo.com/docs/godot/relationships
 
-enum RelationshipType {
-	UNIDIRECTIONAL,   ## One-way relationships (follower/following pattern)
-	BIDIRECTIONAL     ## Mutual relationships requiring both players to be connected
-}
-
 ## Emitted when another player sends the current player a relationship request.
 signal relationship_request_received(player_alias: TaloPlayerAlias)
 
@@ -67,7 +62,7 @@ func broadcast(message: String) -> void:
 	})
 
 ## Subscribe to a player with a specific relationship type.
-func subscribe_to(player_alias_id: int, relationship_type: RelationshipType) -> TaloPlayerAliasSubscription:
+func subscribe_to(player_alias_id: int, relationship_type: TaloPlayerAliasSubscription.RelationshipType) -> TaloPlayerAliasSubscription:
 	if Talo.identity_check() != OK:
 		return null
 
@@ -220,8 +215,8 @@ func get_subscriptions(options := GetSubscriptionsOptions.new()) -> Subscription
 		_:
 			return null
 
-func _get_relationship_type_from_enum(relationship_type: RelationshipType) -> String:
-	return "bidirectional" if relationship_type == RelationshipType.BIDIRECTIONAL else "unidirectional"
+func _get_relationship_type_from_enum(relationship_type: TaloPlayerAliasSubscription.RelationshipType) -> String:
+	return "bidirectional" if relationship_type == TaloPlayerAliasSubscription.RelationshipType.BIDIRECTIONAL else "unidirectional"
 
 func _get_relationship_type_from_filter(relationship_type: RelationshipTypeFilter) -> String:
 	match relationship_type:
@@ -240,8 +235,8 @@ enum ConfirmedFilter {
 
 enum RelationshipTypeFilter {
 	ANY = -1,
-	UNIDIRECTIONAL = RelationshipType.UNIDIRECTIONAL,
-	BIDIRECTIONAL = RelationshipType.BIDIRECTIONAL
+	UNIDIRECTIONAL = TaloPlayerAliasSubscription.RelationshipType.UNIDIRECTIONAL,
+	BIDIRECTIONAL = TaloPlayerAliasSubscription.RelationshipType.BIDIRECTIONAL
 }
 
 class SubscriptionsListPage:

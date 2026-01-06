@@ -1,8 +1,8 @@
 class_name TaloPlayerAliasSubscription extends RefCounted
 
 enum RelationshipType {
-	UNIDIRECTIONAL,
-	BIDIRECTIONAL
+	UNIDIRECTIONAL,   ## One-way relationships (follower/following pattern)
+	BIDIRECTIONAL     ## Mutual relationships requiring both players to be connected
 }
 
 var id: int
