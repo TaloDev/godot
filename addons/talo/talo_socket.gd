@@ -105,7 +105,9 @@ func close_connection(code: int = 1000, reason: String = "") -> void:
 func reset_connection() -> void:
 	close_connection()
 	_reset_socket()
-	open_connection()
+
+	if Talo.settings.auto_connect_socket:
+		open_connection()
 
 func _reset_socket() -> void:
 	connection_closed.emit(_socket.get_close_code(), _socket.get_close_reason())
@@ -125,3 +127,7 @@ func _poll() -> void:
 
 func _process(_delta: float) -> void:
 	_poll()
+
+## Check if the socket is identified with the current player
+func is_identified() -> bool:
+	return _identified

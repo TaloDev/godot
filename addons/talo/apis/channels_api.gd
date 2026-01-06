@@ -75,6 +75,10 @@ func get_channels(options: GetChannelsOptions = GetChannelsOptions.new()) -> Cha
 			url += "&propValue=%s"
 			url_data.append(options.prop_value)
 
+	if options.search != "":
+		url += "&search=%s"
+		url_data.append(options.search.strip_edges().uri_encode())
+
 	var res := await client.make_request(HTTPClient.METHOD_GET, url % url_data)
 
 	match res.status:
@@ -335,6 +339,7 @@ class GetChannelsOptions:
 	var page: int = 0
 	var prop_key: String = ""
 	var prop_value: String = ""
+	var search: String = ""
 
 class GetSubscribedChannelsOptions:
 	var prop_key: String = ""
