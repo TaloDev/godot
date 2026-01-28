@@ -5,7 +5,7 @@ extends Node2D
 var _active_channel_id := -1
 var _subscriptions: Array[TaloChannel] = []
 
-func _ready():
+func _ready() -> void:
 	Talo.players.identified.connect(_on_identified)
 	Talo.channels.message_received.connect(_on_message_received)
 	Talo.player_presence.presence_changed.connect(_on_presence_changed)
