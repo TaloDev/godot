@@ -42,7 +42,6 @@ func _build_entries() -> void:
 		entries = entries.filter(func (entry: TaloLeaderboardEntry): return entry.get_prop("team", "") == _filter)
 
 	for entry in entries:
-		entry.position = entries.find(entry)
 		_create_entry(entry)
 
 func _load_entries() -> void:
