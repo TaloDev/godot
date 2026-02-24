@@ -24,7 +24,7 @@ jobs:
           zip -r $filepath addons/talo
 
       - name: Upload to itch
-        uses: manleydev/butler-publish-itchio-action@master
+        uses: XanatosX/butler-publish-itchio-action@master
         env:
           BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
           CHANNEL: plugin
