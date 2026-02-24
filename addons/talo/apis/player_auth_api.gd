@@ -122,6 +122,20 @@ func change_email(current_password: String, new_email: String) -> Error:
 		_:
 			return _handle_error(res)
 
+## Change the identifier of the current player alias.
+func change_identifier(current_password: String, new_identifier: String) -> Error:
+	var res := await client.make_request(HTTPClient.METHOD_POST, "/change_identifier", {
+		currentPassword = current_password,
+		newIdentifier = new_identifier
+	})
+
+	match res.status:
+		200:
+			session_manager.handle_identifier_changed(TaloPlayerAlias.new(res.body.alias))
+			return OK
+		_:
+			return _handle_error(res)
+
 ## Send a password reset email to the player's email.
 func forgot_password(email: String) -> Error:
 	var res := await client.make_request(HTTPClient.METHOD_POST, "/forgot_password", {
