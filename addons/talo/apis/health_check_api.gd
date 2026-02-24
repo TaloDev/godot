@@ -13,7 +13,7 @@ enum HealthCheckStatus {
 
 var _cached_result := HealthCheckStatus.UNKNOWN
 var _can_ping := true
-var _timer := TaloDebounceTimer.new(func (): _can_ping = true)
+var _timer := TaloDebounceTimer.new(func (): _can_ping = true, false)
 
 func _ready() -> void:
 	add_child(_timer)

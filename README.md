@@ -22,6 +22,7 @@ Talo is the easiest way to add leaderboards, player authentication, peer-to-peer
 - 🗣️ [Game feedback](https://trytalo.com/feedback): Collect and manage feedback from your players.
 - 🛡️ [Continuity](https://trytalo.com/continuity): Keep your data in-sync even when your players are offline.
 - 🔔 [Player presence](https://trytalo.com/players#presence): See if players are online and set custom statuses.
+- 🤝 [Player relationships](https://trytalo.com/player-relationships): Easily add friends, followers and social systems to your game.
 
 ## Samples included with the plugin
 
@@ -31,7 +32,8 @@ Talo is the easiest way to add leaderboards, player authentication, peer-to-peer
 - 💾 **Multi-scene saves**: a small game showing how to persist save data across multiple scenes.
 - 💾 **Persistent buttons**: a simple demo showing how to save and load game state.
 - 💬 **Chat**: showing how to send messages between players in a chat room using channels.
-- 🤝 **Channel storage**: showing how to store data that can be accessed by other players using channels.
+- 📦 **Channel storage**: showing how to store data that can be accessed by other players using channels.
+- 🤝 **Friends list**: a friends list UI with friend statuses, incoming/outgoing requests and player-to-player broadcasts.
 
 ## Links
 

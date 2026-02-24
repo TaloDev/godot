@@ -9,7 +9,7 @@ class_name PlayerPresenceAPI extends TaloAPI
 ## Emitted when a player's presence status changes.
 signal presence_changed(presence: TaloPlayerPresence, online_changed: bool, custom_status_changed: bool)
 
-func _ready():
+func _ready() -> void:
 	await Talo.init_completed
 	Talo.socket.message_received.connect(_on_message_received)
 

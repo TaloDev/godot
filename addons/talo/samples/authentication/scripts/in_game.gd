@@ -2,6 +2,7 @@ extends Node2D
 
 signal go_to_change_password
 signal go_to_change_email
+signal go_to_change_identifier
 signal go_to_delete
 signal logout_success
 
@@ -9,9 +10,15 @@ signal logout_success
 
 func _ready() -> void:
 	Talo.players.identified.connect(_on_player_identified)
+
 	# identified signal emitted before the connection were made
 	if Talo.current_player:
 		_on_player_identified(Talo.current_player)
+
+	# listen for the player changing their identifier
+	%ChangeIdentifier.identifier_change_success.connect(
+		func (): _on_player_identified(Talo.current_player)
+	)
 
 func _on_player_identified(player: TaloPlayer) -> void:
 	username.text = "What would you like to do,\n%s?" % Talo.current_alias.identifier
@@ -21,6 +28,9 @@ func _on_change_password_pressed() -> void:
 
 func _on_change_email_pressed() -> void:
 	go_to_change_email.emit()
+
+func _on_change_identifier_pressed() -> void:
+	go_to_change_identifier.emit()
 
 func _on_logout_pressed() -> void:
 	await Talo.player_auth.logout()

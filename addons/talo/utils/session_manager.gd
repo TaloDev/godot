@@ -47,3 +47,11 @@ func handle_session_created(alias: Dictionary, session_token: String, socket_tok
 
 func check_for_session() -> bool:
 	return not get_token().is_empty()
+
+func handle_identifier_changed(alias: TaloPlayerAlias) -> void:
+	Talo.current_alias = alias
+	alias.write_offline_alias()
+
+	var config := _load_config(_SESSION_CONFIG_PATH)
+	config.set_value("session", "identifier", alias.identifier)
+	config.save(_SESSION_CONFIG_PATH)
