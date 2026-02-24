@@ -21,7 +21,7 @@ func get_cached_entries_for_current_player(internal_name: String) -> Array[TaloL
 			return entry.player_alias.id == Talo.current_alias.id
 	)
 
-## Get a list of entries for a leaderboard. The options include "page", "alias_id", "include_archived", "prop_key", "prop_value", "start_date" and "end_date" for additional filtering.
+## Get a list of entries for a leaderboard. The options include "page", "alias_id", "player_id", "include_archived", "prop_key", "prop_value", "start_date" and "end_date" for additional filtering.
 func get_entries(internal_name: String, options := GetEntriesOptions.new()) -> EntriesPage:
 	var url := "/%s/entries?page=%s"
 	var url_data := [internal_name, options.page]
@@ -29,6 +29,10 @@ func get_entries(internal_name: String, options := GetEntriesOptions.new()) -> E
 	if options.alias_id != -1:
 		url += "&aliasId=%s"
 		url_data.append(options.alias_id)
+
+	if options.player_id != "":
+		url += "&playerId=%s"
+		url_data.append(options.player_id)
 
 	if options.include_archived:
 		url += "&withDeleted=1"
@@ -64,6 +68,7 @@ func get_entries(internal_name: String, options := GetEntriesOptions.new()) -> E
 		_:
 			return null
 
+## @deprecated: Use get_entries() with the alias_id or player_id option instead.
 func get_entries_for_current_player(internal_name: String, options := GetEntriesOptions.new()) -> EntriesPage:
 	if Talo.identity_check() != OK:
 		return null
@@ -114,6 +119,7 @@ class AddEntryResult:
 class GetEntriesOptions:
 	var page: int = 0
 	var alias_id: int = -1
+	var player_id: String = ""
 	var include_archived: bool = false
 	var prop_key: String = ""
 	var prop_value: String = ""
