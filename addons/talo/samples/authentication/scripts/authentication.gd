@@ -6,6 +6,7 @@ extends Node2D
 @onready var in_game = %InGame
 @onready var change_password = %ChangePassword
 @onready var change_email = %ChangeEmail
+@onready var change_identifier = %ChangeIdentifier
 @onready var forgot_password = %ForgotPassword
 @onready var reset_password = %ResetPassword
 @onready var delete_account = %DeleteAccount
@@ -32,6 +33,7 @@ func _configure_signals():
 
 	in_game.go_to_change_password.connect(func (): _make_state_visible(change_password))
 	in_game.go_to_change_email.connect(func (): _make_state_visible(change_email))
+	in_game.go_to_change_identifier.connect(func (): _make_state_visible(change_identifier))
 	in_game.go_to_delete.connect(func (): _make_state_visible(delete_account))
 	in_game.logout_success.connect(func (): _make_state_visible(login))
 
@@ -40,6 +42,9 @@ func _configure_signals():
 
 	change_email.email_change_success.connect(func (): _make_state_visible(in_game))
 	change_email.go_to_game.connect(func (): _make_state_visible(in_game))
+
+	change_identifier.identifier_change_success.connect(func (): _make_state_visible(in_game))
+	change_identifier.go_to_game.connect(func (): _make_state_visible(in_game))
 
 	forgot_password.forgot_password_success.connect(func (): _make_state_visible(reset_password))
 	forgot_password.go_to_login.connect(func (): _make_state_visible(login))
