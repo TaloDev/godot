@@ -1,17 +1,17 @@
-[gd_scene load_steps=2 format=3 uid="uid://cxy83rqs3i7v"]
+[gd_scene format=3 uid="uid://cxy83rqs3i7v"]
 
 [ext_resource type="Script" uid="uid://78stqdsnxi4m" path="res://addons/talo/samples/friends_list/scripts/friends_list.gd" id="1_friends_list"]
 
-[node name="FriendsList" type="Node2D"]
+[node name="FriendsList" type="Node2D" unique_id=1271951708]
 script = ExtResource("1_friends_list")
 
-[node name="Control" type="Control" parent="."]
+[node name="Control" type="Control" parent="." unique_id=1176946137]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 1152.0
 offset_bottom = 648.0
 
-[node name="Title" type="Label" parent="Control"]
+[node name="Title" type="Label" parent="Control" unique_id=1810787780]
 layout_mode = 0
 offset_left = 441.0
 offset_top = 28.0
@@ -21,7 +21,7 @@ theme_override_font_sizes/font_size = 24
 text = "Friends Demo"
 horizontal_alignment = 1
 
-[node name="YourNameLabel" type="Label" parent="Control"]
+[node name="YourNameLabel" type="Label" parent="Control" unique_id=1602967188]
 unique_name_in_owner = true
 layout_mode = 0
 offset_left = 21.0
@@ -32,7 +32,7 @@ theme_override_colors/font_color = Color(0.4, 0.8, 1, 1)
 theme_override_font_sizes/font_size = 18
 text = "You are: Loading..."
 
-[node name="LeftPanel" type="Panel" parent="Control"]
+[node name="LeftPanel" type="Panel" parent="Control" unique_id=1624219906]
 layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
@@ -42,7 +42,7 @@ offset_right = 275.0
 offset_bottom = -4.0
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/LeftPanel"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/LeftPanel" unique_id=838667841]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -51,40 +51,40 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 10
 
-[node name="PlayersLabel" type="Label" parent="Control/LeftPanel/VBoxContainer"]
+[node name="PlayersLabel" type="Label" parent="Control/LeftPanel/VBoxContainer" unique_id=165887042]
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
 text = "Online Players"
 
-[node name="PlayersScroll" type="ScrollContainer" parent="Control/LeftPanel/VBoxContainer"]
+[node name="PlayersScroll" type="ScrollContainer" parent="Control/LeftPanel/VBoxContainer" unique_id=99820964]
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
 
-[node name="PlayersList" type="VBoxContainer" parent="Control/LeftPanel/VBoxContainer/PlayersScroll"]
+[node name="PlayersList" type="VBoxContainer" parent="Control/LeftPanel/VBoxContainer/PlayersScroll" unique_id=329357818]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="HSeparator1" type="HSeparator" parent="Control/LeftPanel/VBoxContainer"]
+[node name="HSeparator1" type="HSeparator" parent="Control/LeftPanel/VBoxContainer" unique_id=1797214370]
 layout_mode = 2
 
-[node name="SubscriptionsLabel" type="Label" parent="Control/LeftPanel/VBoxContainer"]
+[node name="SubscriptionsLabel" type="Label" parent="Control/LeftPanel/VBoxContainer" unique_id=773722605]
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
 text = "My Friends"
 
-[node name="SubscriptionsScroll" type="ScrollContainer" parent="Control/LeftPanel/VBoxContainer"]
+[node name="SubscriptionsScroll" type="ScrollContainer" parent="Control/LeftPanel/VBoxContainer" unique_id=1268970655]
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
 
-[node name="SubscriptionsList" type="VBoxContainer" parent="Control/LeftPanel/VBoxContainer/SubscriptionsScroll"]
+[node name="SubscriptionsList" type="VBoxContainer" parent="Control/LeftPanel/VBoxContainer/SubscriptionsScroll" unique_id=1340687506]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="CenterPanel" type="Panel" parent="Control"]
+[node name="CenterPanel" type="Panel" parent="Control" unique_id=1495716231]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -96,7 +96,7 @@ offset_bottom = -74.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/CenterPanel"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/CenterPanel" unique_id=1782541980]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -104,22 +104,22 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="FeedLabel" type="Label" parent="Control/CenterPanel/VBoxContainer"]
+[node name="FeedLabel" type="Label" parent="Control/CenterPanel/VBoxContainer" unique_id=899161290]
 layout_mode = 2
 theme_override_font_sizes/font_size = 18
 text = "Activity Feed"
 
-[node name="FeedScroll" type="ScrollContainer" parent="Control/CenterPanel/VBoxContainer"]
+[node name="FeedScroll" type="ScrollContainer" parent="Control/CenterPanel/VBoxContainer" unique_id=1891439029]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="Feed" type="VBoxContainer" parent="Control/CenterPanel/VBoxContainer/FeedScroll"]
+[node name="Feed" type="VBoxContainer" parent="Control/CenterPanel/VBoxContainer/FeedScroll" unique_id=1329037453]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="RightPanel" type="Panel" parent="Control"]
+[node name="RightPanel" type="Panel" parent="Control" unique_id=1185618398]
 layout_mode = 1
 anchors_preset = 11
 anchor_left = 1.0
@@ -132,7 +132,7 @@ offset_bottom = -4.0
 grow_horizontal = 0
 grow_vertical = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Control/RightPanel"]
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/RightPanel" unique_id=922360883]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -141,40 +141,40 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 10
 
-[node name="IncomingRequestsLabel" type="Label" parent="Control/RightPanel/VBoxContainer"]
+[node name="IncomingRequestsLabel" type="Label" parent="Control/RightPanel/VBoxContainer" unique_id=438470356]
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
 text = "Incoming Requests"
 
-[node name="IncomingRequestsScroll" type="ScrollContainer" parent="Control/RightPanel/VBoxContainer"]
+[node name="IncomingRequestsScroll" type="ScrollContainer" parent="Control/RightPanel/VBoxContainer" unique_id=1841092618]
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
 
-[node name="PendingRequestsList" type="VBoxContainer" parent="Control/RightPanel/VBoxContainer/IncomingRequestsScroll"]
+[node name="PendingRequestsList" type="VBoxContainer" parent="Control/RightPanel/VBoxContainer/IncomingRequestsScroll" unique_id=1465214655]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="HSeparator" type="HSeparator" parent="Control/RightPanel/VBoxContainer"]
+[node name="HSeparator" type="HSeparator" parent="Control/RightPanel/VBoxContainer" unique_id=1038659364]
 layout_mode = 2
 
-[node name="OutgoingRequestsLabel" type="Label" parent="Control/RightPanel/VBoxContainer"]
+[node name="OutgoingRequestsLabel" type="Label" parent="Control/RightPanel/VBoxContainer" unique_id=1754423841]
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
 text = "Outgoing Requests"
 
-[node name="OutgoingRequestsScroll" type="ScrollContainer" parent="Control/RightPanel/VBoxContainer"]
+[node name="OutgoingRequestsScroll" type="ScrollContainer" parent="Control/RightPanel/VBoxContainer" unique_id=1323924360]
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
 
-[node name="OutgoingRequestsList" type="VBoxContainer" parent="Control/RightPanel/VBoxContainer/OutgoingRequestsScroll"]
+[node name="OutgoingRequestsList" type="VBoxContainer" parent="Control/RightPanel/VBoxContainer/OutgoingRequestsScroll" unique_id=1252090293]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="BottomPanel" type="Panel" parent="Control"]
+[node name="BottomPanel" type="Panel" parent="Control" unique_id=1642827072]
 layout_mode = 1
 anchors_preset = 12
 anchor_top = 1.0
@@ -187,7 +187,7 @@ offset_bottom = -4.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Control/BottomPanel"]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control/BottomPanel" unique_id=802863117]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -196,13 +196,13 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/separation = 10
 
-[node name="BroadcastInput" type="LineEdit" parent="Control/BottomPanel/HBoxContainer"]
+[node name="BroadcastInput" type="LineEdit" parent="Control/BottomPanel/HBoxContainer" unique_id=591576423]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Share an update with your friends..."
 
-[node name="SendButton" type="Button" parent="Control/BottomPanel/HBoxContainer"]
+[node name="SendButton" type="Button" parent="Control/BottomPanel/HBoxContainer" unique_id=255480404]
 layout_mode = 2
 text = "Broadcast"
 

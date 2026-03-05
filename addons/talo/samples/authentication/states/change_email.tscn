@@ -1,18 +1,18 @@
-[gd_scene load_steps=3 format=3 uid="uid://b6mypp2qa8m4u"]
+[gd_scene format=3 uid="uid://b6mypp2qa8m4u"]
 
 [ext_resource type="Script" uid="uid://vflrdq5hi1n4" path="res://addons/talo/samples/authentication/scripts/change_email.gd" id="1_qamph"]
 [ext_resource type="Theme" uid="uid://ce2uyi827vc5x" path="res://addons/talo/samples/authentication/assets/theme.tres" id="2_5w58c"]
 
-[node name="ChangeEmail" type="Node2D"]
+[node name="ChangeEmail" type="Node2D" unique_id=277492208]
 script = ExtResource("1_qamph")
 
-[node name="UI" type="Control" parent="."]
+[node name="UI" type="Control" parent="." unique_id=1414145717]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 1080.0
 offset_bottom = 720.0
 
-[node name="Background" type="ColorRect" parent="UI"]
+[node name="Background" type="ColorRect" parent="UI" unique_id=173163657]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -21,7 +21,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.121569, 0.160784, 0.215686, 1)
 
-[node name="MarginContainer" type="MarginContainer" parent="UI"]
+[node name="MarginContainer" type="MarginContainer" parent="UI" unique_id=839615226]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -33,19 +33,19 @@ theme_override_constants/margin_top = 40
 theme_override_constants/margin_right = 40
 theme_override_constants/margin_bottom = 40
 
-[node name="VBoxContainer" type="VBoxContainer" parent="UI/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/MarginContainer" unique_id=582372699]
 layout_mode = 2
 size_flags_vertical = 4
 theme_override_constants/separation = 24
 
-[node name="Title" type="Label" parent="UI/MarginContainer/VBoxContainer"]
+[node name="Title" type="Label" parent="UI/MarginContainer/VBoxContainer" unique_id=583982607]
 layout_mode = 2
 size_flags_vertical = 0
 theme = ExtResource("2_5w58c")
 text = "Change email"
 horizontal_alignment = 1
 
-[node name="Password" type="TextEdit" parent="UI/MarginContainer/VBoxContainer"]
+[node name="Password" type="TextEdit" parent="UI/MarginContainer/VBoxContainer" unique_id=161400492]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(400, 40)
 layout_mode = 2
@@ -53,7 +53,7 @@ size_flags_horizontal = 4
 theme = ExtResource("2_5w58c")
 placeholder_text = "Current password"
 
-[node name="NewEmail" type="TextEdit" parent="UI/MarginContainer/VBoxContainer"]
+[node name="NewEmail" type="TextEdit" parent="UI/MarginContainer/VBoxContainer" unique_id=1874415675]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(400, 40)
 layout_mode = 2
@@ -61,21 +61,21 @@ size_flags_horizontal = 4
 theme = ExtResource("2_5w58c")
 placeholder_text = "New email"
 
-[node name="Submit" type="Button" parent="UI/MarginContainer/VBoxContainer"]
+[node name="Submit" type="Button" parent="UI/MarginContainer/VBoxContainer" unique_id=636301946]
 custom_minimum_size = Vector2(200, 40)
 layout_mode = 2
 size_flags_horizontal = 4
 theme = ExtResource("2_5w58c")
 text = "Submit"
 
-[node name="Cancel" type="Button" parent="UI/MarginContainer/VBoxContainer"]
+[node name="Cancel" type="Button" parent="UI/MarginContainer/VBoxContainer" unique_id=1447593585]
 custom_minimum_size = Vector2(200, 40)
 layout_mode = 2
 size_flags_horizontal = 4
 theme = ExtResource("2_5w58c")
 text = "Cancel"
 
-[node name="ValidationLabel" type="Label" parent="UI/MarginContainer/VBoxContainer"]
+[node name="ValidationLabel" type="Label" parent="UI/MarginContainer/VBoxContainer" unique_id=336919666]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(400, 2.08165e-12)
 layout_mode = 2

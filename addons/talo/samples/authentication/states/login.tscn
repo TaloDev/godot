@@ -1,18 +1,18 @@
-[gd_scene load_steps=3 format=3 uid="uid://co0uou3idf65q"]
+[gd_scene format=3 uid="uid://co0uou3idf65q"]
 
 [ext_resource type="Script" uid="uid://bkvrg5x0p3hn4" path="res://addons/talo/samples/authentication/scripts/login.gd" id="1_enqms"]
 [ext_resource type="Theme" uid="uid://ce2uyi827vc5x" path="res://addons/talo/samples/authentication/assets/theme.tres" id="2_77km8"]
 
-[node name="Login" type="Node2D"]
+[node name="Login" type="Node2D" unique_id=17406197]
 script = ExtResource("1_enqms")
 
-[node name="UI" type="Control" parent="."]
+[node name="UI" type="Control" parent="." unique_id=119215834]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 1080.0
 offset_bottom = 720.0
 
-[node name="Background" type="ColorRect" parent="UI"]
+[node name="Background" type="ColorRect" parent="UI" unique_id=2056954937]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -21,7 +21,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.121569, 0.160784, 0.215686, 1)
 
-[node name="MarginContainer" type="MarginContainer" parent="UI"]
+[node name="MarginContainer" type="MarginContainer" parent="UI" unique_id=1345016813]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -33,19 +33,19 @@ theme_override_constants/margin_top = 40
 theme_override_constants/margin_right = 40
 theme_override_constants/margin_bottom = 40
 
-[node name="VBoxContainer" type="VBoxContainer" parent="UI/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/MarginContainer" unique_id=973911488]
 layout_mode = 2
 size_flags_vertical = 4
 theme_override_constants/separation = 24
 
-[node name="Title" type="Label" parent="UI/MarginContainer/VBoxContainer"]
+[node name="Title" type="Label" parent="UI/MarginContainer/VBoxContainer" unique_id=167974943]
 layout_mode = 2
 size_flags_vertical = 0
 theme = ExtResource("2_77km8")
 text = "Login"
 horizontal_alignment = 1
 
-[node name="Username" type="TextEdit" parent="UI/MarginContainer/VBoxContainer"]
+[node name="Username" type="TextEdit" parent="UI/MarginContainer/VBoxContainer" unique_id=1922730825]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(400, 40)
 layout_mode = 2
@@ -53,7 +53,7 @@ size_flags_horizontal = 4
 theme = ExtResource("2_77km8")
 placeholder_text = "Username"
 
-[node name="Password" type="TextEdit" parent="UI/MarginContainer/VBoxContainer"]
+[node name="Password" type="TextEdit" parent="UI/MarginContainer/VBoxContainer" unique_id=806533651]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(400, 40)
 layout_mode = 2
@@ -61,28 +61,28 @@ size_flags_horizontal = 4
 theme = ExtResource("2_77km8")
 placeholder_text = "Password"
 
-[node name="Submit" type="Button" parent="UI/MarginContainer/VBoxContainer"]
+[node name="Submit" type="Button" parent="UI/MarginContainer/VBoxContainer" unique_id=1882631925]
 custom_minimum_size = Vector2(200, 40)
 layout_mode = 2
 size_flags_horizontal = 4
 theme = ExtResource("2_77km8")
 text = "Submit"
 
-[node name="ForgotPassword" type="Button" parent="UI/MarginContainer/VBoxContainer"]
+[node name="ForgotPassword" type="Button" parent="UI/MarginContainer/VBoxContainer" unique_id=638541930]
 custom_minimum_size = Vector2(200, 40)
 layout_mode = 2
 size_flags_horizontal = 4
 theme = ExtResource("2_77km8")
 text = "Forgot password"
 
-[node name="Register" type="Button" parent="UI/MarginContainer/VBoxContainer"]
+[node name="Register" type="Button" parent="UI/MarginContainer/VBoxContainer" unique_id=328032725]
 custom_minimum_size = Vector2(200, 40)
 layout_mode = 2
 size_flags_horizontal = 4
 theme = ExtResource("2_77km8")
 text = "Go to Register"
 
-[node name="ValidationLabel" type="Label" parent="UI/MarginContainer/VBoxContainer"]
+[node name="ValidationLabel" type="Label" parent="UI/MarginContainer/VBoxContainer" unique_id=659368251]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(400, 2.08165e-12)
 layout_mode = 2

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is the **Talo Godot Plugin** - a self-hostable game development backend plugin for the Godot Engine (v4.4+). Talo provides leaderboards, player authentication, event tracking, game saves, stats, channels, live config, and more. The plugin is distributed via the Godot Asset Library and GitHub releases.
+This is the **Talo Godot Plugin** - a self-hostable game development backend plugin for the Godot Engine (v4.6+). Talo provides leaderboards, player authentication, event tracking, game saves, stats, channels, live config, and more. The plugin is distributed via the Godot Asset Library and GitHub releases.
 
 ## Architecture
 
