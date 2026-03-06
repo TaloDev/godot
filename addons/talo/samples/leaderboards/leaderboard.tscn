@@ -1,19 +1,19 @@
-[gd_scene load_steps=3 format=3 uid="uid://10aipp4jmgtd"]
+[gd_scene format=3 uid="uid://10aipp4jmgtd"]
 
 [ext_resource type="Script" uid="uid://b130i3slrurbc" path="res://addons/talo/samples/leaderboards/scripts/leaderboard.gd" id="1_ul1ks"]
 [ext_resource type="Theme" uid="uid://ce2uyi827vc5x" path="res://addons/talo/samples/authentication/assets/theme.tres" id="2_aw1ey"]
 
-[node name="Leaderboard" type="Node2D"]
+[node name="Leaderboard" type="Node2D" unique_id=2055924915]
 script = ExtResource("1_ul1ks")
 leaderboard_internal_name = "team-scores"
 
-[node name="UI" type="Control" parent="."]
+[node name="UI" type="Control" parent="." unique_id=575900823]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 1080.0
 offset_bottom = 720.0
 
-[node name="Background" type="ColorRect" parent="UI"]
+[node name="Background" type="ColorRect" parent="UI" unique_id=1653174925]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -22,7 +22,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.121569, 0.160784, 0.215686, 1)
 
-[node name="MarginContainer" type="MarginContainer" parent="UI"]
+[node name="MarginContainer" type="MarginContainer" parent="UI" unique_id=565311974]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -34,12 +34,12 @@ theme_override_constants/margin_top = 40
 theme_override_constants/margin_right = 40
 theme_override_constants/margin_bottom = 40
 
-[node name="VBoxContainer" type="VBoxContainer" parent="UI/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/MarginContainer" unique_id=25159751]
 layout_mode = 2
 size_flags_vertical = 4
 theme_override_constants/separation = 24
 
-[node name="LeaderboardName" type="Label" parent="UI/MarginContainer/VBoxContainer"]
+[node name="LeaderboardName" type="Label" parent="UI/MarginContainer/VBoxContainer" unique_id=869659408]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(1000, 0)
 layout_mode = 2
@@ -49,7 +49,7 @@ text = "{leaderboard} entries"
 horizontal_alignment = 1
 autowrap_mode = 2
 
-[node name="InfoLabel" type="Label" parent="UI/MarginContainer/VBoxContainer"]
+[node name="InfoLabel" type="Label" parent="UI/MarginContainer/VBoxContainer" unique_id=638995712]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(400, 2.08165e-12)
 layout_mode = 2
@@ -57,20 +57,20 @@ size_flags_horizontal = 4
 text = "Loading..."
 horizontal_alignment = 1
 
-[node name="ScrollContainer" type="ScrollContainer" parent="UI/MarginContainer/VBoxContainer"]
+[node name="ScrollContainer" type="ScrollContainer" parent="UI/MarginContainer/VBoxContainer" unique_id=1643490253]
 custom_minimum_size = Vector2(2.08165e-12, 300)
 layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
 
-[node name="Entries" type="VBoxContainer" parent="UI/MarginContainer/VBoxContainer/ScrollContainer"]
+[node name="Entries" type="VBoxContainer" parent="UI/MarginContainer/VBoxContainer/ScrollContainer" unique_id=1750082725]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(2.08165e-12, 32)
 layout_mode = 2
 size_flags_horizontal = 3
 alignment = 1
 
-[node name="Username" type="TextEdit" parent="UI/MarginContainer/VBoxContainer"]
+[node name="Username" type="TextEdit" parent="UI/MarginContainer/VBoxContainer" unique_id=176938907]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(400, 40)
 layout_mode = 2
@@ -78,14 +78,14 @@ size_flags_horizontal = 4
 theme = ExtResource("2_aw1ey")
 placeholder_text = "Username"
 
-[node name="Submit" type="Button" parent="UI/MarginContainer/VBoxContainer"]
+[node name="Submit" type="Button" parent="UI/MarginContainer/VBoxContainer" unique_id=600253215]
 custom_minimum_size = Vector2(200, 40)
 layout_mode = 2
 size_flags_horizontal = 4
 theme = ExtResource("2_aw1ey")
 text = "Add entry"
 
-[node name="Filter" type="Button" parent="UI/MarginContainer/VBoxContainer"]
+[node name="Filter" type="Button" parent="UI/MarginContainer/VBoxContainer" unique_id=859629030]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(200, 40)
 layout_mode = 2

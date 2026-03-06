@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://d17bvaxw1qew4"]
+[gd_scene format=3 uid="uid://d17bvaxw1qew4"]
 
 [ext_resource type="Script" uid="uid://bnojd38smydqq" path="res://addons/talo/samples/authentication/scripts/delete_account.gd" id="1_ggdf5"]
 [ext_resource type="Theme" uid="uid://ce2uyi827vc5x" path="res://addons/talo/samples/authentication/assets/theme.tres" id="2_n2cbx"]
@@ -6,25 +6,25 @@
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xxxlc"]
 bg_color = Color(0.784314, 0.156863, 0.156863, 1)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fa3fr"]
-bg_color = Color(0.690196, 0.129412, 0.129412, 1)
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hijpl"]
 bg_color = Color(0.603922, 0.105882, 0.105882, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fa3fr"]
+bg_color = Color(0.690196, 0.129412, 0.129412, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wems6"]
 bg_color = Color(0.603922, 0.105882, 0.105882, 1)
 
-[node name="DeleteAccount" type="Node2D"]
+[node name="DeleteAccount" type="Node2D" unique_id=1727370789]
 script = ExtResource("1_ggdf5")
 
-[node name="UI" type="Control" parent="."]
+[node name="UI" type="Control" parent="." unique_id=661040967]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 1080.0
 offset_bottom = 720.0
 
-[node name="Background" type="ColorRect" parent="UI"]
+[node name="Background" type="ColorRect" parent="UI" unique_id=1319535468]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -33,7 +33,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.121569, 0.160784, 0.215686, 1)
 
-[node name="MarginContainer" type="MarginContainer" parent="UI"]
+[node name="MarginContainer" type="MarginContainer" parent="UI" unique_id=1703205936]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -45,19 +45,19 @@ theme_override_constants/margin_top = 40
 theme_override_constants/margin_right = 40
 theme_override_constants/margin_bottom = 40
 
-[node name="VBoxContainer" type="VBoxContainer" parent="UI/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/MarginContainer" unique_id=1099640384]
 layout_mode = 2
 size_flags_vertical = 4
 theme_override_constants/separation = 24
 
-[node name="Title" type="Label" parent="UI/MarginContainer/VBoxContainer"]
+[node name="Title" type="Label" parent="UI/MarginContainer/VBoxContainer" unique_id=1193994383]
 layout_mode = 2
 size_flags_vertical = 0
 theme = ExtResource("2_n2cbx")
 text = "Delete account"
 horizontal_alignment = 1
 
-[node name="CurrentPassword" type="TextEdit" parent="UI/MarginContainer/VBoxContainer"]
+[node name="CurrentPassword" type="TextEdit" parent="UI/MarginContainer/VBoxContainer" unique_id=288866880]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(400, 40)
 layout_mode = 2
@@ -65,25 +65,25 @@ size_flags_horizontal = 4
 theme = ExtResource("2_n2cbx")
 placeholder_text = "Current password"
 
-[node name="Delete" type="Button" parent="UI/MarginContainer/VBoxContainer"]
+[node name="Delete" type="Button" parent="UI/MarginContainer/VBoxContainer" unique_id=588551969]
 custom_minimum_size = Vector2(200, 40)
 layout_mode = 2
 size_flags_horizontal = 4
 theme = ExtResource("2_n2cbx")
 theme_override_styles/normal = SubResource("StyleBoxFlat_xxxlc")
-theme_override_styles/hover = SubResource("StyleBoxFlat_fa3fr")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_hijpl")
+theme_override_styles/hover = SubResource("StyleBoxFlat_fa3fr")
 theme_override_styles/focus = SubResource("StyleBoxFlat_wems6")
 text = "Delete account"
 
-[node name="Cancel" type="Button" parent="UI/MarginContainer/VBoxContainer"]
+[node name="Cancel" type="Button" parent="UI/MarginContainer/VBoxContainer" unique_id=1689535090]
 custom_minimum_size = Vector2(200, 40)
 layout_mode = 2
 size_flags_horizontal = 4
 theme = ExtResource("2_n2cbx")
 text = "Cancel"
 
-[node name="ValidationLabel" type="Label" parent="UI/MarginContainer/VBoxContainer"]
+[node name="ValidationLabel" type="Label" parent="UI/MarginContainer/VBoxContainer" unique_id=1990416998]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(400, 2.08165e-12)
 layout_mode = 2

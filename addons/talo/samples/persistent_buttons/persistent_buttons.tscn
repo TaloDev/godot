@@ -1,12 +1,12 @@
-[gd_scene load_steps=3 format=3 uid="uid://cbmprpim3xigq"]
+[gd_scene format=3 uid="uid://cbmprpim3xigq"]
 
 [ext_resource type="Script" uid="uid://ceb1i0adxqrb8" path="res://addons/talo/samples/persistent_buttons/persistent_buttons_manager.gd" id="1_iuhq7"]
 [ext_resource type="Script" uid="uid://c1gm0arpfk0eb" path="res://addons/talo/samples/persistent_buttons/loadable_button.gd" id="2_5mu0j"]
 
-[node name="PersistentButtons" type="Node2D"]
+[node name="PersistentButtons" type="Node2D" unique_id=1983394166]
 script = ExtResource("1_iuhq7")
 
-[node name="Control" type="Control" parent="."]
+[node name="Control" type="Control" parent="." unique_id=38799656]
 layout_mode = 3
 anchors_preset = 8
 anchor_left = 0.5
@@ -18,7 +18,7 @@ offset_bottom = 720.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="GridContainer" type="GridContainer" parent="Control"]
+[node name="GridContainer" type="GridContainer" parent="Control" unique_id=552970385]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -35,73 +35,73 @@ theme_override_constants/h_separation = 20
 theme_override_constants/v_separation = 20
 columns = 3
 
-[node name="LoadableButton" type="Control" parent="Control/GridContainer"]
+[node name="LoadableButton" type="Control" parent="Control/GridContainer" unique_id=2123509519]
 custom_minimum_size = Vector2(65, 32)
 layout_mode = 2
 script = ExtResource("2_5mu0j")
 id = "Button1"
 
-[node name="Button" type="Button" parent="Control/GridContainer/LoadableButton"]
+[node name="Button" type="Button" parent="Control/GridContainer/LoadableButton" unique_id=1722894928]
 layout_mode = 0
 offset_right = 8.0
 offset_bottom = 8.0
 text = "0 clicks"
 
-[node name="LoadableButton2" type="Control" parent="Control/GridContainer"]
+[node name="LoadableButton2" type="Control" parent="Control/GridContainer" unique_id=1072969672]
 custom_minimum_size = Vector2(65, 32)
 layout_mode = 2
 script = ExtResource("2_5mu0j")
 id = "Button2"
 
-[node name="Button" type="Button" parent="Control/GridContainer/LoadableButton2"]
+[node name="Button" type="Button" parent="Control/GridContainer/LoadableButton2" unique_id=113055298]
 layout_mode = 0
 offset_right = 8.0
 offset_bottom = 8.0
 text = "0 clicks"
 
-[node name="LoadableButton3" type="Control" parent="Control/GridContainer"]
+[node name="LoadableButton3" type="Control" parent="Control/GridContainer" unique_id=1897950748]
 custom_minimum_size = Vector2(65, 32)
 layout_mode = 2
 script = ExtResource("2_5mu0j")
 id = "Button3"
 
-[node name="Button" type="Button" parent="Control/GridContainer/LoadableButton3"]
+[node name="Button" type="Button" parent="Control/GridContainer/LoadableButton3" unique_id=362586694]
 layout_mode = 0
 offset_right = 8.0
 offset_bottom = 8.0
 text = "0 clicks"
 
-[node name="LoadableButton4" type="Control" parent="Control/GridContainer"]
+[node name="LoadableButton4" type="Control" parent="Control/GridContainer" unique_id=326258421]
 custom_minimum_size = Vector2(65, 32)
 layout_mode = 2
 script = ExtResource("2_5mu0j")
 id = "Button4"
 
-[node name="Button" type="Button" parent="Control/GridContainer/LoadableButton4"]
+[node name="Button" type="Button" parent="Control/GridContainer/LoadableButton4" unique_id=1115469129]
 layout_mode = 0
 offset_right = 8.0
 offset_bottom = 8.0
 text = "0 clicks"
 
-[node name="LoadableButton5" type="Control" parent="Control/GridContainer"]
+[node name="LoadableButton5" type="Control" parent="Control/GridContainer" unique_id=1825285512]
 custom_minimum_size = Vector2(65, 32)
 layout_mode = 2
 script = ExtResource("2_5mu0j")
 id = "Button5"
 
-[node name="Button" type="Button" parent="Control/GridContainer/LoadableButton5"]
+[node name="Button" type="Button" parent="Control/GridContainer/LoadableButton5" unique_id=2082668654]
 layout_mode = 0
 offset_right = 8.0
 offset_bottom = 8.0
 text = "0 clicks"
 
-[node name="LoadableButton6" type="Control" parent="Control/GridContainer"]
+[node name="LoadableButton6" type="Control" parent="Control/GridContainer" unique_id=1330833264]
 custom_minimum_size = Vector2(65, 32)
 layout_mode = 2
 script = ExtResource("2_5mu0j")
 id = "Button6"
 
-[node name="Button" type="Button" parent="Control/GridContainer/LoadableButton6"]
+[node name="Button" type="Button" parent="Control/GridContainer/LoadableButton6" unique_id=588105573]
 layout_mode = 0
 offset_right = 8.0
 offset_bottom = 8.0

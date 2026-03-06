@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://ci52f1pjsppv3"]
+[gd_scene format=3 uid="uid://ci52f1pjsppv3"]
 
 [ext_resource type="Script" uid="uid://bwicim7dlamat" path="res://addons/talo/samples/multiscene_saves/scripts/loadable_star.gd" id="1_vjn8d"]
 
@@ -7,20 +7,20 @@ radius = 12.0
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_blg0n"]
 
-[node name="Star" type="Node2D"]
+[node name="Star" type="Node2D" unique_id=940602534]
 script = ExtResource("1_vjn8d")
 
-[node name="Area2D" type="Area2D" parent="."]
+[node name="Area2D" type="Area2D" parent="." unique_id=592833782]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=538419297]
 shape = SubResource("CircleShape2D_c1tps")
 
-[node name="Sprite2D" type="Sprite2D" parent="Area2D"]
+[node name="Sprite2D" type="Sprite2D" parent="Area2D" unique_id=1265155983]
 modulate = Color(1, 0.797, 0.42, 1)
 scale = Vector2(20, 20)
 texture = SubResource("CanvasTexture_blg0n")
 
-[node name="Inner" type="Sprite2D" parent="Area2D/Sprite2D"]
+[node name="Inner" type="Sprite2D" parent="Area2D/Sprite2D" unique_id=1277404238]
 rotation = 0.785398
 texture = SubResource("CanvasTexture_blg0n")
 

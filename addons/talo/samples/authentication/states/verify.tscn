@@ -1,18 +1,18 @@
-[gd_scene load_steps=3 format=3 uid="uid://dv6o0q01wov2o"]
+[gd_scene format=3 uid="uid://dv6o0q01wov2o"]
 
 [ext_resource type="Script" uid="uid://djje4dcxkijj3" path="res://addons/talo/samples/authentication/scripts/verify.gd" id="1_idjpk"]
 [ext_resource type="Theme" uid="uid://ce2uyi827vc5x" path="res://addons/talo/samples/authentication/assets/theme.tres" id="2_8uapl"]
 
-[node name="Verify" type="Node2D"]
+[node name="Verify" type="Node2D" unique_id=1267061117]
 script = ExtResource("1_idjpk")
 
-[node name="UI" type="Control" parent="."]
+[node name="UI" type="Control" parent="." unique_id=555470122]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 1080.0
 offset_bottom = 720.0
 
-[node name="Background" type="ColorRect" parent="UI"]
+[node name="Background" type="ColorRect" parent="UI" unique_id=189082680]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -21,7 +21,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.121569, 0.160784, 0.215686, 1)
 
-[node name="MarginContainer" type="MarginContainer" parent="UI"]
+[node name="MarginContainer" type="MarginContainer" parent="UI" unique_id=693747687]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -33,19 +33,19 @@ theme_override_constants/margin_top = 40
 theme_override_constants/margin_right = 40
 theme_override_constants/margin_bottom = 40
 
-[node name="VBoxContainer" type="VBoxContainer" parent="UI/MarginContainer"]
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/MarginContainer" unique_id=1484293008]
 layout_mode = 2
 size_flags_vertical = 4
 theme_override_constants/separation = 24
 
-[node name="Title" type="Label" parent="UI/MarginContainer/VBoxContainer"]
+[node name="Title" type="Label" parent="UI/MarginContainer/VBoxContainer" unique_id=385692235]
 layout_mode = 2
 size_flags_vertical = 0
 theme = ExtResource("2_8uapl")
 text = "Verify"
 horizontal_alignment = 1
 
-[node name="Code" type="TextEdit" parent="UI/MarginContainer/VBoxContainer"]
+[node name="Code" type="TextEdit" parent="UI/MarginContainer/VBoxContainer" unique_id=456415035]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(400, 40)
 layout_mode = 2
@@ -53,14 +53,14 @@ size_flags_horizontal = 4
 theme = ExtResource("2_8uapl")
 placeholder_text = "Verification code"
 
-[node name="Submit" type="Button" parent="UI/MarginContainer/VBoxContainer"]
+[node name="Submit" type="Button" parent="UI/MarginContainer/VBoxContainer" unique_id=1656943947]
 custom_minimum_size = Vector2(200, 40)
 layout_mode = 2
 size_flags_horizontal = 4
 theme = ExtResource("2_8uapl")
 text = "Submit"
 
-[node name="ValidationLabel" type="Label" parent="UI/MarginContainer/VBoxContainer"]
+[node name="ValidationLabel" type="Label" parent="UI/MarginContainer/VBoxContainer" unique_id=1744506285]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(400, 2.08165e-12)
 layout_mode = 2
