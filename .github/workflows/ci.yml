@@ -22,6 +22,10 @@ jobs:
           use-dotnet: false
           include-templates: true
 
+      - name: Regenerate .godot folder
+        run: |
+          godot --editor --headless --quit
+
       - name: Build
         run: |
           output=$(godot --headless --export-release '${{ matrix.platform }}' 2>&1)

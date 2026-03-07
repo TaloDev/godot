@@ -17,7 +17,7 @@ config/icon="res://icon.png"
 
 [autoload]
 
-Talo="*res://addons/talo/talo_manager.gd"
+Talo="*uid://bpmdn8oc34pg7"
 
 [debug]
 
