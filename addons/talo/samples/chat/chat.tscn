@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://b6am7sdy8k7gu"]
+[gd_scene format=3 uid="uid://b6am7sdy8k7gu"]
 
 [ext_resource type="Script" uid="uid://cj4v4kri7ymn" path="res://addons/talo/samples/chat/scripts/chat.gd" id="1_pqhos"]
 
@@ -8,16 +8,16 @@ content_margin_top = 5.0
 content_margin_right = 5.0
 content_margin_bottom = 5.0
 
-[node name="Chat" type="Node2D"]
+[node name="Chat" type="Node2D" unique_id=1497035574]
 script = ExtResource("1_pqhos")
 
-[node name="Control" type="Control" parent="."]
+[node name="Control" type="Control" parent="." unique_id=879930611]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 1080.0
 offset_bottom = 720.0
 
-[node name="ChannelListLabel" type="Label" parent="Control"]
+[node name="ChannelListLabel" type="Label" parent="Control" unique_id=1257984929]
 layout_mode = 0
 offset_left = 20.0
 offset_top = 20.0
@@ -25,7 +25,7 @@ offset_right = 164.0
 offset_bottom = 43.0
 text = "Available channels"
 
-[node name="ChannelList" type="Panel" parent="Control"]
+[node name="ChannelList" type="Panel" parent="Control" unique_id=2073287342]
 layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
@@ -35,7 +35,7 @@ offset_right = 220.0
 offset_bottom = -80.0
 grow_vertical = 2
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Control/ChannelList"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Control/ChannelList" unique_id=1706127654]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -45,12 +45,12 @@ grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_gim24")
 horizontal_scroll_mode = 0
 
-[node name="Channels" type="VBoxContainer" parent="Control/ChannelList/ScrollContainer"]
+[node name="Channels" type="VBoxContainer" parent="Control/ChannelList/ScrollContainer" unique_id=1898744408]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ChatLabel" type="Label" parent="Control"]
+[node name="ChatLabel" type="Label" parent="Control" unique_id=1424208823]
 layout_mode = 0
 offset_left = 240.0
 offset_top = 20.0
@@ -58,7 +58,7 @@ offset_right = 384.0
 offset_bottom = 43.0
 text = "Chat messages"
 
-[node name="Chat" type="Panel" parent="Control"]
+[node name="Chat" type="Panel" parent="Control" unique_id=116022771]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -70,7 +70,7 @@ offset_bottom = -80.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="ScrollContainer" type="ScrollContainer" parent="Control/Chat"]
+[node name="ScrollContainer" type="ScrollContainer" parent="Control/Chat" unique_id=364128402]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -79,12 +79,12 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxEmpty_gim24")
 
-[node name="Messages" type="VBoxContainer" parent="Control/Chat/ScrollContainer"]
+[node name="Messages" type="VBoxContainer" parent="Control/Chat/ScrollContainer" unique_id=889315250]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ChatMessage" type="LineEdit" parent="Control"]
+[node name="ChatMessage" type="LineEdit" parent="Control" unique_id=956167287]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 3
@@ -100,7 +100,7 @@ grow_horizontal = 0
 grow_vertical = 0
 placeholder_text = "Send a message"
 
-[node name="ChannelName" type="LineEdit" parent="Control"]
+[node name="ChannelName" type="LineEdit" parent="Control" unique_id=154866379]
 unique_name_in_owner = true
 layout_mode = 1
 anchors_preset = 3
@@ -116,7 +116,7 @@ grow_horizontal = 0
 grow_vertical = 0
 placeholder_text = "Channel name"
 
-[node name="AddChannelButton" type="Button" parent="Control"]
+[node name="AddChannelButton" type="Button" parent="Control" unique_id=733210507]
 layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0

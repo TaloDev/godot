@@ -7,11 +7,22 @@ class_name LeaderboardsAPI extends TaloAPI
 
 var _entries_manager := TaloLeaderboardEntriesManager.new()
 
-## Get a list of all the entries that have been previously fetched or created for a leaderboard.
-func get_cached_entries(internal_name: String) -> Array[TaloLeaderboardEntry]:
-	return _entries_manager.get_entries(internal_name)
+## Get a list of all the entries that have been previously fetched or created for a leaderboard. The options include "alias_id", "player_id" and "alias_service" for additional filtering.
+func get_cached_entries(internal_name: String, options := GetCachedEntriesOptions.new()) -> Array[TaloLeaderboardEntry]:
+	var entries := _entries_manager.get_entries(internal_name).filter(
+		func (entry: TaloLeaderboardEntry) -> bool:
+			# filter by alias_id if set
+			return (options.alias_id == -1 or entry.player_alias.id == options.alias_id) and \
+				# filter by player_id if set
+				(options.player_id == "" or entry.player_alias.player.id == options.player_id) and \
+				# filter by alias_service if set
+				(options.alias_service == "" or entry.player_alias.service == options.alias_service)
+	)
+
+	return entries
 
 ## Get a list of all the entries that have been previously fetched or created for a leaderboard for the current player.
+## @deprecated: Use get_cached_entries() with the alias_id or player_id option instead.
 func get_cached_entries_for_current_player(internal_name: String) -> Array[TaloLeaderboardEntry]:
 	if Talo.identity_check() != OK:
 		return []
@@ -21,7 +32,7 @@ func get_cached_entries_for_current_player(internal_name: String) -> Array[TaloL
 			return entry.player_alias.id == Talo.current_alias.id
 	)
 
-## Get a list of entries for a leaderboard. The options include "page", "alias_id", "player_id", "include_archived", "prop_key", "prop_value", "start_date" and "end_date" for additional filtering.
+## Get a list of entries for a leaderboard. The options include "page", "alias_id", "player_id", "include_archived", "prop_key", "prop_value", "start_date", "end_date" and "alias_service" for additional filtering.
 func get_entries(internal_name: String, options := GetEntriesOptions.new()) -> EntriesPage:
 	var url := "/%s/entries?page=%s"
 	var url_data := [internal_name, options.page]
@@ -52,6 +63,10 @@ func get_entries(internal_name: String, options := GetEntriesOptions.new()) -> E
 	if options.end_date != "":
 		url += "&endDate=%s"
 		url_data.append(options.end_date)
+
+	if options.alias_service != "":
+		url += "&aliasService=%s"
+		url_data.append(options.alias_service)
 
 	var res := await client.make_request(HTTPClient.METHOD_GET, url % url_data)
 
@@ -125,3 +140,9 @@ class GetEntriesOptions:
 	var prop_value: String = ""
 	var start_date: String = ""
 	var end_date: String = ""
+	var alias_service: String = ""
+
+class GetCachedEntriesOptions:
+	var alias_id: int = -1
+	var player_id: String = ""
+	var alias_service: String = ""

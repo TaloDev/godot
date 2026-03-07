@@ -1,4 +1,4 @@
-[gd_scene load_steps=6 format=3 uid="uid://b3b4ek8meeflf"]
+[gd_scene format=3 uid="uid://b3b4ek8meeflf"]
 
 [ext_resource type="Texture2D" uid="uid://b3naludt1ank2" path="res://icon.png" id="1_rswej"]
 [ext_resource type="Script" uid="uid://pjwribovgraj" path="res://addons/talo/samples/multiscene_saves/scripts/loadable_player.gd" id="1_t5o6r"]
@@ -8,24 +8,24 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_mdugq"]
 radius = 450.0
 
-[node name="Player" type="CharacterBody2D"]
+[node name="Player" type="CharacterBody2D" unique_id=301646292]
 scale = Vector2(0.05, 0.05)
 script = ExtResource("2_bg0gd")
 
-[node name="Loadable" type="Node2D" parent="."]
+[node name="Loadable" type="Node2D" parent="." unique_id=711339171]
 script = ExtResource("1_t5o6r")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1690015695]
 shape = SubResource("CircleShape2D_mdugq")
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=630858184]
 texture = ExtResource("1_rswej")
 
-[node name="Camera" type="Camera2D" parent="."]
+[node name="Camera" type="Camera2D" parent="." unique_id=1762906570]
 unique_name_in_owner = true
 zoom = Vector2(1.5, 1.5)
 
-[node name="Stars" type="Label" parent="."]
+[node name="Stars" type="Label" parent="." unique_id=134657166]
 unique_name_in_owner = true
 anchors_preset = 7
 anchor_left = 0.5
@@ -42,9 +42,9 @@ theme_override_font_sizes/font_size = 350
 text = "0 stars"
 horizontal_alignment = 1
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1249863568]
 
-[node name="Button" type="Button" parent="CanvasLayer"]
+[node name="Button" type="Button" parent="CanvasLayer" unique_id=224350831]
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0

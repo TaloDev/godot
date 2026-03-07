@@ -12,12 +12,12 @@ config_version=5
 
 config/name="Talo"
 run/main_scene="res://addons/talo/samples/playground/playground.tscn"
-config/features=PackedStringArray("4.4", "Forward Plus")
+config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.png"
 
 [autoload]
 
-Talo="*res://addons/talo/talo_manager.gd"
+Talo="*uid://bpmdn8oc34pg7"
 
 [debug]
 
@@ -46,6 +46,9 @@ gdscript/warnings/unsafe_void_return=2
 gdscript/warnings/static_called_on_instance=2
 gdscript/warnings/redundant_static_unload=2
 gdscript/warnings/redundant_await=2
+gdscript/warnings/missing_await=2
+gdscript/warnings/assert_always_true=2
+gdscript/warnings/assert_always_false=2
 gdscript/warnings/narrowing_conversion=2
 gdscript/warnings/int_as_enum_without_cast=2
 gdscript/warnings/int_as_enum_without_match=2
@@ -53,6 +56,7 @@ gdscript/warnings/deprecated_keyword=2
 gdscript/warnings/confusable_identifier=2
 gdscript/warnings/confusable_local_declaration=2
 gdscript/warnings/confusable_local_usage=2
+gdscript/warnings/confusable_capture_reassignment=2
 gdscript/warnings/property_used_as_function=2
 gdscript/warnings/constant_used_as_function=2
 gdscript/warnings/function_used_as_property=2

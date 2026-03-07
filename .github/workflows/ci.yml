@@ -18,13 +18,18 @@ jobs:
       - uses: chickensoft-games/setup-godot@v2
         name: Set up Godot
         with:
-          version: 4.4.1
+          version: 4.6.1
           use-dotnet: false
           include-templates: true
+
+      - name: Regenerate .godot folder
+        run: |
+          godot --editor --headless --quit
 
       - name: Build
         run: |
           output=$(godot --headless --export-release '${{ matrix.platform }}' 2>&1)
           if echo "$output" | grep -q "SCRIPT ERROR"; then
+            echo "$output"
             exit 1
           fi
