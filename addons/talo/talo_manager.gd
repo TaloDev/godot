@@ -69,9 +69,7 @@ func _init_socket() -> void:
 func _notification(what: int):
 	match what:
 		NOTIFICATION_WM_CLOSE_REQUEST:
-			_do_flush()
-			if Talo.settings.handle_tree_quit:
-				get_tree().quit()
+			_handle_quit()
 		NOTIFICATION_APPLICATION_FOCUS_OUT, NOTIFICATION_APPLICATION_PAUSED:
 			_do_flush()
 
@@ -128,4 +126,17 @@ func is_offline() -> bool:
 
 func _do_flush() -> void:
 	if identity_check(false) == OK:
-		events.flush()
+		await events.flush()
+
+func _handle_quit() -> void:
+	socket.close_connection()
+
+	if events.get_queue_size() > 0:
+		# this is unlikely because the focus-out notification will fire before the quit notification
+		if not events.is_flush_pending():
+			_do_flush()
+
+		await events.pending_events_flushed
+
+	if Talo.settings.handle_tree_quit:
+		get_tree().quit()
