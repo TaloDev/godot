@@ -5,6 +5,9 @@ class_name EventsAPI extends TaloAPI
 ##
 ## @tutorial: https://docs.trytalo.com/docs/godot/events
 
+## Emitted after pending events are flushed.
+signal pending_events_flushed
+
 var _queue := []
 var _min_queue_size := 10
 
@@ -80,9 +83,19 @@ func flush() -> void:
 		_flush_attempted_during_lock = false
 		await flush()
 
+	pending_events_flushed.emit()
+
 ## Clear the queue of events waiting to be flushed.
 func clear_queue() -> void:
 	_queue.clear()
 	_events_to_flush.clear()
 	_lock_flushes = false
 	_flush_attempted_during_lock = false
+
+## Get the number of events waiting to be flushed.
+func get_queue_size() -> int:
+	return _queue.size() + _events_to_flush.size()
+
+## Check to see if events are currently being flushed.
+func is_flush_pending() -> bool:
+	return _lock_flushes
