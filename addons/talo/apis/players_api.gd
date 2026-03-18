@@ -63,6 +63,10 @@ func identify_steam(ticket: String, identity: String = "") -> TaloPlayer:
 	else:
 		return await identify("steam", "%s:%s" % [identity, ticket])
 
+## Identify a player using a Google Play Games auth code.
+func identify_google_play_games(auth_code: String) -> TaloPlayer:
+	return await identify("google_play_games", auth_code)
+
 ## Queue a debounced update to the current player. The timer will reset every time this method is called.
 func debounce_update() -> void:
 	_update_timer.debounce()
