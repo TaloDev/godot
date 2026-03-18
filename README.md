@@ -19,6 +19,7 @@ Talo is the easiest way to add leaderboards, player authentication, peer-to-peer
 - 💬 [Game channels](https://trytalo.com/channels): Send real-time messages between players subscribed to specific topics.
 - ⚙️ [Live config](https://trytalo.com/live-config): Update game settings from the web with zero downtime.
 - 🔧 [Steamworks integration](https://trytalo.com/steamworks-integration): Hook into Steamworks for authentication and ownership checks.
+- ▶️ [Google Play Games integration](https://trytalo.com/google-play-games-integration): Use Google Play Games to authenticate players.
 - 🗣️ [Game feedback](https://trytalo.com/feedback): Collect and manage feedback from your players.
 - 🛡️ [Continuity](https://trytalo.com/continuity): Keep your data in-sync even when your players are offline.
 - 🔔 [Player presence](https://trytalo.com/players#presence): See if players are online and set custom statuses.
