@@ -86,11 +86,13 @@ func insert_into_prop_array(key: String, value: String) -> void:
 ## Remove a value from a prop array by key.
 func remove_from_prop_array(key: String, value: String) -> void:
 	var array_key := _to_array_key(key)
+	var had_sentinel := props.any(func (prop: TaloProp): return prop.key == array_key && prop.value == null)
 	props.assign(props.filter(func (prop: TaloProp): return !(prop.key == array_key && prop.value == null)))
 
 	var value_exists := props.any(func (prop: TaloProp): return prop.key == array_key && prop.value == value)
 	if !value_exists:
-		props.push_back(TaloProp.new(array_key, null))
+		if had_sentinel:
+			props.push_back(TaloProp.new(array_key, null))
 		push_error("remove_from_prop_array: value not found in array")
 		return
 
