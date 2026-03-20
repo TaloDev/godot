@@ -18,7 +18,7 @@ func test_remove_from_prop_array_when_last_item_removed_array_is_empty_and_senti
 	player.remove_from_prop_array("items", "sword")
 
 	assert_array(player.get_prop_array("items")).is_empty()
-	var null_entries := player.props.filter(func (p: TaloProp): return p.key == "items[]" && p.value == null)
+	var null_entries := player.props.filter(func (p: TaloProp) -> bool: return p.key == "items[]" && p.value == null)
 	assert_array(null_entries).has_size(1)
 
 func test_remove_from_prop_array_when_array_is_already_deleted_remains_deleted() -> void:
@@ -29,7 +29,7 @@ func test_remove_from_prop_array_when_array_is_already_deleted_remains_deleted()
 
 	player.remove_from_prop_array("items", "sword")
 
-	var null_entries := player.props.filter(func (p: TaloProp): return p.key == "items[]" && p.value == null)
+	var null_entries := player.props.filter(func (p: TaloProp) -> bool: return p.key == "items[]" && p.value == null)
 	assert_array(null_entries).has_size(1)
 
 func test_remove_from_prop_array_when_value_does_not_exist_does_nothing() -> void:
