@@ -21,3 +21,4 @@ addons/talo/settings.cfg
 
 # GdUnit4
 reports
+addons/gdUnit4/GdUnitRunner.cfg
