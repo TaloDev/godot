@@ -22,6 +22,11 @@ jobs:
           use-dotnet: false
           include-templates: true
 
+      - name: Clean project
+        run: |
+          rm -rf addons/gdUnit4
+          rm -rf tests
+
       - name: Regenerate .godot folder
         run: |
           godot --editor --headless --quit
