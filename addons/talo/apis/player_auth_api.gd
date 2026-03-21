@@ -187,3 +187,18 @@ func delete_account(current_password: String) -> Error:
 			return OK
 		_:
 			return _handle_error(res)
+
+## Migrate the current player account to a different service and identifier.
+func migrate_account(current_password: String, new_service: String, new_identifier: String) -> Error:
+	var res := await client.make_request(HTTPClient.METHOD_POST, "/migrate", {
+		currentPassword = current_password,
+		service = new_service,
+		identifier = new_identifier
+	})
+
+	match res.status:
+		200:
+			session_manager.handle_account_migrated(TaloPlayerAlias.new(res.body.alias))
+			return OK
+		_:
+			return _handle_error(res)
