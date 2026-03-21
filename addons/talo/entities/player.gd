@@ -41,6 +41,30 @@ func delete_prop(key: String, update: bool = true) -> void:
 	if update:
 		Talo.players.debounce_update()
 
+## Set all values for a prop array by key. Optionally sync the player (default true) with Talo.
+func set_prop_array(key: String, values: Array[String], update: bool = true) -> void:
+	super.set_prop_array(key, values)
+	if update:
+		Talo.players.debounce_update()
+
+## Delete a prop array by key. Optionally sync the player (default true) with Talo.
+func delete_prop_array(key: String, update: bool = true) -> void:
+	super.delete_prop_array(key)
+	if update:
+		Talo.players.debounce_update()
+
+## Insert a value into a prop array by key. Optionally sync the player (default true) with Talo.
+func insert_into_prop_array(key: String, value: String, update: bool = true) -> void:
+	super.insert_into_prop_array(key, value)
+	if update:
+		Talo.players.debounce_update()
+
+## Remove a value from a prop array by key. Optionally sync the player (default true) with Talo.
+func remove_from_prop_array(key: String, value: String, update: bool = true) -> void:
+	super.remove_from_prop_array(key, value)
+	if update:
+		Talo.players.debounce_update()
+
 ## Check if the player is in a group with the given ID.
 func is_in_talo_group_id(group_id: String) -> bool:
 	return not groups.filter(func (group: TaloPlayerGroupStub): return group.id == group_id).is_empty()
