@@ -15,9 +15,10 @@ func _save_session(session_token: String) -> void:
 	config.set_value("session", "identifier", Talo.current_alias.identifier)
 	config.save(_SESSION_CONFIG_PATH)
 
-func clear_session() -> void:
+func clear_session(reset_socket: bool = true) -> void:
 	Talo.current_alias = null
-	Talo.socket.reset_connection()
+	if reset_socket:
+		Talo.socket.reset_connection()
 
 	var config := _load_config(_SESSION_CONFIG_PATH)
 
@@ -48,10 +49,18 @@ func handle_session_created(alias: Dictionary, session_token: String, socket_tok
 func check_for_session() -> bool:
 	return not get_token().is_empty()
 
-func handle_identifier_changed(alias: TaloPlayerAlias) -> void:
+func _set_new_alias(alias: TaloPlayerAlias) -> void:
 	Talo.current_alias = alias
 	alias.write_offline_alias()
+
+func handle_identifier_changed(alias: TaloPlayerAlias) -> void:
+	_set_new_alias(alias)
 
 	var config := _load_config(_SESSION_CONFIG_PATH)
 	config.set_value("session", "identifier", alias.identifier)
 	config.save(_SESSION_CONFIG_PATH)
+
+func handle_account_migrated(alias: TaloPlayerAlias) -> void:
+	clear_session(false)
+	_set_new_alias(alias)
+	Talo.players.identified.emit(Talo.current_player)
