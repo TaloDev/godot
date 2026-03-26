@@ -28,7 +28,7 @@ func _ready() -> void:
 	message_received.connect(_on_message_received)
 
 func _identify_player() -> void:
-	if not _socket_authenticated:
+	if not _socket_authenticated or Talo.current_alias == null:
 		return
 
 	var payload = {
