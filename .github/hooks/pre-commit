@@ -26,6 +26,13 @@ fi
 
 echo "Detected new version: $NEW_VERSION"
 
+# Check if version is already up to date
+CURRENT_VERSION=$(grep -E 'const TALO_CLIENT_VERSION = ' "$TALO_CLIENT_GD" | sed -E 's/.*const TALO_CLIENT_VERSION = "([^"]+)".*/\1/')
+if [ "$CURRENT_VERSION" = "$NEW_VERSION" ]; then
+    echo "Version already up to date ($NEW_VERSION), skipping update."
+    exit 0
+fi
+
 # `sed -i.bak` edits the file in place and creates a backup with .bak extension.
 # the regex `(const TALO_CLIENT_VERSION = \")[^\"]+(\")` captures the parts before and after the version.
 # `\1$NEW_VERSION\2` reconstructs the line with the new version inserted.
