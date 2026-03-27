@@ -36,9 +36,18 @@ func make_request(method: HTTPClient.Method, url: String, body: Dictionary = {},
 	var all_headers := headers if continuity else _build_headers(headers)
 	var request_body := "" if body.keys().is_empty() else JSON.stringify(body)
 
+	if Talo.settings.log_requests:
+		print_rich("[color=%s]<-- %s %s%s %s[/color]" % [
+			"yellow" if continuity else "orange",
+			_get_method_name(method),
+			full_url,
+			" [CONTINUITY]" if continuity else "",
+			request_body
+		])
+
 	var http_request := HTTPRequest.new()
 	add_child(http_request)
-	http_request.timeout = 5
+	http_request.timeout = 15
 	http_request.accept_gzip = true
 	http_request.name = "%s %s" % [_get_method_name(method), url]
 
@@ -55,15 +64,6 @@ func make_request(method: HTTPClient.Method, url: String, body: Dictionary = {},
 			message =
 				"Request failed: result %s, details: https://docs.godotengine.org/en/stable/classes/class_httprequest.html#enum-httprequest-result" % res.result
 		})
-
-	if Talo.settings.log_requests:
-		print_rich("[color=%s]<-- %s %s%s %s[/color]" % [
-			"yellow" if continuity else "orange",
-			_get_method_name(method),
-			full_url,
-			" [CONTINUITY]" if continuity else "",
-			request_body
-		])
 
 	if Talo.settings.log_responses:
 		print_rich("[color=green]--> %s %s [%s] %s[/color]" % [
