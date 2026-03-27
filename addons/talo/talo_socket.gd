@@ -36,7 +36,7 @@ func _identify_player() -> void:
 		socketToken = _temp_socket_token
 	}
 
-	var session_token = Talo.player_auth.session_manager.get_token()
+	var session_token = Talo.player_auth.session_manager.get_session_token()
 	if not session_token.is_empty():
 		payload.sessionToken = session_token
 
