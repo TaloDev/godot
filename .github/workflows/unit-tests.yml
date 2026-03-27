@@ -1,0 +1,22 @@
+name: Unit tests
+
+on: push
+
+jobs:
+  unit-tests:
+    runs-on: 'ubuntu-latest'
+
+    permissions:
+      checks: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          lfs: true
+
+      - uses: MikeSchulze/gdUnit4-action@v1.3.0
+        with:
+          godot-version: '4.6.1'
+          paths: res://test
+          report-name: test_report.xml 

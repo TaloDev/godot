@@ -1,4 +1,4 @@
-name: CI
+name: Build check
 
 on: push
 
@@ -10,7 +10,7 @@ jobs:
     runs-on: ${{ matrix.platform == 'macOS' && 'macos-latest' || 'ubuntu-latest' }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         name: Checkout
         with:
           lfs: true
@@ -22,14 +22,20 @@ jobs:
           use-dotnet: false
           include-templates: true
 
+      - name: Clean project
+        run: |
+          rm -rf addons/gdUnit4
+          rm -rf tests
+
       - name: Regenerate .godot folder
         run: |
           godot --editor --headless --quit
 
       - name: Build
         run: |
-          output=$(godot --headless --export-release '${{ matrix.platform }}' 2>&1)
-          if echo "$output" | grep -q "SCRIPT ERROR"; then
-            echo "$output"
+          output=$(godot --headless --export-release '${{ matrix.platform }}' 2>&1) || exit_code=$?
+          echo "$output"
+
+          if [ "${exit_code:-0}" -ne 0 ] || echo "$output" | grep -q "SCRIPT ERROR"; then
             exit 1
           fi
