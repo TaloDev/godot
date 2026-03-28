@@ -97,7 +97,7 @@ func add_entry(internal_name: String, score: float, props: Dictionary[String, Va
 
 	var res := await client.make_request(HTTPClient.METHOD_POST, "/%s/entries" % internal_name, {
 		score = score,
-		props = TaloPropUtils.dictionary_to_array(props)
+		props = TaloPropUtils.serialise_dictionary(props)
 	})
 
 	match res.status:

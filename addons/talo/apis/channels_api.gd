@@ -169,7 +169,7 @@ func update(channel_id: int, name: String = "", new_owner_alias_id: int = -1, pr
 	if new_owner_alias_id != -1:
 		data.ownerAliasId = new_owner_alias_id
 	if props.size() > 0:
-		data.props = TaloPropUtils.dictionary_to_array(props)
+		data.props = TaloPropUtils.serialise_dictionary(props)
 
 	var res := await client.make_request(HTTPClient.METHOD_PUT, "/%s" % channel_id, data)
 
@@ -311,7 +311,7 @@ func set_storage_props(channel_id: int, props: Dictionary[String, Variant]) -> v
 		return
 
 	var res := await client.make_request(HTTPClient.METHOD_PUT, "/%s/storage" % channel_id, {
-		props = TaloPropUtils.dictionary_to_array(props)
+		props = TaloPropUtils.serialise_dictionary(props)
 	})
 
 	match res.status:
