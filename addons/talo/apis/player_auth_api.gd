@@ -30,7 +30,7 @@ func _handle_error(res: Dictionary, ret: Variant = FAILED) -> Variant:
 
 ## Identify the player if they have a valid session.
 func start_session() -> void:
-	if session_manager.check_for_session():
+	if await session_manager.check_for_session():
 		session_found.emit()
 		Talo.players.identify("talo", session_manager.get_identifier())
 	else:
@@ -46,12 +46,18 @@ func register(identifier: String, password: String, email: String = "", verifica
 		identifier = identifier,
 		password = password,
 		email = email,
-		verificationEnabled = verification_enabled
+		verificationEnabled = verification_enabled,
+		withRefresh = true
 	})
 
 	match res.status:
 		200:
-			session_manager.handle_session_created(res.body.alias, res.body.sessionToken, res.body.socketToken)
+			session_manager.handle_session_created(
+				res.body.alias,
+				res.body.sessionToken,
+				res.body.refreshToken,
+				res.body.socketToken
+			)
 			return OK
 		_:
 			return _handle_error(res)
@@ -60,7 +66,8 @@ func register(identifier: String, password: String, email: String = "", verifica
 func login(identifier: String, password: String) -> LoginResult:
 	var res := await client.make_request(HTTPClient.METHOD_POST, "/login", {
 		identifier = identifier,
-		password = password
+		password = password,
+		withRefresh = true
 	})
 
 	match res.status:
@@ -68,7 +75,12 @@ func login(identifier: String, password: String) -> LoginResult:
 			if res.body.has("verificationRequired"):
 				session_manager.save_verification_alias_id(res.body.aliasId)
 			else:
-				session_manager.handle_session_created(res.body.alias, res.body.sessionToken, res.body.socketToken)
+				session_manager.handle_session_created(
+					res.body.alias,
+					res.body.sessionToken,
+					res.body.refreshToken,
+					res.body.socketToken
+				)
 
 			if res.body.has("verificationRequired"):
 				return LoginResult.VERIFICATION_REQUIRED
@@ -81,12 +93,18 @@ func login(identifier: String, password: String) -> LoginResult:
 func verify(verification_code: String) -> Error:
 	var res := await client.make_request(HTTPClient.METHOD_POST, "/verify", {
 		aliasId = session_manager.get_verification_alias_id(),
-		code = verification_code
+		code = verification_code,
+		withRefresh = true
 	})
 
 	match res.status:
 		200:
-			session_manager.handle_session_created(res.body.alias, res.body.sessionToken, res.body.socketToken)
+			session_manager.handle_session_created(
+				res.body.alias,
+				res.body.sessionToken,
+				res.body.refreshToken,
+				res.body.socketToken
+			)
 			return OK
 		_:
 			return _handle_error(res)
@@ -95,6 +113,24 @@ func verify(verification_code: String) -> Error:
 func logout() -> void:
 	await client.make_request(HTTPClient.METHOD_POST, "/logout")
 	session_manager.clear_session()
+
+## Refresh the current session.
+func refresh() -> Error:
+	var refresh_token := session_manager.get_refresh_token()
+	if refresh_token.is_empty():
+		return FAILED
+
+	var res := await client.make_request(HTTPClient.METHOD_POST, "/refresh", {
+		refreshToken = refresh_token
+	})
+
+	match res.status:
+		200:
+			session_manager.handle_session_refreshed(res.body.sessionToken, res.body.refreshToken)
+			return OK
+		_:
+			session_manager.clear_session()
+			return _handle_error(res)
 
 ## Change the password of the current player account.
 func change_password(current_password: String, new_password: String) -> Error:
