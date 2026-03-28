@@ -1,6 +1,6 @@
 class_name TaloPropUtils extends RefCounted
 
-static func dictionary_to_array(props: Dictionary[String, Variant]) -> Array[Dictionary]:
+static func serialise_dictionary(props: Dictionary[String, Variant]) -> Array[Dictionary]:
 	var ret: Array[Dictionary] = []
 	var mapped_props := props.keys().map(
 		func (key: String):
@@ -13,7 +13,7 @@ static func dictionary_to_array(props: Dictionary[String, Variant]) -> Array[Dic
 	ret.assign(mapped_props)
 	return ret
 
-static func dictionary_to_prop_array(props: Dictionary[String, String]) -> Array[TaloProp]:
+static func dictionary_to_props(props: Dictionary[String, String]) -> Array[TaloProp]:
 	var ret: Array[TaloProp] = []
 	var mapped_props := props.keys().map(
 		func (key: String):
@@ -22,7 +22,7 @@ static func dictionary_to_prop_array(props: Dictionary[String, String]) -> Array
 	ret.assign(mapped_props)
 	return ret
 
-static func serialise_prop_array(props: Array[TaloProp]) -> Array[Dictionary]:
+static func serialise_props(props: Array[TaloProp]) -> Array[Dictionary]:
 	var ret: Array[Dictionary] = []
 	var mapped_props = props.map(func (prop: TaloProp): return prop.to_dictionary())
 	ret.assign(mapped_props)
