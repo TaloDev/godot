@@ -276,10 +276,14 @@ func get_storage_prop(channel_id: int, prop_key: String, bust_cache: bool = fals
 				return null
 
 			var prop := TaloChannelStorageProp.new(res.body.prop)
-			_storage_manager.upsert_prop(channel_id, prop)
+			_storage_manager.upsert_prop(channel_id, prop, true)
 			return prop
 		_:
 			return null
+
+## Get all values belonging to a storage prop array for a channel. Optionally, ensure the latest version of the prop is returned.
+func get_storage_prop_array(channel_id: int, prop_key: String, bust_cache: bool = false) -> Array[TaloChannelStorageProp]:
+	return await list_storage_props(channel_id, [TaloProp.to_array_key(prop_key)], bust_cache)
 
 ## Get many storage props for a channel. Optionally, ensure the latest versions of the props are returned.
 func list_storage_props(channel_id: int, prop_keys: Array[String], bust_cache: bool = false) -> Array[TaloChannelStorageProp]:
@@ -297,10 +301,8 @@ func list_storage_props(channel_id: int, prop_keys: Array[String], bust_cache: b
 	match res.status:
 		200:
 			var props: Array[TaloChannelStorageProp] = []
-			for prop_data in res.body.props:
-				var prop := TaloChannelStorageProp.new(prop_data)
-				_storage_manager.upsert_prop(channel_id, prop)
-				props.append(prop)
+			props.assign(res.body.props.map(func (prop: Dictionary): return TaloChannelStorageProp.new(prop)))
+			_storage_manager.upsert_many_props(channel_id, props)
 			return props
 		_:
 			return []
