@@ -1,7 +1,8 @@
 # Normalize line endings for all files that Git considers text files.
 * text=auto eol=lf
 
-# Only include the addons/talo folder when downloading from the Asset Library.
-/**             export-ignore
-/addons/talo    !export-ignore
-/addons/talo/** !export-ignore
+# Only include the Talo folder when downloading from the Asset Library.
+/**        			export-ignore
+/addons    			!export-ignore
+/addons/** 			!export-ignore
+/addons/gdUnit4		export-ignore
