@@ -8,8 +8,7 @@ func _get_entity(channel_id: int) -> TaloEntityWithProps:
 	return _entities[channel_id]
 
 func on_props_updated(channel: TaloChannel, upserted_props: Array[TaloChannelStorageProp], deleted_props: Array[TaloChannelStorageProp]) -> void:
-	for prop in upserted_props:
-		upsert_prop(channel.id, prop)
+	upsert_many_props(channel.id, upserted_props)
 
 	for prop in deleted_props:
 		delete_prop(channel.id, prop.key)
