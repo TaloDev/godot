@@ -23,28 +23,22 @@ The plugin is an **autoload singleton** called `Talo` (defined in [talo_manager.
 2. **TaloClient** ([talo_client.gd](addons/talo/talo_client.gd)) - HTTP client wrapper
    - Used by all API classes (via [apis/api.gd](addons/talo/apis/api.gd))
    - Builds authenticated requests with proper headers (access key, player/alias/session tokens)
-   - Logs requests/responses if enabled in settings
    - Triggers continuity system on failed requests
    - Version: Auto-updated by pre-commit hook
 
 3. **TaloSettings** ([talo_settings.gd](addons/talo/talo_settings.gd)) - Configuration management
    - Reads/writes [settings.cfg](addons/talo/settings.cfg)
    - Key settings: `access_key`, `api_url`, `socket_url`, `auto_connect_socket`, `continuity_enabled`, `debounce_timer_seconds`
-   - Auto-creates settings.cfg with defaults if missing
    - Feature tags: `talo_dev` (force debug), `talo_live` (force release)
 
 4. **Continuity System** ([utils/continuity_manager.gd](addons/talo/utils/continuity_manager.gd)) - Offline resilience
    - Automatically retries failed POST/PUT/PATCH/DELETE requests
-   - Excludes: health checks, auth, identify, socket tickets
    - Stores encrypted requests in `user://tc.bin`
    - Replays up to 10 requests every 10 seconds when online
-   - Ignores time scale for reliability
 
 5. **TaloSocket** ([talo_socket.gd](addons/talo/talo_socket.gd)) - WebSocket communication
    - Connects to `wss://api.trytalo.com` by default
    - Requires ticket creation via [socket_tickets_api.gd](addons/talo/apis/socket_tickets_api.gd)
-   - Handles player identification with socket token
-   - Polls in `_process()` loop
    - Used by channels, player presence and player relationships
 
 ### API Layer
@@ -90,9 +84,7 @@ Settings are in [addons/talo/settings.cfg](addons/talo/settings.cfg) - this file
 
 ## Important Notes
 
-- **Process mode**: TaloManager uses `PROCESS_MODE_ALWAYS` ([talo_manager.gd](addons/talo/talo_manager.gd:48))
 - **Auto accept quit**: Disabled to ensure proper flush on exit ([talo_manager.gd](addons/talo/talo_manager.gd:47))
 - **Identity checks**: Most API operations require `Talo.players.identify()` first
 - **Offline mode**: Setting `offline_mode = true` simulates no internet for testing
 - **Debouncing**: Health checks, player updates, and save updates are debounced (configurable via `debounce_timer_seconds`)
-- **Time scale**: Continuity manager and debounce timer ignore time scale for reliability
