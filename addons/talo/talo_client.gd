@@ -33,7 +33,7 @@ func _attempt_refresh(url: String, body: Dictionary) -> Error:
 	if Talo.current_alias == null or url.ends_with("/players/auth/refresh") or not body.has("errorCode"):
 		return ERR_SKIP
 
-	var error = TaloAuthError.new(body["errorCode"])
+	var error := TaloAuthError.new(body["errorCode"])
 	if error.get_code() != TaloAuthError.ErrorCode.INVALID_SESSION:
 		return ERR_SKIP
 
