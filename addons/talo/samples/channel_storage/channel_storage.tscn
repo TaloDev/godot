@@ -60,7 +60,9 @@ layout_mode = 2
 text = "
 How to use this demo: go to \"Debug > Customize Run Instances...\" and select \"Enable Multiple Instances\".
 
-Enter a prop key and value, then upsert it. You can also prefill the prop by setting the \"Prop Key\" exported variable on the root \"ChannelStorage\" node. You will see changes to your selected prop key in real time."
+Enter a prop key and value, then upsert it. You can also prefill the prop by setting the \"Prop Key\" exported variable on the root \"ChannelStorage\" node. You will see changes to your selected prop key in real time.
+
+For prop arrays, add \"[]\" to the end of your prop key, e.g. \"items[]\". To update prop array values, enter comma separated values, e.g. \"sword, shield, potion\"."
 autowrap_mode = 2
 
 [connection signal="pressed" from="Control/VBoxContainer/UpsertPropButton" to="." method="_on_upsert_prop_button_pressed"]

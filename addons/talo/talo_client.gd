@@ -1,7 +1,7 @@
 class_name TaloClient extends Node
 
 # automatically updated with a pre-commit hook
-const TALO_CLIENT_VERSION = "0.44.0"
+const TALO_CLIENT_VERSION = "0.45.0"
 
 var _base_url: String
 
@@ -29,16 +29,41 @@ func _build_response(http_request: HTTPRequest) -> TaloClientResponse:
 	var res = await http_request.request_completed
 	return TaloClientResponse.new(res[0], res[1], res[2], res[3])
 
-func make_request(method: HTTPClient.Method, url: String, body: Dictionary = {}, headers: Array[String] = [], continuity: bool = false) -> Dictionary:
+func _attempt_refresh(url: String, body: Dictionary) -> Error:
+	if Talo.current_alias == null or url.ends_with("/players/auth/refresh") or not body.has("errorCode"):
+		return ERR_SKIP
+
+	var error = TaloAuthError.new(body["errorCode"])
+	if error.get_code() != TaloAuthError.ErrorCode.INVALID_SESSION:
+		return ERR_SKIP
+
+	return await Talo.player_auth.refresh()
+
+func make_request(
+	method: HTTPClient.Method,
+	url: String,
+	body: Dictionary = {},
+	headers: Array[String] = [],
+	continuity: bool = false
+) -> Dictionary:
 	var continuity_timestamp := TaloTimeUtils.get_timestamp_msec()
 
 	var full_url := url if continuity else _build_full_url(url)
 	var all_headers := headers if continuity else _build_headers(headers)
 	var request_body := "" if body.keys().is_empty() else JSON.stringify(body)
 
+	if Talo.settings.log_requests:
+		print_rich("[color=%s]<-- %s %s%s %s[/color]" % [
+			"yellow" if continuity else "orange",
+			_get_method_name(method),
+			full_url,
+			" [CONTINUITY]" if continuity else "",
+			request_body
+		])
+
 	var http_request := HTTPRequest.new()
 	add_child(http_request)
-	http_request.timeout = 5
+	http_request.timeout = 15
 	http_request.accept_gzip = true
 	http_request.name = "%s %s" % [_get_method_name(method), url]
 
@@ -56,15 +81,6 @@ func make_request(method: HTTPClient.Method, url: String, body: Dictionary = {},
 				"Request failed: result %s, details: https://docs.godotengine.org/en/stable/classes/class_httprequest.html#enum-httprequest-result" % res.result
 		})
 
-	if Talo.settings.log_requests:
-		print_rich("[color=%s]<-- %s %s%s %s[/color]" % [
-			"yellow" if continuity else "orange",
-			_get_method_name(method),
-			full_url,
-			" [CONTINUITY]" if continuity else "",
-			request_body
-		])
-
 	if Talo.settings.log_responses:
 		print_rich("[color=green]--> %s %s [%s] %s[/color]" % [
 			_get_method_name(method),
@@ -79,6 +95,9 @@ func make_request(method: HTTPClient.Method, url: String, body: Dictionary = {},
 	}
 
 	if ret.status >= 400:
+		if await _attempt_refresh(url, ret.body) == OK:
+			return await make_request(method, url, body, headers, continuity)
+
 		handle_error(method, url, ret)
 
 	await Talo.continuity_manager.handle_post_response_healthcheck(full_url, res)
@@ -109,8 +128,8 @@ func _build_headers(extra_headers: Array[String] = []) -> Array[String]:
 			"X-Talo-Player: %s" % Talo.current_player.id,
 		])
 
-	var session_token := Talo.player_auth.session_manager.get_token()
-	if session_token:
+	var session_token := Talo.player_auth.session_manager.get_session_token()
+	if not session_token.is_empty():
 		headers.append("X-Talo-Session: %s" % session_token)
 
 	headers.append_array(extra_headers)

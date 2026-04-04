@@ -3,25 +3,21 @@ name: Claude Code Review
 on:
   pull_request:
     types: [opened, synchronize]
-    # Optional: Only run on specific file changes
-    # paths:
-    #   - "src/**/*.ts"
-    #   - "src/**/*.tsx"
-    #   - "src/**/*.js"
-    #   - "src/**/*.jsx"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   claude-review:
-    # Optional: Filter by PR author
-    # if: |
-    #   github.event.pull_request.user.login == 'external-contributor' ||
-    #   github.event.pull_request.user.login == 'new-developer' ||
-    #   github.event.pull_request.author_association == 'FIRST_TIME_CONTRIBUTOR'
-
     runs-on: ubuntu-latest
+
+    timeout-minutes: 10
+
     permissions:
       contents: read
-      pull-requests: write
+      pull-requests: read
+      issues: read
       id-token: write
 
     steps:
@@ -36,9 +32,10 @@ jobs:
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           prompt: |
-            You are reviewing PR #${{ github.event.pull_request.number }} in the repository ${{ github.repository }}.
+            REPO: ${{ github.repository }}
+            PR NUMBER: ${{ github.event.pull_request.number }}
 
-            Review this pull request and provide feedback focused only on improvements needed (not what works well):
+            Review this pull request and provide feedback on areas for improvement.
 
             **Categories to check:**
             1. Code quality and best practices
@@ -48,20 +45,19 @@ jobs:
             5. Backwards compatibility
 
             **Process:**
-            - The PR number is: ${{ github.event.pull_request.number }}
             - View the PR using: `gh pr view ${{ github.event.pull_request.number }} --repo ${{ github.repository }}`
-            - Read CLAUDE.md to understand best practices
             - View the PR diff using: `gh pr diff ${{ github.event.pull_request.number }} --repo ${{ github.repository }}`
             - If an issue spans multiple categories, list it only once in the most relevant section
             - Prioritize by severity: 🔴 Critical → 🟡 Major → 🔵 Minor
             - Focus only on changes introduced in this PR, not pre-existing code issues
-            - Test coverage is currently not a priority
+            - Test coverage is a nice to have but not a priority
 
             **Review Workflow (Follow these steps):**
             1. **Analysis Phase**: Review the PR diff and identify potential issues
             2. **Validation Phase**: For each issue you find, verify it by:
                - Re-reading the relevant code carefully
                - Checking if your suggested fix is actually different from the current code
+               - Checking if existing tests demonstrate the code handles this case
                - Confirming the issue violates documented standards (check CLAUDE.md)
                - Ensuring your criticism is actionable and specific
             3. **Draft Phase**: Write your review only after validating all issues
@@ -80,16 +76,11 @@ jobs:
             Ignore theoretical issues that require multiple unlikely conditions or malicious input patterns.
             Use the "would this bother a pragmatic senior developer?" test.
 
-            Maximum chain of assumptions: 2 levels deep. Skip exotic input combinations that violate documented assumptions.
-
             **Feedback style:**
             - Provide specific code examples or line references showing the issue
             - Suggest concrete fixes with code snippets where helpful
-            - Keep total feedback under 500 words
-            - Use section headers with emojis and horizontal dividers (---)
+            - Use section headers with severity emojis and horizontal dividers (---)
             - If no improvements needed in a category, simply state "No issues found"
-            - Use neutral language; focus on the code, not the author
-            - If the PR looks good overall, say so clearly rather than forcing criticism
 
             **Comment Management (IMPORTANT):**
             Post your review using this command, which will edit your last comment if one exists, or create a new one:
@@ -97,6 +88,10 @@ jobs:
               gh pr comment ${{ github.event.pull_request.number }} --repo ${{ github.repository }} --edit-last --create-if-none --body "<review>"
             ```
 
-            Ensure proper escaping of quotes and special characters in the comment body. Use single quotes around the body and escape any single quotes inside with '\''
+            - Only post your review when it is ready.
+            - Do not try to post anything other than a completed review.
+            - Do not post multiple comments.
+            - Ensure the markdown you generate is well-formatted and renders correctly on GitHub.
+            - Use code blocks for snippets and proper markdown for lists and headers.
           claude_args: |
-            --allowedTools "Read,Bash(gh pr:*),Grep,Glob"
+            --allowedTools "Read,Bash(gh pr*),Grep,Glob"

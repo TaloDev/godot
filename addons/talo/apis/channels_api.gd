@@ -169,7 +169,7 @@ func update(channel_id: int, name: String = "", new_owner_alias_id: int = -1, pr
 	if new_owner_alias_id != -1:
 		data.ownerAliasId = new_owner_alias_id
 	if props.size() > 0:
-		data.props = TaloPropUtils.dictionary_to_array(props)
+		data.props = TaloPropUtils.serialise_dictionary(props)
 
 	var res := await client.make_request(HTTPClient.METHOD_PUT, "/%s" % channel_id, data)
 
@@ -276,10 +276,14 @@ func get_storage_prop(channel_id: int, prop_key: String, bust_cache: bool = fals
 				return null
 
 			var prop := TaloChannelStorageProp.new(res.body.prop)
-			_storage_manager.upsert_prop(channel_id, prop)
+			_storage_manager.upsert_prop(channel_id, prop, true)
 			return prop
 		_:
 			return null
+
+## Get all values belonging to a storage prop array for a channel. Optionally, ensure the latest version of the prop is returned.
+func get_storage_prop_array(channel_id: int, prop_key: String, bust_cache: bool = false) -> Array[TaloChannelStorageProp]:
+	return await list_storage_props(channel_id, [TaloProp.to_array_key(prop_key)], bust_cache)
 
 ## Get many storage props for a channel. Optionally, ensure the latest versions of the props are returned.
 func list_storage_props(channel_id: int, prop_keys: Array[String], bust_cache: bool = false) -> Array[TaloChannelStorageProp]:
@@ -297,13 +301,19 @@ func list_storage_props(channel_id: int, prop_keys: Array[String], bust_cache: b
 	match res.status:
 		200:
 			var props: Array[TaloChannelStorageProp] = []
-			for prop_data in res.body.props:
-				var prop := TaloChannelStorageProp.new(prop_data)
-				_storage_manager.upsert_prop(channel_id, prop)
-				props.append(prop)
+			props.assign(res.body.props.map(func (prop: Dictionary): return TaloChannelStorageProp.new(prop)))
+			_storage_manager.upsert_many_props(channel_id, props)
 			return props
 		_:
 			return []
+
+## Set a storage prop array for a channel. Passing an empty array will delete all existing values for the prop.
+func set_storage_prop_array(channel_id: int, key: String, values: Array[String]) -> void:
+	# TaloPropUtils.serialise_dictionary will expand the array values into multiple props
+	var props: Dictionary[String, Variant] = {
+		TaloProp.to_array_key(key): values
+	}
+	await set_storage_props(channel_id, props)
 
 ## Set storage props for a channel.
 func set_storage_props(channel_id: int, props: Dictionary[String, Variant]) -> void:
@@ -311,7 +321,7 @@ func set_storage_props(channel_id: int, props: Dictionary[String, Variant]) -> v
 		return
 
 	var res := await client.make_request(HTTPClient.METHOD_PUT, "/%s/storage" % channel_id, {
-		props = TaloPropUtils.dictionary_to_array(props)
+		props = TaloPropUtils.serialise_dictionary(props)
 	})
 
 	match res.status:

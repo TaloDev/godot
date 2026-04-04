@@ -44,11 +44,11 @@ func track(name: String, props: Dictionary[String, String] = {}) -> void:
 		return
 
 	var final_props := _build_meta_props()
-	final_props.append_array(TaloPropUtils.dictionary_to_prop_array(props))
+	final_props.append_array(TaloPropUtils.dictionary_to_props(props))
 
 	_queue.push_back({
 		name = name,
-		props = TaloPropUtils.serialise_prop_array(final_props),
+		props = TaloPropUtils.serialise_props(final_props),
 		timestamp = TaloTimeUtils.get_timestamp_msec()
 	})
 

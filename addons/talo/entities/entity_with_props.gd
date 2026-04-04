@@ -2,12 +2,16 @@ class_name TaloEntityWithProps extends RefCounted
 
 var props: Array[TaloProp] = []
 
-func _init(props: Array) -> void:
+func _init(props: Array = []) -> void:
 	self.props.assign(props)
+
+## Find many props by key and return them directly.
+func find_props_by_key(key: String) -> Array[TaloProp]:
+	return props.filter(func (prop: TaloProp): return prop.key == key && prop.value != null)
 
 ## Get a property value by key. Returns the fallback value if the key is not found.
 func get_prop(key: String, fallback: String = "") -> String:
-	var filtered := props.filter(func (prop: TaloProp): return prop.key == key && prop.value != null)
+	var filtered := find_props_by_key(key)
 	return fallback if filtered.is_empty() else filtered.front().value
 
 ## Set a property by key and value.
@@ -30,15 +34,12 @@ func delete_prop(key: String) -> void:
 func get_serialized_props() -> Array:
 	return props.map(func (prop: TaloProp): return prop.to_dictionary())
 
-func _to_array_key(key: String) -> String:
-	return key if key.ends_with("[]") else key + "[]"
-
 ## Get all values for a prop array by key.
 func get_prop_array(key: String) -> Array[String]:
-	var array_key := _to_array_key(key)
+	var array_key := TaloProp.to_array_key(key)
 	var result: Array[String] = []
 
-	result.assign(props.filter(func (prop: TaloProp): return prop.key == array_key && prop.value != null).map(func (prop: TaloProp): return prop.value))
+	result.assign(find_props_by_key(array_key).map(func (prop: TaloProp): return prop.value))
 	return result
 
 ## Set all values for a prop array by key, replacing any existing values.
@@ -53,7 +54,7 @@ func set_prop_array(key: String, values: Array[String]) -> void:
 		push_error("set_prop_array: values must not be empty")
 		return
 
-	var array_key := _to_array_key(key)
+	var array_key := TaloProp.to_array_key(key)
 
 	props.assign(props.filter(func (prop: TaloProp): return prop.key != array_key))
 	for v in unique_values:
@@ -61,7 +62,7 @@ func set_prop_array(key: String, values: Array[String]) -> void:
 
 ## Delete a prop array by key, leaving a sentinel null entry.
 func delete_prop_array(key: String) -> void:
-	var array_key := _to_array_key(key)
+	var array_key := TaloProp.to_array_key(key)
 
 	var matches := props.filter(func (prop: TaloProp): return prop.key == array_key)
 	if matches.is_empty():
@@ -77,7 +78,7 @@ func insert_into_prop_array(key: String, value: String) -> void:
 		push_error("insert_into_prop_array: value must not be empty")
 		return
 
-	var array_key := _to_array_key(key)
+	var array_key := TaloProp.to_array_key(key)
 	var already_exists := props.any(func (prop: TaloProp): return prop.key == array_key && prop.value == value)
 	if !already_exists:
 		props.assign(props.filter(func (prop: TaloProp): return !(prop.key == array_key && prop.value == null)))
@@ -85,7 +86,7 @@ func insert_into_prop_array(key: String, value: String) -> void:
 
 ## Remove a value from a prop array by key.
 func remove_from_prop_array(key: String, value: String) -> void:
-	var array_key := _to_array_key(key)
+	var array_key := TaloProp.to_array_key(key)
 	var had_sentinel := props.any(func (prop: TaloProp): return prop.key == array_key && prop.value == null)
 	props.assign(props.filter(func (prop: TaloProp): return !(prop.key == array_key && prop.value == null)))
 
