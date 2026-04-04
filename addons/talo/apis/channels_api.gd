@@ -307,6 +307,14 @@ func list_storage_props(channel_id: int, prop_keys: Array[String], bust_cache: b
 		_:
 			return []
 
+## Set a storage prop array for a channel. Passing an empty array will delete all existing values for the prop.
+func set_storage_prop_array(channel_id: int, key: String, values: Array[String]) -> void:
+	# TaloPropUtils.serialise_dictionary will expand the array values into multiple props
+	var props: Dictionary[String, Variant] = {
+		TaloProp.to_array_key(key): values
+	}
+	await set_storage_props(channel_id, props)
+
 ## Set storage props for a channel.
 func set_storage_props(channel_id: int, props: Dictionary[String, Variant]) -> void:
 	if Talo.identity_check() != OK:

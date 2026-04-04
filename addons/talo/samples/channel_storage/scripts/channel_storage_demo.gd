@@ -105,15 +105,12 @@ func _on_upsert_prop_button_pressed() -> void:
 
 	var key := prop_key_line_edit.text
 	if _is_array_key(key):
-		var entity := TaloEntityWithProps.new()
-
-		# split the input by commas and trim whitespace
-		var items := prop_value_line_edit.text.split(",")
-		for item in items:
-			entity.insert_into_prop_array(key, item.strip_edges())
-
-		var prop_array := entity.find_props_by_key(key)
-		await Talo.channels.set_storage_props(demo_channel.id, TaloPropUtils.props_to_dictionary(prop_array))
+		var items: Array[String] = []
+		for item in prop_value_line_edit.text.split(","):
+			var trimmed := item.strip_edges()
+			if not trimmed.is_empty():
+				items.push_back(trimmed)
+		await Talo.channels.set_storage_prop_array(demo_channel.id, key, items)
 	else:
 		await Talo.channels.set_storage_props(demo_channel.id, {
 			key: prop_value_line_edit.text
