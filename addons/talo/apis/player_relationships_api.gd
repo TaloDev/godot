@@ -24,7 +24,6 @@ signal message_received(player_alias: TaloPlayerAlias, message: String)
 
 func _init() -> void:
 	super("/v1/players/relationships")
-	name = "TaloPlayerRelationships"
 
 func _ready() -> void:
 	await Talo.init_completed
