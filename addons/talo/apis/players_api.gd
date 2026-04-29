@@ -17,7 +17,7 @@ signal identification_failed()
 ## Emitted after calling clear_identity().
 signal identity_cleared()
 
-var _update_timer := TaloDebounceTimer.new(_handle_update_timer_timeout)
+var _update_timer := TaloDebounceTimer.new(_handle_update_timer_timeout, false)
 
 func _ready() -> void:
 	Talo.connection_restored.connect(_on_connection_restored)
