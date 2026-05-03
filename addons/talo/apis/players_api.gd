@@ -67,6 +67,25 @@ func identify_steam(ticket: String, identity: String = "") -> TaloPlayer:
 func identify_google_play_games(auth_code: String) -> TaloPlayer:
 	return await identify("google_play_games", auth_code)
 
+## Identify a player using an Apple Game Center identity verification signature. Signature and salt must be base64 encoded.
+func identify_game_center(
+	public_key_url: String,
+	signature: String,
+	salt: String,
+	timestamp: int,
+	player_id: String,
+	bundle_id: String
+) -> TaloPlayer:
+	var identifier := JSON.stringify({
+		"publicKeyUrl": public_key_url,
+		"signature": signature,
+		"salt": salt,
+		"timestamp": timestamp,
+		"playerId": player_id,
+		"bundleId": bundle_id
+	})
+	return await identify("game_center", identifier.uri_encode())
+
 ## Queue a debounced update to the current player. The timer will reset every time this method is called.
 func debounce_update() -> void:
 	_update_timer.debounce()
