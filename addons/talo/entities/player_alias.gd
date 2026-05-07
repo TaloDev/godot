@@ -13,6 +13,8 @@ var updated_at: String
 var _offline_data: Dictionary
 
 func _init(data: Dictionary):
+	_offline_data = data
+
 	id = data.id
 	service = data.service
 	identifier = data.identifier
@@ -20,7 +22,9 @@ func _init(data: Dictionary):
 	last_seen_at = data.lastSeenAt
 	created_at = data.createdAt
 	updated_at = data.updatedAt
-	_offline_data = data
+
+	if player.aliases.is_empty():
+		player.aliases.push_back(self)
 
 ## Cache the offline alias data.
 func write_offline_alias():
