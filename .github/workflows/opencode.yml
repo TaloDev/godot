@@ -36,3 +36,22 @@ jobs:
           OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
         with:
           model: opencode-go/deepseek-v4-flash
+          prompt: |
+            ## Code review process (ONLY when asked to review a PR)
+
+            1. Use the @code-reviewer subagent to analyze the code and produce a review.
+            2. Pass the review text and the original PR diff to the @code-review-verifier subagent.
+            3. You are responsible for posting the final verified review as a single GitHub comment.
+
+            **Code review rules:**
+            - Only post when the verified review is ready.
+            - Do not post multiple comments.
+            - Ensure markdown is well-formatted and renders correctly on GitHub.
+            - Post using:
+              ```bash
+              gh pr comment ${INSERT_PR_NUMBER} --repo ${INSERT_REPO} --edit-last --create-if-none --body "<review>"
+              ```
+
+            ## General tasks (for everything else)
+
+            For any request that is NOT a code review, carry on as normal.
