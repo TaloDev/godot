@@ -43,8 +43,11 @@ func track(name: String, props: Dictionary[String, String] = {}) -> void:
 	if Talo.identity_check() != OK:
 		return
 
-	var final_props := _build_meta_props()
-	final_props.append_array(TaloPropUtils.dictionary_to_props(props))
+	# TODO: track enforces string prop values, which means prop arrays aren't supported
+	var variant_value_props: Dictionary[String, Variant] = {}
+	variant_value_props.assign(props)
+
+	var final_props := _build_meta_props() + TaloPropUtils.dictionary_to_props(variant_value_props)
 
 	_queue.push_back({
 		name = name,

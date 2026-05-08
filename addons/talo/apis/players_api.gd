@@ -17,7 +17,7 @@ signal identification_failed()
 ## Emitted after calling clear_identity().
 signal identity_cleared()
 
-var _update_timer := TaloDebounceTimer.new(_handle_update_timer_timeout)
+var _update_timer := TaloDebounceTimer.new(_handle_update_timer_timeout, false)
 
 func _ready() -> void:
 	Talo.connection_restored.connect(_on_connection_restored)
@@ -66,6 +66,25 @@ func identify_steam(ticket: String, identity: String = "") -> TaloPlayer:
 ## Identify a player using a Google Play Games auth code.
 func identify_google_play_games(auth_code: String) -> TaloPlayer:
 	return await identify("google_play_games", auth_code)
+
+## Identify a player using an Apple Game Center identity verification signature. Signature and salt must be base64 encoded.
+func identify_game_center(
+	public_key_url: String,
+	signature: String,
+	salt: String,
+	timestamp: int,
+	player_id: String,
+	bundle_id: String
+) -> TaloPlayer:
+	var identifier := JSON.stringify({
+		"publicKeyUrl": public_key_url,
+		"signature": signature,
+		"salt": salt,
+		"timestamp": timestamp,
+		"playerId": player_id,
+		"bundleId": bundle_id
+	})
+	return await identify("game_center", identifier.uri_encode())
 
 ## Queue a debounced update to the current player. The timer will reset every time this method is called.
 func debounce_update() -> void:

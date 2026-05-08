@@ -1,6 +1,4 @@
-# CLAUDE.md
-
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+# AGENTS.md
 
 ## Project Overview
 
@@ -17,12 +15,10 @@ The plugin is an **autoload singleton** called `Talo` (defined in [talo_manager.
 1. **TaloManager** ([talo_manager.gd](addons/talo/talo_manager.gd)) - Main autoload singleton
    - Initializes all API instances, crypto manager, continuity manager, and socket
    - Manages current player/alias state
-   - Emits `init_completed`, `connection_lost`, and `connection_restored` signals
    - Handles app quit and focus events to flush pending data
 
 2. **TaloClient** ([talo_client.gd](addons/talo/talo_client.gd)) - HTTP client wrapper
    - Used by all API classes (via [apis/api.gd](addons/talo/apis/api.gd))
-   - Builds authenticated requests with proper headers (access key, player/alias/session tokens)
    - Triggers continuity system on failed requests
    - Version: Auto-updated by pre-commit hook
 
@@ -33,11 +29,8 @@ The plugin is an **autoload singleton** called `Talo` (defined in [talo_manager.
 
 4. **Continuity System** ([utils/continuity_manager.gd](addons/talo/utils/continuity_manager.gd)) - Offline resilience
    - Automatically retries failed POST/PUT/PATCH/DELETE requests
-   - Stores encrypted requests in `user://tc.bin`
-   - Replays up to 10 requests every 10 seconds when online
 
 5. **TaloSocket** ([talo_socket.gd](addons/talo/talo_socket.gd)) - WebSocket communication
-   - Connects to `wss://api.trytalo.com` by default
    - Requires ticket creation via [socket_tickets_api.gd](addons/talo/apis/socket_tickets_api.gd)
    - Used by channels, player presence and player relationships
 
