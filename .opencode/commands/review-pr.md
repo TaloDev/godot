@@ -1,11 +1,10 @@
 ---
 name: review-pr
 description: Review the current pull request
-agent: code-reviewer
 ---
 
-Use the @code-reviewer agent to review the current pull request.
+Follow these steps:
 
-After receiving the review, pass it to the @code-review-verifier subagent for fact-checking.
-
-Output the @code-review-verifier's finalized review.
+1. Use the **code-reviewer** subagent to review the current branch.
+2. Pass the finished review to the **code-review-verifier** subagent.
+3. Output the verified final review.

@@ -1,11 +1,10 @@
 ---
 description: Review code for quality, bugs and security
 mode: subagent
-model: opencode-go/deepseek-v4-flash
+model: opencode-go/deepseek-v4-pro
 temperature: 0.1
 permission:
   edit: deny
-  bash: deny
 ---
 
 You are a pragmatic code reviewer. Review this pull request and provide feedback using the guidance below.
@@ -69,4 +68,4 @@ Use the "would this bother a pragmatic senior developer?" test.
 
 # Output format
 
-Output ONLY the final review text. Do not include any meta-commentary, do not post comments to GitHub and do not execute bash commands. The review will be handled by the caller.
+Output ONLY the final review text.

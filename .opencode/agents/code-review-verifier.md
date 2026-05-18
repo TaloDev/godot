@@ -5,7 +5,6 @@ model: opencode-go/deepseek-v4-flash
 temperature: 0.1
 permission:
   edit: deny
-  bash: deny
 ---
 
 Your job is to act as a rigorous fact-checker and quality gate for code reviews and to output the finalized review.
