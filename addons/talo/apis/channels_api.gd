@@ -17,6 +17,8 @@ signal channel_ownership_transferred(channel: TaloChannel, new_owner_player_alia
 signal channel_deleted(channel: TaloChannel)
 ## Emitted when a channel is updated.
 signal channel_updated(channel: TaloChannel, changed_properties: Array[String])
+## Emitted when one or more props are rejected during a channel create or update.
+signal channel_props_rejected(rejected_props: Array[TaloRejectedProp])
 ## Emitted when channel storage props are updated or deleted.
 signal channel_storage_props_updated(channel: TaloChannel, upserted_props: Array[TaloChannelStorageProp], deleted_props: Array[TaloChannelStorageProp])
 ## Emitted when one or more storage props were not successfully set.
@@ -135,6 +137,12 @@ func create(options: CreateChannelOptions = CreateChannelOptions.new()) -> TaloC
 	match res.status:
 		200:
 			return TaloChannel.new(res.body.channel)
+		400:
+			var rejected_props := TaloRejectedProp.from_response(res.body)
+			if rejected_props.size() > 0:
+				channel_props_rejected.emit(rejected_props)
+
+			return null
 		_:
 			return null
 
@@ -176,6 +184,12 @@ func update(channel_id: int, name: String = "", new_owner_alias_id: int = -1, pr
 	match res.status:
 		200:
 			return TaloChannel.new(res.body.channel)
+		400:
+			var rejected_props := TaloRejectedProp.from_response(res.body)
+			if rejected_props.size() > 0:
+				channel_props_rejected.emit(rejected_props)
+
+			return null
 		403:
 			push_error("Player does not have permissions to update channel %s." % channel_id)
 			return null
@@ -329,7 +343,7 @@ func set_storage_props(channel_id: int, props: Dictionary[String, Variant]) -> v
 			if res.body.failedProps.size() > 0:
 				var failed_props: Array[TaloChannelStoragePropError] = []
 				failed_props.assign(res.body.failedProps.map(
-					func (prop: Dictionary): return TaloChannelStoragePropError.new(prop.key, prop.error))
+					func (prop: Dictionary): return TaloChannelStoragePropError.new(prop.key, prop.error, prop.message))
 				)
 				channel_storage_props_failed_to_set.emit(TaloChannel.new(res.body.channel), failed_props)
 

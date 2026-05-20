@@ -17,6 +17,9 @@ signal identification_failed()
 ## Emitted after calling clear_identity().
 signal identity_cleared()
 
+## Emitted when one or more props are rejected during a player update.
+signal props_rejected(rejected_props: Array[TaloRejectedProp])
+
 var _update_timer := TaloDebounceTimer.new(_handle_update_timer_timeout, false)
 
 func _ready() -> void:
@@ -104,6 +107,11 @@ func update() -> TaloPlayer:
 				Talo.current_alias.player = TaloPlayer.new(res.body.player)
 
 			Talo.current_alias.write_offline_alias()
+
+			var rejected_props := TaloRejectedProp.from_response(res.body)
+			if rejected_props.size() > 0:
+				props_rejected.emit(rejected_props)
+
 			return Talo.current_player
 		_:
 			return null
