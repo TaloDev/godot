@@ -93,7 +93,7 @@ func _on_channel_props_updated(channel: TaloChannel, upserted_props: Array[TaloC
 
 func _on_channel_storage_props_failed_to_set(channel: TaloChannel, failed_props: Array[TaloChannelStoragePropError]):
 	for prop in failed_props:
-		print("%s: %s" % [prop.key, prop.error])
+		print("%s: %s" % [prop.key, prop.message if prop.message else prop.error])
 
 func _on_upsert_prop_button_pressed() -> void:
 	if prop_key_line_edit.text.is_empty():
