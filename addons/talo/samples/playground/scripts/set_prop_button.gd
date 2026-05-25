@@ -3,6 +3,13 @@ extends Button
 @export var prop_name: String
 @export var prop_value: String
 
+func _ready() -> void:
+	Talo.players.props_rejected.connect(_on_props_rejected)
+
+func _on_props_rejected(rejected_props: Array[TaloRejectedProp]) -> void:
+	var reasons := rejected_props.map(func (rp: TaloRejectedProp): return "[%s] %s" % [rp.key, rp.message])
+	%ResponseLabel.text = "Rejected props: %s" % ", ".join(reasons)
+
 func _on_pressed() -> void:
 	if Talo.identity_check() != OK:
 		%ResponseLabel.text = "You need to identify a player first!"
