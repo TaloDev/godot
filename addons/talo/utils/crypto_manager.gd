@@ -39,3 +39,29 @@ func get_key() -> String:
 	var key := file.get_as_text()
 	file.close()
 	return key
+
+static func get_hashed_time(size := 16) -> String:
+	var time_hash := str(TaloTimeUtils.get_timestamp_msec()).sha256_text()
+	var split_start := RandomNumberGenerator.new().randi_range(0, time_hash.length() - size)
+	return time_hash.substr(split_start, size)
+
+static func create_request_signature(request_body: String) -> String:
+	if Talo.settings.verification_key_version.is_empty() or Talo.settings.verification_key_value.is_empty():
+		push_error("Verification is enabled but verification_key_version or verification_key_value is missing. Please update your Talo settings.cfg")
+		return "" 
+
+	var timestamp := TaloTimeUtils.get_timestamp_msec()
+	var payload := JSON.stringify({
+		rid = TaloCryptoManager.get_hashed_time(),
+		payload = request_body.sha256_text(),
+		timestamp = timestamp
+	})
+
+	var header_b64 := Marshalls.utf8_to_base64(payload)
+
+	var hmac := HMACContext.new()
+	hmac.start(HashingContext.HASH_SHA256, Talo.settings.verification_key_value.to_utf8_buffer())
+	hmac.update(header_b64.to_utf8_buffer())
+	var signature_b64 := Marshalls.raw_to_base64(hmac.finish())
+
+	return "%s|%s.%s" % [Talo.settings.verification_key_version, header_b64, signature_b64]
