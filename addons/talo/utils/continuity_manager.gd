@@ -30,7 +30,7 @@ func push_request(method: HTTPClient.Method, url: String, body: Dictionary, head
 		method = method,
 		url = url,
 		body = body.duplicate(true),
-		headers = headers.filter(func (h: String): return h.find("Authorization") == -1),
+		headers = headers.filter(func (h: String): return h.find("Authorization") == -1 and h.find("X-Talo-Signature") == -1),
 		timestamp = timestamp
 	})
 
