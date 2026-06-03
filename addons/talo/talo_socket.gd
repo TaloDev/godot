@@ -80,10 +80,15 @@ func send(req: String, data: Dictionary = {}) -> int:
 	if Talo.settings.log_requests:
 		print_rich("[color=orange]<-- WSS %s %s[/color]" % [req, data])
 
-	return _socket.send_text(JSON.stringify({
+	var msg := JSON.stringify({
 		req = req,
 		data = data
-	}))
+	})
+
+	if Talo.settings.verification_enabled and _identified:
+		msg = TaloCryptoManager.create_request_signature(msg) + "\n" + msg
+
+	return _socket.send_text(msg)
 
 func _get_json() -> String:
 	var pkt := _socket.get_packet()
