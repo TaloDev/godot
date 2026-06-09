@@ -44,7 +44,11 @@ For each point in the review, determine:
 
 ### Output format
 
-After completing your verification, you MUST output the finalized review text suitable for posting directly as a GitHub PR comment. The review itself is your ONLY output.
+After completing your verification, modify the original review based on your findings.
+
+You must only output a finalized review.
+
+Do not include references to your verification process or meta commentary about what changed from the original review (assume it was never seen).
 
 ## Rules
 

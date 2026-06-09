@@ -96,6 +96,27 @@ var debounce_timer_seconds: float:
 	set(value):
 		_config_file.set_value("", "debounce_timer_seconds", value)
 
+## Enable request verification to prevent replay attacks and tampering - this must also be enabled in the dashboard
+var verification_enabled: bool:
+	get:
+		return _config_file.get_value("verification", "enabled", false)
+	set(value):
+		_config_file.set_value("verification", "enabled", value)
+
+## The version of the verification key being used
+var verification_key_version: String:
+	get:
+		return _config_file.get_value("verification", "key_version", "")
+	set(value):
+		_config_file.set_value("verification", "key_version", value)
+
+## The value for the verification key version
+var verification_key_value: String:
+	get:
+		return _config_file.get_value("verification", "key_value", "")
+	set(value):
+		_config_file.set_value("verification", "key_value", value)
+
 func _init() -> void:
 	_config_file = ConfigFile.new()
 
@@ -110,6 +131,9 @@ func _init() -> void:
 		auto_start_session = auto_start_session
 		cache_player_on_identify = cache_player_on_identify
 		debounce_timer_seconds = debounce_timer_seconds
+		verification_enabled = verification_enabled
+		verification_key_version = verification_key_version
+		verification_key_value = verification_key_value
 		save_config()
 
 		print_rich("[color=green]Talo settings.cfg created! Please close the game and fill in your access_key.[/color]")

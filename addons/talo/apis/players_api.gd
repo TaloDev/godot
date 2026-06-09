@@ -145,10 +145,7 @@ func find(player_id: String) -> TaloPlayer:
 
 ## Generate a mostly-unique identifier.
 func generate_identifier() -> String:
-	var time_hash := str(TaloTimeUtils.get_timestamp_msec()).sha256_text()
-	var size := 12
-	var split_start := RandomNumberGenerator.new().randi_range(0, time_hash.length() - size)
-	return time_hash.substr(split_start, size)
+	return TaloCryptoManager.get_hashed_time(12)
 
 ## Attempt to identify a player when they're offline.
 func identify_offline(service: String, identifier: String) -> TaloPlayer:

@@ -1,11 +1,11 @@
 class_name TaloClient extends Node
 
 # automatically updated with a pre-commit hook
-const TALO_CLIENT_VERSION = "0.47.0"
+const TALO_CLIENT_VERSION = "0.48.0"
 
 var _base_url: String
 
-func _init(base_url: String):
+func _init(base_url: String) -> void:
 	_base_url = base_url
 	name = "Client"
 
@@ -51,6 +51,9 @@ func make_request(
 	var full_url := url if continuity else _build_full_url(url)
 	var all_headers := headers if continuity else _build_headers(headers)
 	var request_body := "" if body.keys().is_empty() else JSON.stringify(body)
+
+	if Talo.settings.verification_enabled and Talo.current_alias != null:
+		all_headers.append("X-Talo-Signature: %s" % TaloCryptoManager.create_request_signature(request_body))
 
 	if Talo.settings.log_requests:
 		print_rich("[color=%s]<-- %s %s%s %s[/color]" % [
