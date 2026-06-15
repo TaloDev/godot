@@ -19,6 +19,7 @@ signal session_not_found()
 
 var session_manager := TaloSessionManager.new()
 var last_error: TaloAuthError = null
+var session_refresh_request: SessionRefreshRequest = null
 
 func _handle_error(res: Dictionary, ret: Variant = FAILED) -> Variant:
 	if res.body != null and res.body.has("errorCode"):
@@ -120,17 +121,25 @@ func refresh() -> Error:
 	if refresh_token.is_empty():
 		return FAILED
 
+	if session_refresh_request != null:
+		return await session_refresh_request.completed
+
+	session_refresh_request = SessionRefreshRequest.new()
 	var res := await client.make_request(HTTPClient.METHOD_POST, "/refresh", {
 		refreshToken = refresh_token
 	})
 
+	var result := OK
 	match res.status:
 		200:
 			session_manager.handle_session_refreshed(res.body.sessionToken, res.body.refreshToken)
-			return OK
 		_:
 			session_manager.clear_session()
-			return _handle_error(res)
+			result = _handle_error(res)
+
+	session_refresh_request.completed.emit(result)
+	session_refresh_request = null
+	return result
 
 ## Change the password of the current player account.
 func change_password(current_password: String, new_password: String) -> Error:
@@ -238,3 +247,6 @@ func migrate_account(current_password: String, new_service: String, new_identifi
 			return OK
 		_:
 			return _handle_error(res)
+
+class SessionRefreshRequest extends RefCounted:
+	signal completed(result: Error)
