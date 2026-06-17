@@ -23,6 +23,7 @@ static func player_alias_factory(params: Dictionary[String, Variant] = {}) -> Di
 		id = data.get("id", 1),
 		service = data.get("service", "test"),
 		identifier = data.get("identifier", "test_player"),
+		displayName = data.get("display_name", "test_player"),
 		player = player_factory(params),
 		lastSeenAt = "",
 		createdAt = "",
