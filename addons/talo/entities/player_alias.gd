@@ -5,6 +5,7 @@ const _OFFLINE_DATA_PATH = "user://ta.bin"
 var id: int
 var service: String
 var identifier: String
+var display_name: String
 var player: TaloPlayer
 var last_seen_at: String
 var created_at: String
@@ -16,6 +17,7 @@ func _init(data: Dictionary):
 	id = data.id
 	service = data.service
 	identifier = data.identifier
+	display_name = data.displayName
 	player = TaloPlayer.new(data.player)
 	last_seen_at = data.lastSeenAt
 	created_at = data.createdAt
