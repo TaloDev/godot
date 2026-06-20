@@ -26,19 +26,18 @@ func clear_session(reset_socket: bool = true) -> Error:
 
 	_session_token = ""
 	Talo.current_alias = null
-
-	if reset_socket:
-		Talo.socket.reset_connection()
+	TaloPlayerAlias.delete_offline_alias()
 
 	var config := _load_config(_SESSION_CONFIG_PATH)
 	if config.has_section("session"):
 		config.erase_section("session")
 		config.save(_SESSION_CONFIG_PATH)
 
-	TaloPlayerAlias.delete_offline_alias()
-
 	Talo.events.clear_queue()
 	Talo.continuity_manager.clear_requests()
+
+	if reset_socket:
+		Talo.socket.reset_connection()
 
 	return OK
 
