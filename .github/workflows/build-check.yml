@@ -4,7 +4,6 @@ on: push
 
 jobs:
   build-check:
-    name: ${{ matrix.platform }}
     strategy:
       matrix:
         platform: ['Windows Desktop', 'macOS', 'Linux', 'Web']
