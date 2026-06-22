@@ -32,9 +32,13 @@ func write_offline_alias():
 		file.store_line(JSON.stringify(_offline_data))
 		file.close()
 
+## Check if a usable offline alias file exists on disk.
+static func has_offline_alias() -> bool:
+	return Talo.settings.cache_player_on_identify and FileAccess.file_exists(_OFFLINE_DATA_PATH)
+
 ## Get the offline alias data.
 static func get_offline_alias() -> TaloPlayerAlias:
-	if not Talo.settings.cache_player_on_identify or not FileAccess.file_exists(_OFFLINE_DATA_PATH):
+	if not has_offline_alias():
 		return null
 
 	var file := FileAccess.open_encrypted_with_pass(_OFFLINE_DATA_PATH, FileAccess.READ, Talo.crypto_manager.get_key())
@@ -49,15 +53,11 @@ static func get_offline_alias() -> TaloPlayerAlias:
 	return TaloPlayerAlias.new(json.data)
 
 ## Delete the file containing the offline alias data.
-func delete_offline_alias() -> void:
+static func delete_offline_alias() -> void:
 	if FileAccess.file_exists(_OFFLINE_DATA_PATH):
 		var dir := DirAccess.open("user://")
 		dir.remove(_OFFLINE_DATA_PATH)
 
 ## Check if this alias matches the identify request.
 func matches_identify_request(service: String, identifier: String) -> bool:
-	var match = self.service == service and self.identifier == identifier
-	if not match:
-		delete_offline_alias()
-
-	return match
+	return self.service == service and self.identifier == identifier

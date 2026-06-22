@@ -20,17 +20,26 @@ func _save_session(session_token: String, refresh_token: String) -> void:
 
 	config.save(_SESSION_CONFIG_PATH)
 
-func clear_session(reset_socket: bool = true) -> void:
+func clear_session(reset_socket: bool = true) -> Error:
+	if Talo.identity_check(false) != OK:
+		return ERR_UNAUTHORIZED
+
 	_session_token = ""
 	Talo.current_alias = null
-
-	if reset_socket:
-		Talo.socket.reset_connection()
+	TaloPlayerAlias.delete_offline_alias()
 
 	var config := _load_config(_SESSION_CONFIG_PATH)
 	if config.has_section("session"):
 		config.erase_section("session")
 		config.save(_SESSION_CONFIG_PATH)
+
+	Talo.events.clear_queue()
+	Talo.continuity_manager.clear_requests()
+
+	if reset_socket:
+		Talo.socket.reset_connection()
+
+	return OK
 
 func get_session_token() -> String:
 	return _session_token
@@ -61,6 +70,9 @@ func handle_session_refreshed(session_token: String, refresh_token: String) -> v
 func check_for_session() -> bool:
 	if not get_session_token().is_empty():
 		return true
+
+	if await Talo.is_offline():
+		return TaloPlayerAlias.has_offline_alias()
 
 	if get_refresh_token().is_empty():
 		return false

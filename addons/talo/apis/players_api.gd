@@ -170,18 +170,8 @@ func search(query: String, page: int = 0) -> SearchPage:
 
 ## Clears the current player identity. Pending events and continuity requests will also be cleared.
 func clear_identity() -> void:
-	if Talo.identity_check() != OK:
-		return
-
-	Talo.current_alias.delete_offline_alias()
-
-	# clears the alias and resets the socket (doesn't require auth)
-	Talo.player_auth.session_manager.clear_session()
-
-	Talo.events.clear_queue()
-	Talo.continuity_manager.clear_requests()
-
-	identity_cleared.emit()
+	if Talo.player_auth.session_manager.clear_session() == OK:
+		identity_cleared.emit()
 
 ## Create a new socket token. The Talo socket will use this token to identify the player.
 func create_socket_token() -> String:
