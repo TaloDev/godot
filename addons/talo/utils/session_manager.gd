@@ -61,7 +61,7 @@ func get_verification_alias_id() -> int:
 func handle_session_created(alias: Dictionary, session_token: String, refresh_token: String, socket_token: String) -> void:
 	Talo.current_alias = TaloPlayerAlias.new(alias)
 	_save_session(session_token, refresh_token)
-	Talo.players.identified.emit(Talo.current_player)
+	Talo.players.identified.emit(Talo.current_alias)
 	Talo.socket.set_socket_token(socket_token)
 
 func handle_session_refreshed(session_token: String, refresh_token: String) -> void:
@@ -93,4 +93,4 @@ func handle_identifier_changed(alias: TaloPlayerAlias) -> void:
 func handle_account_migrated(alias: TaloPlayerAlias) -> void:
 	clear_session(false)
 	_set_new_alias(alias)
-	Talo.players.identified.emit(Talo.current_player)
+	Talo.players.identified.emit(Talo.current_alias)

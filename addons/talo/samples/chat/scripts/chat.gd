@@ -20,7 +20,7 @@ func _on_presence_changed(presence: TaloPlayerPresence, online_changed: bool, cu
 	if online_changed:
 		_add_chat_message("[SYSTEM] %s is now %s" % [presence.player_alias.identifier, "online" if presence.online else "offline"])
 
-func _on_identified(player: TaloPlayer) -> void:
+func _on_identified(_player_alias: TaloPlayerAlias) -> void:
 	_subscriptions = await Talo.channels.get_subscribed_channels()
 
 	var options := Talo.channels.GetChannelsOptions.new()

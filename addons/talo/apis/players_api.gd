@@ -6,7 +6,7 @@ class_name PlayersAPI extends TaloAPI
 ## @tutorial: https://docs.trytalo.com/docs/godot/identifying
 
 ## Emitted when a player has been identified.
-signal identified(player: TaloPlayer)
+signal identified(player_alias: TaloPlayerAlias)
 
 ## Emitted when identification starts.
 signal identification_started()
@@ -29,7 +29,7 @@ func _ready() -> void:
 func _handle_update_timer_timeout() -> void:
 	await Talo.players.update()
 
-func _handle_identify_success(alias: TaloPlayerAlias, socket_token: String = "") -> TaloPlayer:
+func _handle_identify_success(alias: TaloPlayerAlias, socket_token: String = "") -> TaloPlayerAlias:
 	if not await Talo.is_offline() and Talo.socket.is_identified():
 		Talo.socket.reset_connection()
 
@@ -38,11 +38,11 @@ func _handle_identify_success(alias: TaloPlayerAlias, socket_token: String = "")
 	if not socket_token.is_empty():
 		Talo.socket.set_socket_token(socket_token)
 
-	identified.emit(Talo.current_player)
-	return Talo.current_player
+	identified.emit(Talo.current_alias)
+	return Talo.current_alias
 
 ## Identify a player using a service (e.g. "username") and identifier (e.g. "bob").
-func identify(service: String, identifier: String) -> TaloPlayer:
+func identify(service: String, identifier: String) -> TaloPlayerAlias:
 	identification_started.emit()
 
 	if await Talo.is_offline():
@@ -60,14 +60,14 @@ func identify(service: String, identifier: String) -> TaloPlayer:
 			return null
 
 ## Identify a player using a Steam ticket.
-func identify_steam(ticket: String, identity: String = "") -> TaloPlayer:
+func identify_steam(ticket: String, identity: String = "") -> TaloPlayerAlias:
 	if identity.is_empty():
 		return await identify("steam", ticket)
 	else:
 		return await identify("steam", "%s:%s" % [identity, ticket])
 
 ## Identify a player using a Google Play Games auth code.
-func identify_google_play_games(auth_code: String) -> TaloPlayer:
+func identify_google_play_games(auth_code: String) -> TaloPlayerAlias:
 	return await identify("google_play_games", auth_code)
 
 ## Identify a player using an Apple Game Center identity verification signature. Signature and salt must be base64 encoded.
@@ -78,7 +78,7 @@ func identify_game_center(
 	timestamp: int,
 	player_id: String,
 	bundle_id: String
-) -> TaloPlayer:
+) -> TaloPlayerAlias:
 	var identifier := JSON.stringify({
 		"publicKeyUrl": public_key_url,
 		"signature": signature,
@@ -148,7 +148,7 @@ func generate_identifier() -> String:
 	return TaloCryptoManager.get_hashed_time(12)
 
 ## Attempt to identify a player when they're offline.
-func identify_offline(service: String, identifier: String) -> TaloPlayer:
+func identify_offline(service: String, identifier: String) -> TaloPlayerAlias:
 	var offline_alias := TaloPlayerAlias.get_offline_alias()
 	if offline_alias != null and offline_alias.matches_identify_request(service, identifier):
 		return await _handle_identify_success(offline_alias)
