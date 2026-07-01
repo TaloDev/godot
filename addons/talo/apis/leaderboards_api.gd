@@ -22,17 +22,6 @@ func get_cached_entries(internal_name: String, options := GetCachedEntriesOption
 				(options.alias_service == "" or entry.player_alias.service == options.alias_service)
 	)
 
-## Get a list of all the entries that have been previously fetched or created for a leaderboard for the current player.
-## @deprecated: Use get_cached_entries() with the alias_id or player_id option instead.
-func get_cached_entries_for_current_player(internal_name: String) -> Array[TaloLeaderboardEntry]:
-	if Talo.identity_check() != OK:
-		return []
-
-	return _entries_manager.get_entries(internal_name).filter(
-		func (entry: TaloLeaderboardEntry) -> bool:
-			return entry.player_alias.id == Talo.current_alias.id
-	)
-
 ## Get a list of entries for a leaderboard. The options include "page", "alias_id", "player_id", "include_archived", "prop_key", "prop_value", "start_date", "end_date" and "alias_service" for additional filtering.
 func get_entries(internal_name: String, options := GetEntriesOptions.new()) -> EntriesPage:
 	var url := "/%s/entries?page=%s"
