@@ -55,4 +55,4 @@ func _configure_signals():
 	delete_account.delete_account_success.connect(func (): _make_state_visible(login))
 	delete_account.go_to_game.connect(func (): _make_state_visible(in_game))
 
-	Talo.players.identified.connect(func (player): _make_state_visible(in_game))
+	Talo.players.identified.connect(func (_player_alias: TaloPlayerAlias): _make_state_visible(in_game))
