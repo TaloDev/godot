@@ -73,15 +73,6 @@ func get_entries(internal_name: String, options := GetEntriesOptions.new()) -> E
 		_:
 			return null
 
-## @deprecated: Use get_entries() with the alias_id or player_id option instead.
-func get_entries_for_current_player(internal_name: String, options := GetEntriesOptions.new()) -> EntriesPage:
-	if Talo.identity_check() != OK:
-		return null
-
-	options.alias_id = Talo.current_alias.id
-
-	return await get_entries(internal_name, options)
-
 ## Add an entry to a leaderboard. The props (key-value pairs) parameter is used to store additional data with the entry.
 func add_entry(internal_name: String, score: float, props: Dictionary[String, Variant] = {}) -> AddEntryResult:
 	if Talo.identity_check() != OK:
