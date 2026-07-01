@@ -1,0 +1,57 @@
+name: Summarise
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  summarise:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Get opencode version
+        id: version
+        run: |
+          VERSION=$(curl -sf https://api.github.com/repos/anomalyco/opencode/releases/latest | grep -o '"tag_name": *"[^"]*"' | cut -d'"' -f4)
+          echo "version=${VERSION:-latest}" >> "$GITHUB_OUTPUT"
+
+      - name: Cache opencode
+        id: cache
+        uses: actions/cache@v5
+        with:
+          path: ~/.opencode/bin
+          key: opencode-${{ runner.os }}-${{ runner.arch }}-${{ steps.version.outputs.version }}
+
+      - name: Install opencode
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: curl -fsSL https://opencode.ai/install | bash
+
+      - name: Generate and apply summary
+        env:
+          OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          MODEL: opencode-go/deepseek-v4-flash
+        run: |
+          set -euo pipefail
+          export PATH="$HOME/.opencode/bin:$PATH"
+          PROMPT="$(cat <<'EOF'
+          Summarise the changes in this pull request at a high level.
+          1-5 paragraphs. Each paragraph must start with a bolded theme title of a few words on its own line (e.g. **Authentication overhaul**), followed by one bullet point for each individual point within that theme.
+          Separate paragraphs with a blank line.
+          Focus on substantive changes. Skip tests, fixtures, formatting and wiring unless they are the point of the PR.
+          Describe what changed and why, not how it works internally.
+          No preamble, no restating the title, no judgements.
+          EOF
+          )"
+          BODY="$(gh pr diff "$PR_NUMBER" | opencode run --model "$MODEL" "$PROMPT")"
+          gh pr edit "$PR_NUMBER" --body "$BODY"
