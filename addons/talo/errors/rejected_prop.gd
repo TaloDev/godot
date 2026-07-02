@@ -9,8 +9,13 @@ enum RejectionReason {
 	PROP_KEY_RESERVED
 }
 
+# Which prop key was rejected
 var key: String
+
+# The rejection reason error code
 var error: RejectionReason
+
+# The human-readable rejection reason
 var message: String
 
 func _init(data: Dictionary) -> void:
