@@ -11,8 +11,8 @@ signal identified(player_alias: TaloPlayerAlias)
 ## Emitted when identification starts.
 signal identification_started()
 
-## Emitted when identification fails.
-signal identification_failed()
+## Emitted when identification fails with a [TaloIdentifyError].
+signal identification_failed(error: TaloIdentifyError)
 
 ## Emitted after calling clear_identity().
 signal identity_cleared()
@@ -56,7 +56,7 @@ func identify(service: String, identifier: String) -> TaloPlayerAlias:
 			return await _handle_identify_success(alias, res.body.socketToken)
 		_:
 			Talo.player_auth.session_manager.clear_session()
-			identification_failed.emit()
+			identification_failed.emit(TaloIdentifyError.from_response(res.body))
 			return null
 
 ## Identify a player using a Steam ticket.
@@ -153,7 +153,7 @@ func identify_offline(service: String, identifier: String) -> TaloPlayerAlias:
 	if offline_alias != null and offline_alias.matches_identify_request(service, identifier):
 		return await _handle_identify_success(offline_alias)
 	else:
-		identification_failed.emit()
+		identification_failed.emit(TaloIdentifyError.from_response(null))
 		return null
 
 ## Search for players by IDs, prop values and alias identifiers.
