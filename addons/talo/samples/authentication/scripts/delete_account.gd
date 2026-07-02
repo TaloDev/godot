@@ -16,7 +16,7 @@ func _on_delete_pressed() -> void:
 	var res := await Talo.player_auth.delete_account(current_password.text)
 	if res != OK:
 		match Talo.player_auth.last_error.get_code():
-			TaloAuthError.ErrorCode.INVALID_CREDENTIALS:
+			TaloPlayerAuthError.ErrorCode.INVALID_CREDENTIALS:
 				validation_label.text = "Current password is incorrect"
 			_:
 				validation_label.text = Talo.player_auth.last_error.get_string()

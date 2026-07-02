@@ -23,7 +23,7 @@ func _on_submit_pressed() -> void:
 	match res:
 		Talo.player_auth.LoginResult.FAILED:
 			match Talo.player_auth.last_error.get_code():
-				TaloAuthError.ErrorCode.INVALID_CREDENTIALS:
+				TaloPlayerAuthError.ErrorCode.INVALID_CREDENTIALS:
 					validation_label.text = "Username or password is incorrect"
 				_:
 					validation_label.text = Talo.player_auth.last_error.get_string()
