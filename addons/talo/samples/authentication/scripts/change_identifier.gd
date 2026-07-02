@@ -21,11 +21,11 @@ func _on_submit_pressed() -> void:
 	var res := await Talo.player_auth.change_identifier(password.text, new_identifier.text)
 	if res != OK:
 		match Talo.player_auth.last_error.get_code():
-			TaloAuthError.ErrorCode.INVALID_CREDENTIALS:
+			TaloPlayerAuthError.ErrorCode.INVALID_CREDENTIALS:
 				validation_label.text = "Current password is incorrect"
-			TaloAuthError.ErrorCode.NEW_IDENTIFIER_MATCHES_CURRENT_IDENTIFIER:
+			TaloPlayerAuthError.ErrorCode.NEW_IDENTIFIER_MATCHES_CURRENT_IDENTIFIER:
 				validation_label.text = "New identifier must be different from the current identifier"
-			TaloAuthError.ErrorCode.IDENTIFIER_TAKEN:
+			TaloPlayerAuthError.ErrorCode.IDENTIFIER_TAKEN:
 				validation_label.text = "Identifier is already taken"
 			_:
 				validation_label.text = Talo.player_auth.last_error.get_string()

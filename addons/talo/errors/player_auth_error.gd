@@ -1,4 +1,4 @@
-class_name TaloAuthError extends RefCounted
+class_name TaloPlayerAuthError extends RefCounted
 
 enum ErrorCode {
 	API_ERROR,

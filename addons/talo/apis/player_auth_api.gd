@@ -18,14 +18,14 @@ signal session_found()
 signal session_not_found()
 
 var session_manager := TaloSessionManager.new()
-var last_error: TaloAuthError = null
+var last_error: TaloPlayerAuthError = null
 var session_refresh_request: SessionRefreshRequest = null
 
 func _handle_error(res: Dictionary, ret: Variant = FAILED) -> Variant:
 	if res.body != null and res.body.has("errorCode"):
-		last_error = TaloAuthError.new(res.body.errorCode)
+		last_error = TaloPlayerAuthError.new(res.body.errorCode)
 	else:
-		last_error = TaloAuthError.new("API_ERROR")
+		last_error = TaloPlayerAuthError.new("API_ERROR")
 
 	return ret
 
