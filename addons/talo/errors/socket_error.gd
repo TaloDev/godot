@@ -17,7 +17,7 @@ enum ErrorCode {
 ## The original req that triggered the error.
 var req: String
 
-## The socket error code using the ErrorCode enum.
+## The socket error code using the [code]ErrorCode[/code] enum.
 var code: ErrorCode
 
 ## The human-readable socket error message. 

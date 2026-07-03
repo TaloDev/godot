@@ -6,10 +6,10 @@ enum ErrorCode {
 	IDENTIFIER_TAKEN
 }
 
-var error: ErrorCode
+var code: ErrorCode
 
-func _init(error_code: ErrorCode = ErrorCode.UNKNOWN_ERROR) -> void:
-	error = error_code
+func _init(code: ErrorCode = ErrorCode.UNKNOWN_ERROR) -> void:
+	self.code = code
 
 static func from_response(body: Variant) -> TaloIdentifyError:
 	var code := ErrorCode.UNKNOWN_ERROR

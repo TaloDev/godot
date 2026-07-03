@@ -12,7 +12,7 @@ func _on_submit_pressed() -> void:
 
 	var res := await Talo.player_auth.verify(code.text)
 	if res != OK:
-		match Talo.player_auth.last_error.error:
+		match Talo.player_auth.last_error.code:
 			TaloPlayerAuthError.ErrorCode.VERIFICATION_CODE_INVALID:
 				validation_label.text = "Verification code is incorrect"
 			TaloPlayerAuthError.ErrorCode.VERIFICATION_ALIAS_NOT_FOUND:

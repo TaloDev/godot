@@ -20,7 +20,7 @@ func _on_submit_pressed() -> void:
 
 	var res := await Talo.player_auth.change_email(password.text, new_email.text)
 	if res != OK:
-		match Talo.player_auth.last_error.error:
+		match Talo.player_auth.last_error.code:
 			TaloPlayerAuthError.ErrorCode.INVALID_CREDENTIALS:
 				validation_label.text = "Current password is incorrect"
 			TaloPlayerAuthError.ErrorCode.NEW_EMAIL_MATCHES_CURRENT_EMAIL:

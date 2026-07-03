@@ -1,6 +1,6 @@
 class_name TaloRejectedProp extends RefCounted
 
-enum RejectionReason {
+enum ErrorCode {
 	UNKNOWN_ERROR,
 	PROP_KEY_TOO_LONG,
 	PROP_VALUE_TOO_LONG,
@@ -9,18 +9,18 @@ enum RejectionReason {
 	PROP_KEY_RESERVED
 }
 
-# Which prop key was rejected
+# Which prop key was rejected.
 var key: String
 
-# The rejection reason error code
-var error: RejectionReason
+# The rejection reason code using the [code]ErrorCode[/code] enum.
+var code: ErrorCode
 
-# The human-readable rejection reason
+# The human-readable rejection reason.
 var message: String
 
 func _init(data: Dictionary) -> void:
 	key = data.key
-	error = RejectionReason.get(data.error, RejectionReason.UNKNOWN_ERROR)
+	code = ErrorCode.get(data.error, ErrorCode.UNKNOWN_ERROR)
 	message = data.message
 
 static func from_response(body: Dictionary) -> Array[TaloRejectedProp]:
