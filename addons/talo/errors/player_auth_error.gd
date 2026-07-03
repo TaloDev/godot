@@ -19,18 +19,24 @@ enum ErrorCode {
 	IDENTIFIER_PROFANITY
 }
 
-var _error_string := ""
+## The player auth error code, or [code]API_ERROR[/code] when missing/unknown.
+var error: ErrorCode
 
-func _init(error_string: String) -> void:
-	_error_string = error_string
+## The human-readable message from the response, or a fallback for API errors.
+var message: String
 
-## Get the human-readable player auth error message. 
-func get_string() -> String:
-	if _error_string == "API_ERROR":
-		return "API error - see the Errors Output for more details"
+func _init(error_code: ErrorCode = ErrorCode.API_ERROR, message: String = "") -> void:
+	error = error_code
+	self.message = message
 
-	return _error_string
+static func from_response(body: Variant) -> TaloPlayerAuthError:
+	var code := ErrorCode.API_ERROR
+	var message := "API error - see the Errors Output for more details"
+	if body is Dictionary:
+		if body.has("errorCode"):
+			code = ErrorCode.get(body.errorCode, ErrorCode.API_ERROR)
+			message = body.get("message", "Unknown error")
+		elif body.has("message"):
+			message = body.message
 
-## Get the player auth error code using the ErrorCode enum.
-func get_code() -> ErrorCode:
-	return ErrorCode.get(_error_string)
+	return TaloPlayerAuthError.new(code, message)
