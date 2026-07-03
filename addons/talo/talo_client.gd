@@ -36,7 +36,8 @@ func _attempt_refresh(url: String, body: Dictionary) -> Error:
 	if TaloPlayerAuthError.ErrorCode.get(body.errorCode) != TaloPlayerAuthError.ErrorCode.INVALID_SESSION:
 		return ERR_SKIP
 
-	return await Talo.player_auth.refresh()
+	var res := await Talo.player_auth.refresh()
+	return OK if res.success else FAILED
 
 func make_request(
 	method: HTTPClient.Method,

@@ -13,7 +13,8 @@ func _on_submit_pressed() -> void:
 		validation_label.text = "Email is required"
 		return
 
-	if await Talo.player_auth.forgot_password(email.text) == OK:
+	var res := await Talo.player_auth.forgot_password(email.text)
+	if res.success:
 		forgot_password_success.emit()
 
 func _on_cancel_pressed() -> void:

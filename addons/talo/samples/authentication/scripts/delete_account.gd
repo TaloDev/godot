@@ -14,14 +14,14 @@ func _on_delete_pressed() -> void:
 		return
 
 	var res := await Talo.player_auth.delete_account(current_password.text)
-	if res != OK:
-		match Talo.player_auth.last_error.code:
+	if res.success:
+		delete_account_success.emit()
+	else:
+		match res.error.code:
 			TaloPlayerAuthError.ErrorCode.INVALID_CREDENTIALS:
 				validation_label.text = "Current password is incorrect"
 			_:
-				validation_label.text = Talo.player_auth.last_error.message
-	else:
-		delete_account_success.emit()
+				validation_label.text = res.error.message
 
 func _on_cancel_pressed() -> void:
 	go_to_game.emit()

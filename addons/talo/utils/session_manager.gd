@@ -77,7 +77,8 @@ func check_for_session() -> bool:
 	if get_refresh_token().is_empty():
 		return false
 
-	return await Talo.player_auth.refresh() == OK
+	var res := await Talo.player_auth.refresh()
+	return res.success
 
 func _set_new_alias(alias: TaloPlayerAlias) -> void:
 	Talo.current_alias = alias
