@@ -20,15 +20,16 @@ enum ErrorCode {
 }
 
 ## The player auth error code, or [code]API_ERROR[/code] when missing/unknown.
-var error: ErrorCode
+var code: ErrorCode
 
 ## The human-readable message from the response, or a fallback for API errors.
 var message: String
 
-func _init(error_code: ErrorCode = ErrorCode.API_ERROR, message: String = "") -> void:
-	error = error_code
+func _init(code: ErrorCode = ErrorCode.API_ERROR, message: String = "") -> void:
+	self.code = code
 	self.message = message
 
+## Build a [TaloPlayerAuthError] from a parsed response body.
 static func from_response(body: Variant) -> TaloPlayerAuthError:
 	var code := ErrorCode.API_ERROR
 	var message := "API error - see the Errors Output for more details"

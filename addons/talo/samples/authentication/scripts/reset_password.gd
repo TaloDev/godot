@@ -20,7 +20,7 @@ func _on_submit_pressed() -> void:
 
 	var res := await Talo.player_auth.reset_password(code.text, new_password.text)
 	if res != OK:
-		match Talo.player_auth.last_error.error:
+		match Talo.player_auth.last_error.code:
 			TaloPlayerAuthError.ErrorCode.PASSWORD_RESET_CODE_INVALID:
 				validation_label.text = "Reset code is invalid"
 			_:

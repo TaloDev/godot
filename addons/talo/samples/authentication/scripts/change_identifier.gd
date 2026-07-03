@@ -20,7 +20,7 @@ func _on_submit_pressed() -> void:
 
 	var res := await Talo.player_auth.change_identifier(password.text, new_identifier.text)
 	if res != OK:
-		match Talo.player_auth.last_error.error:
+		match Talo.player_auth.last_error.code:
 			TaloPlayerAuthError.ErrorCode.INVALID_CREDENTIALS:
 				validation_label.text = "Current password is incorrect"
 			TaloPlayerAuthError.ErrorCode.NEW_IDENTIFIER_MATCHES_CURRENT_IDENTIFIER:

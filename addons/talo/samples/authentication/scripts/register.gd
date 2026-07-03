@@ -25,7 +25,7 @@ func _on_submit_button_pressed() -> void:
 
 	var res := await Talo.player_auth.register(username.text, password.text, email.text, enable_verification.button_pressed)
 	if res != OK:
-		match Talo.player_auth.last_error.error:
+		match Talo.player_auth.last_error.code:
 			TaloPlayerAuthError.ErrorCode.IDENTIFIER_TAKEN:
 				validation_label.text = "Username is already taken"
 			TaloPlayerAuthError.ErrorCode.INVALID_EMAIL:
