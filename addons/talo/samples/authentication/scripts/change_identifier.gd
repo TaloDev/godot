@@ -19,8 +19,10 @@ func _on_submit_pressed() -> void:
 		return
 
 	var res := await Talo.player_auth.change_identifier(password.text, new_identifier.text)
-	if res != OK:
-		match Talo.player_auth.last_error.code:
+	if res.success:
+		identifier_change_success.emit()
+	else:
+		match res.error.code:
 			TaloPlayerAuthError.ErrorCode.INVALID_CREDENTIALS:
 				validation_label.text = "Current password is incorrect"
 			TaloPlayerAuthError.ErrorCode.NEW_IDENTIFIER_MATCHES_CURRENT_IDENTIFIER:
@@ -28,9 +30,7 @@ func _on_submit_pressed() -> void:
 			TaloPlayerAuthError.ErrorCode.IDENTIFIER_TAKEN:
 				validation_label.text = "Identifier is already taken"
 			_:
-				validation_label.text = Talo.player_auth.last_error.message
-	else:
-		identifier_change_success.emit()
+				validation_label.text = res.error.message
 
 func _on_cancel_pressed() -> void:
 	go_to_game.emit()
