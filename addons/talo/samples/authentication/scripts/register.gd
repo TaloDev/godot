@@ -25,13 +25,13 @@ func _on_submit_button_pressed() -> void:
 
 	var res := await Talo.player_auth.register(username.text, password.text, email.text, enable_verification.button_pressed)
 	if res != OK:
-		match Talo.player_auth.last_error.get_code():
+		match Talo.player_auth.last_error.error:
 			TaloPlayerAuthError.ErrorCode.IDENTIFIER_TAKEN:
 				validation_label.text = "Username is already taken"
 			TaloPlayerAuthError.ErrorCode.INVALID_EMAIL:
 				validation_label.text = "Invalid email address"
 			_:
-				validation_label.text = Talo.player_auth.last_error.get_string()
+				validation_label.text = Talo.player_auth.last_error.message
 
 func _on_login_pressed() -> void:
 	go_to_login.emit()
