@@ -96,6 +96,13 @@ var debounce_timer_seconds: float:
 	set(value):
 		_config_file.set_value("", "debounce_timer_seconds", value)
 
+## When making requests via HTTPRequest set use_threads to this value
+var requests_use_threads: bool:
+	get:
+		return _config_file.get_value("", "requests_use_threads", false)
+	set(value):
+		_config_file.set_value("", "requests_use_threads", value)
+
 ## Enable request verification to prevent replay attacks and tampering - this must also be enabled in the dashboard
 var verification_enabled: bool:
 	get:
@@ -131,6 +138,7 @@ func _init() -> void:
 		auto_start_session = auto_start_session
 		cache_player_on_identify = cache_player_on_identify
 		debounce_timer_seconds = debounce_timer_seconds
+		requests_use_threads = requests_use_threads
 		verification_enabled = verification_enabled
 		verification_key_version = verification_key_version
 		verification_key_value = verification_key_value

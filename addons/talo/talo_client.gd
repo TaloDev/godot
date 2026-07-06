@@ -69,6 +69,7 @@ func make_request(
 	http_request.timeout = 15
 	http_request.accept_gzip = true
 	http_request.name = "%s %s" % [_get_method_name(method), url]
+	http_request.use_threads = Talo.settings.requests_use_threads
 
 	http_request.request(full_url, all_headers, method, request_body)
 	var res := _simulate_offline_request() if Talo.settings.offline_mode else await _build_response(http_request)
