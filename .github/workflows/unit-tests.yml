@@ -1,6 +1,9 @@
 name: Unit tests
 
-on: push
+on:
+  push:
+    branches: [develop]
+  pull_request:
 
 jobs:
   unit-tests:
