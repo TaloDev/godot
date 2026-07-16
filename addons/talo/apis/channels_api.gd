@@ -167,17 +167,23 @@ func leave(channel_id: int) -> void:
 	await client.make_request(HTTPClient.METHOD_POST, "/%s/leave" % channel_id)
 
 ## Update a channel. This will only work if the current player is the owner of the channel.
-func update(channel_id: int, name: String = "", new_owner_alias_id: int = -1, props: Dictionary[String, Variant] = {}) -> TaloChannel:
+func update(channel_id: int, options: UpdateChannelOptions = UpdateChannelOptions.new()) -> TaloChannel:
 	if Talo.identity_check() != OK:
 		return
 
 	var data := {}
-	if not name.is_empty():
-		data.name = name
-	if new_owner_alias_id != -1:
-		data.ownerAliasId = new_owner_alias_id
-	if props.size() > 0:
-		data.props = TaloPropUtils.serialise_dictionary(props)
+	if not options.name.is_empty():
+		data.name = options.name
+	if options.new_owner_alias_id != -1:
+		data.ownerAliasId = options.new_owner_alias_id
+	if options.props.size() > 0:
+		data.props = TaloPropUtils.serialise_dictionary(options.props)
+	if options.auto_cleanup != UpdateChannelOptions.AutoCleanup.DEFAULT:
+		data.autoCleanup = options.auto_cleanup == UpdateChannelOptions.AutoCleanup.ENABLED
+	if options.private != UpdateChannelOptions.Privacy.DEFAULT:
+		data.private = options.private == UpdateChannelOptions.Privacy.PRIVATE
+	if options.temporary_membership != UpdateChannelOptions.TemporaryMembership.DEFAULT:
+		data.temporaryMembership = options.temporary_membership == UpdateChannelOptions.TemporaryMembership.ENABLED
 
 	var res := await client.make_request(HTTPClient.METHOD_PUT, "/%s" % channel_id, data)
 
@@ -375,6 +381,32 @@ class CreateChannelOptions:
 	var props: Dictionary[String, String] = {}
 	var private: bool = false
 	var temporary_membership: bool = false
+
+class UpdateChannelOptions:
+	enum AutoCleanup {
+		DEFAULT,
+		ENABLED,
+		DISABLED
+	}
+
+	enum Privacy {
+		DEFAULT,
+		PRIVATE,
+		PUBLIC
+	}
+
+	enum TemporaryMembership {
+		DEFAULT,
+		ENABLED,
+		DISABLED
+	}
+
+	var name: String = ""
+	var new_owner_alias_id: int = -1
+	var props: Dictionary[String, Variant] = {}
+	var auto_cleanup: AutoCleanup = AutoCleanup.DEFAULT
+	var private: Privacy = Privacy.DEFAULT
+	var temporary_membership: TemporaryMembership = TemporaryMembership.DEFAULT
 
 enum ChannelLeavingReason {
 	DEFAULT,
