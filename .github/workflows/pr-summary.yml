@@ -15,6 +15,10 @@ jobs:
       pull-requests: write
 
     steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
       - name: Get opencode version
         id: version
         run: |
