@@ -138,5 +138,10 @@ func _handle_quit() -> void:
 
 		await events.pending_events_flushed
 
+	# flush any pending debounced updates before we quit
+	if identity_check(false) == OK:
+		await Talo.players.flush_updates()
+		await Talo.saves.flush_updates()
+
 	if Talo.settings.handle_tree_quit:
 		get_tree().quit()

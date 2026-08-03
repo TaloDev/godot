@@ -34,3 +34,7 @@ func _handle_leading_debounce() -> void:
 		_callback.call()
 	else:
 		_has_pending = true
+
+func stop() -> void:
+	super.stop()
+	_has_pending = false

@@ -1,4 +1,4 @@
-class_name PlayersAPI extends TaloAPI
+class_name PlayersAPI extends TaloDebouncedAPI
 ## An interface for communicating with the Talo Players API.
 ##
 ## This API is used to identify players and update player data.
@@ -20,14 +20,15 @@ signal identity_cleared()
 ## Emitted when one or more props are rejected during a player update.
 signal props_rejected(rejected_props: Array[TaloRejectedProp])
 
-var _update_timer := TaloDebounceTimer.new(_handle_update_timer_timeout, false)
+## Emitted when a debounced player update settles.
+signal player_updated(success: bool)
+
+func _init(base_path: String) -> void:
+	super(base_path)
+	_update_settled.connect(_on_update_settled)
 
 func _ready() -> void:
 	Talo.connection_restored.connect(_on_connection_restored)
-	add_child(_update_timer)
-
-func _handle_update_timer_timeout() -> void:
-	await Talo.players.update()
 
 func _handle_identify_success(alias: TaloPlayerAlias, socket_token: String = "") -> TaloPlayerAlias:
 	if not await Talo.is_offline() and Talo.socket.is_identified():
@@ -89,16 +90,14 @@ func identify_game_center(
 	})
 	return await identify("game_center", identifier.uri_encode())
 
-## Queue a debounced update to the current player. The timer will reset every time this method is called.
-func debounce_update() -> void:
-	_update_timer.debounce()
-
-## Flush and sync the player's current data with Talo.
-func update() -> TaloPlayer:
+func _run_debounced_update() -> Variant:
 	if Talo.identity_check() != OK:
 		return null
 
-	var res := await client.make_request(HTTPClient.METHOD_PATCH, "/%s" % Talo.current_player.id, { props = Talo.current_player.get_serialized_props() })
+	var res := await client.make_request(HTTPClient.METHOD_PATCH, "/%s" % Talo.current_player.id, {
+		props = Talo.current_player.get_serialized_props()
+	})
+
 	match res.status:
 		200:
 			if is_instance_valid(Talo.current_alias.player):
@@ -112,9 +111,28 @@ func update() -> TaloPlayer:
 			if rejected_props.size() > 0:
 				props_rejected.emit(rejected_props)
 
-			return Talo.current_player
+			return rejected_props
 		_:
 			return null
+
+func _on_update_settled(success: bool, _operation_data: Variant) -> void:
+	player_updated.emit(success)
+
+func _build_update_result(success: bool, operation_data: Variant) -> Variant:
+	if not success:
+		return PlayerUpdateResult.new(false)
+	return PlayerUpdateResult.new(true, operation_data)
+
+## Flush and sync the player's current data with Talo.
+func update() -> TaloPlayer:
+	var data := await _run_debounced_update()
+	if data == null:
+		return null
+	return Talo.current_player
+
+## Queue a debounced update. The returned signal resolves with a PlayerUpdateResult.
+func debounce_update() -> Signal:
+	return _queue_update().settled
 
 ## Merge all of the data from player_id2 into player_id1 and delete player_id2.
 func merge(player_id1: String, player_id2: String, options := MergeOptions.new()) -> TaloPlayer:
@@ -205,3 +223,11 @@ class SearchPage:
 
 class MergeOptions:
 	var post_merge_identity_service: String = ""
+
+class PlayerUpdateResult:
+	var success: bool
+	var rejected_props: Array[TaloRejectedProp]
+
+	func _init(success: bool, rejected_props: Array[TaloRejectedProp] = []) -> void:
+		self.success = success
+		self.rejected_props = rejected_props

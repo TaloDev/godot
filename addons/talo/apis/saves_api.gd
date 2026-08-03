@@ -1,4 +1,4 @@
-class_name SavesAPI extends TaloAPI
+class_name SavesAPI extends TaloDebouncedAPI
 ## An interface for communicating with the Talo Saves API.
 ##
 ## This API allows you to save and load game data for your players. You can create, update, and delete saves, as well as load and unload them.
@@ -13,6 +13,8 @@ signal save_chosen(save: TaloGameSave)
 signal save_loading_completed
 ## Emitted when the current save is unloaded.
 signal save_unloaded(save: TaloGameSave)
+## Emitted when the current save is updated. The save is null on failure.
+signal save_updated(success: bool, save: TaloGameSave)
 
 var _saves_manager := TaloSavesManager.new()
 
@@ -28,14 +30,9 @@ var latest: TaloGameSave:
 var current: TaloGameSave:
 	get: return _saves_manager.current_save
 
-var _update_timer := TaloDebounceTimer.new(_handle_update_timer_timeout)
-
-func _ready() -> void:
-	add_child(_update_timer)
-
-func _handle_update_timer_timeout() -> void:
-	if _saves_manager.current_save:
-		await update_save(_saves_manager.current_save)
+func _init(base_path: String) -> void:
+	super(base_path)
+	_update_settled.connect(_on_update_settled)
 
 ## Sync an offline save with an online save using the offline save data.
 func replace_save_with_offline_save(offline_save: TaloGameSave) -> TaloGameSave:
@@ -119,19 +116,33 @@ func create_save(save_name: String, content: Dictionary = {}) -> TaloGameSave:
 func register(loadable: TaloLoadable) -> void:
 	_saves_manager.register(loadable)
 
+func _run_debounced_update() -> Variant:
+	if _saves_manager.current_save:
+		return await update_save(_saves_manager.current_save)
+	return null
+
+func _on_update_settled(success: bool, operation_data: Variant) -> void:
+	save_updated.emit(success, operation_data if success else null)
+
+func _build_update_result(success: bool, operation_data: Variant) -> Variant:
+	var save: TaloGameSave = operation_data if success else null
+	return SaveUpdateResult.new(success, save)
+
 ## Update the currently loaded save using the current state of the game and with the given name.
-func update_current_save(new_name: String = "") -> TaloGameSave:
+func update_current_save(new_name: String = "") -> Variant:
 	if not _saves_manager.current_save:
 		return null
 
 	# if the save is being renamed, sync it immediately
 	if not new_name.is_empty():
-		return await update_save(_saves_manager.current_save, new_name)
+		var save := await update_save(_saves_manager.current_save, new_name)
+		var success := save != null
+		save_updated.emit(success, save if success else null)
+		return SaveUpdateResult.new(success, save)
 	# else, update the save locally and queue it for syncing
 	else:
-		_update_timer.debounce()
 		_saves_manager.current_save.content = _saves_manager.get_save_content()
-		return _saves_manager.current_save
+		return await _queue_update().settled
 
 ## Update the given save using the current state of the game and with the given name.
 func update_save(save: TaloGameSave, new_name: String = "") -> TaloGameSave:
@@ -157,6 +168,8 @@ func update_save(save: TaloGameSave, new_name: String = "") -> TaloGameSave:
 		match res.status:
 			200:
 				save = TaloGameSave.new(res.body.save)
+			_:
+				return null
 
 	_saves_manager.replace_save(save)
 	return save
@@ -181,3 +194,11 @@ func delete_save(save: TaloGameSave, unload_if_current_save: bool = false) -> vo
 ## Get the format version for the current save.
 func get_format_version() -> String:
 	return _saves_manager.get_format_version()
+
+class SaveUpdateResult extends RefCounted:
+	var success: bool
+	var save: TaloGameSave
+
+	func _init(result_success: bool, result_save: TaloGameSave) -> void:
+		success = result_success
+		save = result_save
