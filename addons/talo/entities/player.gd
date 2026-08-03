@@ -29,41 +29,50 @@ func update_from_raw_data(data: Dictionary) -> void:
 
 	_offline_data = data
 
+func _local_update_success_result() -> PlayersAPI.PlayerUpdateResult:
+	return PlayersAPI.PlayerUpdateResult.new(true)
+
 ## Set a property by key and value. Optionally sync the player (default true) with Talo.
-func set_prop(key: String, value: String, update: bool = true) -> void:
+func set_prop(key: String, value: String, update: bool = true) -> Variant:
 	super.set_prop(key, value)
 	if update:
-		Talo.players.debounce_update()
+		return Talo.players.debounce_update()
+	return _local_update_success_result()
 
 ## Delete a property by key. Optionally sync the player (default true) with Talo.
-func delete_prop(key: String, update: bool = true) -> void:
+func delete_prop(key: String, update: bool = true) -> Variant:
 	super.delete_prop(key)
 	if update:
-		Talo.players.debounce_update()
+		return Talo.players.debounce_update()
+	return _local_update_success_result()
 
 ## Set all values for a prop array by key. Optionally sync the player (default true) with Talo.
-func set_prop_array(key: String, values: Array[String], update: bool = true) -> void:
+func set_prop_array(key: String, values: Array[String], update: bool = true) -> Variant:
 	super.set_prop_array(key, values)
 	if update:
-		Talo.players.debounce_update()
+		return Talo.players.debounce_update()
+	return _local_update_success_result()
 
 ## Delete a prop array by key. Optionally sync the player (default true) with Talo.
-func delete_prop_array(key: String, update: bool = true) -> void:
+func delete_prop_array(key: String, update: bool = true) -> Variant:
 	super.delete_prop_array(key)
 	if update:
-		Talo.players.debounce_update()
+		return Talo.players.debounce_update()
+	return _local_update_success_result()
 
 ## Insert a value into a prop array by key. Optionally sync the player (default true) with Talo.
-func insert_into_prop_array(key: String, value: String, update: bool = true) -> void:
+func insert_into_prop_array(key: String, value: String, update: bool = true) -> Variant:
 	super.insert_into_prop_array(key, value)
 	if update:
-		Talo.players.debounce_update()
+		return Talo.players.debounce_update()
+	return _local_update_success_result()
 
 ## Remove a value from a prop array by key. Optionally sync the player (default true) with Talo.
-func remove_from_prop_array(key: String, value: String, update: bool = true) -> void:
+func remove_from_prop_array(key: String, value: String, update: bool = true) -> Variant:
 	super.remove_from_prop_array(key, value)
 	if update:
-		Talo.players.debounce_update()
+		return Talo.players.debounce_update()
+	return _local_update_success_result()
 
 ## Check if the player is in a group with the given ID.
 func is_in_talo_group_id(group_id: String) -> bool:
