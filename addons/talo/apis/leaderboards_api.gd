@@ -73,7 +73,7 @@ func get_entries(internal_name: String, options := GetEntriesOptions.new()) -> E
 ## Add an entry to a leaderboard. The props (key-value pairs) parameter is used to store additional data with the entry.
 func add_entry(internal_name: String, score: float, props: Dictionary[String, Variant] = {}) -> AddEntryResult:
 	if Talo.identity_check() != OK:
-		return AddEntryResult.new(null, false)
+		return AddEntryResult.new(false, null, false)
 
 	var res := await client.make_request(HTTPClient.METHOD_POST, "/%s/entries" % internal_name, {
 		score = score,
@@ -85,12 +85,12 @@ func add_entry(internal_name: String, score: float, props: Dictionary[String, Va
 			var entry := TaloLeaderboardEntry.new(res.body.entry)
 			_entries_manager.upsert_entry(internal_name, entry, true)
 
-			return AddEntryResult.new(entry, res.body.updated)
+			return AddEntryResult.new(true, entry, res.body.updated)
 		400:
 			var rejected_props := TaloRejectedProp.from_response(res.body)
-			return AddEntryResult.new(null, false, rejected_props)
+			return AddEntryResult.new(false, null, false, rejected_props)
 		_:
-			return AddEntryResult.new(null, false)
+			return AddEntryResult.new(false, null, false)
 
 class EntriesPage:
 	var entries: Array[TaloLeaderboardEntry]
@@ -105,11 +105,13 @@ class EntriesPage:
 		self.is_last_page = is_last_page
 
 class AddEntryResult:
+	var success: bool
 	var entry: TaloLeaderboardEntry
 	var updated: bool
 	var rejected_props: Array[TaloRejectedProp]
 
-	func _init(entry: TaloLeaderboardEntry, updated: bool, rejected_props: Array[TaloRejectedProp] = []) -> void:
+	func _init(result_success: bool, entry: TaloLeaderboardEntry, updated: bool, rejected_props: Array[TaloRejectedProp] = []) -> void:
+		self.success = result_success
 		self.entry = entry
 		self.updated = updated
 		self.rejected_props = rejected_props
