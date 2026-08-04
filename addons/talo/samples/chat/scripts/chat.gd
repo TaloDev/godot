@@ -46,10 +46,10 @@ func _on_add_channel_button_pressed() -> void:
 	options.name = %ChannelName.text
 	options.auto_cleanup = true
 
-	var channel := await Talo.channels.create(options)
-	if channel:
-		_subscriptions.append(channel)
-		_add_channel_label(channel.id, channel.name)
+	var result := await Talo.channels.create(options)
+	if result.success:
+		_subscriptions.append(result.channel)
+		_add_channel_label(result.channel.id, result.channel.name)
 		%ChannelName.text = ""
 
 func _add_chat_message(message: String) -> void:

@@ -17,9 +17,6 @@ signal identification_failed(error: TaloIdentifyError)
 ## Emitted after calling clear_identity().
 signal identity_cleared()
 
-## Emitted when one or more props are rejected during a player update.
-signal props_rejected(rejected_props: Array[TaloRejectedProp])
-
 ## Emitted when a debounced player update settles.
 signal player_updated(success: bool)
 
@@ -108,9 +105,6 @@ func _run_debounced_update() -> Variant:
 			Talo.current_alias.write_offline_alias()
 
 			var rejected_props := TaloRejectedProp.from_response(res.body)
-			if rejected_props.size() > 0:
-				props_rejected.emit(rejected_props)
-
 			return rejected_props
 		_:
 			return null

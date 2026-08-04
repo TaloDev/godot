@@ -195,7 +195,7 @@ func delete_save(save: TaloGameSave, unload_if_current_save: bool = false) -> vo
 func get_format_version() -> String:
 	return _saves_manager.get_format_version()
 
-class SaveUpdateResult extends RefCounted:
+class SaveUpdateResult:
 	var success: bool
 	var save: TaloGameSave
 
