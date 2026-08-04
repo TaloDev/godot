@@ -6,7 +6,7 @@ on:
 
 jobs:
   summarise:
-    if: ${{ github.event.pull_request.author_association == 'MEMBER' }}
+    if: ${{ github.event.pull_request.user.login == 'tudddorrr' }}
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
