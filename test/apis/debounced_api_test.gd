@@ -7,8 +7,8 @@ class TestHarness extends TaloDebouncedAPI:
 	var operation_result: Variant
 	var operation_count: int
 
-	func _init(leading: bool = false) -> void:
-		super._init("/v1/test", leading)
+	func _init() -> void:
+		super._init("/v1/test")
 
 	func _run_debounced_update() -> Variant:
 		operation_count += 1
@@ -37,8 +37,8 @@ func before_test() -> void:
 func after_test() -> void:
 	Talo.settings.debounce_timer_seconds = 1.0
 
-func _make_harness(result: Variant, leading: bool = false) -> TestHarness:
-	var harness: TestHarness = auto_free(TestHarness.new(leading))
+func _make_harness(result: Variant) -> TestHarness:
+	var harness: TestHarness = auto_free(TestHarness.new())
 	harness.operation_result = result
 	add_child(harness)
 	monitor_signals(harness)
@@ -122,28 +122,6 @@ func test_failed_update_resolves_waiter_and_returns_failure() -> void:
 
 	assert_int(result).is_equal(TaloDebouncedAPI.FlushResult.FAILURE)
 	assert_bool(waiter.result.success).is_false()
-
-func test_leading_mode_fires_immediately_on_first_call() -> void:
-	var harness := _make_harness(TaloFixtures.make_player(), true)
-
-	# (first) leading call fires immediately
-	var first := harness.queue_update()
-	@warning_ignore("redundant_await")
-	await assert_signal(harness).is_emitted(harness.operation_started, 1)
-
-	# (second) trailing call within window merges into one execution
-	var second := harness.queue_update()
-
-	_release_after(harness, 0.05)
-	_release_after(harness, 0.10)
-	var result := await harness.flush_updates()
-
-	assert_int(harness.operation_count).is_equal(2)
-	assert_int(result).is_equal(TaloDebouncedAPI.FlushResult.SUCCESS)
-	assert_bool(first.result.success).is_true()
-	assert_bool(second.result.success).is_true()
-	assert_bool(harness._is_queued).is_false()
-	assert_bool(harness._is_executing).is_false()
 
 func test_flush_returns_nothing_pending_when_nothing_queued() -> void:
 	var harness := _make_harness(TaloFixtures.make_player())
