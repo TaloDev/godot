@@ -17,8 +17,6 @@ signal channel_ownership_transferred(channel: TaloChannel, new_owner_player_alia
 signal channel_deleted(channel: TaloChannel)
 ## Emitted when a channel is updated.
 signal channel_updated(channel: TaloChannel, changed_properties: Array[String])
-## Emitted when one or more props are rejected during a channel create or update.
-signal channel_props_rejected(rejected_props: Array[TaloRejectedProp])
 ## Emitted when channel storage props are updated or deleted.
 signal channel_storage_props_updated(channel: TaloChannel, upserted_props: Array[TaloChannelStorageProp], deleted_props: Array[TaloChannelStorageProp])
 ## Emitted when one or more storage props were not successfully set.
@@ -118,9 +116,9 @@ func get_subscribed_channels(options: GetSubscribedChannelsOptions = GetSubscrib
 			return []
 
 ## Create a new channel. The player who creates this channel will automatically become the owner. If auto cleanup is enabled, the channel will be deleted when the owner or the last member leaves. Private channels can only be joined by players who have been invited to the channel. Channels with temporary membership will remove players at the end of their session.
-func create(options: CreateChannelOptions = CreateChannelOptions.new()) -> TaloChannel:
+func create(options: CreateChannelOptions = CreateChannelOptions.new()) -> ChannelUpsertResult:
 	if Talo.identity_check() != OK:
-		return
+		return ChannelUpsertResult.new(false, null)
 
 	var props_to_send := options.props \
 		.keys() \
@@ -136,15 +134,12 @@ func create(options: CreateChannelOptions = CreateChannelOptions.new()) -> TaloC
 
 	match res.status:
 		200:
-			return TaloChannel.new(res.body.channel)
+			return ChannelUpsertResult.new(true, TaloChannel.new(res.body.channel))
 		400:
 			var rejected_props := TaloRejectedProp.from_response(res.body)
-			if rejected_props.size() > 0:
-				channel_props_rejected.emit(rejected_props)
-
-			return null
+			return ChannelUpsertResult.new(false, null, rejected_props)
 		_:
-			return null
+			return ChannelUpsertResult.new(false, null)
 
 ## Join an existing channel.
 func join(channel_id: int) -> TaloChannel:
@@ -167,9 +162,9 @@ func leave(channel_id: int) -> void:
 	await client.make_request(HTTPClient.METHOD_POST, "/%s/leave" % channel_id)
 
 ## Update a channel. This will only work if the current player is the owner of the channel.
-func update(channel_id: int, options: UpdateChannelOptions = UpdateChannelOptions.new()) -> TaloChannel:
+func update(channel_id: int, options: UpdateChannelOptions = UpdateChannelOptions.new()) -> ChannelUpsertResult:
 	if Talo.identity_check() != OK:
-		return
+		return ChannelUpsertResult.new(false, null)
 
 	var data := {}
 	if not options.name.is_empty():
@@ -189,18 +184,15 @@ func update(channel_id: int, options: UpdateChannelOptions = UpdateChannelOption
 
 	match res.status:
 		200:
-			return TaloChannel.new(res.body.channel)
+			return ChannelUpsertResult.new(true, TaloChannel.new(res.body.channel))
 		400:
 			var rejected_props := TaloRejectedProp.from_response(res.body)
-			if rejected_props.size() > 0:
-				channel_props_rejected.emit(rejected_props)
-
-			return null
+			return ChannelUpsertResult.new(false, null, rejected_props)
 		403:
 			push_error("Player does not have permissions to update channel %s." % channel_id)
-			return null
+			return ChannelUpsertResult.new(false, null)
 		_:
-			return null
+			return ChannelUpsertResult.new(false, null)
 
 ## Delete a channel. This will only work if the current player is the owner of the channel.
 func delete(channel_id: int) -> void:
@@ -433,3 +425,13 @@ class MembersPage:
 		self.count = count
 		self.items_per_page = items_per_page
 		self.is_last_page = is_last_page
+
+class ChannelUpsertResult:
+	var success: bool
+	var channel: TaloChannel
+	var rejected_props: Array[TaloRejectedProp]
+
+	func _init(success: bool, channel: TaloChannel, rejected_props: Array[TaloRejectedProp] = []) -> void:
+		self.success = success
+		self.channel = channel
+		self.rejected_props = rejected_props

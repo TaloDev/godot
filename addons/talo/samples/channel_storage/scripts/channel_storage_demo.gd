@@ -29,7 +29,9 @@ func _ready() -> void:
 		create_options.props = {
 			"channel-storage-demo": "true"
 		}
-		demo_channel = await Talo.channels.create(create_options)
+		var result := await Talo.channels.create(create_options)
+		if result.success:
+			demo_channel = result.channel
 
 	await Talo.channels.join(demo_channel.id)
 

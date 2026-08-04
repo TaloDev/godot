@@ -5,9 +5,6 @@ class_name LeaderboardsAPI extends TaloAPI
 ##
 ## @tutorial: https://docs.trytalo.com/docs/godot/leaderboards
 
-## Emitted when one or more props are rejected during an entry add.
-signal props_rejected(rejected_props: Array[TaloRejectedProp])
-
 var _entries_manager := TaloLeaderboardEntriesManager.new()
 
 ## Get a list of all the entries that have been previously fetched or created for a leaderboard. The options include "alias_id", "player_id" and "alias_service" for additional filtering.
@@ -76,7 +73,7 @@ func get_entries(internal_name: String, options := GetEntriesOptions.new()) -> E
 ## Add an entry to a leaderboard. The props (key-value pairs) parameter is used to store additional data with the entry.
 func add_entry(internal_name: String, score: float, props: Dictionary[String, Variant] = {}) -> AddEntryResult:
 	if Talo.identity_check() != OK:
-		return null
+		return AddEntryResult.new(null, false)
 
 	var res := await client.make_request(HTTPClient.METHOD_POST, "/%s/entries" % internal_name, {
 		score = score,
@@ -91,12 +88,9 @@ func add_entry(internal_name: String, score: float, props: Dictionary[String, Va
 			return AddEntryResult.new(entry, res.body.updated)
 		400:
 			var rejected_props := TaloRejectedProp.from_response(res.body)
-			if rejected_props.size() > 0:
-				props_rejected.emit(rejected_props)
-
-			return null
+			return AddEntryResult.new(null, false, rejected_props)
 		_:
-			return null
+			return AddEntryResult.new(null, false)
 
 class EntriesPage:
 	var entries: Array[TaloLeaderboardEntry]
@@ -113,10 +107,12 @@ class EntriesPage:
 class AddEntryResult:
 	var entry: TaloLeaderboardEntry
 	var updated: bool
+	var rejected_props: Array[TaloRejectedProp]
 
-	func _init(entry: TaloLeaderboardEntry, updated: bool) -> void:
+	func _init(entry: TaloLeaderboardEntry, updated: bool, rejected_props: Array[TaloRejectedProp] = []) -> void:
 		self.entry = entry
 		self.updated = updated
+		self.rejected_props = rejected_props
 
 class GetEntriesOptions:
 	var page: int = 0
