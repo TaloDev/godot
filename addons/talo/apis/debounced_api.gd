@@ -13,9 +13,9 @@ var _is_executing: bool
 var _is_queued: bool
 var _pending_waiters: Array[UpdateWaiter] = []
 
-func _init(base_path: String, leading: bool = true) -> void:
+func _init(base_path: String) -> void:
 	super(base_path)
-	_update_timer = TaloDebounceTimer.new(_on_debounce_fired, leading)
+	_update_timer = TaloDebounceTimer.new(_on_debounce_fired)
 	add_child(_update_timer)
 
 func _debounce() -> void:
