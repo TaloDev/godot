@@ -92,7 +92,7 @@ var cache_player_on_identify: bool:
 ## Number of seconds to wait before sending debounced requests (e.g. player updates, save updates and health checks)
 var debounce_timer_seconds: float:
 	get:
-		return _config_file.get_value("", "debounce_timer_seconds", 1.0)
+		return _config_file.get_value("", "debounce_timer_seconds", 0.5)
 	set(value):
 		_config_file.set_value("", "debounce_timer_seconds", value)
 

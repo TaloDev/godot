@@ -234,8 +234,8 @@ func test_cache_player_on_identify_writing() -> void:
 
 # debounce_timer_seconds
 
-func test_debounce_timer_seconds_defaults_to_1() -> void:
-	assert_float(Talo.settings.debounce_timer_seconds).is_equal(1.0)
+func test_debounce_timer_seconds_defaults_to_0point5() -> void:
+	assert_float(Talo.settings.debounce_timer_seconds).is_equal(0.5)
 
 func test_debounce_timer_seconds_reading() -> void:
 	var file := ConfigFile.new()
@@ -249,7 +249,7 @@ func test_debounce_timer_seconds_writing() -> void:
 	Talo.settings.save_config()
 	var file := ConfigFile.new()
 	file.load(TaloSettings.SETTINGS_PATH)
-	assert_float(file.get_value("", "debounce_timer_seconds", 1.0)).is_equal(2.5)
+	assert_float(file.get_value("", "debounce_timer_seconds", 0.5)).is_equal(2.5)
 
 # verification_enabled
 
