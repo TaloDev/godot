@@ -5,9 +5,6 @@ class_name FeedbackAPI extends TaloAPI
 ##
 ## @tutorial: https://docs.trytalo.com/docs/godot/feedback
 
-## Emitted when one or more props are rejected during feedback submission.
-signal props_rejected(rejected_props: Array[TaloRejectedProp])
-
 ## Get a list of feedback categories that are available for players to submit feedback.
 func get_categories() -> Array[TaloFeedbackCategory]:
 	var res := await client.make_request(HTTPClient.METHOD_GET, "/categories")
@@ -21,9 +18,9 @@ func get_categories() -> Array[TaloFeedbackCategory]:
 			return []
 
 ## Submit feedback for a specific category. Optionally add props for extra context.
-func send(category_internal_name: String, comment: String, props: Dictionary[String, String] = {}) -> void:
+func send(category_internal_name: String, comment: String, props: Dictionary[String, String] = {}) -> FeedbackSendResult:
 	if Talo.identity_check() != OK:
-		return
+		return FeedbackSendResult.new(false)
 
 	var props_to_send := props \
 		.keys() \
@@ -35,7 +32,17 @@ func send(category_internal_name: String, comment: String, props: Dictionary[Str
 	})
 
 	match res.status:
+		200:
+			return FeedbackSendResult.new(true)
 		400:
-			var rejected_props := TaloRejectedProp.from_response(res.body)
-			if rejected_props.size() > 0:
-				props_rejected.emit(rejected_props)
+			return FeedbackSendResult.new(false, TaloRejectedProp.from_response(res.body))
+		_:
+			return FeedbackSendResult.new(false)
+
+class FeedbackSendResult:
+	var success: bool
+	var rejected_props: Array[TaloRejectedProp]
+
+	func _init(success: bool, rejected_props: Array[TaloRejectedProp] = []) -> void:
+		self.success = success
+		self.rejected_props = rejected_props

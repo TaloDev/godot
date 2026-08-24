@@ -35,11 +35,11 @@ func _ready():
 	# register the loadable
 	super()
 
-func _on_identified(_player: TaloPlayer):
+func _on_identified(player_alias: TaloPlayerAlias):
 	var saves := await Talo.saves.get_saves()
 	if saves.is_empty():
 		# the save is automatically chosen after it is created
-		await Talo.saves.create_save("save (%s)" % Talo.current_alias.identifier)
+		await Talo.saves.create_save("save (%s)" % player_alias.identifier)
 	else:
 		await Talo.saves.choose_save(Talo.saves.all.front())
 

@@ -29,7 +29,9 @@ func _ready() -> void:
 		create_options.props = {
 			"channel-storage-demo": "true"
 		}
-		demo_channel = await Talo.channels.create(create_options)
+		var result := await Talo.channels.create(create_options)
+		if result.success:
+			demo_channel = result.channel
 
 	await Talo.channels.join(demo_channel.id)
 
@@ -91,9 +93,9 @@ func _on_channel_props_updated(channel: TaloChannel, upserted_props: Array[TaloC
 			last_prop.updated_at
 		]
 
-func _on_channel_storage_props_failed_to_set(channel: TaloChannel, failed_props: Array[TaloChannelStoragePropError]):
+func _on_channel_storage_props_failed_to_set(channel: TaloChannel, failed_props: Array[TaloRejectedProp]):
 	for prop in failed_props:
-		print("%s: %s" % [prop.key, prop.message if prop.message else prop.error])
+		print("%s: %s" % [prop.key, prop.message])
 
 func _on_upsert_prop_button_pressed() -> void:
 	if prop_key_line_edit.text.is_empty():

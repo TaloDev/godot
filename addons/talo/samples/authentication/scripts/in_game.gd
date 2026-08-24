@@ -12,16 +12,16 @@ func _ready() -> void:
 	Talo.players.identified.connect(_on_player_identified)
 
 	# identified signal emitted before the connection were made
-	if Talo.current_player:
-		_on_player_identified(Talo.current_player)
+	if Talo.current_alias:
+		_on_player_identified(Talo.current_alias)
 
 	# listen for the player changing their identifier
 	%ChangeIdentifier.identifier_change_success.connect(
-		func (): _on_player_identified(Talo.current_player)
+		func (): _on_player_identified(Talo.current_alias)
 	)
 
-func _on_player_identified(player: TaloPlayer) -> void:
-	username.text = "What would you like to do,\n%s?" % Talo.current_alias.identifier
+func _on_player_identified(player_alias: TaloPlayerAlias) -> void:
+	username.text = "What would you like to do,\n%s?" % player_alias.identifier
 
 func _on_change_password_pressed() -> void:
 	go_to_change_password.emit()

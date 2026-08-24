@@ -1,7 +1,7 @@
 class_name TaloClient extends Node
 
 # automatically updated with a pre-commit hook
-const TALO_CLIENT_VERSION = "0.49.1"
+const TALO_CLIENT_VERSION = "1.0.0"
 
 var _base_url: String
 
@@ -33,11 +33,11 @@ func _attempt_refresh(url: String, body: Dictionary) -> Error:
 	if Talo.current_alias == null or url.ends_with("/v1/players/auth/refresh") or not body.has("errorCode"):
 		return ERR_SKIP
 
-	var error := TaloAuthError.new(body["errorCode"])
-	if error.get_code() != TaloAuthError.ErrorCode.INVALID_SESSION:
+	if TaloPlayerAuthError.ErrorCode.get(body.errorCode) != TaloPlayerAuthError.ErrorCode.INVALID_SESSION:
 		return ERR_SKIP
 
-	return await Talo.player_auth.refresh()
+	var res := await Talo.player_auth.refresh()
+	return OK if res.success else FAILED
 
 func make_request(
 	method: HTTPClient.Method,
@@ -69,6 +69,7 @@ func make_request(
 	http_request.timeout = 15
 	http_request.accept_gzip = true
 	http_request.name = "%s %s" % [_get_method_name(method), url]
+	http_request.use_threads = Talo.settings.requests_use_threads
 
 	http_request.request(full_url, all_headers, method, request_body)
 	var res := _simulate_offline_request() if Talo.settings.offline_mode else await _build_response(http_request)

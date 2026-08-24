@@ -51,6 +51,7 @@ Key utilities in [addons/talo/utils/](addons/talo/utils/):
 - **CryptoManager** - Encryption key generation/storage for offline data
 - **SessionManager** - Session token persistence
 - **DebounceTimer** - Debounces health checks, player updates, save updates (1s default, configurable via `debounce_timer_seconds`)
+- **TaloDebouncedAPI** ([apis/debounced_api.gd](addons/talo/apis/debounced_api.gd)) - Base class for debounced APIs. Provides `flush_updates() -> FlushResult` and per-update awaiters. Player and save updates debounce by default but can be awaited for entity-specific results.
 
 ## GDScript Standards
 
