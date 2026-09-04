@@ -1,0 +1,51 @@
+[gd_scene load_steps=4 format=3 uid="uid://du82kmf6hub41"]
+
+[ext_resource type="Texture2D" uid="uid://b3naludt1ank2" path="res://icon.png" id="1_cm242"]
+[ext_resource type="Script" path="res://addons/talo/samples/multiplayer/scripts/player.gd" id="2_myrjg"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_sjscl"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 2
+
+[node name="Player" type="Node2D"]
+script = ExtResource("2_myrjg")
+
+[node name="NameLabel" type="Label" parent="."]
+unique_name_in_owner = true
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -121.0
+offset_top = -81.0
+offset_right = 121.0
+offset_bottom = -58.0
+grow_horizontal = 2
+text = "Identifier"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RpcTestButton" type="Button" parent="."]
+unique_name_in_owner = true
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -133.0
+offset_top = 57.0
+offset_right = 133.0
+offset_bottom = 88.0
+grow_horizontal = 2
+grow_vertical = 0
+focus_mode = 0
+text = "RpcTestButton"
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("1_cm242")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_interval = 0.03
+delta_interval = 0.03
+replication_config = SubResource("SceneReplicationConfig_sjscl")
