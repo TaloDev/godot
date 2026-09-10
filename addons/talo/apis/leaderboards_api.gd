@@ -78,17 +78,18 @@ func get_top_entries(internal_name: String, limit: int) -> TopEntriesResult:
 	match res.status:
 		200:
 			return TopEntriesResult.new(
-				_map_entries(internal_name, res.body.topEntries),
+				_map_entries(internal_name, res.body.topEntries, false),
 				_map_entries(internal_name, res.body.playerEntries)
 			)
 		_:
 			return null
 
-func _map_entries(internal_name: String, data: Array) -> Array[TaloLeaderboardEntry]:
+func _map_entries(internal_name: String, data: Array, cache: bool = true) -> Array[TaloLeaderboardEntry]:
 	return Array(data.map(
 		func (entry_data: Dictionary):
 			var entry := TaloLeaderboardEntry.new(entry_data)
-			_entries_manager.upsert_entry(internal_name, entry)
+			if cache:
+				_entries_manager.upsert_entry(internal_name, entry)
 
 			return entry
 	), TYPE_OBJECT, (TaloLeaderboardEntry as Script).get_instance_base_type(), TaloLeaderboardEntry)
