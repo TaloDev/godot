@@ -59,16 +59,39 @@ func get_entries(internal_name: String, options := GetEntriesOptions.new()) -> E
 
 	match res.status:
 		200:
-			var entries: Array[TaloLeaderboardEntry] = Array(res.body.entries.map(
-				func (data: Dictionary):
-					var entry := TaloLeaderboardEntry.new(data)
-					_entries_manager.upsert_entry(internal_name, entry)
-
-					return entry
-			), TYPE_OBJECT, (TaloLeaderboardEntry as Script).get_instance_base_type(), TaloLeaderboardEntry)
-			return EntriesPage.new(entries, res.body.count, res.body.itemsPerPage, res.body.isLastPage)
+			return EntriesPage.new(
+				_map_entries(internal_name, res.body.entries),
+				res.body.count,
+				res.body.itemsPerPage,
+				res.body.isLastPage
+			)
 		_:
 			return null
+
+## Get the top entries for a leaderboard alongside the current player's entries.
+func get_top_entries(internal_name: String, limit: int = 10) -> TopEntriesResult:
+	if Talo.identity_check() != OK:
+		return null
+
+	var res := await client.make_request(HTTPClient.METHOD_GET, "/%s/entries/top?limit=%s" % [internal_name, limit])
+
+	match res.status:
+		200:
+			return TopEntriesResult.new(
+				_map_entries(internal_name, res.body.topEntries),
+				_map_entries(internal_name, res.body.playerEntries)
+			)
+		_:
+			return null
+
+func _map_entries(internal_name: String, data: Array) -> Array[TaloLeaderboardEntry]:
+	return Array(data.map(
+		func (entry_data: Dictionary):
+			var entry := TaloLeaderboardEntry.new(entry_data)
+			_entries_manager.upsert_entry(internal_name, entry)
+
+			return entry
+	), TYPE_OBJECT, (TaloLeaderboardEntry as Script).get_instance_base_type(), TaloLeaderboardEntry)
 
 ## Add an entry to a leaderboard. The props (key-value pairs) parameter is used to store additional data with the entry.
 func add_entry(internal_name: String, score: float, props: Dictionary[String, Variant] = {}) -> AddEntryResult:
@@ -103,6 +126,14 @@ class EntriesPage:
 		self.count = count
 		self.items_per_page = items_per_page
 		self.is_last_page = is_last_page
+
+class TopEntriesResult:
+	var top_entries: Array[TaloLeaderboardEntry]
+	var player_entries: Array[TaloLeaderboardEntry]
+
+	func _init(top_entries: Array[TaloLeaderboardEntry], player_entries: Array[TaloLeaderboardEntry]) -> void:
+		self.top_entries = top_entries
+		self.player_entries = player_entries
 
 class AddEntryResult:
 	var success: bool
