@@ -69,7 +69,7 @@ func get_entries(internal_name: String, options := GetEntriesOptions.new()) -> E
 			return null
 
 ## Get the top entries for a leaderboard alongside the current player's entries.
-func get_top_entries(internal_name: String, limit: int = 10) -> TopEntriesResult:
+func get_top_entries(internal_name: String, limit: int) -> TopEntriesResult:
 	if Talo.identity_check() != OK:
 		return null
 
