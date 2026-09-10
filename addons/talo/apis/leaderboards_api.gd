@@ -79,7 +79,7 @@ func get_top_entries(internal_name: String, limit: int) -> TopEntriesResult:
 		200:
 			return TopEntriesResult.new(
 				_map_entries(internal_name, res.body.topEntries, false),
-				_map_entries(internal_name, res.body.playerEntries)
+				_map_entries(internal_name, res.body.playerEntries, false)
 			)
 		_:
 			return null
