@@ -27,8 +27,8 @@ func ping() -> bool:
 	_can_ping = false
 	_timer.debounce()
 
-	var res := await client.make_request(HTTPClient.METHOD_GET, "")
-	var success := true if res.status == 204 else false
+	var res := await client.make_request(HTTPClient.METHOD_GET, "?body=1")
+	var success := true if res.status == 200 else false
 	var failed_last_health_check := _cached_result == HealthCheckStatus.FAILED
 
 	if success:
