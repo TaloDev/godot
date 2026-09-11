@@ -1,7 +1,7 @@
 class_name TaloClient extends Node
 
 # automatically updated with a pre-commit hook
-const TALO_CLIENT_VERSION = "1.0.0"
+const TALO_CLIENT_VERSION = "1.1.0"
 
 var _base_url: String
 
