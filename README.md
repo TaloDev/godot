@@ -4,7 +4,6 @@ Talo is the easiest way to add leaderboards, player authentication, peer-to-peer
 
 ## Get the plugin
 
-- [Godot Asset Library](https://godotengine.org/asset-library/asset/2936)
 - [Godot Asset Store](https://store-beta.godotengine.org/asset/talo/talo-game-services/)
 - [GitHub releases](https://github.com/TaloDev/godot/releases)
 - [itch.io](https://sleepystudios.itch.io/talo-godot)

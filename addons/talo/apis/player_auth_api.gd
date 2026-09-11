@@ -104,7 +104,7 @@ func refresh() -> PlayerAuthResult:
 	var refresh_token := session_manager.get_refresh_token()
 	if refresh_token.is_empty():
 		var error := TaloPlayerAuthError.from_response({ message = "No refresh token available" })
-		return PlayerAuthResult.new()
+		return PlayerAuthResult.new(error)
 
 	if session_refresh_request != null:
 		return await session_refresh_request.completed
