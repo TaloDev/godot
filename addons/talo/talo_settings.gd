@@ -5,7 +5,7 @@ class_name TaloSettings extends RefCounted
 
 var _config_file: ConfigFile
 
-const SETTINGS_PATH := "res://addons/talo/settings.cfg"
+const SETTINGS_PATH := "res://talo_settings.cfg"
 const DEFAULT_API_URL := "https://api.trytalo.com"
 
 const DEV_FEATURE_TAG := "talo_dev"
@@ -144,12 +144,13 @@ func _init() -> void:
 		verification_key_value = verification_key_value
 		save_config()
 
-		print_rich("[color=green]Talo settings.cfg created! Please close the game and fill in your access_key.[/color]")
+		print_rich("[color=green]talo_settings.cfg created! Please close the game and fill in your access_key.[/color]")
 	else:
 		_config_file.load(SETTINGS_PATH)
 
 		if access_key.is_empty() and is_debug_build():
-			print_rich("[color=yellow]Warning: Talo access_key in settings.cfg is empty[/color]")
+			print_rich("[color=yellow]Warning: Talo access_key in talo_settings.cfg is empty[/color]")
+
 
 func is_debug_build() -> bool:
 	if OS.has_feature(LIVE_FEATURE_TAG):

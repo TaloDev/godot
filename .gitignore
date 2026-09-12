@@ -17,7 +17,7 @@ mono_crash.*.json
 .DS_Store
 
 # Talo
-addons/talo/settings.cfg
+talo_settings.cfg
 
 # GdUnit4
 reports

@@ -47,7 +47,7 @@ static func get_hashed_time(size := 16) -> String:
 
 static func create_request_signature(request_body: String) -> String:
 	if Talo.settings.verification_key_version.is_empty() or Talo.settings.verification_key_value.is_empty():
-		push_error("Verification is enabled but verification_key_version or verification_key_value is missing. Please update your Talo settings.cfg")
+		push_error("Verification is enabled but verification_key_version or verification_key_value is missing. Please update your talo_settings.cfg")
 		return "" 
 
 	var timestamp := TaloTimeUtils.get_timestamp_msec()
