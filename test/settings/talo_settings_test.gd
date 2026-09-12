@@ -1,13 +1,11 @@
 extends GdUnitTestSuite
 
-var _saved_access_key: String
 var _saved_api_url: String
 var _saved_socket_url: String
 var _file_backup := ConfigFile.new()
 var _had_config_file := false
 
 func before() -> void:
-	_saved_access_key = Talo.settings._config_file.get_value("", "access_key", "")
 	_saved_api_url = Talo.settings._config_file.get_value("", "api_url", TaloSettings.DEFAULT_API_URL)
 	_saved_socket_url = Talo.settings._config_file.get_value("", "socket_url", TaloSocket.DEFAULT_SOCKET_URL)
 
@@ -15,12 +13,10 @@ func before() -> void:
 	if _had_config_file:
 		_file_backup.load(TaloSettings.SETTINGS_PATH)
 
-	Talo.settings._config_file.set_value("", "access_key", "")
 	Talo.settings._config_file.set_value("", "api_url", TaloSettings.DEFAULT_API_URL)
 	Talo.settings._config_file.set_value("", "socket_url", TaloSocket.DEFAULT_SOCKET_URL)
 
 func after() -> void:
-	Talo.settings._config_file.set_value("", "access_key", _saved_access_key)
 	Talo.settings._config_file.set_value("", "api_url", _saved_api_url)
 	Talo.settings._config_file.set_value("", "socket_url", _saved_socket_url)
 
@@ -28,25 +24,6 @@ func after() -> void:
 		_file_backup.save(TaloSettings.SETTINGS_PATH)
 	elif FileAccess.file_exists(TaloSettings.SETTINGS_PATH):
 		DirAccess.remove_absolute(TaloSettings.SETTINGS_PATH)
-
-# access_key
-
-func test_access_key_defaults_to_empty() -> void:
-	assert_str(Talo.settings.access_key).is_empty()
-
-func test_access_key_reading() -> void:
-	var file := ConfigFile.new()
-	file.set_value("", "access_key", "test-key")
-	file.save(TaloSettings.SETTINGS_PATH)
-	Talo.settings._config_file.load(TaloSettings.SETTINGS_PATH)
-	assert_str(Talo.settings.access_key).is_equal("test-key")
-
-func test_access_key_writing() -> void:
-	Talo.settings.access_key = "persisted-key"
-	Talo.settings.save_config()
-	var file := ConfigFile.new()
-	file.load(TaloSettings.SETTINGS_PATH)
-	assert_str(file.get_value("", "access_key", "")).is_equal("persisted-key")
 
 # api_url
 
@@ -269,41 +246,3 @@ func test_verification_enabled_writing() -> void:
 	var file := ConfigFile.new()
 	file.load(TaloSettings.SETTINGS_PATH)
 	assert_bool(file.get_value("verification", "enabled", false)).is_true()
-
-# verification_key_version
-
-func test_verification_key_version_defaults_to_empty() -> void:
-	assert_str(Talo.settings.verification_key_version).is_empty()
-
-func test_verification_key_version_reading() -> void:
-	var file := ConfigFile.new()
-	file.set_value("verification", "key_version", "2")
-	file.save(TaloSettings.SETTINGS_PATH)
-	Talo.settings._config_file.load(TaloSettings.SETTINGS_PATH)
-	assert_str(Talo.settings.verification_key_version).is_equal("2")
-
-func test_verification_key_version_writing() -> void:
-	Talo.settings.verification_key_version = "3"
-	Talo.settings.save_config()
-	var file := ConfigFile.new()
-	file.load(TaloSettings.SETTINGS_PATH)
-	assert_str(file.get_value("verification", "key_version", "")).is_equal("3")
-
-# verification_key_value
-
-func test_verification_key_value_defaults_to_empty() -> void:
-	assert_str(Talo.settings.verification_key_value).is_empty()
-
-func test_verification_key_value_reading() -> void:
-	var file := ConfigFile.new()
-	file.set_value("verification", "key_value", "my-secret-key")
-	file.save(TaloSettings.SETTINGS_PATH)
-	Talo.settings._config_file.load(TaloSettings.SETTINGS_PATH)
-	assert_str(Talo.settings.verification_key_value).is_equal("my-secret-key")
-
-func test_verification_key_value_writing() -> void:
-	Talo.settings.verification_key_value = "persisted-secret"
-	Talo.settings.save_config()
-	var file := ConfigFile.new()
-	file.load(TaloSettings.SETTINGS_PATH)
-	assert_str(file.get_value("verification", "key_value", "")).is_equal("persisted-secret")

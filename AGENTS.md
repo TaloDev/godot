@@ -16,6 +16,7 @@ The plugin is an **autoload singleton** called `Talo` (defined in [talo_manager.
    - Initializes all API instances, crypto manager, continuity manager, and socket
    - Manages current player/alias state
    - Handles app quit and focus events to flush pending data
+   - Feature tags: `talo_dev` (force debug), `talo_live` (force release)
 
 2. **TaloClient** ([talo_client.gd](addons/talo/talo_client.gd)) - HTTP client wrapper
    - Used by all API classes (via [apis/api.gd](addons/talo/apis/api.gd))
@@ -24,13 +25,16 @@ The plugin is an **autoload singleton** called `Talo` (defined in [talo_manager.
 
 3. **TaloSettings** ([talo_settings.gd](addons/talo/talo_settings.gd)) - Configuration management
    - Reads/writes [talo_settings.cfg](talo_settings.cfg)
-   - Key settings: `access_key`, `api_url`, `socket_url`, `auto_connect_socket`, `continuity_enabled`, `debounce_timer_seconds`
-   - Feature tags: `talo_dev` (force debug), `talo_live` (force release)
+   - Key settings: `api_url`, `socket_url`, `auto_connect_socket`, `continuity_enabled`, `debounce_timer_seconds`
 
-4. **Continuity System** ([utils/continuity_manager.gd](addons/talo/utils/continuity_manager.gd)) - Offline resilience
+4. **TaloSecrets** ([talo_secrets.gd](addons/talo/talo_secrets.gd)) - Secrets management
+   - Reads/writes [talo_secrets.cfg](talo_secrets.cfg)
+   - Key settings: `access_key`, `verification`
+
+5. **Continuity System** ([utils/continuity_manager.gd](addons/talo/utils/continuity_manager.gd)) - Offline resilience
    - Automatically retries failed POST/PUT/PATCH/DELETE requests
 
-5. **TaloSocket** ([talo_socket.gd](addons/talo/talo_socket.gd)) - WebSocket communication
+6. **TaloSocket** ([talo_socket.gd](addons/talo/talo_socket.gd)) - WebSocket communication
    - Requires ticket creation via [socket_tickets_api.gd](addons/talo/apis/socket_tickets_api.gd)
    - Used by channels, player presence and player relationships
 
@@ -74,7 +78,7 @@ The plugin autoload is configured in [project.godot](project.godot:20):
 Talo="*res://addons/talo/talo_manager.gd"
 ```
 
-Settings are in [talo_settings.cfg](talo_settings.cfg) - this file is auto-generated and should be filled with the user's access key.
+Settings are in [talo_settings.cfg](talo_settings.cfg) - this file is auto-generated. The user should create [talo_secrets.cfg](talo_secrets.cfg) and fill in their access key.
 
 ## Important Notes
 

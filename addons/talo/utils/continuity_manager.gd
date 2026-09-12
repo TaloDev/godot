@@ -67,7 +67,7 @@ func _on_timeout():
 		var req := _requests.pop_front()
 		_write_requests()
 
-		var headers: Array[String] = ["Authorization: Bearer %s" % Talo.settings.access_key]
+		var headers: Array[String] = ["Authorization: Bearer %s" % Talo.secrets.access_key]
 		headers.append_array(req.headers)
 
 		if not req.headers.any(func (h: String): return h.find(_CONTINUITY_TIMESTAMP_HEADER) != -1):

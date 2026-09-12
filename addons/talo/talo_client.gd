@@ -114,11 +114,11 @@ func make_request(
 
 func _build_headers(extra_headers: Array[String] = []) -> Array[String]:
 	var headers: Array[String] = [
-		"Authorization: Bearer %s" % Talo.settings.access_key,
+		"Authorization: Bearer %s" % Talo.secrets.access_key,
 		"Content-Type: application/json",
 		"Accept: application/json",
-		"X-Talo-Dev-Build: %s" % ("1" if Talo.settings.is_debug_build() else "0"),
-		"X-Talo-Include-Dev-Data: %s" % ("1" if Talo.settings.is_debug_build() else "0"),
+		"X-Talo-Dev-Build: %s" % ("1" if Talo.is_debug_build() else "0"),
+		"X-Talo-Include-Dev-Data: %s" % ("1" if Talo.is_debug_build() else "0"),
 		"X-Talo-Client: godot:%s" % TALO_CLIENT_VERSION
 	]
 

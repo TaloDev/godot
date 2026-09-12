@@ -9,12 +9,16 @@ signal connection_lost()
 ## Emitted when internet connectivity is restored.
 signal connection_restored()
 
+const DEV_FEATURE_TAG := "talo_dev"
+const LIVE_FEATURE_TAG := "talo_live"
+
 var current_alias: TaloPlayerAlias
 var current_player: TaloPlayer:
 	get:
 		return null if not current_alias else current_alias.player
 
 var settings: TaloSettings
+var secrets: TaloSecrets
 
 var players: PlayersAPI
 var events: EventsAPI
@@ -75,6 +79,8 @@ func _notification(what: int):
 
 func _load_config() -> void:
 	settings = TaloSettings.new()
+	secrets = TaloSecrets.new()
+
 
 func _load_apis() -> void:
 	players = preload("res://addons/talo/apis/players_api.gd").new("/v1/players")
@@ -145,3 +151,11 @@ func _handle_quit() -> void:
 
 	if Talo.settings.handle_tree_quit:
 		get_tree().quit()
+
+
+func is_debug_build() -> bool:
+	if OS.has_feature(LIVE_FEATURE_TAG):
+		return false
+	if OS.has_feature(DEV_FEATURE_TAG):
+		return true
+	return OS.is_debug_build()

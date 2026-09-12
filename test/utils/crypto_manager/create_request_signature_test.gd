@@ -5,13 +5,13 @@ const KEY_VERSION := "1"
 const KEY_VALUE := "test-key"
 
 func before() -> void:
-	Talo.settings.verification_key_version = KEY_VERSION
-	Talo.settings.verification_key_value = KEY_VALUE
+	Talo.secrets.verification_key_version = KEY_VERSION
+	Talo.secrets.verification_key_value = KEY_VALUE
 	Talo.settings.verification_enabled = true
 
 func after() -> void:
-	Talo.settings.verification_key_version = ""
-	Talo.settings.verification_key_value = ""
+	Talo.secrets.verification_key_version = ""
+	Talo.secrets.verification_key_value = ""
 	Talo.settings.verification_enabled = false
 
 func test_token_header_decodes_and_contains_valid_payload() -> void:

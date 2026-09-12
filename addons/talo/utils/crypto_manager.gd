@@ -10,7 +10,7 @@ static func handle_undecryptable_file(path: String, what: String) -> void:
 
 func _get_pass() -> String:
 	if OS.has_feature("web"):
-		return Talo.settings.access_key
+		return Talo.secrets.access_key
 
 	return OS.get_unique_id()
 
@@ -46,9 +46,9 @@ static func get_hashed_time(size := 16) -> String:
 	return time_hash.substr(split_start, size)
 
 static func create_request_signature(request_body: String) -> String:
-	if Talo.settings.verification_key_version.is_empty() or Talo.settings.verification_key_value.is_empty():
-		push_error("Verification is enabled but verification_key_version or verification_key_value is missing. Please update your talo_settings.cfg")
-		return "" 
+	if Talo.secrets.verification_key_version.is_empty() or Talo.secrets.verification_key_value.is_empty():
+		push_error("Verification is enabled but verification_key_version or verification_key_value is missing. Please update your talo_secrets.cfg")
+		return ""
 
 	var timestamp := TaloTimeUtils.get_timestamp_msec()
 	var payload := JSON.stringify({
@@ -60,8 +60,8 @@ static func create_request_signature(request_body: String) -> String:
 	var header_b64 := Marshalls.utf8_to_base64(payload)
 
 	var hmac := HMACContext.new()
-	hmac.start(HashingContext.HASH_SHA256, Talo.settings.verification_key_value.to_utf8_buffer())
+	hmac.start(HashingContext.HASH_SHA256, Talo.secrets.verification_key_value.to_utf8_buffer())
 	hmac.update(header_b64.to_utf8_buffer())
 	var signature_b64 := Marshalls.raw_to_base64(hmac.finish())
 
-	return "%s|%s.%s" % [Talo.settings.verification_key_version, header_b64, signature_b64]
+	return "%s|%s.%s" % [Talo.secrets.verification_key_version, header_b64, signature_b64]

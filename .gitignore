@@ -18,6 +18,7 @@ mono_crash.*.json
 
 # Talo
 talo_settings.cfg
+talo_secrets.cfg
 
 # GdUnit4
 reports
