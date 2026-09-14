@@ -20,7 +20,7 @@ jobs:
 
       - uses: MikeSchulze/gdUnit4-action@v1.3.2
         with:
-          godot-version: '4.6.1'
+          godot-version: '4.7.2'
           paths: res://test
           publish-report: ${{ github.event.pull_request.head.repo.fork != true }}
           report-name: unit-test-report.xml
