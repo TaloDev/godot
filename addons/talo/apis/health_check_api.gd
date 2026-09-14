@@ -8,15 +8,20 @@ class_name HealthCheckAPI extends TaloAPI
 enum HealthCheckStatus {
 	OK,
 	FAILED,
-	UNKNOWN
+	UNKNOWN,
 }
 
 var _cached_result := HealthCheckStatus.UNKNOWN
 var _can_ping := true
-var _timer := TaloDebounceTimer.new(func (): _can_ping = true)
+var _timer := TaloDebounceTimer.new(
+	func():
+		_can_ping = true,
+)
+
 
 func _ready() -> void:
 	add_child(_timer)
+
 
 ## Check if the Talo API can be reached.
 func ping() -> bool:
@@ -41,6 +46,7 @@ func ping() -> bool:
 			Talo.connection_lost.emit()
 
 	return success
+
 
 ## Get the latest known health check status.
 func get_last_status() -> HealthCheckStatus:

@@ -2,6 +2,7 @@ extends Button
 
 @onready var line_edit: LineEdit = %SearchLineEdit
 
+
 func _on_pressed() -> void:
 	var query = line_edit.text.strip_edges()
 	if query.is_empty():

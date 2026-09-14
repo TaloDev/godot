@@ -2,6 +2,7 @@ extends Button
 
 @export var group_id: String
 
+
 func _on_pressed() -> void:
 	if group_id.is_empty():
 		%ResponseLabel.text = "group_id not set on GetGroupButton"

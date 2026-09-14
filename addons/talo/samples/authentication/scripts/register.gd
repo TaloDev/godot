@@ -8,6 +8,7 @@ signal go_to_login
 @onready var email: TextEdit = %Email
 @onready var validation_label: Label = %ValidationLabel
 
+
 func _on_submit_button_pressed() -> void:
 	validation_label.text = ""
 
@@ -23,7 +24,12 @@ func _on_submit_button_pressed() -> void:
 		validation_label.text = "Email is required when verification is enabled"
 		return
 
-	var res := await Talo.player_auth.register(username.text, password.text, email.text, enable_verification.button_pressed)
+	var res := await Talo.player_auth.register(
+		username.text,
+		password.text,
+		email.text,
+		enable_verification.button_pressed,
+	)
 	if not res.success:
 		match res.error.code:
 			TaloPlayerAuthError.ErrorCode.IDENTIFIER_TAKEN:
@@ -32,6 +38,7 @@ func _on_submit_button_pressed() -> void:
 				validation_label.text = "Invalid email address"
 			_:
 				validation_label.text = res.error.message
+
 
 func _on_login_pressed() -> void:
 	go_to_login.emit()

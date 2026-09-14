@@ -13,6 +13,7 @@ var min_time_between_updates: int
 var created_at: String
 var updated_at: String
 
+
 func _init(data: Dictionary):
 	id = data.id
 	internal_name = data.internalName

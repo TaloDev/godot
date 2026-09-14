@@ -13,13 +13,16 @@ var _is_executing: bool
 var _is_queued: bool
 var _pending_waiters: Array[UpdateWaiter] = []
 
+
 func _init(base_path: String) -> void:
 	super(base_path)
 	_update_timer = TaloDebounceTimer.new(_on_debounce_fired)
 	add_child(_update_timer)
 
+
 func _debounce() -> void:
 	_update_timer.debounce()
+
 
 func _queue_update() -> UpdateWaiter:
 	var waiter := UpdateWaiter.new()
@@ -27,11 +30,14 @@ func _queue_update() -> UpdateWaiter:
 	_debounce()
 	return waiter
 
+
 func _run_debounced_update() -> Variant:
 	return null
 
+
 func _build_update_result(success: bool, operation_data: Variant) -> Variant:
 	return operation_data
+
 
 func _on_debounce_fired() -> void:
 	# if an update is executing, queue a new update
@@ -40,6 +46,7 @@ func _on_debounce_fired() -> void:
 		return
 	# else, just execute it
 	_execute_update()
+
 
 func _execute_update() -> void:
 	while true:
@@ -66,6 +73,7 @@ func _execute_update() -> void:
 		if not _is_executing:
 			return
 
+
 func flush_updates() -> FlushResult:
 	var result := FlushResult.NOTHING_PENDING
 	while _is_executing or not _update_timer.is_stopped():
@@ -84,10 +92,12 @@ func flush_updates() -> FlushResult:
 
 	return result
 
+
 class UpdateWaiter:
 	signal settled(result: Variant)
 
 	var result: Variant
+
 
 	func settle(update_result: Variant) -> void:
 		result = update_result

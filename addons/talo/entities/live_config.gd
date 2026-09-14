@@ -9,27 +9,47 @@ var props: Array[TaloProp] = []
 
 var _offline_data: Array
 
+
 func _init(props: Array):
-	self.props.assign(props.map(func (prop): return TaloProp.new(prop.key, prop.value)))
+	self.props.assign(
+		props.map(
+			func(prop):
+				return TaloProp.new(prop.key, prop.value),
+		)
+	)
 	_offline_data = props
+
 
 ## Get a property value by key. Returns the fallback value if the key is not found.
 func get_prop(key: String, fallback: String) -> String:
-	var filtered := props.filter(func (prop: TaloProp): return prop.key == key)
+	var filtered := props.filter(
+		func(prop: TaloProp):
+			return prop.key == key,
+	)
 	return fallback if filtered.is_empty() else filtered.front().value
+
 
 ## Cache the offline live config data.
 func write_offline_config():
-	var file := FileAccess.open_encrypted_with_pass(_OFFLINE_DATA_PATH, FileAccess.WRITE, Talo.crypto_manager.get_key())
+	var file := FileAccess.open_encrypted_with_pass(
+		_OFFLINE_DATA_PATH,
+		FileAccess.WRITE,
+		Talo.crypto_manager.get_key(),
+	)
 	file.store_line(JSON.stringify(_offline_data))
 	file.close()
+
 
 ## Get the offline live config data.
 static func get_offline_config() -> TaloLiveConfig:
 	if not FileAccess.file_exists(_OFFLINE_DATA_PATH):
 		return null
 
-	var file := FileAccess.open_encrypted_with_pass(_OFFLINE_DATA_PATH, FileAccess.READ, Talo.crypto_manager.get_key())
+	var file := FileAccess.open_encrypted_with_pass(
+		_OFFLINE_DATA_PATH,
+		FileAccess.READ,
+		Talo.crypto_manager.get_key(),
+	)
 	if file == null:
 		TaloCryptoManager.handle_undecryptable_file(_OFFLINE_DATA_PATH, "offline live config file")
 		return null
@@ -39,6 +59,7 @@ static func get_offline_config() -> TaloLiveConfig:
 	file.close()
 
 	return TaloLiveConfig.new(json.data)
+
 
 ## Get the last modified time of the offline live config file.
 func get_offline_config_last_modified() -> int:

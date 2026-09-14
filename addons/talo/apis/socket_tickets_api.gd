@@ -5,6 +5,7 @@ class_name SocketTicketsAPI extends TaloAPI
 ##
 ## @tutorial: https://docs.trytalo.com/docs/godot/socket
 
+
 ## Create a new socket ticket.
 func create_ticket() -> String:
 	var res := await client.make_request(HTTPClient.METHOD_POST, "")

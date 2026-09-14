@@ -1,10 +1,13 @@
 extends Button
 
+
 func _ready() -> void:
 	Talo.saves.save_updated.connect(_on_save_updated)
 
+
 func _on_save_updated(success: bool, save: TaloGameSave) -> void:
 	%ResponseLabel.text = "Saved successfully!" if success else "Save failed"
+
 
 func _on_pressed() -> void:
 	if not Talo.saves.current:
@@ -20,7 +23,10 @@ func _on_pressed() -> void:
 	if result:
 		version = int(result.get_string(1))
 
-	var new_name := Talo.saves.current.name.replace("version %s" % version, "version %s" % (version + 1))
+	var new_name := Talo.saves.current.name.replace(
+		"version %s" % version,
+		"version %s" % (version + 1),
+	)
 
 	await Talo.saves.update_current_save(new_name)
 	%ResponseLabel.text = "Renamed to: %s" % new_name

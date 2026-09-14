@@ -6,6 +6,7 @@ var value: float
 var global_value: float
 var created_at: String
 
+
 func _init(data: Dictionary):
 	player_alias = TaloPlayerAlias.new(data.playerAlias)
 	change = data.change

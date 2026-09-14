@@ -11,15 +11,21 @@ signal live_config_loaded(live_config: TaloLiveConfig)
 ## Emitted when the live config has been updated.
 signal live_config_updated(live_config: TaloLiveConfig)
 
+
 func _ready() -> void:
 	await Talo.init_completed
 	Talo.socket.message_received.connect(_on_message_received)
+
 
 func _on_message_received(res: String, data: Dictionary) -> void:
 	if res == "v1.live-config.updated":
 		_handle_new_live_config(TaloLiveConfig.new(data.config), true)
 
-func _handle_new_live_config(new_live_config: TaloLiveConfig, updated: bool = false) -> TaloLiveConfig:
+
+func _handle_new_live_config(
+	new_live_config: TaloLiveConfig,
+	updated: bool = false,
+) -> TaloLiveConfig:
 	Talo.live_config = new_live_config
 
 	if updated:
@@ -31,6 +37,7 @@ func _handle_new_live_config(new_live_config: TaloLiveConfig, updated: bool = fa
 		new_live_config.write_offline_config()
 
 	return new_live_config
+
 
 ## Get the live config for your game.
 func get_live_config() -> TaloLiveConfig:

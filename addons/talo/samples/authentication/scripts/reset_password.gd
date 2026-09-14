@@ -7,6 +7,7 @@ signal go_to_forgot_password
 @onready var new_password: TextEdit = %NewPassword
 @onready var validation_label: Label = %ValidationLabel
 
+
 func _on_submit_pressed() -> void:
 	validation_label.text = ""
 
@@ -27,6 +28,7 @@ func _on_submit_pressed() -> void:
 				validation_label.text = "Reset code is invalid"
 			_:
 				validation_label.text = res.error.message
+
 
 func _on_cancel_pressed() -> void:
 	go_to_forgot_password.emit()

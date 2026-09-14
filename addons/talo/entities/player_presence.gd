@@ -5,13 +5,15 @@ var custom_status: String
 var player_alias: TaloPlayerAlias
 var updated_at: String
 
+
 static func get_default_data() -> Dictionary:
 	return {
 		online = false,
 		customStatus = "",
 		playerAlias = null,
-		updatedAt = TaloTimeUtils.get_current_datetime_string()
+		updatedAt = TaloTimeUtils.get_current_datetime_string(),
 	}
+
 
 func _init(data: Dictionary):
 	online = data.online

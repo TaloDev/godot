@@ -7,6 +7,7 @@ signal go_to_game
 @onready var new_password: TextEdit = %NewPassword
 @onready var validation_label: Label = %ValidationLabel
 
+
 func _on_submit_pressed() -> void:
 	validation_label.text = ""
 
@@ -29,6 +30,7 @@ func _on_submit_pressed() -> void:
 				validation_label.text = "New password must be different from the current password"
 			_:
 				validation_label.text = res.error.message
+
 
 func _on_cancel_pressed() -> void:
 	go_to_game.emit()

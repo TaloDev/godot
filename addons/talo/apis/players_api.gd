@@ -20,12 +20,15 @@ signal identity_cleared()
 ## Emitted when a debounced player update settles.
 signal player_updated(success: bool)
 
+
 func _init(base_path: String) -> void:
 	super(base_path)
 	_update_settled.connect(_on_update_settled)
 
+
 func _ready() -> void:
 	Talo.connection_restored.connect(_on_connection_restored)
+
 
 func _handle_identify_success(alias: TaloPlayerAlias, socket_token: String = "") -> TaloPlayerAlias:
 	if not await Talo.is_offline() and Talo.socket.is_identified():
@@ -39,6 +42,7 @@ func _handle_identify_success(alias: TaloPlayerAlias, socket_token: String = "")
 	identified.emit(Talo.current_alias)
 	return Talo.current_alias
 
+
 ## Identify a player using a service (e.g. "username") and identifier (e.g. "bob").
 func identify(service: String, identifier: String) -> TaloPlayerAlias:
 	identification_started.emit()
@@ -46,7 +50,10 @@ func identify(service: String, identifier: String) -> TaloPlayerAlias:
 	if await Talo.is_offline():
 		return await identify_offline(service, identifier)
 
-	var res := await client.make_request(HTTPClient.METHOD_GET, "/identify?service=%s&identifier=%s" % [service, identifier])
+	var res := await client.make_request(
+		HTTPClient.METHOD_GET,
+		"/identify?service=%s&identifier=%s" % [service, identifier],
+	)
 	match res.status:
 		200:
 			var alias = TaloPlayerAlias.new(res.body.alias)
@@ -57,6 +64,7 @@ func identify(service: String, identifier: String) -> TaloPlayerAlias:
 			identification_failed.emit(TaloIdentifyError.from_response(res.body))
 			return null
 
+
 ## Identify a player using a Steam ticket.
 func identify_steam(ticket: String, identity: String = "") -> TaloPlayerAlias:
 	if identity.is_empty():
@@ -64,9 +72,11 @@ func identify_steam(ticket: String, identity: String = "") -> TaloPlayerAlias:
 	else:
 		return await identify("steam", "%s:%s" % [identity, ticket])
 
+
 ## Identify a player using a Google Play Games auth code.
 func identify_google_play_games(auth_code: String) -> TaloPlayerAlias:
 	return await identify("google_play_games", auth_code)
+
 
 ## Identify a player using an Apple Game Center identity verification signature. Signature and salt must be base64 encoded.
 func identify_game_center(
@@ -75,25 +85,30 @@ func identify_game_center(
 	salt: String,
 	timestamp: int,
 	player_id: String,
-	bundle_id: String
+	bundle_id: String,
 ) -> TaloPlayerAlias:
-	var identifier := JSON.stringify({
-		"publicKeyUrl": public_key_url,
-		"signature": signature,
-		"salt": salt,
-		"timestamp": timestamp,
-		"playerId": player_id,
-		"bundleId": bundle_id
-	})
+	var identifier := JSON.stringify(
+		{
+			"publicKeyUrl": public_key_url,
+			"signature": signature,
+			"salt": salt,
+			"timestamp": timestamp,
+			"playerId": player_id,
+			"bundleId": bundle_id,
+		}
+	)
 	return await identify("game_center", identifier.uri_encode())
+
 
 func _run_debounced_update() -> Variant:
 	if Talo.identity_check() != OK:
 		return null
 
-	var res := await client.make_request(HTTPClient.METHOD_PATCH, "/%s" % Talo.current_player.id, {
-		props = Talo.current_player.get_serialized_props()
-	})
+	var res := await client.make_request(
+		HTTPClient.METHOD_PATCH,
+		"/%s" % Talo.current_player.id,
+		{ props = Talo.current_player.get_serialized_props() },
+	)
 
 	match res.status:
 		200:
@@ -109,13 +124,16 @@ func _run_debounced_update() -> Variant:
 		_:
 			return null
 
+
 func _on_update_settled(success: bool, _operation_data: Variant) -> void:
 	player_updated.emit(success)
+
 
 func _build_update_result(success: bool, operation_data: Variant) -> Variant:
 	if not success:
 		return PlayerUpdateResult.new(false)
 	return PlayerUpdateResult.new(true, operation_data)
+
 
 ## Flush and sync the player's current data with Talo.
 func update() -> TaloPlayer:
@@ -124,16 +142,19 @@ func update() -> TaloPlayer:
 		return null
 	return Talo.current_player
 
+
 ## Queue a debounced update. The returned signal resolves with a PlayerUpdateResult.
 func debounce_update() -> Signal:
 	return _queue_update().settled
 
+
 ## Merge all of the data from player_id2 into player_id1 and delete player_id2.
 func merge(player_id1: String, player_id2: String, options := MergeOptions.new()) -> TaloPlayer:
-	var res := await client.make_request(HTTPClient.METHOD_POST, "/merge", {
-		playerId1 = player_id1,
-		playerId2 = player_id2
-	})
+	var res := await client.make_request(
+		HTTPClient.METHOD_POST,
+		"/merge",
+		{ playerId1 = player_id1, playerId2 = player_id2 },
+	)
 
 	match res.status:
 		200:
@@ -146,6 +167,7 @@ func merge(player_id1: String, player_id2: String, options := MergeOptions.new()
 		_:
 			return null
 
+
 ## Get a player by their ID.
 func find(player_id: String) -> TaloPlayer:
 	var res := await client.make_request(HTTPClient.METHOD_GET, "/%s" % player_id)
@@ -155,9 +177,11 @@ func find(player_id: String) -> TaloPlayer:
 		_:
 			return null
 
+
 ## Generate a mostly-unique identifier.
 func generate_identifier() -> String:
 	return TaloCryptoManager.get_hashed_time(12)
+
 
 ## Attempt to identify a player when they're offline.
 func identify_offline(service: String, identifier: String) -> TaloPlayerAlias:
@@ -168,28 +192,44 @@ func identify_offline(service: String, identifier: String) -> TaloPlayerAlias:
 		identification_failed.emit(TaloIdentifyError.from_response(null))
 		return null
 
+
 ## Search for players by IDs, prop values and alias identifiers.
 func search(query: String, page: int = 0) -> SearchPage:
 	var encoded_query := query.strip_edges().uri_encode()
-	var res := await client.make_request(HTTPClient.METHOD_GET, "/search?query=%s&page=%s" % [encoded_query, page])
+	var res := await client.make_request(
+		HTTPClient.METHOD_GET,
+		"/search?query=%s&page=%s" % [encoded_query, page],
+	)
 	match res.status:
 		200:
 			var players: Array[TaloPlayer] = []
-			players.assign(res.body.players.map(func (player: Dictionary): return TaloPlayer.new(player)))
-			return SearchPage.new(players, res.body.count, res.body.itemsPerPage, res.body.isLastPage)
+			players.assign(
+				res.body.players.map(
+					func(player: Dictionary):
+						return TaloPlayer.new(player),
+				)
+			)
+			return SearchPage.new(
+				players,
+				res.body.count,
+				res.body.itemsPerPage,
+				res.body.isLastPage,
+			)
 		_:
 			return null
+
 
 ## Clears the current player identity. Pending events and continuity requests will also be cleared.
 func clear_identity() -> void:
 	if Talo.player_auth.session_manager.clear_session() == OK:
 		identity_cleared.emit()
 
+
 ## Create a new socket token. The Talo socket will use this token to identify the player.
 func create_socket_token() -> String:
 	if Talo.identity_check() != OK:
 		return ""
-	
+
 	var res := await client.make_request(HTTPClient.METHOD_POST, "/socket-token")
 	match res.status:
 		200:
@@ -197,11 +237,13 @@ func create_socket_token() -> String:
 		_:
 			return ""
 
+
 func _on_connection_restored():
 	await Talo.socket.reset_connection()
 	if Talo.identity_check(false) == OK:
 		var socket_token := await create_socket_token()
 		Talo.socket.set_socket_token(socket_token)
+
 
 class SearchPage:
 	var players: Array[TaloPlayer]
@@ -209,18 +251,27 @@ class SearchPage:
 	var items_per_page: int
 	var is_last_page: bool
 
-	func _init(players: Array[TaloPlayer], count: int, items_per_page: int, is_last_page: bool) -> void:
+
+	func _init(
+		players: Array[TaloPlayer],
+		count: int,
+		items_per_page: int,
+		is_last_page: bool,
+	) -> void:
 		self.players = players
 		self.count = count
 		self.items_per_page = items_per_page
 		self.is_last_page = is_last_page
 
+
 class MergeOptions:
 	var post_merge_identity_service: String = ""
+
 
 class PlayerUpdateResult:
 	var success: bool
 	var rejected_props: Array[TaloRejectedProp]
+
 
 	func _init(success: bool, rejected_props: Array[TaloRejectedProp] = []) -> void:
 		self.success = success
