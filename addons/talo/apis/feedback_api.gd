@@ -33,12 +33,10 @@ func send(
 	if Talo.identity_check() != OK:
 		return FeedbackSendResult.new(false)
 
-	var props_to_send := props \
-			.keys() \
-			.map(
-		func(key: String):
-			return { key = key, value = str(props[key]) },
-	)
+	var props_to_send := (props.keys().map(
+			func(key: String):
+				return { key = key, value = str(props[key]) },
+		))
 
 	var res := await client.make_request(
 		HTTPClient.METHOD_POST,

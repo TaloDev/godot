@@ -101,22 +101,22 @@ func remove_from_prop_array(key: String, value: String, update: bool = true) -> 
 
 ## Check if the player is in a group with the given ID.
 func is_in_talo_group_id(group_id: String) -> bool:
-	return not groups \
-			.filter(
-		func(group: TaloPlayerGroupStub):
-			return group.id == group_id,
-	) \
-			.is_empty()
+	return not (
+		groups.filter(
+			func(group: TaloPlayerGroupStub):
+				return group.id == group_id,
+		).is_empty()
+	)
 
 
 ## Check if the player is in a group with the given name.
 func is_in_talo_group_name(group_name: String) -> bool:
-	return not groups \
-			.filter(
-		func(group: TaloPlayerGroupStub):
-			return group.name == group_name,
-	) \
-			.is_empty()
+	return not (
+		groups.filter(
+			func(group: TaloPlayerGroupStub):
+				return group.name == group_name,
+		).is_empty()
+	)
 
 
 ## Get the offline data for the player.

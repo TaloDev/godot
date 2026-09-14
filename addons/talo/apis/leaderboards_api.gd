@@ -15,12 +15,17 @@ func get_cached_entries(
 ) -> Array[TaloLeaderboardEntry]:
 	return _entries_manager.get_entries(internal_name).filter(
 		func(entry: TaloLeaderboardEntry) -> bool:
-			# filter by alias_id if set
-			return (options.alias_id == -1 or entry.player_alias.id == options.alias_id) and \
-			 # filter by player_id if set
-			(options.player_id == "" or entry.player_alias.player.id == options.player_id) and \
-			 # filter by alias_service if set
-			(options.alias_service == "" or entry.player_alias.service == options.alias_service),
+			return (
+				# filter by alias_id if set
+				(options.alias_id == -1 or entry.player_alias.id == options.alias_id)
+				# filter by player_id if set
+				and (options.player_id == "" or entry.player_alias.player.id == options.player_id)
+				# filter by alias_service if set
+				and (
+					options.alias_service == ""
+					or entry.player_alias.service == options.alias_service
+				)
+			),
 	)
 
 

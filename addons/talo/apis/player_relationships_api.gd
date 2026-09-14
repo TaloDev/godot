@@ -44,10 +44,7 @@ func _on_message_received(res: String, data: Dictionary) -> void:
 			# emit who the other alias is
 			var other_alias := (
 				subscription.subscriber
-				if subscription.subscriber.player.id
-				!= Talo \
-						.current_player \
-						.id
+				if (subscription.subscriber.player.id != Talo.current_player.id)
 				else subscription.subscribed_to
 			)
 			relationship_confirmed.emit(other_alias)
@@ -55,10 +52,7 @@ func _on_message_received(res: String, data: Dictionary) -> void:
 			var subscription := TaloPlayerAliasSubscription.new(data.subscription)
 			var other_alias := (
 				subscription.subscriber
-				if subscription.subscriber.player.id
-				!= Talo \
-						.current_player \
-						.id
+				if (subscription.subscriber.player.id != Talo.current_player.id)
 				else subscription.subscribed_to
 			)
 			if subscription.confirmed:
@@ -271,10 +265,7 @@ func _get_relationship_type_from_enum(
 ) -> String:
 	return (
 		"bidirectional"
-		if relationship_type
-		== TaloPlayerAliasSubscription \
-				.RelationshipType \
-				.BIDIRECTIONAL
+		if (relationship_type == TaloPlayerAliasSubscription.RelationshipType.BIDIRECTIONAL)
 		else "unidirectional"
 	)
 

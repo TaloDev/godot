@@ -179,12 +179,10 @@ func create(options: CreateChannelOptions = CreateChannelOptions.new()) -> Chann
 	if Talo.identity_check() != OK:
 		return ChannelUpsertResult.new(false, null)
 
-	var props_to_send := options.props \
-			.keys() \
-			.map(
-		func(key: String):
-			return { key = key, value = str(options.props[key]) },
-	)
+	var props_to_send := (options.props.keys().map(
+			func(key: String):
+				return { key = key, value = str(options.props[key]) },
+		))
 
 	var res := await client.make_request(
 		HTTPClient.METHOD_POST,
@@ -250,9 +248,9 @@ func update(
 	if options.private != UpdateChannelOptions.Privacy.DEFAULT:
 		data.private = options.private == UpdateChannelOptions.Privacy.PRIVATE
 	if options.temporary_membership != UpdateChannelOptions.TemporaryMembership.DEFAULT:
-		data.temporaryMembership = options.temporary_membership == UpdateChannelOptions \
-				.TemporaryMembership \
-				.ENABLED
+		data.temporaryMembership = (
+			options.temporary_membership == UpdateChannelOptions.TemporaryMembership.ENABLED
+		)
 
 	var res := await client.make_request(HTTPClient.METHOD_PUT, "/%s" % channel_id, data)
 

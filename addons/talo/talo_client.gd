@@ -46,9 +46,9 @@ func _attempt_refresh(url: String, body: Dictionary) -> Error:
 	):
 		return ERR_SKIP
 
-	if TaloPlayerAuthError.ErrorCode.get(body.errorCode) != TaloPlayerAuthError \
-			.ErrorCode \
-			.INVALID_SESSION:
+	if (TaloPlayerAuthError.ErrorCode.get(body.errorCode) != TaloPlayerAuthError
+		.ErrorCode
+		.INVALID_SESSION):
 		return ERR_SKIP
 
 	var res := await Talo.player_auth.refresh()
