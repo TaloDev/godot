@@ -176,7 +176,6 @@ func save_config():
 static func init_project_settings() -> void:
 	_define_project_setting(SETTINGS_PATH_SETTING, DEFAULT_SETTINGS_PATH, "The path to the Talo settings file.")
 
-# Based on GdUnitSettings.create_property_if_need from GdUnit4
 static func _define_project_setting(name: String, default: Variant, help := "") -> void:
 	if not ProjectSettings.has_setting(name):
 		ProjectSettings.set_setting(name, default)
