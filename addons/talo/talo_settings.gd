@@ -1,3 +1,4 @@
+@tool
 class_name TaloSettings extends RefCounted
 ## Talo's configuration options.
 ##
@@ -5,11 +6,18 @@ class_name TaloSettings extends RefCounted
 
 var _config_file: ConfigFile
 
-const SETTINGS_PATH := "res://addons/talo/settings.cfg"
+const SETTINGS_PATH_SETTING := "talo/settings/settings_path"
+const DEFAULT_SETTINGS_PATH := "res://addons/talo/settings.cfg"
 const DEFAULT_API_URL := "https://api.trytalo.com"
 
 const DEV_FEATURE_TAG := "talo_dev"
 const LIVE_FEATURE_TAG := "talo_live"
+
+static var settings_path: String:
+	get:
+		return ProjectSettings.get_setting(SETTINGS_PATH_SETTING, DEFAULT_SETTINGS_PATH)
+	set(value):
+		ProjectSettings.set_setting(SETTINGS_PATH_SETTING, value)
 
 ## Your Talo access key, allowing you to connect to the Talo API and access data based on its scopes
 var access_key: String:
@@ -127,7 +135,7 @@ var verification_key_value: String:
 func _init() -> void:
 	_config_file = ConfigFile.new()
 
-	if not FileAccess.file_exists(SETTINGS_PATH):
+	if not FileAccess.file_exists(settings_path):
 		# set each setting to their default value
 		access_key = access_key
 		api_url = api_url
@@ -144,12 +152,13 @@ func _init() -> void:
 		verification_key_value = verification_key_value
 		save_config()
 
-		print_rich("[color=green]Talo settings.cfg created! Please close the game and fill in your access_key.[/color]")
+		print_rich("[color=green]%s created! Please close the game and fill in your access_key.[/color]" % settings_path)
 	else:
-		_config_file.load(SETTINGS_PATH)
+		_config_file.load(settings_path)
 
 		if access_key.is_empty() and is_debug_build():
-			print_rich("[color=yellow]Warning: Talo access_key in settings.cfg is empty[/color]")
+			print_rich("[color=yellow]Warning: Talo access_key in %s is empty[/color]" % settings_path)
+
 
 func is_debug_build() -> bool:
 	if OS.has_feature(LIVE_FEATURE_TAG):
@@ -162,4 +171,21 @@ func is_debug_build() -> bool:
 func save_config():
 	if _config_file == null:
 		return
-	_config_file.save(SETTINGS_PATH)
+	_config_file.save(settings_path)
+
+static func init_project_settings() -> void:
+	_define_project_setting(SETTINGS_PATH_SETTING, DEFAULT_SETTINGS_PATH, "The path to the Talo settings file.")
+
+# Based on GdUnitSettings.create_property_if_need from GdUnit4
+static func _define_project_setting(name: String, default: Variant, help := "") -> void:
+	if not ProjectSettings.has_setting(name):
+		ProjectSettings.set_setting(name, default)
+
+	ProjectSettings.set_initial_value(name, default)
+
+	ProjectSettings.add_property_info({
+		"name": name,
+		"type": typeof(default),
+		"hint": PROPERTY_HINT_TYPE_STRING,
+		"hint_string": help
+	})

@@ -4,6 +4,7 @@ extends EditorPlugin
 var export_plugin := TaloExportPlugin.new()
 
 func _enter_tree():
+	TaloSettings.init_project_settings()
 	add_autoload_singleton("Talo", "res://addons/talo/talo_manager.gd")
 	add_export_plugin(export_plugin)
 
