@@ -2,7 +2,8 @@
 * text=auto eol=lf
 
 # Only include the Talo folder when downloading from the Asset Library.
-/**        			export-ignore
-/addons    			!export-ignore
-/addons/** 			!export-ignore
-/addons/gdUnit4		export-ignore
+/**             export-ignore
+/addons         !export-ignore
+/addons/**      export-ignore
+/addons/talo    !export-ignore
+/addons/talo/** !export-ignore
