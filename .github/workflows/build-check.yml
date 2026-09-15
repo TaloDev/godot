@@ -13,7 +13,7 @@ jobs:
     runs-on: ${{ matrix.platform == 'macOS' && 'macos-latest' || 'ubuntu-latest' }}
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         name: Checkout
         with:
           lfs: true
