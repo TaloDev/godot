@@ -1,7 +1,8 @@
 class_name SavesAPI extends TaloDebouncedAPI
 ## An interface for communicating with the Talo Saves API.
 ##
-## This API allows you to save and load game data for your players. You can create, update, and delete saves, as well as load and unload them.
+## This API allows you to save and load game data for your players. You can create, update, and
+## delete saves, as well as load and unload them.
 ##
 ## @tutorial: https://docs.trytalo.com/docs/godot/saves
 
@@ -36,7 +37,7 @@ var current: TaloGameSave:
 
 func _init(base_path: String) -> void:
 	super(base_path)
-	_update_settled.connect(_on_update_settled)
+	update_settled.connect(_on_update_settled)
 
 
 ## Sync an offline save with an online save using the offline save data.
@@ -162,10 +163,10 @@ func update_current_save(new_name: String = "") -> Variant:
 		var success := save != null
 		save_updated.emit(success, save if success else null)
 		return SaveUpdateResult.new(success, save)
-	# else, update the save locally and queue it for syncing
-	else:
-		_saves_manager.current_save.content = _saves_manager.get_save_content()
-		return await _queue_update().settled
+
+	# update the save locally and queue it for syncing
+	_saves_manager.current_save.content = _saves_manager.get_save_content()
+	return await _queue_update().settled
 
 
 ## Update the given save using the current state of the game and with the given name.

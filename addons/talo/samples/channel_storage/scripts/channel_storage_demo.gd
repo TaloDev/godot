@@ -134,7 +134,7 @@ func _on_channel_props_updated(
 
 
 func _on_channel_storage_props_failed_to_set(
-	channel: TaloChannel,
+	_channel: TaloChannel,
 	failed_props: Array[TaloRejectedProp],
 ):
 	for prop in failed_props:

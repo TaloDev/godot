@@ -23,7 +23,7 @@ signal player_updated(success: bool)
 
 func _init(base_path: String) -> void:
 	super(base_path)
-	_update_settled.connect(_on_update_settled)
+	update_settled.connect(_on_update_settled)
 
 
 func _ready() -> void:
@@ -69,8 +69,8 @@ func identify(service: String, identifier: String) -> TaloPlayerAlias:
 func identify_steam(ticket: String, identity: String = "") -> TaloPlayerAlias:
 	if identity.is_empty():
 		return await identify("steam", ticket)
-	else:
-		return await identify("steam", "%s:%s" % [identity, ticket])
+
+	return await identify("steam", "%s:%s" % [identity, ticket])
 
 
 ## Identify a player using a Google Play Games auth code.
@@ -78,7 +78,8 @@ func identify_google_play_games(auth_code: String) -> TaloPlayerAlias:
 	return await identify("google_play_games", auth_code)
 
 
-## Identify a player using an Apple Game Center identity verification signature. Signature and salt must be base64 encoded.
+## Identify a player using an Apple Game Center identity verification signature. Signature and salt
+## must be base64 encoded.
 func identify_game_center(
 	public_key_url: String,
 	signature: String,
@@ -188,9 +189,9 @@ func identify_offline(service: String, identifier: String) -> TaloPlayerAlias:
 	var offline_alias := TaloPlayerAlias.get_offline_alias()
 	if offline_alias != null and offline_alias.matches_identify_request(service, identifier):
 		return await _handle_identify_success(offline_alias)
-	else:
-		identification_failed.emit(TaloIdentifyError.from_response(null))
-		return null
+
+	identification_failed.emit(TaloIdentifyError.from_response(null))
+	return null
 
 
 ## Search for players by IDs, prop values and alias identifiers.

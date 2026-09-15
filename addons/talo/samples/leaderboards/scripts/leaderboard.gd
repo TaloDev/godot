@@ -27,7 +27,11 @@ func _ready() -> void:
 
 func _set_entry_count():
 	if entries_container.get_child_count() == 0:
-		info_label.text = "No entries yet!" if not _entries_error else "Failed loading leaderboard %s. Does it exist?" % leaderboard_internal_name
+		info_label.text = (
+			"No entries yet!"
+			if not _entries_error
+			else "Failed loading leaderboard %s. Does it exist?" % leaderboard_internal_name
+		)
 	else:
 		info_label.text = "%s entries" % entries_container.get_child_count()
 		if _filter != "All":

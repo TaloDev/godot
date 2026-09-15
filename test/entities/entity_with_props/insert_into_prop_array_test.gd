@@ -17,7 +17,7 @@ func test_insert_into_prop_array_does_not_add_duplicate_value() -> void:
 	assert_array(player.get_prop_array("items")).contains_exactly(["sword"])
 
 
-func test_insert_into_prop_array_when_array_was_previously_deleted_clears_null_entry_and_inserts_value() -> void:
+func test_insert_into_prop_array_clears_null_entry_if_previously_deleted() -> void:
 	var player := TaloEntityWithProps.new([TaloProp.new("items[]", "sword")])
 	player.delete_prop_array("items")
 

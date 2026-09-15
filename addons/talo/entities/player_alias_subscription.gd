@@ -19,6 +19,9 @@ func _init(data: Dictionary):
 	subscriber = TaloPlayerAlias.new(data.subscriber)
 	subscribed_to = TaloPlayerAlias.new(data.subscribedTo)
 	confirmed = data.confirmed
-	relationship_type = RelationshipType.BIDIRECTIONAL if data.relationshipType == "bidirectional" else RelationshipType.UNIDIRECTIONAL
+	if data.relationshipType == "bidirectional":
+		relationship_type = RelationshipType.BIDIRECTIONAL
+	else:
+		relationship_type = RelationshipType.UNIDIRECTIONAL
 	created_at = data.createdAt
 	updated_at = data.updatedAt

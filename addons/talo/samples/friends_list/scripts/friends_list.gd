@@ -13,7 +13,7 @@ var _players_manager: PlayersManager
 var _subscriptions_manager: SubscriptionsManager
 var _ui_manager: UIManager
 
-static var lookingForFriendsStatus := "Looking for friends!"
+static var looking_for_friends_status := "Looking for friends!"
 
 
 func _ready() -> void:
@@ -34,7 +34,7 @@ func _identify_player() -> void:
 	# create a presence update after a short delay
 	# this notifies other clients that we are online
 	await get_tree().create_timer(2.0).timeout
-	await Talo.player_presence.update_presence(true, lookingForFriendsStatus)
+	await Talo.player_presence.update_presence(true, looking_for_friends_status)
 
 
 func _initialize_managers() -> void:
@@ -126,7 +126,7 @@ func _on_presence_changed(
 	_custom_status_changed: bool,
 ) -> void:
 	# only mark players as online if they have the custom status
-	if presence.online and presence.custom_status != lookingForFriendsStatus:
+	if presence.online and presence.custom_status != looking_for_friends_status:
 		return
 
 	var status_text: String = "looking for friends" if presence.online else "offline"
@@ -148,9 +148,10 @@ func _on_relationship_request_received(player_alias: TaloPlayerAlias) -> void:
 	await _subscriptions_manager.load_pending_requests()
 
 
-func _on_relationship_request_cancelled(player_alias: TaloPlayerAlias) -> void:
+func _on_relationship_request_cancelled(_player_alias: TaloPlayerAlias) -> void:
 	# reload both incoming and outgoing requests
-	# (incoming if they cancelled their request to the player, outgoing if the player cancelled theirs)
+	# (incoming if they cancelled their request to the player,
+	# outgoing if the player cancelled theirs)
 	await _subscriptions_manager.load_pending_requests()
 	await _subscriptions_manager.load_outgoing_requests()
 

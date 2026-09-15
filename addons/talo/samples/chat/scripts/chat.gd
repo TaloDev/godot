@@ -21,7 +21,7 @@ func _ready() -> void:
 func _on_presence_changed(
 	presence: TaloPlayerPresence,
 	online_changed: bool,
-	custom_status_changed: bool,
+	_custom_status_changed: bool,
 ) -> void:
 	if online_changed:
 		_add_chat_message(

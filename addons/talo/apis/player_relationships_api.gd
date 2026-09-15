@@ -98,7 +98,8 @@ func subscribe_to(
 			return null
 
 
-## Revoke a subscription by ID. For bidirectional subscriptions, the reciprocal relationship is automatically deleted.
+## Revoke a subscription by ID. For bidirectional subscriptions, the reciprocal relationship is
+## automatically deleted.
 func revoke_subscription(subscription_id: int) -> void:
 	if Talo.identity_check() != OK:
 		return
@@ -110,7 +111,8 @@ func revoke_subscription(subscription_id: int) -> void:
 			push_error("Subscription not found")
 
 
-## Unsubscribe from a player by alias ID. For bidirectional subscriptions, the reciprocal relationship is automatically deleted.
+## Unsubscribe from a player by alias ID. For bidirectional subscriptions, the reciprocal
+## relationship is automatically deleted.
 func unsubscribe_from(player_alias_id: int) -> bool:
 	if Talo.identity_check() != OK:
 		return false
@@ -126,7 +128,8 @@ func unsubscribe_from(player_alias_id: int) -> bool:
 	return true
 
 
-## Confirm a subscription request by ID. For bidirectional subscriptions, the reciprocal relationship is automatically created and confirmed.
+## Confirm a subscription request by ID. For bidirectional subscriptions, the reciprocal
+## relationship is automatically created and confirmed.
 func confirm_subscription_by_id(subscription_id: int) -> TaloPlayerAliasSubscription:
 	if Talo.identity_check() != OK:
 		return null
@@ -143,7 +146,8 @@ func confirm_subscription_by_id(subscription_id: int) -> TaloPlayerAliasSubscrip
 			return null
 
 
-## Confirm a subscription request by player alias ID. For bidirectional subscriptions, the reciprocal relationship is automatically created and confirmed.
+## Confirm a subscription request by player alias ID. For bidirectional subscriptions, the
+## reciprocal relationship is automatically created and confirmed.
 func confirm_subscription_from(player_alias_id: int) -> bool:
 	if Talo.identity_check() != OK:
 		return false
@@ -162,7 +166,8 @@ func confirm_subscription_from(player_alias_id: int) -> bool:
 	return confirmed != null
 
 
-## Check if the current player has a subscription to a player. Optionally check if the subscription is confirmed.
+## Check if the current player has a subscription to a player. Optionally check if the subscription
+## is confirmed.
 func is_subscribed_to(player_alias_id: int, confirmed: bool) -> bool:
 	if Talo.identity_check() != OK:
 		return false

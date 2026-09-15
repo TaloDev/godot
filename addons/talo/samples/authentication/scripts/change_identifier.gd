@@ -27,7 +27,9 @@ func _on_submit_pressed() -> void:
 			TaloPlayerAuthError.ErrorCode.INVALID_CREDENTIALS:
 				validation_label.text = "Current password is incorrect"
 			TaloPlayerAuthError.ErrorCode.NEW_IDENTIFIER_MATCHES_CURRENT_IDENTIFIER:
-				validation_label.text = "New identifier must be different from the current identifier"
+				validation_label.text = (
+					"New identifier must be different from the current " + "identifier"
+				)
 			TaloPlayerAuthError.ErrorCode.IDENTIFIER_TAKEN:
 				validation_label.text = "Identifier is already taken"
 			_:

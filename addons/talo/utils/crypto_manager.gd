@@ -61,7 +61,11 @@ static func create_request_signature(request_body: String) -> String:
 		or Talo.settings.verification_key_value.is_empty()
 	):
 		push_error(
-			"Verification is enabled but verification_key_version or verification_key_value is missing. Please update your Talo settings file (%s)"
+			(
+				"Verification is enabled but verification_key_version or "
+				+ "verification_key_value is missing. Please update your Talo "
+				+ "settings file (%s)"
+			)
 			% TaloSettings.settings_path
 		)
 		return ""

@@ -15,6 +15,7 @@ func before_test() -> void:
 	_saved_current_alias = Talo.current_alias
 	Talo.current_alias = null
 
+	# gdlint-ignore-next-line private-access
 	DirAccess.remove_absolute(TaloPlayerAlias._OFFLINE_DATA_PATH)
 
 
@@ -23,6 +24,7 @@ func after_test() -> void:
 	Talo.settings.cache_player_on_identify = _saved_cache_setting
 	Talo.current_alias = _saved_current_alias
 
+	# gdlint-ignore-next-line private-access
 	DirAccess.remove_absolute(TaloPlayerAlias._OFFLINE_DATA_PATH)
 
 

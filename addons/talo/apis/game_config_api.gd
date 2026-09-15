@@ -1,7 +1,8 @@
 class_name GameConfigAPI extends TaloAPI
 ## An interface for communicating with the Talo Live Config API.
 ##
-## This API is used to fetch the live config for your game. The live config is a set of key-value pairs that can be updated in the Talo dashboard.
+## This API is used to fetch the live config for your game. The live config is a set of key-value
+## pairs that can be updated in the Talo dashboard.
 ##
 ## @tutorial: https://docs.trytalo.com/docs/godot/live-config
 
@@ -45,8 +46,8 @@ func get_live_config() -> TaloLiveConfig:
 		var offline_config := TaloLiveConfig.get_offline_config()
 		if offline_config != null:
 			return await _handle_new_live_config(offline_config)
-		else:
-			return null
+
+		return null
 
 	var res := await client.make_request(HTTPClient.METHOD_GET, "/")
 	match res.status:

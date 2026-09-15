@@ -1,7 +1,8 @@
 class_name PlayerAuthAPI extends TaloAPI
 ## An interface for communicating with the Talo Player Auth API.
 ##
-## This API is used to handle player authentication in your game. It provides methods for registering, logging in and managing player accounts.
+## This API is used to handle player authentication in your game. It provides methods for
+## registering, logging in and managing player accounts.
 ##
 ## @tutorial: https://docs.trytalo.com/docs/godot/player-authentication
 
@@ -24,7 +25,8 @@ func start_session() -> void:
 		session_not_found.emit()
 
 
-## Register a new player account. If verification is enabled, a valid email will be required to verify all logins.
+## Register a new player account. If verification is enabled, a valid email will be required to
+## verify all logins.
 func register(
 	identifier: String,
 	password: String,
@@ -63,7 +65,8 @@ func register(
 			return PlayerAuthResult.new(TaloPlayerAuthError.from_response(res.body))
 
 
-## Log in to an existing player account. If verification is required, a verification code will be sent to the player's email.
+## Log in to an existing player account. If verification is required, a verification code will be
+## sent to the player's email.
 func login(identifier: String, password: String) -> PlayerAuthLoginResult:
 	var res := await client.make_request(
 		HTTPClient.METHOD_POST,

@@ -31,7 +31,7 @@ func test_get_prop_returns_null_when_prop_is_deleted() -> void:
 
 	manager.delete_prop(1, "color")
 
-	var entity := manager._get_entity(1)
+	var entity := manager._get_entity(1) # gdlint-ignore-line private-access
 	var cached := entity.props.filter(
 		func(p: TaloProp) -> bool:
 			return p.key == "color" && p.value != null,

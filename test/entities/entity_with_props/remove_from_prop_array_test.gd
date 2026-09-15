@@ -11,7 +11,7 @@ func test_remove_from_prop_array_removes_matching_value() -> void:
 	assert_array(player.get_prop_array("items")).contains_exactly(["shield"])
 
 
-func test_remove_from_prop_array_when_last_item_removed_array_is_empty_and_sentinel_null_exists_in_props() -> void:
+func test_remove_from_prop_array_leaves_empty_array_and_null_sentinel_when_last_removed() -> void:
 	var player := TaloEntityWithProps.new([TaloProp.new("items[]", "sword")])
 
 	player.remove_from_prop_array("items", "sword")

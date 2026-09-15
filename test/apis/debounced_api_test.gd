@@ -80,7 +80,7 @@ func test_debounced_updates_merge_into_one() -> void:
 
 func test_flush_forces_pending_update_and_resolves_waiter() -> void:
 	var harness := _make_harness(TaloFixtures.make_player())
-	harness._update_timer.wait_time = 60.0
+	harness._update_timer.wait_time = 60.0 # gdlint-ignore-line private-access
 	var waiter := harness.queue_update()
 	_release_after(harness, 0.05)
 
@@ -94,8 +94,8 @@ func test_flush_forces_pending_update_and_resolves_waiter() -> void:
 func test_flush_waits_for_in_flight_update() -> void:
 	var harness := _make_harness(TaloFixtures.make_player())
 	var waiter := harness.queue_update()
-	harness._update_timer.stop()
-	harness._on_debounce_fired()
+	harness._update_timer.stop() # gdlint-ignore-line private-access
+	harness._on_debounce_fired() # gdlint-ignore-line private-access
 	@warning_ignore("redundant_await")
 	await assert_signal(harness).is_emitted(harness.operation_started, 1)
 	_release_after(harness, 0.05)
@@ -110,8 +110,8 @@ func test_flush_waits_for_in_flight_update() -> void:
 func test_queued_update_gets_its_own_result_after_in_flight_update() -> void:
 	var harness := _make_harness(TaloFixtures.make_player())
 	var first := harness.queue_update()
-	harness._update_timer.stop()
-	harness._on_debounce_fired()
+	harness._update_timer.stop() # gdlint-ignore-line private-access
+	harness._on_debounce_fired() # gdlint-ignore-line private-access
 	@warning_ignore("redundant_await")
 	await assert_signal(harness).is_emitted(harness.operation_started, 1)
 
@@ -125,13 +125,13 @@ func test_queued_update_gets_its_own_result_after_in_flight_update() -> void:
 	assert_int(harness.operation_count).is_equal(2)
 	assert_bool(first.result.success).is_true()
 	assert_bool(second.result.success).is_true()
-	assert_bool(harness._is_queued).is_false()
-	assert_bool(harness._is_executing).is_false()
+	assert_bool(harness._is_queued).is_false() # gdlint-ignore-line private-access
+	assert_bool(harness._is_executing).is_false() # gdlint-ignore-line private-access
 
 
 func test_failed_update_resolves_waiter_and_returns_failure() -> void:
 	var harness := _make_harness(null)
-	harness._update_timer.wait_time = 60.0
+	harness._update_timer.wait_time = 60.0 # gdlint-ignore-line private-access
 	var waiter := harness.queue_update()
 	_release_after(harness, 0.05)
 

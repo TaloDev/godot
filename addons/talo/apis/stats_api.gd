@@ -1,7 +1,8 @@
 class_name StatsAPI extends TaloAPI
 ## An interface for communicating with the Talo Stats API.
 ##
-## This API is used to track player stats in your game. Stats are used to track player metrics both individually and globally.
+## This API is used to track player stats in your game. Stats are used to track player metrics both
+## individually and globally.
 ##
 ## @tutorial: https://docs.trytalo.com/docs/godot/stats
 
@@ -51,7 +52,8 @@ func find_player_stat(internal_name: String) -> TaloPlayerStat:
 			return null
 
 
-## Track a stat for the current player. The stat will be updated by the change amount (default 1.0). Returns the updated player stat and global stat values.
+## Track a stat for the current player. The stat will be updated by the change amount (default 1.0).
+## Returns the updated player stat and global stat values.
 func track(internal_name: String, change: float = 1.0) -> TaloPlayerStat:
 	if Talo.identity_check() != OK:
 		return
@@ -69,7 +71,8 @@ func track(internal_name: String, change: float = 1.0) -> TaloPlayerStat:
 			return null
 
 
-## Get a paginated array of changes to a player stat value (and its global value) over time. History items can be filtered by when they were tracked.
+## Get a paginated array of changes to a player stat value (and its global value) over time. History
+## items can be filtered by when they were tracked.
 func get_history(
 	internal_name: String,
 	page: int = 0,
@@ -109,7 +112,8 @@ func get_history(
 			return null
 
 
-## Get a paginated array of changes to a global stat over time. History items can be filtered by when they were tracked and by player.
+## Get a paginated array of changes to a global stat over time. History items can be filtered by
+## when they were tracked and by player.
 func get_global_history(
 	internal_name: String,
 	page: int = 0,

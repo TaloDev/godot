@@ -1,7 +1,8 @@
 class_name TaloSocket extends Node
 ## An interface for communicating with the Talo Socket server.
 ##
-## Sockets are used to provide interactivity to your game. It is highly recommended to use the Talo APIs instead of the socket directly.
+## Sockets are used to provide interactivity to your game. It is highly recommended to use the Talo
+## APIs instead of the socket directly.
 ##
 ## @tutorial: https://docs.trytalo.com/docs/godot/socket
 
@@ -17,10 +18,12 @@ func _init() -> void:
 	name = "TaloSocket"
 
 
-## Emitted when a message is received from the Talo Socket server. Not recommended for direct use. See the Talo docs for a list of responses and message structures.
+## Emitted when a message is received from the Talo Socket server. Not recommended for direct use.
+## See the Talo docs for a list of responses and message structures.
 signal message_received(res: String, message: Dictionary)
 
-## Emitted when the connection to the Talo Socket server is closed. The code and reason are provided.
+## Emitted when the connection to the Talo Socket server is closed. The code and reason are
+## provided.
 signal connection_closed(code: int, reason: String)
 
 ## Emitted when an error is received from the Talo Socket server.
@@ -49,7 +52,8 @@ func _get_socket_url(ticket: String) -> String:
 	return "%s/?ticket=%s" % [url, ticket]
 
 
-## Open the connection to the Talo Socket server. A new ticket is created to authenticate the connection.
+## Open the connection to the Talo Socket server. A new ticket is created to authenticate the
+## connection.
 func open_connection():
 	var ticket := await Talo.socket_tickets.create_ticket()
 
@@ -74,14 +78,16 @@ func _on_message_received(res: String, data: Dictionary) -> void:
 			error_received.emit(TaloSocketError.new(data))
 
 
-## A socket token is created for a player alias each time they are identified. This must be sent in order to validate the current socket session.
+## A socket token is created for a player alias each time they are identified. This must be sent in
+## order to validate the current socket session.
 func set_socket_token(token: String) -> void:
 	_temp_socket_token = token
 	if not _identified and _socket_authenticated:
 		_identify_player()
 
 
-## Send a message to the Talo Socket server. Not recommended for direct use. See the Talo docs for available requests and message structures.
+## Send a message to the Talo Socket server. Not recommended for direct use. See the Talo docs for
+## available requests and message structures.
 func send(req: String, data: Dictionary = { }) -> int:
 	if Talo.settings.log_requests:
 		print_rich("[color=orange]<-- WSS %s %s[/color]" % [req, data])
