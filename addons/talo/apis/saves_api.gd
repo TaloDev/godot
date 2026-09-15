@@ -212,7 +212,7 @@ func delete_save(save: TaloGameSave, unload_if_current_save: bool = false) -> vo
 
 	_saves_manager.all_saves = _saves_manager.all_saves.filter(
 		func(s: TaloGameSave):
-			s.id != save.id,
+			return s.id != save.id,
 	)
 	_saves_manager.delete_offline_save(save)
 
