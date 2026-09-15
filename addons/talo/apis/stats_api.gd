@@ -5,6 +5,7 @@ class_name StatsAPI extends TaloAPI
 ##
 ## @tutorial: https://docs.trytalo.com/docs/godot/stats
 
+
 ## List all stats and their values.
 func get_stats() -> Array[TaloStat]:
 	var res := await client.make_request(HTTPClient.METHOD_GET, "")
@@ -12,10 +13,16 @@ func get_stats() -> Array[TaloStat]:
 	match res.status:
 		200:
 			var stats: Array[TaloStat] = []
-			stats.assign(res.body.stats.map(func (stat: Dictionary): return TaloStat.new(stat)))
+			stats.assign(
+				res.body.stats.map(
+					func(stat: Dictionary):
+						return TaloStat.new(stat),
+				)
+			)
 			return stats
 		_:
 			return []
+
 
 ## Get a stat by its internal name.
 func find(internal_name: String) -> TaloStat:
@@ -26,6 +33,7 @@ func find(internal_name: String) -> TaloStat:
 			return TaloStat.new(res.body.stat)
 		_:
 			return null
+
 
 ## Get a player stat by the stat's internal name.
 func find_player_stat(internal_name: String) -> TaloPlayerStat:
@@ -42,12 +50,17 @@ func find_player_stat(internal_name: String) -> TaloPlayerStat:
 		_:
 			return null
 
+
 ## Track a stat for the current player. The stat will be updated by the change amount (default 1.0). Returns the updated player stat and global stat values.
 func track(internal_name: String, change: float = 1.0) -> TaloPlayerStat:
 	if Talo.identity_check() != OK:
 		return
 
-	var res := await client.make_request(HTTPClient.METHOD_PUT, "/%s" % internal_name, { change = change })
+	var res := await client.make_request(
+		HTTPClient.METHOD_PUT,
+		"/%s" % internal_name,
+		{ change = change },
+	)
 
 	match res.status:
 		200:
@@ -55,8 +68,14 @@ func track(internal_name: String, change: float = 1.0) -> TaloPlayerStat:
 		_:
 			return null
 
+
 ## Get a paginated array of changes to a player stat value (and its global value) over time. History items can be filtered by when they were tracked.
-func get_history(internal_name: String, page: int = 0, start_date: String = "", end_date: String = "") -> StatHistoryPage:
+func get_history(
+	internal_name: String,
+	page: int = 0,
+	start_date: String = "",
+	end_date: String = "",
+) -> StatHistoryPage:
 	if Talo.identity_check() != OK:
 		return null
 
@@ -74,13 +93,30 @@ func get_history(internal_name: String, page: int = 0, start_date: String = "", 
 	match res.status:
 		200:
 			var history: Array[TaloPlayerStatSnapshot] = []
-			history.assign(res.body.history.map(func (snapshot: Dictionary): return TaloPlayerStatSnapshot.new(snapshot)))
-			return StatHistoryPage.new(history, res.body.count, res.body.itemsPerPage, res.body.isLastPage)
+			history.assign(
+				res.body.history.map(
+					func(snapshot: Dictionary):
+						return TaloPlayerStatSnapshot.new(snapshot),
+				)
+			)
+			return StatHistoryPage.new(
+				history,
+				res.body.count,
+				res.body.itemsPerPage,
+				res.body.isLastPage,
+			)
 		_:
 			return null
 
+
 ## Get a paginated array of changes to a global stat over time. History items can be filtered by when they were tracked and by player.
-func get_global_history(internal_name: String, page: int = 0, player_id = "", start_date: String = "", end_date: String = "") -> GlobalStatHistoryPage:
+func get_global_history(
+	internal_name: String,
+	page: int = 0,
+	player_id = "",
+	start_date: String = "",
+	end_date: String = "",
+) -> GlobalStatHistoryPage:
 	var query_params := PackedStringArray(["page=%s" % page])
 	if player_id != "":
 		query_params.append("playerId=%s" % player_id)
@@ -97,17 +133,23 @@ func get_global_history(internal_name: String, page: int = 0, player_id = "", st
 	match res.status:
 		200:
 			var history: Array[TaloPlayerStatSnapshot] = []
-			history.assign(res.body.history.map(func (snapshot: Dictionary): return TaloPlayerStatSnapshot.new(snapshot)))
+			history.assign(
+				res.body.history.map(
+					func(snapshot: Dictionary):
+						return TaloPlayerStatSnapshot.new(snapshot),
+				)
+			)
 			return GlobalStatHistoryPage.new(
 				history,
 				res.body.globalValue,
 				res.body.playerValue,
 				res.body.count,
 				res.body.itemsPerPage,
-				res.body.isLastPage
+				res.body.isLastPage,
 			)
 		_:
 			return null
+
 
 ## Get all the current player's stats.
 func list_player_stats() -> Array[TaloPlayerStat]:
@@ -119,10 +161,16 @@ func list_player_stats() -> Array[TaloPlayerStat]:
 	match res.status:
 		200:
 			var player_stats: Array[TaloPlayerStat] = []
-			player_stats.assign(res.body.playerStats.map(func (player_stat: Dictionary): return TaloPlayerStat.new(player_stat)))
+			player_stats.assign(
+				res.body.playerStats.map(
+					func(player_stat: Dictionary):
+						return TaloPlayerStat.new(player_stat),
+				)
+			)
 			return player_stats
 		_:
 			return []
+
 
 class StatHistoryPage:
 	var history: Array[TaloPlayerStatSnapshot]
@@ -130,11 +178,18 @@ class StatHistoryPage:
 	var items_per_page: int
 	var is_last_page: bool
 
-	func _init(history: Array[TaloPlayerStatSnapshot], count: int, items_per_page: int, is_last_page: bool) -> void:
+
+	func _init(
+		history: Array[TaloPlayerStatSnapshot],
+		count: int,
+		items_per_page: int,
+		is_last_page: bool,
+	) -> void:
 		self.history = history
 		self.count = count
 		self.items_per_page = items_per_page
 		self.is_last_page = is_last_page
+
 
 class GlobalValueMetrics:
 	var min_value: float
@@ -143,6 +198,7 @@ class GlobalValueMetrics:
 	var average_value: float
 	var average_change: float
 
+
 	func _init(data: Dictionary):
 		min_value = data.minValue
 		max_value = data.maxValue
@@ -150,17 +206,20 @@ class GlobalValueMetrics:
 		average_value = data.averageValue
 		average_change = data.averageChange
 
+
 class PlayerValueMetrics:
 	var min_value: float
 	var max_value: float
 	var median_value: float
 	var average_value: float
 
+
 	func _init(data: Dictionary):
 		min_value = data.minValue
 		max_value = data.maxValue
 		median_value = data.medianValue
 		average_value = data.averageValue
+
 
 class GlobalStatHistoryPage:
 	var history: Array[TaloPlayerStatSnapshot]
@@ -170,7 +229,15 @@ class GlobalStatHistoryPage:
 	var items_per_page: int
 	var is_last_page: bool
 
-	func _init(history: Array[TaloPlayerStatSnapshot], global_value: Dictionary, player_value: Dictionary, count: int, items_per_page: int, is_last_page: bool) -> void:
+
+	func _init(
+		history: Array[TaloPlayerStatSnapshot],
+		global_value: Dictionary,
+		player_value: Dictionary,
+		count: int,
+		items_per_page: int,
+		is_last_page: bool,
+	) -> void:
 		self.history = history
 		self.global_value = GlobalValueMetrics.new(global_value)
 		self.player_value = PlayerValueMetrics.new(player_value)

@@ -8,29 +8,48 @@ var presence: TaloPlayerPresence
 
 var _offline_data: Dictionary
 
+
 func _init(data: Dictionary):
 	super._init([])
 	update_from_raw_data(data)
 
+
 ## Update the player from raw JSON data.
 func update_from_raw_data(data: Dictionary) -> void:
-	props.assign(data.props.map(func (prop): return TaloProp.new(prop.key, prop.value)))
+	props.assign(
+		data.props.map(
+			func(prop):
+				return TaloProp.new(prop.key, prop.value),
+		)
+	)
 
 	id = data.id
 	if data.has("aliases"):
-		aliases.assign(data.aliases.map(func (alias): return TaloPlayerAlias.new(alias)))
+		aliases.assign(
+			data.aliases.map(
+				func(alias):
+					return TaloPlayerAlias.new(alias),
+			)
+		)
 
 	var presence_data = data.get("presence")
 	if presence_data == null:
 		presence_data = TaloPlayerPresence.get_default_data()
 	presence = TaloPlayerPresence.new(presence_data)
 
-	groups.assign(data.groups.map(func (group): return TaloPlayerGroupStub.new(group.id, group.name)))
+	groups.assign(
+		data.groups.map(
+			func(group):
+				return TaloPlayerGroupStub.new(group.id, group.name),
+		)
+	)
 
 	_offline_data = data
 
+
 func _local_update_success_result() -> PlayersAPI.PlayerUpdateResult:
 	return PlayersAPI.PlayerUpdateResult.new(true)
+
 
 ## Set a property by key and value. Optionally sync the player (default true) with Talo.
 func set_prop(key: String, value: String, update: bool = true) -> Variant:
@@ -39,12 +58,14 @@ func set_prop(key: String, value: String, update: bool = true) -> Variant:
 		return Talo.players.debounce_update()
 	return _local_update_success_result()
 
+
 ## Delete a property by key. Optionally sync the player (default true) with Talo.
 func delete_prop(key: String, update: bool = true) -> Variant:
 	super.delete_prop(key)
 	if update:
 		return Talo.players.debounce_update()
 	return _local_update_success_result()
+
 
 ## Set all values for a prop array by key. Optionally sync the player (default true) with Talo.
 func set_prop_array(key: String, values: Array[String], update: bool = true) -> Variant:
@@ -53,12 +74,14 @@ func set_prop_array(key: String, values: Array[String], update: bool = true) -> 
 		return Talo.players.debounce_update()
 	return _local_update_success_result()
 
+
 ## Delete a prop array by key. Optionally sync the player (default true) with Talo.
 func delete_prop_array(key: String, update: bool = true) -> Variant:
 	super.delete_prop_array(key)
 	if update:
 		return Talo.players.debounce_update()
 	return _local_update_success_result()
+
 
 ## Insert a value into a prop array by key. Optionally sync the player (default true) with Talo.
 func insert_into_prop_array(key: String, value: String, update: bool = true) -> Variant:
@@ -67,6 +90,7 @@ func insert_into_prop_array(key: String, value: String, update: bool = true) -> 
 		return Talo.players.debounce_update()
 	return _local_update_success_result()
 
+
 ## Remove a value from a prop array by key. Optionally sync the player (default true) with Talo.
 func remove_from_prop_array(key: String, value: String, update: bool = true) -> Variant:
 	super.remove_from_prop_array(key, value)
@@ -74,17 +98,31 @@ func remove_from_prop_array(key: String, value: String, update: bool = true) -> 
 		return Talo.players.debounce_update()
 	return _local_update_success_result()
 
+
 ## Check if the player is in a group with the given ID.
 func is_in_talo_group_id(group_id: String) -> bool:
-	return not groups.filter(func (group: TaloPlayerGroupStub): return group.id == group_id).is_empty()
+	return not (
+		groups.filter(
+			func(group: TaloPlayerGroupStub):
+				return group.id == group_id,
+		).is_empty()
+	)
+
 
 ## Check if the player is in a group with the given name.
 func is_in_talo_group_name(group_name: String) -> bool:
-	return not groups.filter(func (group: TaloPlayerGroupStub): return group.name == group_name).is_empty()
+	return not (
+		groups.filter(
+			func(group: TaloPlayerGroupStub):
+				return group.name == group_name,
+		).is_empty()
+	)
+
 
 ## Get the offline data for the player.
 func get_offline_data() -> Dictionary:
 	return _offline_data
+
 
 ## Get the first alias that matches an optional service.
 func get_alias(service: String = "") -> TaloPlayerAlias:

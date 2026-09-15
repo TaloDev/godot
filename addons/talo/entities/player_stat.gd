@@ -6,6 +6,7 @@ var value: float
 var created_at: String
 var updated_at: String
 
+
 func _init(data: Dictionary):
 	id = data.id
 	stat = TaloStat.new(data.stat)

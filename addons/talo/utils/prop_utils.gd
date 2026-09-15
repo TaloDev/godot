@@ -1,5 +1,6 @@
 class_name TaloPropUtils extends RefCounted
 
+
 static func serialise_dictionary(props: Dictionary[String, Variant]) -> Array[Dictionary]:
 	var ret: Array[Dictionary] = []
 	for key in props.keys():
@@ -15,6 +16,7 @@ static func serialise_dictionary(props: Dictionary[String, Variant]) -> Array[Di
 			ret.push_back({ key = key, value = null if val == null else str(val) })
 	return ret
 
+
 static func dictionary_to_props(props: Dictionary[String, Variant]) -> Array[TaloProp]:
 	var ret: Array[TaloProp] = []
 	for key in props.keys():
@@ -26,8 +28,9 @@ static func dictionary_to_props(props: Dictionary[String, Variant]) -> Array[Tal
 			ret.push_back(TaloProp.new(key, val))
 	return ret
 
+
 static func props_to_dictionary(props: Array[TaloProp]) -> Dictionary[String, Variant]:
-	var ret: Dictionary[String, Variant] = {}
+	var ret: Dictionary[String, Variant] = { }
 	for prop in props:
 		if prop.key.ends_with("[]"):
 			if !ret.has(prop.key):
@@ -38,8 +41,12 @@ static func props_to_dictionary(props: Array[TaloProp]) -> Dictionary[String, Va
 			ret[prop.key] = prop.value
 	return ret
 
+
 static func serialise_props(props: Array[TaloProp]) -> Array[Dictionary]:
 	var ret: Array[Dictionary] = []
-	var mapped_props = props.map(func (prop: TaloProp): return prop.to_dictionary())
+	var mapped_props = props.map(
+		func(prop: TaloProp):
+			return prop.to_dictionary(),
+	)
 	ret.assign(mapped_props)
 	return ret

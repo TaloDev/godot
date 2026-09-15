@@ -3,6 +3,7 @@ extends Button
 @export var stat_name: String
 @export var player_id: String
 
+
 func _on_pressed() -> void:
 	if stat_name.is_empty():
 		%ResponseLabel.text = "stat_name not set on GetGlobalHistoryButton"
@@ -19,7 +20,7 @@ func _on_pressed() -> void:
 			global_metrics.median_value,
 			global_metrics.average_value,
 			global_metrics.average_change,
-			player_metrics.average_value
+			player_metrics.average_value,
 		]
 	else:
 		%ResponseLabel.text = "Could not fetch global history, is your stat global?"

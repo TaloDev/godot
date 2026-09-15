@@ -8,6 +8,7 @@ signal go_to_register
 @onready var password: TextEdit = %Password
 @onready var validation_label: Label = %ValidationLabel
 
+
 func _on_submit_pressed() -> void:
 	validation_label.text = ""
 
@@ -29,8 +30,10 @@ func _on_submit_pressed() -> void:
 			_:
 				validation_label.text = res.error.message
 
+
 func _on_forgot_password_pressed() -> void:
 	go_to_forgot_password.emit()
+
 
 func _on_register_pressed() -> void:
 	go_to_register.emit()

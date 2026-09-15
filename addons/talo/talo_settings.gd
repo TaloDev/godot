@@ -132,6 +132,7 @@ var verification_key_value: String:
 	set(value):
 		_config_file.set_value("verification", "key_value", value)
 
+
 func _init() -> void:
 	_config_file = ConfigFile.new()
 
@@ -152,12 +153,17 @@ func _init() -> void:
 		verification_key_value = verification_key_value
 		save_config()
 
-		print_rich("[color=green]%s created! Please close the game and fill in your access_key.[/color]" % settings_path)
+		print_rich(
+			"[color=green]%s created! Please close the game and fill in your access_key.[/color]"
+			% settings_path
+		)
 	else:
 		_config_file.load(settings_path)
 
 		if access_key.is_empty() and is_debug_build():
-			print_rich("[color=yellow]Warning: Talo access_key in %s is empty[/color]" % settings_path)
+			print_rich(
+				"[color=yellow]Warning: Talo access_key in %s is empty[/color]" % settings_path
+			)
 
 
 func is_debug_build() -> bool:
@@ -165,7 +171,8 @@ func is_debug_build() -> bool:
 		return false
 	if OS.has_feature(DEV_FEATURE_TAG):
 		return true
-	return OS.is_debug_build() 
+	return OS.is_debug_build()
+
 
 ## Save the Talo settings to the config file
 func save_config():
@@ -173,8 +180,14 @@ func save_config():
 		return
 	_config_file.save(settings_path)
 
+
 static func init_project_settings() -> void:
-	_define_project_setting(SETTINGS_PATH_SETTING, DEFAULT_SETTINGS_PATH, "The path to the Talo settings file.")
+	_define_project_setting(
+		SETTINGS_PATH_SETTING,
+		DEFAULT_SETTINGS_PATH,
+		"The path to the Talo settings file.",
+	)
+
 
 static func _define_project_setting(name: String, default: Variant, help := "") -> void:
 	if not ProjectSettings.has_setting(name):
@@ -182,9 +195,11 @@ static func _define_project_setting(name: String, default: Variant, help := "") 
 
 	ProjectSettings.set_initial_value(name, default)
 
-	ProjectSettings.add_property_info({
-		"name": name,
-		"type": typeof(default),
-		"hint": PROPERTY_HINT_TYPE_STRING,
-		"hint_string": help
-	})
+	ProjectSettings.add_property_info(
+		{
+			"name": name,
+			"type": typeof(default),
+			"hint": PROPERTY_HINT_TYPE_STRING,
+			"hint_string": help,
+		}
+	)

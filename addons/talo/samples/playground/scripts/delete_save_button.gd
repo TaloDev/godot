@@ -1,5 +1,6 @@
 extends Button
 
+
 func _on_pressed() -> void:
 	if not Talo.saves.current:
 		%ResponseLabel.text = "No save currently loaded"

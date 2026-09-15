@@ -6,7 +6,7 @@ enum ErrorCode {
 	PROP_VALUE_TOO_LONG,
 	PROP_ARRAY_TOO_LONG,
 	PROP_CONTAINS_PROFANITY,
-	PROP_KEY_RESERVED
+	PROP_KEY_RESERVED,
 }
 
 # Which prop key was rejected.
@@ -18,15 +18,22 @@ var code: ErrorCode
 # The human-readable rejection reason.
 var message: String
 
+
 func _init(data: Dictionary) -> void:
 	key = data.key
 	code = ErrorCode.get(data.error, ErrorCode.UNKNOWN_ERROR)
 	message = data.message
+
 
 static func from_response(body: Dictionary) -> Array[TaloRejectedProp]:
 	if not body.has("rejectedProps") or body.rejectedProps.size() == 0:
 		return []
 
 	var rejected_props: Array[TaloRejectedProp] = []
-	rejected_props.assign(body.rejectedProps.map(func (prop: Dictionary): return TaloRejectedProp.new(prop)))
+	rejected_props.assign(
+		body.rejectedProps.map(
+			func(prop: Dictionary):
+				return TaloRejectedProp.new(prop),
+		)
+	)
 	return rejected_props

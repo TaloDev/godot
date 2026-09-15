@@ -15,10 +15,15 @@ var _entries_error: bool
 var _filter: String = "All"
 var _filter_idx: int
 
+
 func _ready() -> void:
-	leaderboard_name.text = leaderboard_name.text.replace("{leaderboard}", leaderboard_internal_name)
+	leaderboard_name.text = leaderboard_name.text.replace(
+		"{leaderboard}",
+		leaderboard_internal_name,
+	)
 	await _load_entries()
 	_set_entry_count()
+
 
 func _set_entry_count():
 	if entries_container.get_child_count() == 0:
@@ -28,10 +33,12 @@ func _set_entry_count():
 		if _filter != "All":
 			info_label.text += " (%s team)" % _filter
 
+
 func _create_entry(entry: TaloLeaderboardEntry) -> void:
 	var entry_instance = entry_scene.instantiate()
 	entry_instance.set_data(entry)
 	entries_container.add_child(entry_instance)
+
 
 func _build_entries() -> void:
 	for child in entries_container.get_children():
@@ -39,10 +46,14 @@ func _build_entries() -> void:
 
 	var entries = Talo.leaderboards.get_cached_entries(leaderboard_internal_name)
 	if _filter != "All":
-		entries = entries.filter(func (entry: TaloLeaderboardEntry): return entry.get_prop("team", "") == _filter)
+		entries = entries.filter(
+			func(entry: TaloLeaderboardEntry):
+				return entry.get_prop("team", "") == _filter,
+		)
 
 	for entry in entries:
 		_create_entry(entry)
+
 
 func _load_entries() -> void:
 	var page := 0
@@ -69,19 +80,26 @@ func _load_entries() -> void:
 
 	_build_entries()
 
+
 func _on_submit_pressed() -> void:
 	await Talo.players.identify("username", username.text)
 	var score := RandomNumberGenerator.new().randi_range(0, 100)
 	var team := "Blue" if RandomNumberGenerator.new().randi_range(0, 1) == 0 else "Red"
 
-	var res := await Talo.leaderboards.add_entry(leaderboard_internal_name, score, {team = team})
+	var res := await Talo.leaderboards.add_entry(leaderboard_internal_name, score, { team = team })
 	assert(res.entry != null)
-	info_label.text = "You scored %s points for the %s team!%s" % [score, team, " Your highscore was updated!" if res.updated else ""]
+	info_label.text = "You scored %s points for the %s team!%s" % [
+		score,
+		team,
+		" Your highscore was updated!" if res.updated else "",
+	]
 
 	_build_entries()
 
+
 func _get_next_filter(idx: int) -> String:
 	return ["All", "Blue", "Red"][idx % 3]
+
 
 func _on_filter_pressed() -> void:
 	_filter_idx += 1

@@ -3,6 +3,7 @@ class_name TaloDebounceTimer extends Timer
 
 var _callback: Callable
 
+
 func _init(callback: Callable) -> void:
 	one_shot = true
 	ignore_time_scale = true
@@ -11,8 +12,10 @@ func _init(callback: Callable) -> void:
 	_callback = callback
 	timeout.connect(_on_timeout)
 
+
 func _on_timeout() -> void:
 	_callback.call()
+
 
 ## Fire on timeout for every debounce window that had at least one call.
 func debounce() -> void:

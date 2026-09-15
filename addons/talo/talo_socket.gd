@@ -12,8 +12,10 @@ var _temp_socket_token: String
 var _socket_authenticated: bool
 var _identified: bool
 
+
 func _init() -> void:
 	name = "TaloSocket"
+
 
 ## Emitted when a message is received from the Talo Socket server. Not recommended for direct use. See the Talo docs for a list of responses and message structures.
 signal message_received(res: String, message: Dictionary)
@@ -24,17 +26,16 @@ signal connection_closed(code: int, reason: String)
 ## Emitted when an error is received from the Talo Socket server.
 signal error_received(err: TaloSocketError)
 
+
 func _ready() -> void:
 	message_received.connect(_on_message_received)
+
 
 func _identify_player() -> void:
 	if not _socket_authenticated or Talo.current_alias == null:
 		return
 
-	var payload = {
-		playerAliasId = Talo.current_alias.id,
-		socketToken = _temp_socket_token
-	}
+	var payload = { playerAliasId = Talo.current_alias.id, socketToken = _temp_socket_token }
 
 	var session_token = Talo.player_auth.session_manager.get_session_token()
 	if not session_token.is_empty():
@@ -42,9 +43,11 @@ func _identify_player() -> void:
 
 	send("v1.players.identify", payload)
 
+
 func _get_socket_url(ticket: String) -> String:
 	var url := Talo.settings.socket_url
 	return "%s/?ticket=%s" % [url, ticket]
+
 
 ## Open the connection to the Talo Socket server. A new ticket is created to authenticate the connection.
 func open_connection():
@@ -53,6 +56,7 @@ func open_connection():
 	var err := _socket.connect_to_url(_get_socket_url(ticket))
 	if err != OK:
 		print_rich("[color=yellow]Warning: Failed connecting to the Talo Socket: %s[/color]" % err)
+
 
 func _on_message_received(res: String, data: Dictionary) -> void:
 	if Talo.settings.log_responses:
@@ -69,30 +73,31 @@ func _on_message_received(res: String, data: Dictionary) -> void:
 		"v1.error":
 			error_received.emit(TaloSocketError.new(data))
 
+
 ## A socket token is created for a player alias each time they are identified. This must be sent in order to validate the current socket session.
 func set_socket_token(token: String) -> void:
 	_temp_socket_token = token
 	if not _identified and _socket_authenticated:
 		_identify_player()
 
+
 ## Send a message to the Talo Socket server. Not recommended for direct use. See the Talo docs for available requests and message structures.
-func send(req: String, data: Dictionary = {}) -> int:
+func send(req: String, data: Dictionary = { }) -> int:
 	if Talo.settings.log_requests:
 		print_rich("[color=orange]<-- WSS %s %s[/color]" % [req, data])
 
-	var msg := JSON.stringify({
-		req = req,
-		data = data
-	})
+	var msg := JSON.stringify({ req = req, data = data })
 
 	if Talo.settings.verification_enabled and _identified:
 		msg = TaloCryptoManager.create_request_signature(msg) + "\n" + msg
 
 	return _socket.send_text(msg)
 
+
 func _get_json() -> String:
 	var pkt := _socket.get_packet()
 	return pkt.get_string_from_utf8()
+
 
 func _emit_message(message: String) -> void:
 	var json := JSON.new()
@@ -102,9 +107,11 @@ func _emit_message(message: String) -> void:
 	var data = json.data.data
 	message_received.emit(res, data)
 
+
 ## Close the connection to the Talo Socket server.
 func close_connection(code: int = 1000, reason: String = "") -> void:
 	_socket.close(code, reason)
+
 
 ## Close the current connection and create a new connection to the Talo Socket server.
 func reset_connection() -> void:
@@ -114,11 +121,13 @@ func reset_connection() -> void:
 	if Talo.settings.auto_connect_socket:
 		open_connection()
 
+
 func _reset_socket() -> void:
 	connection_closed.emit(_socket.get_close_code(), _socket.get_close_reason())
 	_socket = WebSocketPeer.new()
 	_socket_authenticated = false
 	_identified = false
+
 
 func _poll() -> void:
 	if _socket.get_ready_state() != _socket.STATE_CLOSED:
@@ -126,12 +135,16 @@ func _poll() -> void:
 	elif _socket.get_ready_state() == _socket.STATE_CLOSED and _socket_authenticated:
 		_reset_socket()
 
-	while _socket.get_ready_state() == _socket.STATE_OPEN and _socket.get_available_packet_count() > 0:
+	while (
+		_socket.get_ready_state() == _socket.STATE_OPEN and _socket.get_available_packet_count() > 0
+	):
 		var message := _get_json()
 		_emit_message(message)
 
+
 func _process(_delta: float) -> void:
 	_poll()
+
 
 ## Check if the socket is identified with the current player
 func is_identified() -> bool:
