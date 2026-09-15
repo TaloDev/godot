@@ -1,0 +1,6 @@
+{
+	"editor.formatOnSave": true,
+	"[gdscript]": {
+		"editor.defaultFormatter": "DoHe.godot-format"
+	}
+}
