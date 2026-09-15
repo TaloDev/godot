@@ -174,7 +174,10 @@ func get_subscribed_channels(
 			return []
 
 
-## Create a new channel. The player who creates this channel will automatically become the owner. If auto cleanup is enabled, the channel will be deleted when the owner or the last member leaves. Private channels can only be joined by players who have been invited to the channel. Channels with temporary membership will remove players at the end of their session.
+## Create a new channel. The player who creates this channel will automatically become the owner. If
+## auto cleanup is enabled, the channel will be deleted when the owner or the last member leaves.
+## Private channels can only be joined by players who have been invited to the channel. Channels
+## with temporary membership will remove players at the end of their session.
 func create(options: CreateChannelOptions = CreateChannelOptions.new()) -> ChannelUpsertResult:
 	if Talo.identity_check() != OK:
 		return ChannelUpsertResult.new(false, null)
@@ -287,7 +290,8 @@ func send_message(channel_id: int, message: String) -> void:
 	Talo.socket.send("v1.channels.message", { channel = { id = channel_id }, message = message })
 
 
-## Invite a player to a channel. The invitee will automatically join the channel. This will only work if the current player is the owner of the channel.
+## Invite a player to a channel. The invitee will automatically join the channel. This will only
+## work if the current player is the owner of the channel.
 func invite(channel_id: int, player_alias_id: int) -> void:
 	if Talo.identity_check() != OK:
 		return
@@ -387,7 +391,8 @@ func get_storage_prop(
 			return null
 
 
-## Get all values belonging to a storage prop array for a channel. Optionally, ensure the latest version of the prop is returned.
+## Get all values belonging to a storage prop array for a channel. Optionally, ensure the latest
+## version of the prop is returned.
 func get_storage_prop_array(
 	channel_id: int,
 	prop_key: String,
@@ -396,7 +401,8 @@ func get_storage_prop_array(
 	return await list_storage_props(channel_id, [TaloProp.to_array_key(prop_key)], bust_cache)
 
 
-## Get many storage props for a channel. Optionally, ensure the latest versions of the props are returned.
+## Get many storage props for a channel. Optionally, ensure the latest versions of the props are
+## returned.
 func list_storage_props(
 	channel_id: int,
 	prop_keys: Array[String],
@@ -433,7 +439,8 @@ func list_storage_props(
 			return []
 
 
-## Set a storage prop array for a channel. Passing an empty array will delete all existing values for the prop.
+## Set a storage prop array for a channel. Passing an empty array will delete all existing values
+## for the prop.
 func set_storage_prop_array(channel_id: int, key: String, values: Array[String]) -> void:
 	# TaloPropUtils.serialise_dictionary will expand the array values into multiple props
 	var props: Dictionary[String, Variant] = { TaloProp.to_array_key(key): values }

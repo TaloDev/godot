@@ -1,7 +1,9 @@
 class_name TaloLoadable extends Node
 ## An object that can be saved and loaded.
 ##
-## This class is used to save and load objects in your game. It should be inherited by a child class that implements register_fields() and on_loaded(). The saving and loading logic is managed by the SavesAPI and SavesManager.
+## This class is used to save and load objects in your game. It should be inherited by a child class
+## that implements register_fields() and on_loaded(). The saving and loading logic is managed by the
+## SavesAPI and SavesManager.
 ##
 ## @tutorial: https://docs.trytalo.com/docs/godot/saves
 
@@ -32,18 +34,20 @@ func hydrate(data: Array[Dictionary]) -> void:
 	on_loaded(fields)
 
 
-## Register all the fields that should be saved and loaded. This can remain unimplemented if you only care about the loadable's presence in the scene.
+## Register all the fields that should be saved and loaded. This can remain unimplemented if you
+## only care about the loadable's presence in the scene.
 func register_fields() -> void:
 	pass
 
 
-## Register the given key with a value. When this object is saved, the value will be saved and loaded.
+## Register the given key with a value. When this object is saved, the value will be saved and
+## loaded.
 func register_field(key: String, value: Variant) -> void:
 	_saved_fields.set(key, value)
 
 
 ## Handle the loaded data. This must be implemented by the child class.
-func on_loaded(data: Dictionary) -> void:
+func on_loaded(_data: Dictionary) -> void:
 	assert(false, "on_loaded() must be implemented")
 
 

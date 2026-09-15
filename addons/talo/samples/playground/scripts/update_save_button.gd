@@ -5,7 +5,7 @@ func _ready() -> void:
 	Talo.saves.save_updated.connect(_on_save_updated)
 
 
-func _on_save_updated(success: bool, save: TaloGameSave) -> void:
+func _on_save_updated(success: bool, _save: TaloGameSave) -> void:
 	%ResponseLabel.text = "Saved successfully!" if success else "Save failed"
 
 

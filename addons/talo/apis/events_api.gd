@@ -1,7 +1,8 @@
 class_name EventsAPI extends TaloAPI
 ## An interface for communicating with the Talo Events API.
 ##
-## This API is used to track events in your game. Events are used to measure user interactions such as button clicks, level completions and other kinds of game interactions.
+## This API is used to track events in your game. Events are used to measure user interactions such
+## as button clicks, level completions and other kinds of game interactions.
 ##
 ## @tutorial: https://docs.trytalo.com/docs/godot/events
 
@@ -52,7 +53,8 @@ func _has_errors(errors: Array) -> bool:
 	)
 
 
-## Track an event with optional props (key-value pairs) and add it to the queue of events ready to be sent to the backend. If the queue reaches the minimum size, it will be flushed.
+## Track an event with optional props (key-value pairs) and add it to the queue of events ready to
+## be sent to the backend. If the queue reaches the minimum size, it will be flushed.
 func track(name: String, props: Dictionary[String, String] = { }) -> void:
 	if Talo.identity_check() != OK:
 		return
@@ -75,7 +77,8 @@ func track(name: String, props: Dictionary[String, String] = { }) -> void:
 		await flush()
 
 
-## Flush the current queue of events. This is called automatically when the queue reaches the minimum size.
+## Flush the current queue of events. This is called automatically when the queue reaches the
+## minimum size.
 func flush() -> void:
 	if _queue.size() == 0:
 		return

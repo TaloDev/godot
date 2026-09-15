@@ -16,6 +16,7 @@ func test_on_props_updated_upserts_new_props() -> void:
 
 	manager.on_props_updated(channel, upserted, deleted)
 
+	# gdlint-ignore-next-line private-access
 	assert_str(manager._get_entity(1).get_prop("color")).is_equal("red")
 
 
@@ -41,6 +42,7 @@ func test_on_props_updated_deletes_props() -> void:
 
 	manager.on_props_updated(channel, upserted, deleted)
 
+	# gdlint-ignore-next-line private-access
 	assert_str(manager._get_entity(1).get_prop("color")).is_equal("")
 
 
@@ -66,17 +68,14 @@ func test_on_props_updated_updates_existing_props() -> void:
 
 	manager.on_props_updated(channel, upserted, deleted)
 
+	# gdlint-ignore-next-line private-access
 	assert_str(manager._get_entity(1).get_prop("color")).is_equal("blue")
-	assert_int(
-		manager
-		._get_entity(1)
-		.props
-		.filter(
-			func(p: TaloProp) -> bool:
-				return p.key == "color",
-		)
-		.size()
-	).is_equal(1)
+	var entity := manager._get_entity(1) # gdlint-ignore-line private-access
+	var filtered := entity.props.filter(
+		func(p: TaloProp) -> bool:
+			return p.key == "color",
+	)
+	assert_int(filtered.size()).is_equal(1)
 
 
 func test_on_props_updated_handles_upserts_and_deletes_together() -> void:
@@ -105,5 +104,7 @@ func test_on_props_updated_handles_upserts_and_deletes_together() -> void:
 
 	manager.on_props_updated(channel, upserted, deleted)
 
+	# gdlint-ignore-next-line private-access
 	assert_str(manager._get_entity(1).get_prop("color")).is_equal("")
+	# gdlint-ignore-next-line private-access
 	assert_str(manager._get_entity(1).get_prop("size")).is_equal("large")

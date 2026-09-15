@@ -1,14 +1,16 @@
 class_name LeaderboardsAPI extends TaloAPI
 ## An interface for communicating with the Talo Leaderboards API.
 ##
-## This API is used to read and update leaderboards in your game. Leaderboards are used to track player scores and rankings.
+## This API is used to read and update leaderboards in your game. Leaderboards are used to track
+## player scores and rankings.
 ##
 ## @tutorial: https://docs.trytalo.com/docs/godot/leaderboards
 
 var _entries_manager := TaloLeaderboardEntriesManager.new()
 
 
-## Get a list of all the entries that have been previously fetched or created for a leaderboard. The options include "alias_id", "player_id" and "alias_service" for additional filtering.
+## Get a list of all the entries that have been previously fetched or created for a leaderboard. The
+## options include "alias_id", "player_id" and "alias_service" for additional filtering.
 func get_cached_entries(
 	internal_name: String,
 	options := GetCachedEntriesOptions.new(),
@@ -29,7 +31,9 @@ func get_cached_entries(
 	)
 
 
-## Get a list of entries for a leaderboard. The options include "page", "alias_id", "player_id", "include_archived", "prop_key", "prop_value", "start_date", "end_date" and "alias_service" for additional filtering.
+## Get a list of entries for a leaderboard. The options include "page", "alias_id", "player_id",
+## "include_archived", "prop_key", "prop_value", "start_date", "end_date" and "alias_service" for
+## additional filtering.
 func get_entries(internal_name: String, options := GetEntriesOptions.new()) -> EntriesPage:
 	var url := "/%s/entries?page=%s"
 	var url_data := [internal_name, options.page]
@@ -119,7 +123,8 @@ func _map_entries(
 	)
 
 
-## Add an entry to a leaderboard. The props (key-value pairs) parameter is used to store additional data with the entry.
+## Add an entry to a leaderboard. The props (key-value pairs) parameter is used to store additional
+## data with the entry.
 func add_entry(
 	internal_name: String,
 	score: float,

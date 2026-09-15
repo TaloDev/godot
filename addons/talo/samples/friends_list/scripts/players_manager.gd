@@ -15,7 +15,7 @@ func get_online_aliases() -> Array[TaloPlayerAlias]:
 
 func handle_presence_changed(presence: TaloPlayerPresence) -> void:
 	var presence_alias := presence.player_alias
-	if presence.online and presence.custom_status == FriendsListSample.lookingForFriendsStatus:
+	if presence.online and presence.custom_status == FriendsListSample.looking_for_friends_status:
 		_online_aliases.set(presence_alias.id, presence_alias)
 	else:
 		_online_aliases.erase(presence_alias.id)

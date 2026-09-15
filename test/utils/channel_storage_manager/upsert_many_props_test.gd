@@ -16,7 +16,9 @@ func test_upsert_many_props_adds_all_props() -> void:
 		],
 	)
 
+	# gdlint-ignore-next-line private-access
 	assert_str(manager._get_entity(1).get_prop("color")).is_equal("red")
+	# gdlint-ignore-next-line private-access
 	assert_str(manager._get_entity(1).get_prop("size")).is_equal("large")
 
 
@@ -49,7 +51,9 @@ func test_upsert_many_props_replaces_existing_props() -> void:
 		],
 	)
 
+	# gdlint-ignore-next-line private-access
 	assert_str(manager._get_entity(1).get_prop("color")).is_equal("blue")
+	# gdlint-ignore-next-line private-access
 	assert_str(manager._get_entity(1).get_prop("size")).is_equal("small")
 
 
@@ -71,9 +75,11 @@ func test_upsert_many_props_stores_array_props_as_individual_entries() -> void:
 		],
 	)
 
+	# gdlint-ignore-next-line private-access
 	assert_array(manager._get_entity(1).get_prop_array("items")).contains_exactly(
 		["sword", "shield"]
 	)
+	# gdlint-ignore-next-line private-access
 	assert_str(manager._get_entity(1).get_prop("color")).is_equal("red")
 
 
@@ -89,4 +95,5 @@ func test_upsert_many_props_with_empty_array_does_nothing() -> void:
 
 	manager.upsert_many_props(1, [])
 
+	# gdlint-ignore-next-line private-access
 	assert_str(manager._get_entity(1).get_prop("color")).is_equal("red")

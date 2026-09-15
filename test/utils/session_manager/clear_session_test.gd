@@ -7,31 +7,35 @@ func before_test() -> void:
 	_saved_current_alias = Talo.current_alias
 	Talo.current_alias = null
 
+	# gdlint-ignore-next-line private-access
 	DirAccess.remove_absolute(TaloPlayerAlias._OFFLINE_DATA_PATH)
+	# gdlint-ignore-next-line private-access
 	DirAccess.remove_absolute(TaloContinuityManager._CONTINUITY_PATH)
 
 	var config := ConfigFile.new()
 	if config.has_section("session"):
 		config.erase_section("session")
-		config.save(TaloSessionManager._SESSION_CONFIG_PATH)
+		config.save(TaloSessionManager._SESSION_CONFIG_PATH) # gdlint-ignore-line private-access
 
 
 func after_test() -> void:
 	Talo.current_alias = _saved_current_alias
 
+	# gdlint-ignore-next-line private-access
 	DirAccess.remove_absolute(TaloPlayerAlias._OFFLINE_DATA_PATH)
+	# gdlint-ignore-next-line private-access
 	DirAccess.remove_absolute(TaloContinuityManager._CONTINUITY_PATH)
 
 	var config := ConfigFile.new()
 	if config.has_section("session"):
 		config.erase_section("session")
-		config.save(TaloSessionManager._SESSION_CONFIG_PATH)
+		config.save(TaloSessionManager._SESSION_CONFIG_PATH) # gdlint-ignore-line private-access
 
 
 func _write_refresh_token(token: String) -> void:
 	var config := ConfigFile.new()
 	config.set_value("session", "refreshToken", token)
-	config.save(TaloSessionManager._SESSION_CONFIG_PATH)
+	config.save(TaloSessionManager._SESSION_CONFIG_PATH) # gdlint-ignore-line private-access
 
 
 func test_clear_session_without_identity_still_clears_stored_refresh_token() -> void:

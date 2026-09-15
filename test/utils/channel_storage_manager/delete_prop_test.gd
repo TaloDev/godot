@@ -13,6 +13,7 @@ func test_delete_prop_removes_prop() -> void:
 
 	manager.delete_prop(1, "color")
 
+	# gdlint-ignore-next-line private-access
 	assert_str(manager._get_entity(1).get_prop("color")).is_equal("")
 
 
@@ -35,6 +36,7 @@ func test_delete_prop_leaves_other_props_intact() -> void:
 
 	manager.delete_prop(1, "color")
 
+	# gdlint-ignore-next-line private-access
 	assert_str(manager._get_entity(1).get_prop("size")).is_equal("large")
 
 
@@ -50,6 +52,7 @@ func test_delete_prop_removes_all_entries_for_array_key() -> void:
 
 	manager.delete_prop(1, "items[]")
 
+	# gdlint-ignore-next-line private-access
 	assert_array(manager._get_entity(1).get_prop_array("items")).is_empty()
 
 
@@ -74,6 +77,7 @@ func test_delete_prop_leaves_other_array_props_intact() -> void:
 
 	manager.delete_prop(1, "items[]")
 
+	# gdlint-ignore-next-line private-access
 	assert_array(manager._get_entity(1).get_prop_array("tags")).contains_exactly(["rpg", "fantasy"])
 
 
@@ -96,5 +100,7 @@ func test_delete_prop_is_isolated_per_channel() -> void:
 
 	manager.delete_prop(1, "color")
 
+	# gdlint-ignore-next-line private-access
 	assert_str(manager._get_entity(1).get_prop("color")).is_equal("")
+	# gdlint-ignore-next-line private-access
 	assert_str(manager._get_entity(2).get_prop("color")).is_equal("blue")

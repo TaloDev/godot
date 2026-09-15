@@ -17,8 +17,8 @@ func _compare_entries(a: TaloLeaderboardEntry, b: TaloLeaderboardEntry) -> bool:
 	if a.score != b.score:
 		if a.leaderboard_sort_mode == TaloLeaderboardEntry.LeaderboardSortMode.ASC:
 			return a.score < b.score
-		else:
-			return a.score > b.score
+
+		return a.score > b.score
 
 	# if scores are equal, earlier entries win
 	return a.created_at < b.created_at

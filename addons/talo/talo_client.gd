@@ -107,8 +107,14 @@ func make_request(
 	if res.result != HTTPRequest.RESULT_SUCCESS:
 		json.set_data(
 			{
-				message = "Request failed: result %s, details: https://docs.godotengine.org/en/stable/classes/class_httprequest.html#enum-httprequest-result"
-				% res.result
+				message = (
+					(
+						"Request failed: result %s, details: "
+						+ "https://docs.godotengine.org/en/stable/classes/"
+						+ "class_httprequest.html#enum-httprequest-result"
+					)
+					% res.result
+				)
 			}
 		)
 

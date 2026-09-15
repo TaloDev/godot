@@ -1,5 +1,6 @@
 class_name TaloDebounceTimer extends Timer
-## A one-shot timer with the wait_time equal to the debounce_timer_seconds setting. The debounce() function will throttle callback invocations.
+## A one-shot timer with the wait_time equal to the debounce_timer_seconds setting. The debounce()
+## function will throttle callback invocations.
 
 var _callback: Callable
 

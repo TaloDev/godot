@@ -22,5 +22,5 @@ jobs:
         with:
           godot-version: '4.7.2'
           paths: res://test
-          publish-report: ${{ github.event.pull_request.head.repo.fork != true }}
+          publish-report: false
           report-name: unit-test-report.xml

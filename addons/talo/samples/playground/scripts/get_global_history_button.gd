@@ -14,7 +14,10 @@ func _on_pressed() -> void:
 		var global_metrics := res.global_value
 		var player_metrics := res.player_value
 
-		%ResponseLabel.text = "Min: %s, max: %s, median: %s, average: %s, average change: %s, average player value: %s" % [
+		%ResponseLabel.text = (
+			"Min: %s, max: %s, median: %s, average: %s, "
+			+ "average change: %s, average player value: %s"
+		) % [
 			global_metrics.min_value,
 			global_metrics.max_value,
 			global_metrics.median_value,

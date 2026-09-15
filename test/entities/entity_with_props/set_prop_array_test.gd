@@ -43,7 +43,7 @@ func test_set_prop_array_with_empty_collection_does_nothing() -> void:
 	assert_array(player.get_prop_array("items")).contains_exactly(["sword"])
 
 
-func test_set_prop_array_when_array_was_previously_deleted_clears_null_entry_and_sets_new_values() -> void:
+func test_set_prop_array_clears_null_entry_and_sets_new_values_if_previously_deleted() -> void:
 	var player := TaloEntityWithProps.new([TaloProp.new("items[]", "sword")])
 	player.delete_prop_array("items")
 

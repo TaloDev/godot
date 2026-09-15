@@ -90,14 +90,16 @@ var auto_start_session: bool:
 		_config_file.set_value("player_auth", "auto_start_session", value)
 
 ## If enabled, Talo will automatically cache the player after a successful online identification
-## If the player is offline and tries to identify in later sessions, Talo will attempt to use the cached the player data
+## If the player is offline and tries to identify in later sessions, Talo will attempt to use the
+## cached the player data
 var cache_player_on_identify: bool:
 	get:
 		return _config_file.get_value("", "cache_player_on_identify", true)
 	set(value):
 		_config_file.set_value("", "cache_player_on_identify", value)
 
-## Number of seconds to wait before sending debounced requests (e.g. player updates, save updates and health checks)
+## Number of seconds to wait before sending debounced requests (e.g. player updates, save updates
+## and health checks)
 var debounce_timer_seconds: float:
 	get:
 		return _config_file.get_value("", "debounce_timer_seconds", 0.5)
@@ -111,7 +113,8 @@ var requests_use_threads: bool:
 	set(value):
 		_config_file.set_value("", "requests_use_threads", value)
 
-## Enable request verification to prevent replay attacks and tampering - this must also be enabled in the dashboard
+## Enable request verification to prevent replay attacks and tampering - this must also be enabled
+## in the dashboard
 var verification_enabled: bool:
 	get:
 		return _config_file.get_value("verification", "enabled", false)
