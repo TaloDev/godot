@@ -67,6 +67,13 @@ When writing code:
 - Prefer `await` for async operations (avoid `yield`)
 - Follow existing patterns in API/entity/utility files
 
+## Verifying GDScript Changes
+
+After adding or editing `.gd` files:
+- Parse: `godot --headless --check-only --script <file>` — it exits 0 even on parse errors, so fail on `SCRIPT ERROR` / `Parse Error`.
+- Lint + format: `gdscript-formatter --check <file>` and `gdscript-formatter lint --pretty <file>`.
+- Tests: `GODOT_BIN=$(command -v godot) bash addons/gdUnit4/runtest.sh -a <test path>` for the suites covering the change.
+
 ## Plugin Configuration
 
 The plugin autoload is configured in [project.godot](project.godot:20):
