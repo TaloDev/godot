@@ -135,6 +135,13 @@ var verification_key_value: String:
 	set(value):
 		_config_file.set_value("verification", "key_value", value)
 
+## If enabled, large request bodies will be gzipped before being sent
+var compress_requests: bool:
+	get:
+		return _config_file.get_value("", "compress_requests", true)
+	set(value):
+		_config_file.set_value("", "compress_requests", value)
+
 
 func _init() -> void:
 	_config_file = ConfigFile.new()
@@ -154,6 +161,7 @@ func _init() -> void:
 		verification_enabled = verification_enabled
 		verification_key_version = verification_key_version
 		verification_key_value = verification_key_value
+		compress_requests = compress_requests
 		save_config()
 
 		print_rich(

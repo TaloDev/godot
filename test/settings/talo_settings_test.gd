@@ -3,6 +3,7 @@ extends GdUnitTestSuite
 var _saved_access_key: String
 var _saved_api_url: String
 var _saved_socket_url: String
+var _saved_compress_requests: bool
 var _file_backup := ConfigFile.new()
 var _had_config_file := false
 
@@ -28,11 +29,14 @@ func before() -> void:
 	Talo.settings._config_file.set_value("", "api_url", TaloSettings.DEFAULT_API_URL)
 	Talo.settings._config_file.set_value("", "socket_url", TaloSocket.DEFAULT_SOCKET_URL)
 
+	_saved_compress_requests = Talo.settings.compress_requests
+
 
 func after() -> void:
 	Talo.settings._config_file.set_value("", "access_key", _saved_access_key)
 	Talo.settings._config_file.set_value("", "api_url", _saved_api_url)
 	Talo.settings._config_file.set_value("", "socket_url", _saved_socket_url)
+	Talo.settings.compress_requests = _saved_compress_requests
 
 	if _had_config_file:
 		_file_backup.save(TaloSettings.settings_path)
@@ -360,3 +364,26 @@ func test_verification_key_value_writing() -> void:
 	var file := ConfigFile.new()
 	file.load(TaloSettings.settings_path)
 	assert_str(file.get_value("verification", "key_value", "")).is_equal("persisted-secret")
+
+# compress_requests
+
+
+func test_compress_requests_defaults_to_true() -> void:
+	Talo.settings._config_file.erase_section_key("", "compress_requests")
+	assert_bool(Talo.settings.compress_requests).is_true()
+
+
+func test_compress_requests_reading() -> void:
+	var file := ConfigFile.new()
+	file.set_value("", "compress_requests", false)
+	file.save(TaloSettings.settings_path)
+	Talo.settings._config_file.load(TaloSettings.settings_path)
+	assert_bool(Talo.settings.compress_requests).is_false()
+
+
+func test_compress_requests_writing() -> void:
+	Talo.settings.compress_requests = false
+	Talo.settings.save_config()
+	var file := ConfigFile.new()
+	file.load(TaloSettings.settings_path)
+	assert_bool(file.get_value("", "compress_requests", true)).is_false()
