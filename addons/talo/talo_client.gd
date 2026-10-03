@@ -3,6 +3,9 @@ class_name TaloClient extends Node
 # automatically updated with a pre-commit hook
 const TALO_CLIENT_VERSION = "1.1.0"
 
+# compressing a small body saves less than the gzip header it adds
+const GZIP_MIN_BYTES := 1024
+
 var _base_url: String
 
 
@@ -37,6 +40,23 @@ func _simulate_offline_request() -> TaloClientResponse:
 func _build_response(http_request: HTTPRequest) -> TaloClientResponse:
 	var res = await http_request.request_completed
 	return TaloClientResponse.new(res[0], res[1], res[2], res[3])
+
+
+func _encode_request_body(request_body: String) -> Dictionary[String, Variant]:
+	var bytes := request_body.to_utf8_buffer()
+
+	if not Talo.settings.compress_requests or bytes.size() < GZIP_MIN_BYTES:
+		return { bytes = bytes, gzipped = false }
+
+	return { bytes = bytes.compress(FileAccess.COMPRESSION_GZIP), gzipped = true }
+
+
+# ensure continuity doesn't replay the Content-Encoding header
+func _build_gzip_headers(all_headers: Array[String]) -> PackedStringArray:
+	var headers := PackedStringArray(all_headers)
+	headers.append("Content-Encoding: gzip")
+
+	return headers
 
 
 func _attempt_refresh(url: String, body: Dictionary) -> Error:
@@ -92,7 +112,18 @@ func make_request(
 	http_request.name = "%s %s" % [_get_method_name(method), url]
 	http_request.use_threads = Talo.settings.requests_use_threads
 
-	http_request.request(full_url, all_headers, method, request_body)
+	var encoded_body := _encode_request_body(request_body)
+
+	if encoded_body.gzipped:
+		http_request.request_raw(
+			full_url,
+			_build_gzip_headers(all_headers),
+			method,
+			encoded_body.bytes,
+		)
+	else:
+		http_request.request(full_url, all_headers, method, request_body)
+
 	var res := (
 		_simulate_offline_request()
 		if Talo.settings.offline_mode
