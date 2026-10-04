@@ -3,13 +3,15 @@ class_name TaloIdentifyError extends RefCounted
 enum ErrorCode {
 	UNKNOWN_ERROR,
 	IDENTIFIER_PROFANITY,
-	IDENTIFIER_TAKEN
+	IDENTIFIER_TAKEN,
 }
 
 var code: ErrorCode
 
+
 func _init(code: ErrorCode = ErrorCode.UNKNOWN_ERROR) -> void:
 	self.code = code
+
 
 static func from_response(body: Variant) -> TaloIdentifyError:
 	var code := ErrorCode.UNKNOWN_ERROR

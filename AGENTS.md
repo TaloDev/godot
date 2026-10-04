@@ -23,7 +23,7 @@ The plugin is an **autoload singleton** called `Talo` (defined in [talo_manager.
    - Version: Auto-updated by pre-commit hook
 
 3. **TaloSettings** ([talo_settings.gd](addons/talo/talo_settings.gd)) - Configuration management
-   - Reads/writes [settings.cfg](addons/talo/settings.cfg)
+   - Reads/writes the settings file (path configurable via `talo/settings/settings_path`, defaults to settings.cfg)
    - Key settings: `access_key`, `api_url`, `socket_url`, `auto_connect_socket`, `continuity_enabled`, `debounce_timer_seconds`
    - Feature tags: `talo_dev` (force debug), `talo_live` (force release)
 
@@ -74,7 +74,7 @@ The plugin autoload is configured in [project.godot](project.godot:20):
 Talo="*res://addons/talo/talo_manager.gd"
 ```
 
-Settings are in [addons/talo/settings.cfg](addons/talo/settings.cfg) - this file is auto-generated and should be filled with the user's access key.
+Settings live in the file at `talo/settings/settings_path` (defaults to [addons/talo/settings.cfg](addons/talo/settings.cfg)) - auto-generated and should be filled with the user's access key.
 
 ## Important Notes
 

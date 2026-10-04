@@ -3,18 +3,23 @@ class_name TaloSavesManager extends RefCounted
 var all_saves: Array[TaloGameSave] = []
 var current_save: TaloGameSave
 
-var _saved_objects: Dictionary[String, TaloSavedObject] = {}
-var _loadables: Dictionary[String, TaloLoadable] = {}
+var _saved_objects: Dictionary[String, TaloSavedObject] = { }
+var _loadables: Dictionary[String, TaloLoadable] = { }
 
 var _format_version := "godot.v2"
 
 const _OFFLINE_SAVES_PATH = "user://ts.bin"
 
+
 func read_offline_saves() -> Array[TaloGameSave]:
 	if not FileAccess.file_exists(_OFFLINE_SAVES_PATH):
 		return []
 
-	var saves := FileAccess.open_encrypted_with_pass(_OFFLINE_SAVES_PATH, FileAccess.READ, Talo.crypto_manager.get_key())
+	var saves := FileAccess.open_encrypted_with_pass(
+		_OFFLINE_SAVES_PATH,
+		FileAccess.READ,
+		Talo.crypto_manager.get_key(),
+	)
 	if saves == null:
 		TaloCryptoManager.handle_undecryptable_file(_OFFLINE_SAVES_PATH, "offline saves file")
 		return []
@@ -24,14 +29,32 @@ func read_offline_saves() -> Array[TaloGameSave]:
 	saves.close()
 
 	var res: Array[TaloGameSave] = []
-	res.assign(json.data.map(func (data: Dictionary): return TaloGameSave.new(data)))
+	res.assign(
+		json.data.map(
+			func(data: Dictionary):
+				return TaloGameSave.new(data),
+		)
+	)
 
 	return res
 
+
 func write_offline_saves(offline_saves: Array[TaloGameSave]):
-	var saves := FileAccess.open_encrypted_with_pass(_OFFLINE_SAVES_PATH, FileAccess.WRITE, Talo.crypto_manager.get_key())
-	saves.store_line(JSON.stringify(offline_saves.map(func (save: TaloGameSave): return save.to_dictionary())))
+	var saves := FileAccess.open_encrypted_with_pass(
+		_OFFLINE_SAVES_PATH,
+		FileAccess.WRITE,
+		Talo.crypto_manager.get_key(),
+	)
+	saves.store_line(
+		JSON.stringify(
+			offline_saves.map(
+				func(save: TaloGameSave):
+					return save.to_dictionary(),
+			)
+		)
+	)
 	saves.close()
+
 
 func sync_save(online_save: TaloGameSave, offline_save: TaloGameSave) -> TaloGameSave:
 	var online_updated_at := Time.get_unix_time_from_datetime_string(online_save.updated_at)
@@ -44,10 +67,15 @@ func sync_save(online_save: TaloGameSave, offline_save: TaloGameSave) -> TaloGam
 
 	return online_save
 
+
 func delete_offline_save(save: TaloGameSave):
 	var offline_saves: Array[TaloGameSave] = read_offline_saves()
-	offline_saves = offline_saves.filter(func (s: TaloGameSave): return s.id != save.id)
+	offline_saves = offline_saves.filter(
+		func(s: TaloGameSave):
+			return s.id != save.id,
+	)
 	write_offline_saves(offline_saves)
+
 
 func sync_offline_saves(offline_saves: Array[TaloGameSave]) -> Array[TaloGameSave]:
 	var new_saves: Array[TaloGameSave] = []
@@ -60,6 +88,7 @@ func sync_offline_saves(offline_saves: Array[TaloGameSave]) -> Array[TaloGameSav
 
 	return new_saves
 
+
 func get_synced_saves(online_saves: Array[TaloGameSave]) -> Array[TaloGameSave]:
 	var saves: Array[TaloGameSave] = []
 	var offline_saves: Array[TaloGameSave] = read_offline_saves()
@@ -68,7 +97,10 @@ func get_synced_saves(online_saves: Array[TaloGameSave]) -> Array[TaloGameSave]:
 		saves.append_array(online_saves)
 	else:
 		for online_save in online_saves:
-			var filtered := offline_saves.filter(func (save: TaloGameSave): return save.id == online_save.id)
+			var filtered := offline_saves.filter(
+				func(save: TaloGameSave):
+					return save.id == online_save.id,
+			)
 			if not filtered.is_empty():
 				var synced_save := await sync_save(online_save, filtered.front())
 				saves.push_back(synced_save)
@@ -79,6 +111,7 @@ func get_synced_saves(online_saves: Array[TaloGameSave]) -> Array[TaloGameSave]:
 		saves.append_array(synced_offline_saves)
 
 	return saves
+
 
 func update_offline_saves(incoming_save: TaloGameSave) -> void:
 	var offline_saves := read_offline_saves()
@@ -98,6 +131,7 @@ func update_offline_saves(incoming_save: TaloGameSave) -> void:
 
 	write_offline_saves(offline_saves)
 
+
 func set_chosen_save(save: TaloGameSave, load_save: bool) -> void:
 	current_save = save
 	if not load_save:
@@ -105,6 +139,7 @@ func set_chosen_save(save: TaloGameSave, load_save: bool) -> void:
 
 	Talo.saves.save_chosen.emit(save)
 	_match_loadables(save)
+
 
 func _match_loadables(save: TaloGameSave) -> void:
 	for object in save.content.get("objects", []):
@@ -117,10 +152,12 @@ func _match_loadables(save: TaloGameSave) -> void:
 
 	Talo.saves.save_loading_completed.emit()
 
+
 func unload_current_save():
 	_saved_objects.clear()
 	_loadables.clear()
 	set_chosen_save(null, false)
+
 
 func register(loadable: TaloLoadable) -> void:
 	_loadables.set(loadable.id, loadable)
@@ -128,24 +165,28 @@ func register(loadable: TaloLoadable) -> void:
 	if (_saved_objects.has(loadable.id)):
 		_saved_objects.get(loadable.id).register_loadable(loadable)
 	else:
-		var saved_object = TaloSavedObject.new({
-			id = loadable.id,
-			name = loadable.get_path(),
-			data = loadable.get_latest_data()
-		})
+		var saved_object = TaloSavedObject.new(
+			{ id = loadable.id, name = loadable.get_path(), data = loadable.get_latest_data() }
+		)
 		saved_object.register_loadable(loadable, false) # no need to hydrate, the data will match
 		_saved_objects.set(loadable.id, saved_object)
+
 
 func get_save_content() -> Dictionary:
 	return {
 		version = _format_version,
 		objects = _saved_objects.values().map(
-			func (saved_object: TaloSavedObject): return saved_object.to_dictionary()
-		)
+			func(saved_object: TaloSavedObject):
+				return saved_object.to_dictionary(),
+		),
 	}
 
+
 func replace_save(new_save: TaloGameSave) -> void:
-	var existing_saves := all_saves.filter(func (save): return save.id == new_save.id)
+	var existing_saves := all_saves.filter(
+		func(save):
+			return save.id == new_save.id,
+	)
 	if existing_saves.is_empty():
 		push_error("Save %s cannot be replaced as it does not exist" % new_save.id)
 		all_saves.push_back(new_save)
@@ -157,19 +198,21 @@ func replace_save(new_save: TaloGameSave) -> void:
 
 	update_offline_saves(new_save)
 
+
 func get_latest_save() -> TaloGameSave:
 	var dupe := all_saves.duplicate()
 	if dupe.is_empty():
 		return null
 
 	dupe.sort_custom(
-		func (a, b):
+		func(a, b):
 			var time_a := Time.get_unix_time_from_datetime_string(a.updated_at)
 			var time_b := Time.get_unix_time_from_datetime_string(b.updated_at)
-			return time_a > time_b
+			return time_a > time_b,
 	)
 
 	return dupe.front()
+
 
 func get_format_version() -> String:
 	var default := "godot.v1" # version 1 didn't have this key, so fallback to it

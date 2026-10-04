@@ -2,6 +2,7 @@ extends Button
 
 @export var leaderboard_name: String
 
+
 func _on_pressed() -> void:
 	if leaderboard_name.is_empty():
 		%ResponseLabel.text = "leaderboard_name not set on GetEntriesButton"

@@ -11,6 +11,12 @@ addons/talo/
 ├── talo_manager.gd     # Main autoload singleton (Talo.*)
 ├── talo_client.gd      # HTTP client wrapper
 └── talo_settings.gd    # Add new settings here
+
+test/                   # Unit tests (gdUnit4), mirror of addons/talo/
+├── apis/
+├── entities/
+├── settings/
+└── utils/
 ```
 
 ## Code style
@@ -25,18 +31,27 @@ This project uses **strict GDScript type safety** - all warnings are treated as 
 
 Follow the patterns in existing API and entity files. The CI build will fail on any script error.
 
-## Testing your changes
+## Formatting
 
-There are no automated unit tests — validation is done by building for all platforms and checking for script errors:
+GDScript is formatted with the [GDQuest GDScript Formatter](https://github.com/GDQuest/GDScript-formatter), configured through [.editorconfig](.editorconfig) (tabs, width 4). Format the plugin source before submitting:
 
 ```bash
-godot --headless --export-release 'Windows Desktop'
-godot --headless --export-release 'macOS'
-godot --headless --export-release 'Linux'
-godot --headless --export-release 'Web'
+gdscript-formatter addons/talo
 ```
 
-The CI runs these checks automatically on every push. You can also test interactively using the sample scenes — the [Playground](addons/talo/samples/playground/playground.tscn) is the quickest way to exercise most APIs.
+To check without writing (fails if changes are needed):
+
+```bash
+gdscript-formatter --check addons/talo
+```
+
+## Testing your changes
+
+Unit tests use [gdUnit4](https://github.com/MikeSchulze/gdUnit4) and live in [test/](test), mirroring the layout of `addons/talo`.
+
+The GdUnit4 panel inside the editor allows you to run the existing tests. You may also want to consider adding your own tests for substantial contributions.
+
+You can also test interactively using the sample scenes — the [Playground](addons/talo/samples/playground/playground.tscn) is the quickest way to exercise most APIs.
 
 ## Submitting a PR
 

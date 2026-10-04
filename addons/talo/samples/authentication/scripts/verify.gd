@@ -3,6 +3,7 @@ extends Node2D
 @onready var code: TextEdit = %Code
 @onready var validation_label: Label = %ValidationLabel
 
+
 func _on_submit_pressed() -> void:
 	validation_label.text = ""
 

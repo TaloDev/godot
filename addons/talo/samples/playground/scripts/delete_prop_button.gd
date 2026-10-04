@@ -2,6 +2,7 @@ extends Button
 
 @export var prop_name: String
 
+
 func _on_pressed() -> void:
 	if Talo.identity_check() != OK:
 		%ResponseLabel.text = "You need to identify a player first!"
@@ -12,4 +13,9 @@ func _on_pressed() -> void:
 		return
 
 	var result: PlayersAPI.PlayerUpdateResult = await Talo.current_player.delete_prop(prop_name)
-	%ResponseLabel.text = "%s deleted successfully" % prop_name if result.success else "Failed to delete %s" % prop_name
+	var message := (
+		"%s deleted successfully" % prop_name
+		if result.success
+		else "Failed to delete %s" % prop_name
+	)
+	%ResponseLabel.text = message

@@ -5,6 +5,7 @@ var last_updated_by_alias: TaloPlayerAlias
 var created_at: String
 var updated_at: String
 
+
 func _init(data: Dictionary):
 	super(data.key, data.value)
 
@@ -17,13 +18,16 @@ func _init(data: Dictionary):
 	created_at = data.createdAt
 	updated_at = data.updatedAt
 
+
 static func new_from_prop(source: TaloChannelStorageProp, value: String) -> TaloChannelStorageProp:
-	var expanded := TaloChannelStorageProp.new({
-		key = source.key,
-		value = value,
-		createdAt = source.created_at,
-		updatedAt = source.updated_at
-	})
+	var expanded := TaloChannelStorageProp.new(
+		{
+			key = source.key,
+			value = value,
+			createdAt = source.created_at,
+			updatedAt = source.updated_at,
+		}
+	)
 	expanded.created_by_alias = source.created_by_alias
 	expanded.last_updated_by_alias = source.last_updated_by_alias
 

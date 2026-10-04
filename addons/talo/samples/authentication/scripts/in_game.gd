@@ -8,6 +8,7 @@ signal logout_success
 
 @onready var username: Label = %Username
 
+
 func _ready() -> void:
 	Talo.players.identified.connect(_on_player_identified)
 
@@ -17,24 +18,31 @@ func _ready() -> void:
 
 	# listen for the player changing their identifier
 	%ChangeIdentifier.identifier_change_success.connect(
-		func (): _on_player_identified(Talo.current_alias)
+		func():
+			_on_player_identified(Talo.current_alias),
 	)
+
 
 func _on_player_identified(player_alias: TaloPlayerAlias) -> void:
 	username.text = "What would you like to do,\n%s?" % player_alias.identifier
 
+
 func _on_change_password_pressed() -> void:
 	go_to_change_password.emit()
+
 
 func _on_change_email_pressed() -> void:
 	go_to_change_email.emit()
 
+
 func _on_change_identifier_pressed() -> void:
 	go_to_change_identifier.emit()
+
 
 func _on_logout_pressed() -> void:
 	await Talo.player_auth.logout()
 	logout_success.emit()
+
 
 func _on_delete_pressed() -> void:
 	go_to_delete.emit()

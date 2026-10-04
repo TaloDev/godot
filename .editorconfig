@@ -1,0 +1,15 @@
+root = true
+
+[*]
+indent_style = tab
+indent_size = tab
+tab_width = 4
+
+[*.gd]
+gdscript_formatter_format_on_save = true
+
+[addons/GDQuest_GDScript_formatter/**]
+gdscript_formatter_exclude = true
+
+[addons/gdUnit4/**]
+gdscript_formatter_exclude = true

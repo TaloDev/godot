@@ -10,6 +10,7 @@ var count: int
 var members: Array[TaloPlayer]
 var updated_at: String
 
+
 func _init(data: Dictionary):
 	id = data.id
 	name = data.name
@@ -19,7 +20,12 @@ func _init(data: Dictionary):
 	members_visible = data.membersVisible
 	count = data.count
 	if data.has("members"):
-		members.assign(data.members.map(func (member): return TaloPlayer.new(member)))
+		members.assign(
+			data.members.map(
+				func(member):
+					return TaloPlayer.new(member),
+			)
+		)
 	else:
 		members = []
 	updated_at = data.updatedAt

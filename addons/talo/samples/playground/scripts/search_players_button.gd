@@ -2,10 +2,13 @@ extends Button
 
 @onready var line_edit: LineEdit = %SearchLineEdit
 
+
 func _on_pressed() -> void:
 	var query = line_edit.text.strip_edges()
 	if query.is_empty():
-		%ResponseLabel.text = "Please enter a query e.g. a player ID, alias identifier or prop value"
+		%ResponseLabel.text = (
+			"Please enter a query e.g. a player ID, alias identifier or prop value"
+		)
 		return
 
 	%ResponseLabel.text = "Searching for: %s..." % [query]

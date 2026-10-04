@@ -2,7 +2,7 @@ class_name TaloLeaderboardEntry extends TaloEntityWithProps
 
 enum LeaderboardSortMode {
 	ASC,
-	DESC
+	DESC,
 }
 
 var id: int
@@ -16,8 +16,14 @@ var created_at: String
 var updated_at: String
 var deleted_at: String
 
+
 func _init(data: Dictionary):
-	super._init(data.props.map(func (prop): return TaloProp.new(prop.key, prop.value)))
+	super._init(
+		data.props.map(
+			func(prop):
+				return TaloProp.new(prop.key, prop.value),
+		)
+	)
 
 	id = data.id
 	position = data.position
@@ -26,7 +32,10 @@ func _init(data: Dictionary):
 
 	leaderboard_name = data.leaderboardName
 	leaderboard_internal_name = data.leaderboardInternalName
-	leaderboard_sort_mode = LeaderboardSortMode.ASC if data.leaderboardSortMode.to_lower() == 'asc' else LeaderboardSortMode.DESC
+	if data.leaderboardSortMode.to_lower() == 'asc':
+		leaderboard_sort_mode = LeaderboardSortMode.ASC
+	else:
+		leaderboard_sort_mode = LeaderboardSortMode.DESC
 
 	created_at = data.createdAt
 	updated_at = data.updatedAt

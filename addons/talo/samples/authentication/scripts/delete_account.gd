@@ -6,6 +6,7 @@ signal go_to_game
 @onready var current_password: TextEdit = %CurrentPassword
 @onready var validation_label: Label = %ValidationLabel
 
+
 func _on_delete_pressed() -> void:
 	validation_label.text = ""
 
@@ -22,6 +23,7 @@ func _on_delete_pressed() -> void:
 				validation_label.text = "Current password is incorrect"
 			_:
 				validation_label.text = res.error.message
+
 
 func _on_cancel_pressed() -> void:
 	go_to_game.emit()

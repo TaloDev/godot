@@ -16,7 +16,7 @@ enum ErrorCode {
 	NEW_IDENTIFIER_MATCHES_CURRENT_IDENTIFIER,
 	INVALID_MIGRATION_TARGET,
 	EMAIL_TAKEN,
-	IDENTIFIER_PROFANITY
+	IDENTIFIER_PROFANITY,
 }
 
 ## The player auth error code, or [code]API_ERROR[/code] when missing/unknown.
@@ -25,9 +25,11 @@ var code: ErrorCode
 ## The human-readable message from the response, or a fallback for API errors.
 var message: String
 
+
 func _init(code: ErrorCode = ErrorCode.API_ERROR, message: String = "") -> void:
 	self.code = code
 	self.message = message
+
 
 ## Build a [TaloPlayerAuthError] from a parsed response body.
 static func from_response(body: Variant) -> TaloPlayerAuthError:

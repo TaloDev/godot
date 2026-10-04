@@ -4,6 +4,7 @@ extends Button
 @export var event_props: Dictionary[String, String] = { prop1 = "value1" }
 @export var flush_immediately: bool
 
+
 func _on_pressed() -> void:
 	if Talo.identity_check() != OK:
 		%ResponseLabel.text = "You need to identify a player first!"

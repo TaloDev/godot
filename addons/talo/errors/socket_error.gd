@@ -11,7 +11,7 @@ enum ErrorCode {
 	INVALID_SOCKET_TOKEN,
 	INVALID_SESSION_TOKEN,
 	MISSING_ACCESS_KEY_SCOPES,
-	RATE_LIMIT_EXCEEDED
+	RATE_LIMIT_EXCEEDED,
 }
 
 ## The original req that triggered the error.
@@ -20,11 +20,12 @@ var req: String
 ## The socket error code using the [code]ErrorCode[/code] enum.
 var code: ErrorCode
 
-## The human-readable socket error message. 
+## The human-readable socket error message.
 var message: String
 
 ## The cause of the error. Only some error types will provide this.
 var cause: String
+
 
 func _init(error_data: Dictionary) -> void:
 	req = error_data.get("req", "unknown")
