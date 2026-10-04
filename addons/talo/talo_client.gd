@@ -1,7 +1,7 @@
 class_name TaloClient extends Node
 
 # automatically updated with a pre-commit hook
-const TALO_CLIENT_VERSION = "1.1.0"
+const TALO_CLIENT_VERSION = "1.2.0"
 
 # compressing a small body saves less than the gzip header it adds
 const GZIP_MIN_BYTES := 1024
