@@ -7,8 +7,9 @@ class_name TaloSocket extends Node
 ## @tutorial: https://docs.trytalo.com/docs/godot/socket
 
 const DEFAULT_SOCKET_URL := "wss://api.trytalo.com"
+const BUFFER_SIZE := 256 * 1024
 
-var _socket := WebSocketPeer.new()
+var _socket: WebSocketPeer
 var _temp_socket_token: String
 var _socket_authenticated: bool
 var _identified: bool
@@ -16,6 +17,14 @@ var _identified: bool
 
 func _init() -> void:
 	name = "TaloSocket"
+	_socket = _new_socket()
+
+
+func _new_socket() -> WebSocketPeer:
+	var socket := WebSocketPeer.new()
+	socket.inbound_buffer_size = BUFFER_SIZE
+	socket.outbound_buffer_size = BUFFER_SIZE
+	return socket
 
 
 ## Emitted when a message is received from the Talo Socket server. Not recommended for direct use.
@@ -130,7 +139,7 @@ func reset_connection() -> void:
 
 func _reset_socket() -> void:
 	connection_closed.emit(_socket.get_close_code(), _socket.get_close_reason())
-	_socket = WebSocketPeer.new()
+	_socket = _new_socket()
 	_socket_authenticated = false
 	_identified = false
 
