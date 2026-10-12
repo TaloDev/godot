@@ -71,31 +71,76 @@ func broadcast(message: String) -> void:
 	Talo.socket.send("v1.player-relationships.broadcast", { message = message })
 
 
-## Subscribe to a player with a specific relationship type.
+## Subscribe to a player with a specific relationship type. Props are used to store additional
+## data with the subscription.
 func subscribe_to(
 	player_alias_id: int,
 	relationship_type: TaloPlayerAliasSubscription.RelationshipType,
-) -> TaloPlayerAliasSubscription:
+	props: Dictionary[String, Variant] = { },
+) -> SubscriptionUpsertResult:
 	if Talo.identity_check() != OK:
-		return null
+		return SubscriptionUpsertResult.new(false, null)
 
 	var type_string := _get_relationship_type_from_enum(relationship_type)
-	var res := await client.make_request(
-		HTTPClient.METHOD_POST,
-		"",
-		{ aliasId = player_alias_id, relationshipType = type_string },
-	)
+	var body := { aliasId = player_alias_id, relationshipType = type_string }
+	if not props.is_empty():
+		body.props = TaloPropUtils.serialise_dictionary(props)
+
+	var res := await client.make_request(HTTPClient.METHOD_POST, "", body)
 
 	match res.status:
 		200:
-			return TaloPlayerAliasSubscription.new(res.body.subscription)
+			return SubscriptionUpsertResult.new(
+				true,
+				TaloPlayerAliasSubscription.new(res.body.subscription),
+			)
+		400:
+			return SubscriptionUpsertResult.new(
+				false,
+				null,
+				TaloRejectedProp.from_response(res.body),
+			)
 		_:
 			if res.has("body") and res.body.has("message"):
 				push_error(
 					"Failed subscribing to player alias %s: %s"
 					% [player_alias_id, res.body.message]
 				)
-			return null
+			return SubscriptionUpsertResult.new(false, null)
+
+
+## Update the props of a subscription, merging them with the existing props. Passing a null prop
+## value deletes it. Only the subscriber (the player who created the subscription) can update props.
+func update_subscription_props(
+	subscription_id: int,
+	props: Dictionary[String, Variant],
+) -> SubscriptionUpsertResult:
+	if Talo.identity_check() != OK:
+		return SubscriptionUpsertResult.new(false, null)
+
+	var res := await client.make_request(
+		HTTPClient.METHOD_PATCH,
+		"/%s" % subscription_id,
+		{ props = TaloPropUtils.serialise_dictionary(props) },
+	)
+
+	match res.status:
+		200:
+			return SubscriptionUpsertResult.new(
+				true,
+				TaloPlayerAliasSubscription.new(res.body.subscription),
+			)
+		400:
+			return SubscriptionUpsertResult.new(
+				false,
+				null,
+				TaloRejectedProp.from_response(res.body),
+			)
+		404:
+			push_error("Subscription not found")
+			return SubscriptionUpsertResult.new(false, null)
+		_:
+			return SubscriptionUpsertResult.new(false, null)
 
 
 ## Revoke a subscription by ID. For bidirectional subscriptions, the reciprocal relationship is
@@ -329,3 +374,19 @@ class GetSubscriptionsOptions:
 	var confirmed: ConfirmedFilter = ConfirmedFilter.ANY
 	var alias_id: int = -1
 	var relationship_type: RelationshipTypeFilter = RelationshipTypeFilter.ANY
+
+
+class SubscriptionUpsertResult:
+	var success: bool
+	var subscription: TaloPlayerAliasSubscription
+	var rejected_props: Array[TaloRejectedProp]
+
+
+	func _init(
+		success: bool,
+		subscription: TaloPlayerAliasSubscription,
+		rejected_props: Array[TaloRejectedProp] = [],
+	) -> void:
+		self.success = success
+		self.subscription = subscription
+		self.rejected_props = rejected_props
