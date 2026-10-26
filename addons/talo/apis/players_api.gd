@@ -181,7 +181,8 @@ func find(player_id: String) -> TaloPlayer:
 
 ## Generate a mostly-unique identifier.
 func generate_identifier() -> String:
-	return TaloCryptoManager.get_hashed_time(12)
+	# 12 lowercase hex chars
+	return Crypto.new().generate_random_bytes(6).hex_encode()
 
 
 ## Attempt to identify a player when they're offline.

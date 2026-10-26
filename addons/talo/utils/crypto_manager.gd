@@ -49,12 +49,6 @@ func get_key() -> String:
 	return key
 
 
-static func get_hashed_time(size := 16) -> String:
-	var time_hash := str(TaloTimeUtils.get_timestamp_msec()).sha256_text()
-	var split_start := RandomNumberGenerator.new().randi_range(0, time_hash.length() - size)
-	return time_hash.substr(split_start, size)
-
-
 static func create_request_signature(request_body: String) -> String:
 	if (
 		Talo.settings.verification_key_version.is_empty()
@@ -70,13 +64,12 @@ static func create_request_signature(request_body: String) -> String:
 		)
 		return ""
 
+	# 16 lowercase hex chars
+	var rid := Crypto.new().generate_random_bytes(8).hex_encode()
+
 	var timestamp := TaloTimeUtils.get_timestamp_msec()
 	var payload := JSON.stringify(
-		{
-			rid = TaloCryptoManager.get_hashed_time(),
-			payload = request_body.sha256_text(),
-			timestamp = timestamp,
-		}
+		{ rid = rid, payload = request_body.sha256_text(), timestamp = timestamp }
 	)
 
 	var header_b64 := Marshalls.utf8_to_base64(payload)
