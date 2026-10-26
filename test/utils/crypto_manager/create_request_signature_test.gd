@@ -17,17 +17,22 @@ func after() -> void:
 	Talo.settings.verification_enabled = false
 
 
-func test_token_header_decodes_and_contains_valid_payload() -> void:
-	var token := TaloCryptoManager.create_request_signature(BODY)
+func _read_header(token: String) -> Dictionary:
 	var header_b64: String = token.split("|")[1].split(".")[0]
 
 	var json := JSON.new()
 	json.parse(Marshalls.base64_to_utf8(header_b64))
 
-	var payload: String = json.data.payload
+	return json.data
+
+
+func test_token_header_decodes_and_contains_valid_payload() -> void:
+	var header := _read_header(TaloCryptoManager.create_request_signature(BODY))
+
+	var payload: String = header.payload
 	assert_str(payload).is_equal(BODY.sha256_text())
 
-	var timestamp: int = json.data.timestamp
+	var timestamp: int = header.timestamp
 	assert_int(timestamp).is_greater(0)
 
 
@@ -44,11 +49,18 @@ func test_token_signature_verifies_with_key_value() -> void:
 	assert_str(signature_b64).is_equal(expected_sig_b64)
 
 
-func test_different_bodies_produce_different_tokens() -> void:
-	assert_str(TaloCryptoManager.create_request_signature("body1")).is_not_equal(
-		TaloCryptoManager.create_request_signature("body2")
-	)
-
-
 func test_token_uses_configured_key_version() -> void:
 	assert_str(TaloCryptoManager.create_request_signature(BODY)).starts_with(KEY_VERSION + "|")
+
+
+func test_signing_same_body_twice_yields_different_nonces() -> void:
+	var first := _read_header(TaloCryptoManager.create_request_signature(BODY))
+	var second := _read_header(TaloCryptoManager.create_request_signature(BODY))
+
+	assert_str(first.rid).is_not_equal(second.rid)
+
+
+func test_nonce_has_expected_length() -> void:
+	var nonce: String = _read_header(TaloCryptoManager.create_request_signature(BODY)).rid
+
+	assert_int(nonce.length()).is_equal(16)
