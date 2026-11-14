@@ -34,6 +34,7 @@ var player_relationships: PlayerRelationshipsAPI
 var live_config: TaloLiveConfig
 
 var crypto_manager: TaloCryptoManager
+var claim_key_manager: TaloClaimKeyManager
 var continuity_manager: TaloContinuityManager
 
 var socket: TaloSocket
@@ -43,6 +44,7 @@ func _ready() -> void:
 	_load_config()
 	_load_apis()
 	_init_crypto_manager()
+	_init_claim_key_manager()
 	_init_continuity()
 	_init_socket()
 
@@ -56,6 +58,10 @@ func _ready() -> void:
 
 func _init_crypto_manager() -> void:
 	crypto_manager = TaloCryptoManager.new()
+
+
+func _init_claim_key_manager() -> void:
+	claim_key_manager = TaloClaimKeyManager.new()
 
 
 func _init_continuity() -> void:

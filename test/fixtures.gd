@@ -70,3 +70,29 @@ static func make_channel_storage_prop(
 	params: Dictionary[String, Variant] = { }
 ) -> TaloChannelStorageProp:
 	return TaloChannelStorageProp.new(channel_storage_prop_factory(params))
+
+
+class StubClient extends TaloClient:
+	var requests: Array[Dictionary] = []
+	var responses: Array[Dictionary] = []
+
+
+	func _init() -> void:
+		super("")
+
+
+	func make_request(
+		method: HTTPClient.Method,
+		url: String,
+		body: Dictionary = { },
+		headers: Array[String] = [],
+		_continuity: bool = false,
+		identity := Talo.current_alias,
+	) -> Dictionary:
+		requests.append(
+			{ method = method, url = url, body = body, headers = headers, identity = identity }
+		)
+
+		if responses.is_empty():
+			return { status = 404, body = { } }
+		return responses.pop_front()

@@ -4,6 +4,7 @@ enum ErrorCode {
 	UNKNOWN_ERROR,
 	IDENTIFIER_PROFANITY,
 	IDENTIFIER_TAKEN,
+	INVALID_CLAIM_KEY,
 }
 
 var code: ErrorCode

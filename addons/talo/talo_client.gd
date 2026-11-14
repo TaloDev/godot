@@ -81,11 +81,12 @@ func make_request(
 	body: Dictionary = { },
 	headers: Array[String] = [],
 	continuity: bool = false,
+	identity := Talo.current_alias,
 ) -> Dictionary:
 	var continuity_timestamp := TaloTimeUtils.get_timestamp_msec()
 
 	var full_url := url if continuity else _build_full_url(url)
-	var all_headers := headers if continuity else _build_headers(headers)
+	var all_headers := headers if continuity else _build_headers(headers, identity)
 	var request_body := "" if body.keys().is_empty() else JSON.stringify(body)
 
 	if Talo.settings.verification_enabled and Talo.current_alias != null:
@@ -178,7 +179,10 @@ func make_request(
 	return ret
 
 
-func _build_headers(extra_headers: Array[String] = []) -> Array[String]:
+func _build_headers(
+	extra_headers: Array[String] = [],
+	identity := Talo.current_alias,
+) -> Array[String]:
 	var headers: Array[String] = [
 		"Authorization: Bearer %s" % Talo.settings.access_key,
 		"Content-Type: application/json",
@@ -188,11 +192,13 @@ func _build_headers(extra_headers: Array[String] = []) -> Array[String]:
 		"X-Talo-Client: godot:%s" % TALO_CLIENT_VERSION,
 	]
 
-	if Talo.current_alias:
-		headers.append_array(["X-Talo-Alias: %s" % Talo.current_alias.id])
+	if identity != null:
+		headers.append_array(["X-Talo-Alias: %s" % identity.id])
+		headers.append_array(["X-Talo-Player: %s" % identity.player.id])
 
-	if Talo.current_player:
-		headers.append_array(["X-Talo-Player: %s" % Talo.current_player.id])
+		if not TaloClaimKeyManager.has_header(extra_headers):
+			var current_key := Talo.claim_key_manager.get_current_key(identity.player)
+			headers.append_array(TaloClaimKeyManager.build_headers(current_key))
 
 	var session_token := Talo.player_auth.session_manager.get_session_token()
 	if not session_token.is_empty():
