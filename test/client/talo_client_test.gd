@@ -41,6 +41,16 @@ func test_empty_body_is_not_compressed() -> void:
 	assert_int(encoded_bytes.size()).is_equal(0)
 
 
+func test_read_body_falls_back_to_empty_dictionary() -> void:
+	var client: TaloClient = auto_free(TaloClient.new("/v1"))
+	# gdlint-ignore-next-line private-access
+	assert_dict(client._read_body(null)).is_empty()
+	# gdlint-ignore-next-line private-access
+	assert_dict(client._read_body("<html>502 Bad Gateway</html>")).is_empty()
+	# gdlint-ignore-next-line private-access
+	assert_dict(client._read_body({ message = "nope" })).contains_key_value("message", "nope")
+
+
 func test_compression_can_be_disabled() -> void:
 	var request_body := JSON.stringify({ data = "x".repeat(LARGE_BODY_FILLER_SIZE) })
 	var compress_requests := Talo.settings.compress_requests
