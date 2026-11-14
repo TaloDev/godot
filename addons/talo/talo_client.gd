@@ -75,6 +75,10 @@ func _attempt_refresh(url: String, body: Dictionary) -> Error:
 	return OK if res.success else FAILED
 
 
+func _read_body(data: Variant) -> Dictionary:
+	return data if data is Dictionary else { }
+
+
 func make_request(
 	method: HTTPClient.Method,
 	url: String,
@@ -155,7 +159,7 @@ func make_request(
 			% [_get_method_name(method), full_url, status, json.data]
 		)
 
-	var ret := { status = status, body = json.data }
+	var ret := { status = status, body = _read_body(json.data) }
 
 	if ret.status >= 400:
 		if await _attempt_refresh(full_url, ret.body) == OK:
