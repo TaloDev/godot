@@ -136,6 +136,39 @@ func test_claim_key_header_is_omitted_for_another_player() -> void:
 	assert_bool(_has_claim_key_header(headers)).is_false()
 
 
+func test_requests_that_write_are_signed_without_an_identified_player() -> void:
+	var enabled := Talo.settings.verification_enabled
+	var version := Talo.settings.verification_key_version
+	var value := Talo.settings.verification_key_value
+	Talo.settings.verification_enabled = true
+	Talo.settings.verification_key_version = "1"
+	Talo.settings.verification_key_value = "secret"
+
+	var client: TaloClient = auto_free(TaloClient.new("/v1"))
+	var post_headers: Array[String] = []
+	var get_headers: Array[String] = []
+	# gdlint-ignore-next-line private-access
+	client._add_signature(post_headers, HTTPClient.METHOD_POST, "{}")
+	# gdlint-ignore-next-line private-access
+	client._add_signature(get_headers, HTTPClient.METHOD_GET, "")
+
+	Talo.settings.verification_enabled = enabled
+	Talo.settings.verification_key_version = version
+	Talo.settings.verification_key_value = value
+
+	assert_bool(_has_header(post_headers, "X-Talo-Signature")).is_true()
+	assert_bool(_has_header(get_headers, "X-Talo-Signature")).is_false()
+
+
+func test_requests_are_not_signed_when_verification_is_off() -> void:
+	var client: TaloClient = auto_free(TaloClient.new("/v1"))
+	var headers: Array[String] = []
+	# gdlint-ignore-next-line private-access
+	client._add_signature(headers, HTTPClient.METHOD_POST, "{}")
+
+	assert_array(headers).is_empty()
+
+
 func _has_header(headers: Array[String], header_name: String) -> bool:
 	return headers.any(
 		func(header: String) -> bool:
