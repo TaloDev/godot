@@ -61,17 +61,6 @@ func test_sends_the_key_and_saves_it_for_the_migrated_identity() -> void:
 	assert_str(Talo.claim_key_manager.get_current_key(Talo.current_player)).is_equal("caller-key")
 
 
-func test_sends_the_key_of_the_current_player_when_none_is_passed() -> void:
-	Talo.claim_key_manager.save_key("player-1", "current-key")
-	_client.responses.append(_migrate_success())
-
-	await Talo.player_auth.migrate_account("password", "steam", MIGRATED_IDENTIFIER)
-
-	var request := _request(0)
-	var headers: Array[String] = request.headers
-	assert_array(headers).contains(["X-Talo-Claim-Key: current-key"])
-
-
 func test_files_the_key_under_the_identity_the_backend_stored() -> void:
 	# the backend resolves a ticket to the steam id, so the request values are never stored again
 	_client.responses.append(_migrate_success())

@@ -276,10 +276,6 @@ func migrate_account(
 	new_identifier: String,
 	claim_key: String = "",
 ) -> PlayerAuthResult:
-	# use the current player's key if one isn't supplied
-	if claim_key.is_empty():
-		claim_key = Talo.claim_key_manager.get_current_key(Talo.current_player)
-
 	var res := await client.make_request(
 		HTTPClient.METHOD_POST,
 		"/migrate",
