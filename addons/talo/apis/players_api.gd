@@ -44,38 +44,59 @@ func _handle_identify_success(alias: TaloPlayerAlias, socket_token: String = "")
 
 
 ## Identify a player using a service (e.g. "username") and identifier (e.g. "bob").
-func identify(service: String, identifier: String) -> TaloPlayerAlias:
+func identify(service: String, identifier: String, claim_key: String = "") -> TaloPlayerAlias:
 	identification_started.emit()
 
 	if await Talo.is_offline():
 		return await identify_offline(service, identifier)
 
+	#	use the current player's key if one isn't supplied
+	if claim_key.is_empty():
+		claim_key = Talo.claim_key_manager.get_identify_key(service, identifier)
+
 	var res := await client.make_request(
-		HTTPClient.METHOD_GET,
-		"/identify?service=%s&identifier=%s" % [service, identifier],
+		HTTPClient.METHOD_POST,
+		"/identify",
+		{ service = service, identifier = identifier },
+		TaloClaimKeyManager.build_headers(claim_key),
+		false,
+		null, # no identity yet
 	)
+
 	match res.status:
 		200:
 			var alias = TaloPlayerAlias.new(res.body.alias)
+			Talo.claim_key_manager.save_key(
+				alias.player.id,
+				claim_key,
+				alias.service,
+				alias.identifier,
+			)
 			alias.write_offline_alias()
 			return await _handle_identify_success(alias, res.body.socketToken)
 		_:
-			Talo.player_auth.session_manager.clear_session()
-			identification_failed.emit(TaloIdentifyError.from_response(res.body))
+			var error := TaloIdentifyError.from_response(res.body)
+			if error.code != TaloIdentifyError.ErrorCode.INVALID_CLAIM_KEY:
+				Talo.player_auth.session_manager.clear_session()
+			identification_failed.emit(error)
 			return null
 
 
 ## Identify a player using a Steam ticket.
-func identify_steam(ticket: String, identity: String = "") -> TaloPlayerAlias:
+func identify_steam(
+	ticket: String,
+	identity: String = "",
+	claim_key: String = "",
+) -> TaloPlayerAlias:
 	if identity.is_empty():
-		return await identify("steam", ticket)
+		return await identify("steam", ticket, claim_key)
 
-	return await identify("steam", "%s:%s" % [identity, ticket])
+	return await identify("steam", "%s:%s" % [identity, ticket], claim_key)
 
 
 ## Identify a player using a Google Play Games auth code.
-func identify_google_play_games(auth_code: String) -> TaloPlayerAlias:
-	return await identify("google_play_games", auth_code)
+func identify_google_play_games(auth_code: String, claim_key: String = "") -> TaloPlayerAlias:
+	return await identify("google_play_games", auth_code, claim_key)
 
 
 ## Identify a player using an Apple Game Center identity verification signature. Signature and salt
@@ -87,6 +108,7 @@ func identify_game_center(
 	timestamp: int,
 	player_id: String,
 	bundle_id: String,
+	claim_key: String = "",
 ) -> TaloPlayerAlias:
 	var identifier := JSON.stringify(
 		{
@@ -98,7 +120,7 @@ func identify_game_center(
 			"bundleId": bundle_id,
 		}
 	)
-	return await identify("game_center", identifier.uri_encode())
+	return await identify("game_center", identifier.uri_encode(), claim_key)
 
 
 func _run_debounced_update() -> Variant:
@@ -151,15 +173,22 @@ func debounce_update() -> Signal:
 
 ## Merge all of the data from player_id2 into player_id1 and delete player_id2.
 func merge(player_id1: String, player_id2: String, options := MergeOptions.new()) -> TaloPlayer:
-	var res := await client.make_request(
-		HTTPClient.METHOD_POST,
-		"/merge",
-		{ playerId1 = player_id1, playerId2 = player_id2 },
-	)
+	var body := { playerId1 = player_id1, playerId2 = player_id2 }
+
+	# if the second player has a claim key, it must be supplied
+	var player2_claim_key := options.player2_claim_key
+	if player2_claim_key.is_empty():
+		player2_claim_key = Talo.claim_key_manager.get_player_key(player_id2)
+
+	if not player2_claim_key.is_empty():
+		body.player2ClaimKey = player2_claim_key
+
+	var res := await client.make_request(HTTPClient.METHOD_POST, "/merge", body)
 
 	match res.status:
 		200:
 			var player := TaloPlayer.new(res.body.player)
+			_handle_merged_claim_key(player, player_id2, player2_claim_key)
 			if options.post_merge_identity_service != "":
 				var alias := player.get_alias(options.post_merge_identity_service)
 				if alias != null:
@@ -167,6 +196,23 @@ func merge(player_id1: String, player_id2: String, options := MergeOptions.new()
 			return player
 		_:
 			return null
+
+
+## If the surviving player didn't have a key, it gets the merged one's key.
+func _handle_merged_claim_key(
+	player: TaloPlayer,
+	merged_player_id: String,
+	merged_key: String,
+) -> void:
+	if not merged_key.is_empty() and Talo.claim_key_manager.get_player_key(player.id).is_empty():
+		Talo.claim_key_manager.save_key(player.id, merged_key)
+
+	# the merged player's aliases belong to the surviving player now, so their keys follow
+	var key_for_player := Talo.claim_key_manager.get_player_key(player.id)
+	for alias in player.aliases:
+		Talo.claim_key_manager.save_key(player.id, key_for_player, alias.service, alias.identifier)
+
+	Talo.claim_key_manager.forget_player(merged_player_id)
 
 
 ## Get a player by their ID.
@@ -268,6 +314,7 @@ class SearchPage:
 
 class MergeOptions:
 	var post_merge_identity_service: String = ""
+	var player2_claim_key: String = ""
 
 
 class PlayerUpdateResult:
