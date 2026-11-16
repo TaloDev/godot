@@ -99,7 +99,7 @@ func forget_player(player_id: String) -> void:
 
 
 func _identity(service: String, identifier: String) -> String:
-	return "%s:%s" % [service, identifier]
+	return "%s:%s" % [service.strip_edges().to_lower(), identifier.strip_edges()]
 
 
 func _read() -> Dictionary:

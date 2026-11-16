@@ -145,6 +145,18 @@ func test_saves_the_resolved_identifier_of_an_integration() -> void:
 	assert_str(manager.get_identify_key("steam", "ticket-1")).is_empty()
 
 
+func test_stores_the_identity_the_backend_resolved() -> void:
+	# the backend trims and lowercases the service and keeps the trimmed identifier
+	_client.responses.append(_identify_success("bob", "username"))
+
+	await Talo.players.identify(" Username ", " bob ", "caller-key")
+
+	# the next launch identifies the same way, so the lookup must land on the stored entry
+	assert_str(TaloClaimKeyManager.new().get_identify_key(" Username ", " bob ")).is_equal(
+		"caller-key"
+	)
+
+
 func test_a_rejected_claim_key_does_not_clear_the_identity() -> void:
 	# establish a player and its key, then reject a different key for the same player
 	_client.responses.append(_identify_success())
