@@ -63,16 +63,21 @@ func _on_message_received(res: String, data: Dictionary) -> void:
 				relationship_request_cancelled.emit(other_alias)
 
 
-## Broadcast a message to (by default) all confirmed subscribers via WebSocket.
-## Pass a list of player alias IDs to target only those subscribers.
-func broadcast(message: String, player_alias_ids: PackedInt32Array = []) -> void:
+## Broadcast a message to all confirmed subscribers.
+func broadcast(message: String) -> void:
+	_send_broadcast({ message = message })
+
+
+## Broadcast a message to the given player aliases only. Unconfirmed subscribers are skipped.
+func broadcast_to(message: String, player_alias_ids: PackedInt32Array) -> void:
+	_send_broadcast({ message = message, aliasIds = player_alias_ids })
+
+
+func _send_broadcast(data: Dictionary) -> void:
 	if Talo.identity_check() != OK:
 		return
 
-	Talo.socket.send(
-		"v1.player-relationships.broadcast",
-		{ message = message, aliasIds = player_alias_ids },
-	)
+	Talo.socket.send("v1.player-relationships.broadcast", data)
 
 
 ## Subscribe to a player with a specific relationship type. Props are used to store additional
