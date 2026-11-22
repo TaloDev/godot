@@ -274,16 +274,25 @@ func migrate_account(
 	current_password: String,
 	new_service: String,
 	new_identifier: String,
+	claim_key: String = "",
 ) -> PlayerAuthResult:
 	var res := await client.make_request(
 		HTTPClient.METHOD_POST,
 		"/migrate",
 		{ currentPassword = current_password, service = new_service, identifier = new_identifier },
+		TaloClaimKeyManager.build_headers(claim_key),
 	)
 
 	match res.status:
 		200:
-			session_manager.handle_account_migrated(TaloPlayerAlias.new(res.body.alias))
+			var alias := TaloPlayerAlias.new(res.body.alias)
+			session_manager.handle_account_migrated(alias)
+			Talo.claim_key_manager.save_key(
+				alias.player.id,
+				claim_key,
+				alias.service,
+				alias.identifier,
+			)
 			return PlayerAuthResult.new()
 		_:
 			return PlayerAuthResult.new(TaloPlayerAuthError.from_response(res.body))

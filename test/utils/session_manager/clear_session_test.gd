@@ -6,6 +6,7 @@ var _saved_current_alias: TaloPlayerAlias
 func before_test() -> void:
 	_saved_current_alias = Talo.current_alias
 	Talo.current_alias = null
+	Talo.claim_key_manager.clear_current_key()
 
 	# gdlint-ignore-next-line private-access
 	DirAccess.remove_absolute(TaloPlayerAlias._OFFLINE_DATA_PATH)
@@ -20,6 +21,7 @@ func before_test() -> void:
 
 func after_test() -> void:
 	Talo.current_alias = _saved_current_alias
+	Talo.claim_key_manager.clear_current_key()
 
 	# gdlint-ignore-next-line private-access
 	DirAccess.remove_absolute(TaloPlayerAlias._OFFLINE_DATA_PATH)
@@ -56,3 +58,30 @@ func test_clear_session_with_identity_returns_ok() -> void:
 
 	assert_int(result).is_equal(OK)
 	assert_object(Talo.current_alias).is_null()
+
+
+func test_clear_session_clears_the_claim_key() -> void:
+	Talo.current_alias = TaloFixtures.make_alias()
+	Talo.claim_key_manager.clear_current_key()
+
+	var manager := TaloSessionManager.new()
+	manager.clear_session(false)
+
+	# the key must not come back when the same player is identified again
+	Talo.current_alias = TaloFixtures.make_alias()
+	assert_str(Talo.claim_key_manager.get_current_key(Talo.current_player)).is_empty()
+
+
+func test_handle_session_created_does_not_carry_the_key_to_another_player() -> void:
+	Talo.current_alias = TaloFixtures.make_alias()
+	Talo.claim_key_manager.clear_current_key()
+
+	var manager := TaloSessionManager.new()
+	manager.handle_session_created(
+		TaloFixtures.player_alias_factory({ "player": { "id": "player-2" } }),
+		"session",
+		"refresh",
+		"",
+	)
+
+	assert_str(Talo.claim_key_manager.get_current_key(Talo.current_player)).is_empty()
