@@ -1,47 +1,27 @@
 extends GdUnitTestSuite
 
-var _saved_access_key: String
-var _saved_api_url: String
-var _saved_socket_url: String
-var _saved_compress_requests: bool
 var _file_backup := ConfigFile.new()
 var _had_config_file := false
 
 
 func before() -> void:
-	_saved_access_key = Talo.settings._config_file.get_value("", "access_key", "")
-	_saved_api_url = Talo.settings._config_file.get_value(
-		"",
-		"api_url",
-		TaloSettings.DEFAULT_API_URL,
-	)
-	_saved_socket_url = Talo.settings._config_file.get_value(
-		"",
-		"socket_url",
-		TaloSocket.DEFAULT_SOCKET_URL,
-	)
-
 	_had_config_file = FileAccess.file_exists(TaloSettings.settings_path)
 	if _had_config_file:
 		_file_backup.load(TaloSettings.settings_path)
 
-	Talo.settings._config_file.set_value("", "access_key", "")
-	Talo.settings._config_file.set_value("", "api_url", TaloSettings.DEFAULT_API_URL)
-	Talo.settings._config_file.set_value("", "socket_url", TaloSocket.DEFAULT_SOCKET_URL)
-
-	_saved_compress_requests = Talo.settings.compress_requests
+	# the defaults tests need a config with no keys, so drop any keys from earlier suites
+	Talo.settings._config_file = ConfigFile.new()
 
 
 func after() -> void:
-	Talo.settings._config_file.set_value("", "access_key", _saved_access_key)
-	Talo.settings._config_file.set_value("", "api_url", _saved_api_url)
-	Talo.settings._config_file.set_value("", "socket_url", _saved_socket_url)
-	Talo.settings.compress_requests = _saved_compress_requests
-
 	if _had_config_file:
 		_file_backup.save(TaloSettings.settings_path)
 	elif FileAccess.file_exists(TaloSettings.settings_path):
 		DirAccess.remove_absolute(TaloSettings.settings_path)
+
+	Talo.settings._config_file = ConfigFile.new()
+	if _had_config_file:
+		Talo.settings._config_file.load(TaloSettings.settings_path)
 
 # access_key
 

@@ -1,7 +1,7 @@
 class_name TaloClient extends Node
 
 # automatically updated with a pre-commit hook
-const TALO_CLIENT_VERSION = "1.2.0"
+const TALO_CLIENT_VERSION = "1.3.0"
 
 # compressing a small body saves less than the gzip header it adds
 const GZIP_MIN_BYTES := 1024
@@ -75,23 +75,25 @@ func _attempt_refresh(url: String, body: Dictionary) -> Error:
 	return OK if res.success else FAILED
 
 
+func _read_body(data: Variant) -> Dictionary:
+	return data if data is Dictionary else { }
+
+
 func make_request(
 	method: HTTPClient.Method,
 	url: String,
 	body: Dictionary = { },
 	headers: Array[String] = [],
 	continuity: bool = false,
+	identity := Talo.current_alias,
 ) -> Dictionary:
 	var continuity_timestamp := TaloTimeUtils.get_timestamp_msec()
 
 	var full_url := url if continuity else _build_full_url(url)
-	var all_headers := headers if continuity else _build_headers(headers)
+	var all_headers := headers if continuity else _build_headers(headers, identity)
 	var request_body := "" if body.keys().is_empty() else JSON.stringify(body)
 
-	if Talo.settings.verification_enabled and Talo.current_alias != null:
-		all_headers.append(
-			"X-Talo-Signature: %s" % TaloCryptoManager.create_request_signature(request_body)
-		)
+	_add_signature(all_headers, method, request_body)
 
 	if Talo.settings.log_requests:
 		print_rich(
@@ -155,7 +157,7 @@ func make_request(
 			% [_get_method_name(method), full_url, status, json.data]
 		)
 
-	var ret := { status = status, body = json.data }
+	var ret := { status = status, body = _read_body(json.data) }
 
 	if ret.status >= 400:
 		if await _attempt_refresh(full_url, ret.body) == OK:
@@ -178,7 +180,17 @@ func make_request(
 	return ret
 
 
-func _build_headers(extra_headers: Array[String] = []) -> Array[String]:
+func _add_signature(headers: Array[String], method: HTTPClient.Method, body: String) -> void:
+	if not Talo.settings.verification_enabled or method == HTTPClient.Method.METHOD_GET:
+		return
+
+	headers.append("X-Talo-Signature: %s" % TaloCryptoManager.create_request_signature(body))
+
+
+func _build_headers(
+	extra_headers: Array[String] = [],
+	identity := Talo.current_alias,
+) -> Array[String]:
 	var headers: Array[String] = [
 		"Authorization: Bearer %s" % Talo.settings.access_key,
 		"Content-Type: application/json",
@@ -188,11 +200,13 @@ func _build_headers(extra_headers: Array[String] = []) -> Array[String]:
 		"X-Talo-Client: godot:%s" % TALO_CLIENT_VERSION,
 	]
 
-	if Talo.current_alias:
-		headers.append_array(["X-Talo-Alias: %s" % Talo.current_alias.id])
+	if identity != null:
+		headers.append_array(["X-Talo-Alias: %s" % identity.id])
+		headers.append_array(["X-Talo-Player: %s" % identity.player.id])
 
-	if Talo.current_player:
-		headers.append_array(["X-Talo-Player: %s" % Talo.current_player.id])
+		if not TaloClaimKeyManager.has_header(extra_headers):
+			var current_key := Talo.claim_key_manager.get_current_key(identity.player)
+			headers.append_array(TaloClaimKeyManager.build_headers(current_key))
 
 	var session_token := Talo.player_auth.session_manager.get_session_token()
 	if not session_token.is_empty():

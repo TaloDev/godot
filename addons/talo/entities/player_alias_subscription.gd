@@ -1,4 +1,4 @@
-class_name TaloPlayerAliasSubscription extends RefCounted
+class_name TaloPlayerAliasSubscription extends TaloEntityWithProps
 
 enum RelationshipType {
 	UNIDIRECTIONAL, ## One-way relationships (follower/following pattern)
@@ -15,6 +15,13 @@ var updated_at: String
 
 
 func _init(data: Dictionary):
+	super._init(
+		data.props.map(
+			func(prop):
+				return TaloProp.new(prop.key, prop.value),
+		)
+	)
+
 	id = data.id
 	subscriber = TaloPlayerAlias.new(data.subscriber)
 	subscribed_to = TaloPlayerAlias.new(data.subscribedTo)

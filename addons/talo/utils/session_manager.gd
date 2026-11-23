@@ -28,6 +28,8 @@ func clear_session(reset_socket: bool = true) -> Error:
 
 	_session_token = ""
 	Talo.current_alias = null
+	Talo.claim_key_manager.clear_current_key()
+
 	if had_identity:
 		TaloPlayerAlias.delete_offline_alias()
 

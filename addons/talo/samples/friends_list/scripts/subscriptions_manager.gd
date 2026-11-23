@@ -70,11 +70,11 @@ func load_outgoing_requests() -> void:
 
 
 func send_friend_request(alias: TaloPlayerAlias) -> bool:
-	var subscription := await Talo.player_relationships.subscribe_to(
+	var result := await Talo.player_relationships.subscribe_to(
 		alias.id,
 		TaloPlayerAliasSubscription.RelationshipType.BIDIRECTIONAL,
 	)
-	return subscription != null
+	return result.success
 
 
 func accept_friend_request(alias: TaloPlayerAlias) -> bool:

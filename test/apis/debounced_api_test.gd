@@ -1,5 +1,7 @@
 extends GdUnitTestSuite
 
+var _saved_debounce_timer_seconds: float
+
 
 class TestHarness extends TaloDebouncedAPI:
 	signal operation_started(count: int)
@@ -41,11 +43,12 @@ class TestHarness extends TaloDebouncedAPI:
 
 
 func before_test() -> void:
+	_saved_debounce_timer_seconds = Talo.settings.debounce_timer_seconds
 	Talo.settings.debounce_timer_seconds = 0.01
 
 
 func after_test() -> void:
-	Talo.settings.debounce_timer_seconds = 1.0
+	Talo.settings.debounce_timer_seconds = _saved_debounce_timer_seconds
 
 
 func _make_harness(result: Variant) -> TestHarness:
