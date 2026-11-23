@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://b3b4ek8meeflf"]
 
-[ext_resource type="Texture2D" uid="uid://b3naludt1ank2" path="res://icon.png" id="1_rswej"]
 [ext_resource type="Script" uid="uid://pjwribovgraj" path="res://addons/talo/samples/multiscene_saves/scripts/loadable_player.gd" id="1_t5o6r"]
 [ext_resource type="Script" uid="uid://cbm1re05xae6k" path="res://addons/talo/samples/multiscene_saves/scripts/player_controller.gd" id="2_bg0gd"]
+[ext_resource type="Texture2D" uid="uid://4yaslfsdv3lh" path="res://addons/talo/samples/multiscene_saves/player.png" id="3_y324y"]
 [ext_resource type="Script" uid="uid://yc4mmrcvitc2" path="res://addons/talo/samples/multiscene_saves/scripts/new_game_button.gd" id="4_y324y"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_mdugq"]
@@ -19,7 +19,8 @@ script = ExtResource("1_t5o6r")
 shape = SubResource("CircleShape2D_mdugq")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=630858184]
-texture = ExtResource("1_rswej")
+scale = Vector2(5, 5)
+texture = ExtResource("3_y324y")
 
 [node name="Camera" type="Camera2D" parent="." unique_id=1762906570]
 unique_name_in_owner = true
